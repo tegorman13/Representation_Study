@@ -7,14 +7,19 @@ author:
   - name:  Communication and Cognition Lab, Purdue University, USA
     affiliation-url: https://web.ics.purdue.edu/~treimer/
 lightbox: true
+toc: false
 code-fold: true
 code-tools: true
 execute:
   #echo: false
   warning: false
-format: 
-  html:
-    page-layout: full
+format:
+  html: 
+    grid:
+      sidebar-width: 220px
+      body-width: 1200px
+      margin-width: 170px
+      gutter-width: 1.0rem
 ---
 
 
@@ -188,11 +193,14 @@ print(shapiro_test)
 
 
 
-::: {.column-page-inset-right}
+::: column-page-right
+
+## Before and after excluding outliers
+
 ```{r}
 #| layout-ncol: 1
-#| fig.width: 12
-#| fig.height: 11
+#| fig.width: 10
+#| fig.height: 8
 
 #outlier_plot
 
@@ -200,7 +208,7 @@ sum1 |> ggplot(aes(x=pct_change)) +
   geom_density(aes(fill=state), alpha=0.5) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
-  stat_boxplot(width=0.2, alpha=0.3) +
+  stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
   theme_minimal() +
   labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
@@ -219,7 +227,7 @@ sum1 |>
   geom_density(aes(fill=state), alpha=0.5) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
-  stat_boxplot(width=0.2, alpha=0.3) +
+  stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
   theme_minimal() +
   labs(title="After outlier exclusion",
@@ -232,9 +240,12 @@ sum1 |>
 
 ## Individual Participant responses
 
+- Facets indicate the Reference class (%, kWh, USD) and the goal % reduction (10%, 15%)
+- dashed lines also indicate goal percentage - dots on the line indicate participants who met the goal
+
 ```{r}
-#| fig.width: 12
-#| fig.height: 10
+#| fig.width: 11
+#| fig.height: 9
 
   # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
 sum1 |> 
@@ -250,7 +261,7 @@ sum1 |>
 ```
 
 
-:::
+
 
 
 ## Interactive data table
@@ -258,40 +269,102 @@ sum1 |>
 ```{r}
 # plot distribution of reductions by applicance
 # s2_long |> ggplot(aes(x = change)) + geom_histogram(bins = 30) + facet_wrap(~appliance, scales = "free")
-DT::datatable(sum1)
+sum1 |> mutate(refClass=factor(refClass),pct_goal=factor(pct_goal),rounded=factor(rounded),state=factor(state)) |>
+DT::datatable(extensions = 'Buttons',
+  options = list(
+    dom = 'Blfrtip',
+    buttons = list('copy', 'csv', 'excel', 'pdf', 'print'),
+    pageLength = 7,
+    autoWidth = TRUE
+  ),
+  filter = 'top') # Add filtering at the top of each column)
 #DT::datatable(sum1 |> group_by(id,block) |> summarise(diff(total_kWh),diff(orig_kWh)))
 ```
-
+:::
 
 ## Main Effects and Interactions
+
+**Click on plots to enlarge**
 
 ```{r}
 #| layout-ncol: 2
 
 sum1 |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Reference Class",
+    x = "Reference Class",
+    y = "% Change",
+    fill = "Reference Class"
+  ) +
+  theme_minimal()
+
 
 sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Goal % Reduction",
+    x = "Goal % Reduction",
+    y = "% Change",
+    fill = "Goal % Reduction"
+  ) +
+  theme_minimal()
+
+sum1 |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Rounding",
+    x = "Rounding",
+    y = "% Change",
+    fill = "Rounding"
+  ) +
+  theme_minimal()
+
+
 
 
 sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Goal % Reduction and Reference Class",
+    x = "Goal % Reduction",
+    y = "% Change",
+    fill= "Reference Class"
+  ) +
+  theme_minimal()
 
- sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
-  stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") 
+
  
 sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + facet_wrap(~state)
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + 
+  facet_wrap(~state) +
+  labs(
+    title = "Effect of Goal % Reduction and Reference Class - Separated by State",
+    x = "Goal % Reduction",
+    y = "% Change",
+    fill= "Reference Class"
+  ) +
+  theme_minimal()
  
+
+
+
 sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + facet_wrap(~rounded)
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + 
+  facet_wrap(~rounded) +
+  labs(
+    title = "Effect of Goal % Reduction and Rounding",
+    x = "Goal % Reduction",
+    y = "% Change",
+    fill= "Rounding"
+  ) +
+  theme_minimal()
  
 
 ```
@@ -302,38 +375,38 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) +
 ```{r}
 #| fig.height: 11
 #| 
-sum1 |> 
-  ungroup() |> 
-  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
-         block=factor(block)) |>
-  group_by(refClass,block,pct_goal) |>
-  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
-  ggplot(aes(x=mean_pct_change,y=refClass,col=block)) + 
-  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
-  ggforce::facet_col(~pct_goal)
-
-
-sum1 |> 
-  ungroup() |> 
-  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
-         block=factor(block)) |>
-  group_by(refClass,,pct_goal,state) |>
-  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
-  ggplot(aes(x=mean_pct_change,y=refClass,col=pct_goal)) + 
-  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
-  ggforce::facet_col(~state)
-
-
-sum1 |> 
-  ungroup() |> 
-  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
-         block=factor(block)) |>
-  group_by(refClass,,pct_goal,state,goal_pct) |>
-  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
-  ggplot(aes(x=mean_pct_change,y=refClass,col=state)) + 
-  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
-  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
-  ggforce::facet_col(~pct_goal)
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+#          block=factor(block)) |>
+#   group_by(refClass,block,pct_goal) |>
+#   summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+#   ggplot(aes(x=mean_pct_change,y=refClass,col=block)) + 
+#   geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+#   ggforce::facet_col(~pct_goal)
+# 
+# 
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+#          block=factor(block)) |>
+#   group_by(refClass,,pct_goal,state) |>
+#   summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+#   ggplot(aes(x=mean_pct_change,y=refClass,col=pct_goal)) + 
+#   geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+#   ggforce::facet_col(~state)
+# 
+# 
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+#          block=factor(block)) |>
+#   group_by(refClass,,pct_goal,state,goal_pct) |>
+#   summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+#   ggplot(aes(x=mean_pct_change,y=refClass,col=state)) + 
+#   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+#   ggforce::facet_col(~pct_goal)
 
 
 
