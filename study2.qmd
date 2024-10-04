@@ -7,6 +7,14 @@ author:
   - name:  Communication and Cognition Lab, Purdue University, USA
     affiliation-url: https://web.ics.purdue.edu/~treimer/
 lightbox: true
+code-fold: true
+code-tools: true
+execute:
+  #echo: false
+  warning: false
+format: 
+  html:
+    page-layout: full
 ---
 
 
@@ -123,7 +131,6 @@ s2_long <- s2_long |>
 
 #write.csv(s2_long,"data/study_2_tg.csv")
 
-
 # compute total kWh reduction, and total % reduction 
 sum1 <- s2_long |> 
   filter(appliance !="TOTAL") |> 
@@ -134,9 +141,10 @@ sum1 <- s2_long |>
 
 ```
 
+
+## Inspect response distribution for outliers
+
 ```{r}
-#| fig.width: 11
-#| fig.height: 9
 
 outliers <- sum1 |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
                                      z_score=(pct_change-change_mean)/change_sd,
@@ -156,32 +164,12 @@ outlier_plot <- ggplot(outliers, aes(x = state, y = z_score, color = is_outlier)
   geom_jitter(alpha = 0.5) +
   facet_wrap(~ pct_goal) +
   labs(
-    title = "Z-Scores of Change in Energy Usage by Appliance",
-    x = "Appliance",
+    title = "Z-Scores of Change in Energy Usage by State - outliers colored",
+    x = "State",
     y = "Z-Score",
     color = "Outlier"
   ) +
   theme_minimal()
-
-outlier_plot
-
-
-
-
-sum1 |> ggplot(aes(x=pct_change)) +
-  geom_density(aes(fill=refClass), alpha=0.5) +
-  ggdist::stat_halfeye() +
-  geom_rug(alpha=0.1) +
-  stat_boxplot(width=0.1, alpha=0.3) +
-  facet_wrap(~state, scales="free_y") +
-  theme_minimal() +
-  labs(title="Distribution of Percent Change by State and Reference Class",
-       x="Percent Change",
-       y="Density") +
-  scale_fill_brewer(palette="Set2")
-
-# plot densities in a better way to account for the positive skew
-
 
 # Assess skewness and normality of the data
 library(e1071)
@@ -196,69 +184,57 @@ cat("Kurtosis:", kurtosis_value, "\n")
 # Shapiro-Wilk test for normality (sample size limitation)
 shapiro_test <- shapiro.test(sum1$pct_change[1:5000])  # Using first 5000 observations if large dataset
 print(shapiro_test)
+```
 
 
+
+::: {.column-page-inset-right}
+```{r}
+#| layout-ncol: 1
+#| fig.width: 12
+#| fig.height: 11
+
+#outlier_plot
+
+sum1 |> ggplot(aes(x=pct_change)) +
+  geom_density(aes(fill=state), alpha=0.5) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.2, alpha=0.3) +
+  facet_wrap(~refClass) +
+  theme_minimal() +
+  labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2")
+
+# plot densities in a better way to account for the positive skew
+
+sum1 <- sum1 |> 
+  filter(!id %in% outlier_id)
 
 sum1 |> 
   filter(!id %in% outlier_id) |>
   ggplot(aes(x=pct_change)) +
-  geom_density(aes(fill=refClass), alpha=0.5) +
+  geom_density(aes(fill=state), alpha=0.5) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
-  stat_boxplot(width=0.1, alpha=0.3) +
-  facet_wrap(~state, scales="free_y") +
+  stat_boxplot(width=0.2, alpha=0.3) +
+  facet_wrap(~refClass) +
   theme_minimal() +
-  labs(title="Distribution of Percent Change by State and Reference Class",
+  labs(title="After outlier exclusion",
        x="Percent Change",
        y="Density") +
   scale_fill_brewer(palette="Set2")
 
 
-
-sum1 <- sum1 |> 
-  filter(!id %in% outlier_id)
-
-
 ```
 
-
-
-
-
-```{r}
-# plot distribution of reductions by applicance
-s2_long |> ggplot(aes(x = change)) + geom_histogram(bins = 30) + facet_wrap(~appliance, scales = "free")
-
-
-
-
-DT::datatable(sum1)
-
-
-DT::datatable(sum1 |> group_by(id,block) |> summarise(diff(total_kWh),diff(orig_kWh)))
-
-```
-
-
-
-```{r}
-
-sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
-  geom_boxplot(position = "dodge") +
-  facet_wrap(~state)
-
-
- sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
-  stat_summary(fun = mean, geom = "bar", position="dodge") +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") 
-```
-
+## Individual Participant responses
 
 ```{r}
 #| fig.width: 12
 #| fig.height: 10
-
-
 
   # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
 sum1 |> 
@@ -271,36 +247,57 @@ sum1 |>
   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
   ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
 
-sum1 |> 
-  ungroup() |> 
-  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
-  mutate(id=reorder(id,pct_change)) |> 
-  ggplot(aes(y=id,x=pct_change)) + 
-  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
-  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
-  ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
+```
 
-# sum1 |> 
-#   ungroup() |> 
-#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
-#   mutate(id=reorder(id,pct_change)) |> 
-#   ggplot(aes(y=id,x=pct_change,col=refClass)) + 
-#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
-#   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
-#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",scales="free",ncol=2) 
-# 
-# 
-# sum1 |> 
-#   ungroup() |> 
-#     mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
-#   ggplot(aes(x=state,y=pct_change,col=state)) + 
-#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
-#     geom_hline(aes(yintercept=goal_pct),linetype="dashed",alpha=.5) +
-#   ggdist::stat_halfeye()+
-#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",ncol=2) 
 
+:::
+
+
+## Interactive data table
+
+```{r}
+# plot distribution of reductions by applicance
+# s2_long |> ggplot(aes(x = change)) + geom_histogram(bins = 30) + facet_wrap(~appliance, scales = "free")
+DT::datatable(sum1)
+#DT::datatable(sum1 |> group_by(id,block) |> summarise(diff(total_kWh),diff(orig_kWh)))
+```
+
+
+## Main Effects and Interactions
+
+```{r}
+#| layout-ncol: 2
+
+sum1 |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+
+sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+
+
+sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge")
+
+ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") 
+ 
+sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + facet_wrap(~state)
+ 
+sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + facet_wrap(~rounded)
+ 
 
 ```
+
+
+
 
 ```{r}
 #| fig.height: 11
@@ -358,6 +355,52 @@ s2_long |>
   facet_wrap(~appliance)
   
 
+
+
+```
+
+
+```{r}
+
+# mixed effects model testing effect of refClass, state, and pct_goal on pct_change
+# marginal effects plots
+library(ggeffects)
+
+
+m1 <- lmer(pct_change ~ refClass  + (1+plan|id) + (1|state), data = sum1)
+summary(m1)
+ggpredict(m1, c("refClass")) |> plot()
+
+m1 <- lmer(pct_change ~ pct_goal  + (1|id) + (1|state), data = sum1)
+summary(m1)
+ggpredict(m1, c("pct_goal")) |> plot()
+
+m1 <- lmer(pct_change ~ pct_goal*rounded  + (1|id) + (1|state), data = sum1)
+summary(m1)
+ggpredict(m1, c("pct_goal","rounded")) |> plot()
+
+
+m1 <- lmer(pct_change ~ refClass*pct_goal*rounded  + (1|id) + (1|state), data = sum1)
+ggpredict(m1, c("refClass","pct_goal","rounded")) |> plot()
+
+m1 <- lmer(pct_change ~ state*pct_goal*rounded  + (1|id), data = sum1)
+summary(m1)
+ggpredict(m1, c("state","pct_goal","rounded")) |> plot()
+
+
+# m1 <- lmer(pct_change ~ refClass*pct_goal*rounded*state  + (1|id), data = sum1)
+# ggpredict(m1, c("refClass","pct_goal","rounded","state")) |> plot()
+
+```
+
+
+
+```{r}
+#| eval: false
+
+
+
+
 s2_long |> 
   filter(appliance != "TOTAL") |>
   ggplot(aes(x=refClass,y=state_dif,fill=state))+
@@ -376,29 +419,6 @@ s2_long |>
 sum1 |> 
   ggplot(aes(x=state_dif,y=pct_change,col=state)) +
   geom_point() 
-
-```
-
-
-```{r}
-
-# mixed effects model testing effect of refClass, state, and pct_goal on pct_change
-
-m1 <- lmer(pct_change ~ refClass  + (1+plan|id) + (1|state), data = sum1)
-summary(m1)
-
-
-
-
-```
-
-
-
-```{r}
-#| eval: false
-
-
-
 
 
 # compute total kWh reduction, and total % reduction 
@@ -433,6 +453,35 @@ s2_long |> group_by(id,refClass,state,pct_goal,rounded,plan) |>
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   facet_wrap(plan~rounded)
+
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+#   mutate(id=reorder(id,pct_change)) |> 
+#   ggplot(aes(y=id,x=pct_change)) + 
+#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+#   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
+
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+#   mutate(id=reorder(id,pct_change)) |> 
+#   ggplot(aes(y=id,x=pct_change,col=refClass)) + 
+#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+#   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",scales="free",ncol=2) 
+# 
+# 
+# sum1 |> 
+#   ungroup() |> 
+#     mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+#   ggplot(aes(x=state,y=pct_change,col=state)) + 
+#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+#     geom_hline(aes(yintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   ggdist::stat_halfeye()+
+#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",ncol=2) 
+
 
 # s2_long <- s2 |>
 #   pivot_longer(
