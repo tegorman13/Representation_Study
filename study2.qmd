@@ -26,10 +26,16 @@ format:
 
 ```{r}
 library(pacman)
-pacman::p_load(dplyr,purrr,tidyr,haven,tibble,ggplot2,gt,ggh4x,lme4)
+pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4)
+
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
+theme_set(theme_nice())
 
 s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
 s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id)
+
+
 
 s2 <- s2 |> 
   mutate(
@@ -210,7 +216,6 @@ sum1 |> ggplot(aes(x=pct_change)) +
   geom_rug(alpha=0.1) +
   stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
-  theme_minimal() +
   labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
        x="Percent Change",
        y="Density") +
@@ -229,7 +234,6 @@ sum1 |>
   geom_rug(alpha=0.1) +
   stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
-  theme_minimal() +
   labs(title="After outlier exclusion",
        x="Percent Change",
        y="Density") +
@@ -245,7 +249,7 @@ sum1 |>
 
 ```{r}
 #| fig.width: 10
-#| fig.height: 7
+#| fig.height: 9
 
   # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
 sum1 |> 
@@ -256,7 +260,9 @@ sum1 |>
   ggplot(aes(y=id,x=pct_change)) + 
   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
-  ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
+  ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2)  + 
+  labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
+  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7)),)
 
 ```
 
@@ -297,8 +303,7 @@ sum1 |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) +
     x = "Reference Class",
     y = "% Change",
     fill = "Reference Class"
-  ) +
-  theme_minimal()
+  ) 
 
 
 sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) + 
@@ -309,8 +314,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) +
     x = "Goal % Reduction",
     y = "% Change",
     fill = "Goal % Reduction"
-  ) +
-  theme_minimal()
+  ) 
 
 sum1 |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
@@ -320,8 +324,7 @@ sum1 |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) +
     x = "Rounding",
     y = "% Change",
     fill = "Rounding"
-  ) +
-  theme_minimal()
+  ) 
 
 
 
@@ -334,8 +337,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) +
     x = "Goal % Reduction",
     y = "% Change",
     fill= "Reference Class"
-  ) +
-  theme_minimal()
+  ) 
 
 
  
@@ -348,8 +350,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) +
     x = "Goal % Reduction",
     y = "% Change",
     fill= "Reference Class"
-  ) +
-  theme_minimal()
+  ) 
  
 
 
@@ -363,9 +364,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) +
     x = "Goal % Reduction",
     y = "% Change",
     fill= "Rounding"
-  ) +
-  theme_minimal()
- 
+  ) 
 
 ```
 
