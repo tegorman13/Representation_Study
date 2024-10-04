@@ -14,8 +14,8 @@ project:
 
 website:
   title: "Representation Study"
-  # repo-url: https://github.com/tegorman13/medical_llm
-  # site-url: "https://tegorman13.github.io/medical_llm"
+  repo-url: https://github.com/tegorman13/Representation_Study
+  site-url: https://tegorman13.github.io/Representation_Study/
   repo-actions: [source]
   reader-mode: true
   page-navigation: true
@@ -24,10 +24,14 @@ website:
     background: light
     tools:
     - icon: github
-      href: https://github.com/tegorman13/medical_llm
+      href: https://github.com/tegorman13/Representation_Study
     contents:
       - href: index.qmd
         text: Home
+      - section: "Analysis"
+        contents: 
+          - href: study2.qmd
+            text: "Study 2 Analysis"
       - section: "Background"
         contents:
           - href: study_info.md
@@ -42,7 +46,7 @@ website:
       - text: "{{< fa brands github size=2.0x >}}"
         aria-label: GitHub
         target: _blank
-        href: https://github.com/tegorman13/medical_llm
+        href: https://github.com/tegorman13/Representation_Study
 
 
 

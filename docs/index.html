@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.13">
+<meta name="generator" content="quarto-1.6.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./study_info.html" rel="next">
+<link href="./study2.html" rel="next">
 <script src="site_libs/quarto-listing/list.min.js"></script>
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-018089954d508eae8a473f0b7f0491f0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5fcabdeeb7af6ee2d9a4af447da17fd2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-3dec7c42c364e72d02a62818b47b8c9a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -162,7 +162,7 @@ window.Quarto = {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Representation Study</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/tegorman13/medical_llm" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://github.com/tegorman13/Representation_Study" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -187,12 +187,29 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Background</span></a>
+ <span class="menu-text">Analysis</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./study2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 2 Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Background</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./study_info.html" class="sidebar-item-text sidebar-link">
@@ -249,7 +266,79 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-sample-listings">
 <div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1726667066822" data-listing-reading-time-sort="20" data-listing-word-count-sort="3823">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1728013771244" data-listing-reading-time-sort="9" data-listing-word-count-sort="1782">
+<a href="./study2.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img src="study2_files/figure-html/unnamed-chunk-2-1.png" style="height: 500px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Study 2 Analysis
+</h5>
+<div class="card-text listing-description">
+
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">pacman</span><span class="op">)</span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">haven</span>,<span class="va">tibble</span>,<span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu">read_sav</span><span class="op">(</span><span class="st">"data/Frequency &amp; Probability Study 2 - 3-24-19.sav"</span><span class="op">)</span></span>
+<span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="va">s2</span> <span class="op">|&gt;</span> <span class="fu">…</span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="cn"></span><span class="op"></span><span class="cn"></span></span><span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="cn"></span><span class="op"></span><span class="cn"></span></span><span><span class="op"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fl"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fl"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span></span><span><span class="co"></span></span><span><span class="co"></span></span><span><span class="co"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="st"></span><span class="op"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="op"></span></span><span></span><span><span class="co"></span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span></span><span></span><span><span class="co"></span></span><span></span><span></span><span><span class="co"></span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="fl"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span></code></pre></div><div class="cell-output cell-output-stderr"><pre><code></code></pre></div>
+</div>
+<div class="card-attribution card-text-small start">
+<div class="listing-author">
+Thomas E. Gorman
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1727993292541" data-listing-reading-time-sort="7" data-listing-word-count-sort="1351">
+<a href="./study2_info.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="listing-item-img-placeholder card-img-top" style="height: 500px;">&nbsp;</div>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Scenario 1
+</h5>
+<div class="card-text listing-description">
+
+
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>Variable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Family Cooling Use</td>
+<td>ACFAMILY1</td>
+</tr>
+<tr class="even">
+<td>State Cooling Average</td>
+<td>ACSTATE1</td>
+</tr>
+<tr class="odd">
+<td>Cooling Action Plan 1</td>
+<td>ACAPONE1</td>
+</tr>
+<tr class="even">
+<td>Cooling Action Plan 2</td>
+<td>ACAPTWO1</td>
+</tr>
+<tr class="odd">
+<td>Family…</td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr><tr class="odd"><td></td><td></td></tr><tr class="even"><td></td><td></td></tr></tbody></table>
+</div>
+<div class="card-attribution card-text-small start">
+<div class="listing-author">
+
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1726667066822" data-listing-reading-time-sort="20" data-listing-word-count-sort="3823">
 <a href="./study_info.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="listing-item-img-placeholder card-img-top" style="height: 500px;">&nbsp;</div>
@@ -269,7 +358,7 @@ In the re-launch of the frequency and probability study, the new design is a 4 s
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1726526931220" data-listing-reading-time-sort="34" data-listing-word-count-sort="6677">
+<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1726526931220" data-listing-reading-time-sort="34" data-listing-word-count-sort="6677">
 <a href="./initial_slides.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="listing-item-img-placeholder card-img-top" style="height: 500px;">&nbsp;</div>
@@ -386,7 +475,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/tegorman13\.github\.io\/Representation_Study\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -723,8 +812,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./study_info.html" class="pagination-link" aria-label="study_info">
-        <span class="nav-page-text">study_info</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./study2.html" class="pagination-link" aria-label="Study 2 Analysis">
+        <span class="nav-page-text">Study 2 Analysis</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -736,11 +825,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>site created with <a href="https://cran.r-project.org/">R</a> and <a href="https://quarto.org">quarto</a></p>
-</div>
+<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/Representation_Study/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link active" href="https://github.com/tegorman13/medical_llm" target="_blank" aria-current="page">
+    <a class="nav-link active" href="https://github.com/tegorman13/Representation_Study" target="_blank" aria-current="page">
 <p><i class="fa-brands fa-github fa-2.0x" aria-label="github"></i></p>
 </a>
   </li>  
