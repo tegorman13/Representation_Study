@@ -199,8 +199,8 @@ print(shapiro_test)
 
 ```{r}
 #| layout-ncol: 1
-#| fig.width: 10
-#| fig.height: 8
+#| fig.width: 9
+#| fig.height: 6
 
 #outlier_plot
 
@@ -244,8 +244,8 @@ sum1 |>
 - dashed lines also indicate goal percentage - dots on the line indicate participants who met the goal
 
 ```{r}
-#| fig.width: 11
-#| fig.height: 9
+#| fig.width: 10
+#| fig.height: 7
 
   # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
 sum1 |> 
