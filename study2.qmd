@@ -23,7 +23,6 @@ format:
 ---
 
 
-
 ```{r}
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4)
@@ -246,6 +245,7 @@ sum1 |>
 
 - Facets indicate the Reference class (%, kWh, USD) and the goal % reduction (10%, 15%)
 - dashed lines also indicate goal percentage - dots on the line indicate participants who met the goal
+
 
 ```{r}
 #| fig.width: 10

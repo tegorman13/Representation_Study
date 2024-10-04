@@ -1,4 +1,4 @@
-
+pacman::p_load(ggplot2,wesanderson,glue)
 
 
 theme_blank <- theme(
@@ -97,3 +97,49 @@ theme_nice_b <- function() {
 
 
 
+geom_flat_violin <- function(mapping = NULL, data = NULL, stat = "ydensity",
+                             position = "dodge", trim = TRUE, scale = "area",
+                             show.legend = NA, inherit.aes = TRUE, ...) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomFlatViolin,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      trim = trim,
+      scale = scale,
+      ...
+    )
+  )
+}
+
+
+
+
+col_themes <- tibble::lst(darjeeling = c(wes_palette("Darjeeling1"),wes_palette("Darjeeling2"), ggokabeito::palette_okabe_ito(),
+  wes_palette("AsteroidCity1"), wes_palette("AsteroidCity2")), 
+                          wes2 = wes_palette("AsteroidCity1"), 
+                          okabeito = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#000000"))
+
+# okabeito <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#000000")
+# wes2 <- wes_palette("AsteroidCity1")
+
+
+#### COLOR THEME ##### 
+# darjeeling <- c(wes_palette("Darjeeling1"),wes_palette("Darjeeling2"))
+#cat(darjeeling)
+
+
+scale_colour_discrete <- function(...) {
+  scale_colour_manual(..., values = col_themes$darjeeling)
+}
+
+scale_fill_discrete <- function(...) {
+  scale_fill_manual(..., values = col_themes$darjeeling)
+}
+
+options(ggplot2.continuous.colour=col_themes$darjeeling)
+options(ggplot2.continuous.fill = col_themes$darjeeling)
