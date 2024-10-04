@@ -1,0 +1,24 @@
+---
+title: "Representation Project"
+author:
+- name: Thomas Gorman
+  url: https://tegorman13.github.io/
+  #orcid: 0000-0001-5366-5442
+format:
+  html: 
+    grid:
+      sidebar-width: 200px
+      body-width: 1200px
+      margin-width: 150px
+      gutter-width: 1.0rem
+listing:
+  id: sample-listings
+  type: grid #default
+  grid-columns: 2
+  sort:
+    - "date desc"
+    - "title desc"
+  image-height: 500px
+#   contents:
+#     - gpt4_sim.qmd
+---

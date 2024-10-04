@@ -1,0 +1,458 @@
+---
+title: "Study 2 Analysis"
+author:
+- name: Thomas E. Gorman
+  url: https://tegorman13.github.io/
+  affiliations: 
+  - name:  Communication and Cognition Lab, Purdue University, USA
+    affiliation-url: https://web.ics.purdue.edu/~treimer/
+lightbox: true
+---
+
+
+
+```{r}
+library(pacman)
+pacman::p_load(dplyr,purrr,tidyr,haven,tibble,ggplot2,gt,ggh4x,lme4)
+
+s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
+s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id)
+
+s2 <- s2 |> 
+  mutate(
+    state1 = case_when(
+      COLORADO == 1 ~ "Colorado",
+      MASSACHUSETTS == 1 ~ "Massachusetts",
+      CALIFORNIA == 1 ~ "California",
+      TEXAS == 1 ~ "Texas",
+      TRUE ~ NA_character_
+    ),
+    state2 = case_when(
+      COLORADO == 2 ~ "Colorado",
+      MASSACHUSETTS == 2 ~ "Massachusetts",
+      CALIFORNIA == 2 ~ "California",
+      TEXAS == 2 ~ "Texas",
+      TRUE ~ NA_character_
+    )
+  ) |> 
+  mutate(refClass = case_when(
+  REFERENCECLASS == 1 ~ "USD",
+  REFERENCECLASS == 2 ~ "kWh",
+  REFERENCECLASS == 3 ~ "Percentage"
+)) |> 
+  relocate(refClass,state1,state2, .after = id)
+
+
+
+s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, ACFAMILY1:TOTALAPTWO1) |> 
+  mutate( 
+    block = 1,
+    state=state1,
+  pct_goal=case_when (TENPERCENT == 1 ~ "10%", TENPERCENT == 2 ~ "15%"), 
+  rounded = case_when(ROUNDED == 1 ~ "Rounded", ROUNDED == 2 ~ "Not Rounded")
+  ) |> relocate(id,block,refClass,pct_goal,rounded,state)  |> 
+  select(-TENPERCENT,-ROUNDED, -state1)
+
+s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED, ACFAMILY2:TOTALAPTWO2) |> 
+  mutate( 
+    block = 2,
+    state=state2,
+  pct_goal=case_when (TENPERCENT == 1 ~ "15%", TENPERCENT == 2 ~ "10%"), 
+  rounded = case_when(ROUNDED == 1 ~ "Not Rounded", ROUNDED == 2 ~ "Rounded")
+  ) |> relocate(id,block,refClass,pct_goal,rounded,state) |> 
+  select(-TENPERCENT,-ROUNDED, -state2)
+
+
+# pivot data into longer format, so that each appliance type is on its own row, so for each appliance we have the family value, state, value, plan 1 value, and plan 2 value
+# so for the first row for id 113029, we would have ACFAMILY1 ACSTATE1 ACAPONE1 ACAPTWO1, then the next row would be HEATFAMILY1 HEATSTATE1 HEATAPONE1 HEATAPTWO1, etc.
+# so each of the bill sources, AC, HEAT, WATER, REFRIG, OTHER, will now be on its own row, with the family, state, value, plan 1 value, and plan 2 value
+
+s2_b1_long <- s2_b1 |>
+  pivot_longer(
+    cols = c(ACFAMILY1:TOTALAPTWO1),
+    names_to = c("appliance", "measure"),
+    names_pattern = "(AC|HEAT|WATER|REFRIG|OTHER|TOTAL)(FAMILY1|STATE1|APONE1|APTWO1)",
+    values_to = "value"
+  ) |>
+  pivot_wider(
+    names_from = measure,
+    values_from = value
+  ) |>
+  rename(
+    family = FAMILY1,
+    state_avg = STATE1,
+    plan1 = APONE1,
+    plan2 = APTWO1
+  ) |>
+  relocate(appliance, .after = refClass)
+
+
+s2_b2_long <- s2_b2 |>
+  pivot_longer(
+    cols = c(ACFAMILY2:TOTALAPTWO2),
+    names_to = c("appliance", "measure"),
+    names_pattern = "(AC|HEAT|WATER|REFRIG|OTHER|TOTAL)(FAMILY2|STATE2|APONE2|APTWO2)",
+    values_to = "value"
+  ) |>
+  pivot_wider(
+    names_from = measure,
+    values_from = value
+  ) |>
+  rename(
+    family = FAMILY2,
+    state_avg = STATE2,
+    plan1 = APONE2,
+    plan2 = APTWO2
+  ) |>
+  relocate(appliance, .after = refClass)
+
+
+s2_long <- bind_rows(s2_b1_long, s2_b2_long) |> 
+  arrange(id, block) 
+
+# pivot so that plan1 and plan2 are on their own rows
+s2_long <- s2_long |>
+  group_by(id,block) |> 
+  pivot_longer(
+    cols = c(plan1, plan2),
+    names_to = "plan",
+    values_to = "value"
+  ) |> 
+  mutate(change = value-family, state_dif = value-state_avg,plan=as_factor(plan)) 
+
+
+#write.csv(s2_long,"data/study_2_tg.csv")
+
+
+# compute total kWh reduction, and total % reduction 
+sum1 <- s2_long |> 
+  filter(appliance !="TOTAL") |> 
+  group_by(id,refClass,state,pct_goal,rounded,block,plan) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif))
+
+
+
+```
+
+```{r}
+#| fig.width: 11
+#| fig.height: 9
+
+outliers <- sum1 |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
+                                     z_score=(pct_change-change_mean)/change_sd,
+                                     is_outlier=abs(z_score)>2.5)
+
+outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
+
+outlier_summary <- outliers %>%
+  group_by(pct_goal, rounded, refClass,state) %>%
+  summarise(
+    num_outliers = sum(is_outlier, na.rm = TRUE),
+    total = n(),
+    outlier_percentage = (num_outliers / total) * 100
+  )
+
+outlier_plot <- ggplot(outliers, aes(x = state, y = z_score, color = is_outlier)) +
+  geom_jitter(alpha = 0.5) +
+  facet_wrap(~ pct_goal) +
+  labs(
+    title = "Z-Scores of Change in Energy Usage by Appliance",
+    x = "Appliance",
+    y = "Z-Score",
+    color = "Outlier"
+  ) +
+  theme_minimal()
+
+outlier_plot
+
+
+
+
+sum1 |> ggplot(aes(x=pct_change)) +
+  geom_density(aes(fill=refClass), alpha=0.5) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.1, alpha=0.3) +
+  facet_wrap(~state, scales="free_y") +
+  theme_minimal() +
+  labs(title="Distribution of Percent Change by State and Reference Class",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2")
+
+# plot densities in a better way to account for the positive skew
+
+
+# Assess skewness and normality of the data
+library(e1071)
+# Calculate skewness and kurtosis for the `pct_change` variable
+skewness_value <- skewness(sum1$pct_change, na.rm = TRUE)
+kurtosis_value <- kurtosis(sum1$pct_change, na.rm = TRUE)
+
+cat("Skewness:", skewness_value, "\n")
+cat("Kurtosis:", kurtosis_value, "\n")
+
+
+# Shapiro-Wilk test for normality (sample size limitation)
+shapiro_test <- shapiro.test(sum1$pct_change[1:5000])  # Using first 5000 observations if large dataset
+print(shapiro_test)
+
+
+
+sum1 |> 
+  filter(!id %in% outlier_id) |>
+  ggplot(aes(x=pct_change)) +
+  geom_density(aes(fill=refClass), alpha=0.5) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.1, alpha=0.3) +
+  facet_wrap(~state, scales="free_y") +
+  theme_minimal() +
+  labs(title="Distribution of Percent Change by State and Reference Class",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2")
+
+
+
+sum1 <- sum1 |> 
+  filter(!id %in% outlier_id)
+
+
+```
+
+
+
+
+
+```{r}
+# plot distribution of reductions by applicance
+s2_long |> ggplot(aes(x = change)) + geom_histogram(bins = 30) + facet_wrap(~appliance, scales = "free")
+
+
+
+
+DT::datatable(sum1)
+
+
+DT::datatable(sum1 |> group_by(id,block) |> summarise(diff(total_kWh),diff(orig_kWh)))
+
+```
+
+
+
+```{r}
+
+sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+  geom_boxplot(position = "dodge") +
+  facet_wrap(~state)
+
+
+ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") 
+```
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 10
+
+
+
+  # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
+sum1 |> 
+  filter(block==1) |>
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+  mutate(id=reorder(id,pct_change)) |> 
+  ggplot(aes(y=id,x=pct_change)) + 
+  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+  ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
+
+sum1 |> 
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+  mutate(id=reorder(id,pct_change)) |> 
+  ggplot(aes(y=id,x=pct_change)) + 
+  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+  ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2) 
+
+# sum1 |> 
+#   ungroup() |> 
+#   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+#   mutate(id=reorder(id,pct_change)) |> 
+#   ggplot(aes(y=id,x=pct_change,col=refClass)) + 
+#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+#   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",scales="free",ncol=2) 
+# 
+# 
+# sum1 |> 
+#   ungroup() |> 
+#     mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+#   ggplot(aes(x=state,y=pct_change,col=state)) + 
+#   geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+#     geom_hline(aes(yintercept=goal_pct),linetype="dashed",alpha=.5) +
+#   ggdist::stat_halfeye()+
+#   ggh4x::facet_nested_wrap(block~pct_goal,axes="all",ncol=2) 
+
+
+```
+
+```{r}
+#| fig.height: 11
+#| 
+sum1 |> 
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+         block=factor(block)) |>
+  group_by(refClass,block,pct_goal) |>
+  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+  ggplot(aes(x=mean_pct_change,y=refClass,col=block)) + 
+  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+  ggforce::facet_col(~pct_goal)
+
+
+sum1 |> 
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+         block=factor(block)) |>
+  group_by(refClass,,pct_goal,state) |>
+  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+  ggplot(aes(x=mean_pct_change,y=refClass,col=pct_goal)) + 
+  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+  ggforce::facet_col(~state)
+
+
+sum1 |> 
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100,
+         block=factor(block)) |>
+  group_by(refClass,,pct_goal,state,goal_pct) |>
+  summarise(mean_pct_change = mean(pct_change),se_pct_change = sd(pct_change)/sqrt(n())) |>
+  ggplot(aes(x=mean_pct_change,y=refClass,col=state)) + 
+  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+  geom_pointrange(aes(xmin=mean_pct_change-se_pct_change,xmax=mean_pct_change+se_pct_change),position = position_dodge(width=0.5)) +
+  ggforce::facet_col(~pct_goal)
+
+
+
+  s2_long |> 
+    filter(appliance != "TOTAL") |>
+  group_by(refClass,appliance,state) |>
+  summarise(mean_kWh_change = mean(change),se_pct_change = sd(change)/sqrt(n())) |>
+  ggplot(aes(x=mean_kWh_change,y=refClass,col=appliance)) + 
+  geom_pointrange(aes(xmin=mean_kWh_change-se_pct_change,xmax=mean_kWh_change+se_pct_change),position = position_dodge(width=0.5)) +
+  ggforce::facet_col(~state)
+
+  
+s2_long |> 
+  filter(appliance != "TOTAL") |>
+  ggplot(aes(x=refClass,y=change,fill=state))+
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  scale_y_reverse() +
+  facet_wrap(~appliance)
+  
+
+s2_long |> 
+  filter(appliance != "TOTAL") |>
+  ggplot(aes(x=refClass,y=state_dif,fill=state))+
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  scale_y_reverse() +
+  facet_wrap(~appliance)
+
+s2_long |> 
+  filter(appliance != "TOTAL") |>
+  ggplot(aes(x=state_dif,y=value,col=state))+
+  geom_point() +
+  facet_wrap(~appliance)
+
+
+sum1 |> 
+  ggplot(aes(x=state_dif,y=pct_change,col=state)) +
+  geom_point() 
+
+```
+
+
+```{r}
+
+# mixed effects model testing effect of refClass, state, and pct_goal on pct_change
+
+m1 <- lmer(pct_change ~ refClass  + (1+plan|id) + (1|state), data = sum1)
+summary(m1)
+
+
+
+
+```
+
+
+
+```{r}
+#| eval: false
+
+
+
+
+
+# compute total kWh reduction, and total % reduction 
+s2_long |> group_by(id,refClass,state,pct_goal,rounded,block,plan) |> 
+  filter(appliance !="TOTAL") |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), total_pct = sum(value)/sum(family)) |>
+  ggplot(aes(x = pct_goal, y = total_pct, fill = refClass)) + 
+  geom_boxplot(position = "dodge") +
+  facet_wrap(~state)
+  
+s2_long |> group_by(id,refClass,state,pct_goal,rounded) |> 
+  filter(appliance !="TOTAL") |> 
+  summarise(total_kWh = sum(reduction), total_pct = sum(reduction)/sum(family)) |>
+  ggplot(aes(x = pct_goal, y = total_pct, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") 
+  
+
+s2_long |> group_by(id,refClass,state,pct_goal,rounded) |> 
+  filter(appliance !="TOTAL") |> 
+  summarise(total_kWh = sum(reduction), orig_kWh=sum(family), total_pct = round(sum(reduction)/sum(family))) |>
+  ggplot(aes(x = state1, y = total_pct, fill = refClass)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  facet_wrap(~pct_goal)
+  
+
+s2_long |> group_by(id,refClass,state,pct_goal,rounded,plan) |> 
+  filter(appliance !="TOTAL") |> 
+  summarise(total_kWh = sum(reduction), total_pct = sum(reduction)/sum(family)) |>
+  ggplot(aes(x = refClass, y = total_pct, fill = pct_goal)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  facet_wrap(plan~rounded)
+
+# s2_long <- s2 |>
+#   pivot_longer(
+#     cols = c(ACFAMILY1:TOTALAPTWO1),
+#     names_to = c(".value", "appliance"),
+#     names_pattern = "(.*)(FAMILY1|STATE1|APONE1|APTWO1)$",
+#     values_to = "value"
+#   )
+
+
+
+
+# s2 |> pivot_longer(cols = contains("FAMILY"), names_to = "Family", values_to = "kWh") |> relocate(Family,kWh) |> 
+#   pivot_longer(cols = contains("STATE1"), names_to = "State", values_to = "kWh") |> relocate(State)
+
+
+# 
+# s2 |> 
+#   pivot_longer(cols=ACFAMILY1:TOTALAPTWO1, names_to = "appliance", values_to = "family") |> relocate(appliance,family)
+
+
+```
+

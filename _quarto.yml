@@ -1,0 +1,83 @@
+project:
+  type: website
+  output-dir: docs
+  preview:
+    port: 4205
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "!_*" # ignore any file that starts with a _
+    
+  # resources: 
+  #   - "Task/index.html"
+
+
+website:
+  title: "Representation Study"
+  # repo-url: https://github.com/tegorman13/medical_llm
+  # site-url: "https://tegorman13.github.io/medical_llm"
+  repo-actions: [source]
+  reader-mode: true
+  page-navigation: true
+  sidebar:
+    style: docked 
+    background: light
+    tools:
+    - icon: github
+      href: https://github.com/tegorman13/medical_llm
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Background"
+        contents:
+          - href: study_info.md
+            text: "study_info"
+          - href: initial_slides.md
+            text: "initial_slides"
+
+  page-footer:
+    left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
+    center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"
+    right: 
+      - text: "{{< fa brands github size=2.0x >}}"
+        aria-label: GitHub
+        target: _blank
+        href: https://github.com/tegorman13/medical_llm
+
+
+
+execute:
+  freeze: auto
+  tidy: true
+  
+bibliography: [assets/Medical.bib] #, assets/grateful-refs.bib
+csl: assets/apa.csl
+
+format:
+  html:
+    # theme:
+    #   light: spacelab #[default]
+    #   dark: cyborg
+    #theme: Assets/Style/lux-modified.scss 
+    css: "assets/style_qt.css"
+    page-layout: full
+    tbl-cap-location: top
+    fig-cap-location: bottom
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    cold-fold: true
+    cold-tools: true
+    code-link: true
+    code-line-numbers: false
+    code-summary: "Display code"
+    citations-hover: true
+    #code-overflow: wrap
+    code-copy: true
+    number-depth: 3
+    smooth-scroll: true
+    # code-block-bg: "#f8f8f8" #"#272822"
+    # highlight-style: monochrome #monokai #github #a11y
+    html-math-method: mathjax
+    link-external-newwindow: true
+    #link-external-filter: '^(?:http:|https:)\/\/www\.tegorman13.github.io/dot_variability\/custom'

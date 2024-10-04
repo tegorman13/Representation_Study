@@ -1,0 +1,123 @@
+/* Minimal CSS */
+
+:root {
+    --link-color: #087d42;
+  }
+  
+  /* Link color */
+  
+  a {
+    color: var(--link-color)
+  }
+  
+  a:hover {
+    color: var(--link-color)
+  }
+  
+  .sidebar nav[role=doc-toc] ul>li>a.active,
+  .sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
+    border-left: 1px solid var(--link-color);
+    color: var(--link-color) !important
+  }
+  
+  .sidebar nav[role=doc-toc] ul>li>a:hover,
+  .sidebar nav[role=doc-toc] ul>li>ul>li>a:hover {
+    color: var(--link-color) !important
+  }
+  
+  div.sidebar-item-container .active,
+  div.sidebar-item-container .show>.nav-link,
+  div.sidebar-item-container .sidebar-link>code {
+    color: var(--link-color)
+  }
+  
+  div.sidebar-item-container:hover,
+  div.sidebar-item-container:focus {
+    color: var(--link-color)
+  }
+  
+  .nav-page a:hover {
+    color: var(--link-color)
+  }
+  
+  /* Callouts */
+  
+  .callout {
+    background-color: #f8f8f8;
+    font-size: .95em;
+  }
+  
+  .callout .sourceCode {
+    background-color: #f8f8f8;
+    border: none;
+  }
+  
+  .halfsize {
+    width: 50%;
+    float: right;
+    margin-left: 1.5em;
+    margin-top: .5em;
+  }
+  
+  /* Tables */
+  
+  .table {
+    font-size: .75em;
+  }
+  
+  /* Code */
+  
+  .sourceCode {
+    background-color: #f8f8f8;
+    font-size: .95em;
+  }
+  
+  pre.sourceCode {
+    background-color: #f8f8f8;
+  }
+  
+  .cell-output {
+    font-size: .85em;
+  }
+  
+  /* Wraps code output */
+  pre code:not(.sourceCode) {
+    white-space: pre-wrap;
+  }
+  
+  /* Figures */
+  
+  /* Overwrites bootstrap setting */
+  /* .img-fluid {
+    max-width: 75%;
+  }
+   */
+  .quarto-cover-image {
+    max-width: 35%;
+  }
+
+  .sidebar-navigation .sidebar-item {
+    font-size: .925rem
+}
+  
+  
+  /* TESTING/ VIEWING HEX COLORS */
+  .my_greyscale {
+    color: #000000;
+    color: #525252;
+    color: #717171;
+    color: #929292;
+    color: #BABABA;
+    color: #DADADA;
+  }
+  
+  .my_colorblind {
+    color: #999999;
+    color: #E69F00;
+    color: #56B4E9;
+    color: #009E73;
+    color: #F0E442;
+    color: #0072B2;
+    color: #D55E00;
+    color: #CC79A7;
+  }
