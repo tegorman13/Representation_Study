@@ -25,7 +25,7 @@ format:
 
 ```{r}
 library(pacman)
-pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4)
+pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable)
 
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
@@ -33,9 +33,6 @@ theme_set(theme_nice())
 
 s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
 s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id)
-
-
-
 s2 <- s2 |> 
   mutate(
     state1 = case_when(
@@ -58,24 +55,48 @@ s2 <- s2 |>
   REFERENCECLASS == 2 ~ "kWh",
   REFERENCECLASS == 3 ~ "Percentage"
 )) |> 
-  relocate(refClass,state1,state2, .after = id)
+  rename(calc=MATH01) |>  # replace NA's in calc with 0's
+  mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
+  relocate(refClass,state1,state2,calc, .after = id) 
+
+# recode DEMO4 variable based on this mapping: 
+# 1 = "Some schooling, but no diploma or degree" 
+# 2 = "Highschool diploma or GED" 
+# 3 = "Some college" 
+# 4 = "College degree" 
+# 5 = "Some graduate school" 
+# 6 = "Graduate degree" 
+# 7 = "Choose not to answer" 
+
+s2 <- s2 |> rename(edu=DEM04) |>
+  mutate(edu = factor(case_when(
+    edu == '1' ~ "Some schooling, but no diploma or degree",
+    edu == 2 ~ "Highschool diploma or GED",
+    edu == 3 ~ "Some college",
+    edu == 4 ~ "College degree",
+    edu == 5 ~ "Some graduate school",
+    edu == 6 ~ "Graduate degree",
+    edu == 7 ~ "Choose not to answer",
+    TRUE ~ NA_character_
+  ))) |> relocate(edu, .after = id) 
 
 
-
-s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, ACFAMILY1:TOTALAPTWO1) |> 
+s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, calc, edu,ACFAMILY1:TOTALAPTWO1) |> 
   mutate( 
     block = 1,
     state=state1,
   pct_goal=case_when (TENPERCENT == 1 ~ "10%", TENPERCENT == 2 ~ "15%"), 
+  pct=case_when (TENPERCENT == 1 ~ .10, TENPERCENT == 2 ~ .15),
   rounded = case_when(ROUNDED == 1 ~ "Rounded", ROUNDED == 2 ~ "Not Rounded")
   ) |> relocate(id,block,refClass,pct_goal,rounded,state)  |> 
   select(-TENPERCENT,-ROUNDED, -state1)
 
-s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED, ACFAMILY2:TOTALAPTWO2) |> 
+s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED, calc,edu,ACFAMILY2:TOTALAPTWO2) |> 
   mutate( 
     block = 2,
     state=state2,
   pct_goal=case_when (TENPERCENT == 1 ~ "15%", TENPERCENT == 2 ~ "10%"), 
+  pct=case_when (TENPERCENT == 1 ~ .10, TENPERCENT == 2 ~ .15),
   rounded = case_when(ROUNDED == 1 ~ "Not Rounded", ROUNDED == 2 ~ "Rounded")
   ) |> relocate(id,block,refClass,pct_goal,rounded,state) |> 
   select(-TENPERCENT,-ROUNDED, -state2)
@@ -144,12 +165,15 @@ s2_long <- s2_long |>
 # compute total kWh reduction, and total % reduction 
 sum1 <- s2_long |> 
   filter(appliance !="TOTAL") |> 
-  group_by(id,refClass,state,pct_goal,rounded,block,plan) |> 
+  group_by(id,refClass,state,pct_goal,pct,rounded,block,plan,calc,edu) |> 
   summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif))
 
 
 
 ```
+
+
+
 
 
 ## Inspect response distribution for outliers
@@ -158,7 +182,7 @@ sum1 <- s2_long |>
 
 outliers <- sum1 |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
                                      z_score=(pct_change-change_mean)/change_sd,
-                                     is_outlier=abs(z_score)>2.5)
+                                     is_outlier=abs(z_score)>2.75)
 
 outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
 
@@ -288,9 +312,267 @@ DT::datatable(extensions = 'Buttons',
 ```
 :::
 
+
+
+
+## Looking at % of subjects who hit the target reduction
+
+```{r}
+
+# Step 1: Calculate whether participants matched the target pct_goal
+sum1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct))
+
+# Step 2: Summarize the percentage of participants meeting the goal for each condition
+summary_pct <- sum1 |>
+  group_by(refClass, rounded, pct_goal) |>
+  summarise(
+    matched_count = sum(matched_goal),
+    total_count = n(),
+    pct_matched = matched_count / total_count * 100,
+    .groups = "drop"
+  )
+
+# Step 3: Create plots for the percentage of subjects in each condition who matched the target pct
+ggplot(summary_pct, aes(x = refClass, y = pct_matched, fill = rounded)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  facet_wrap(~ pct_goal) +
+  labs(
+    title = "Percentage of Participants Matching Target Pct by Condition",
+    x = "Reference Class",
+    y = "Percentage Matched (%)",
+    fill = "Rounding"
+  ) +
+  theme_minimal()
+
+
+summary_pct |>
+  gt() |>
+  tab_header(
+    title = md("**Percentage of Participants Matching Target Pct by Condition**"),
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal"
+  ) |>
+  fmt_number(
+    columns = c(pct_matched),
+    decimals = 2
+  ) |>
+  cols_label(
+    refClass = "Reference Class",
+    rounded = "Rounding",
+    pct_goal = "Pct Goal",
+    matched_count = "Matched Count",
+    total_count = "Total Count",
+    pct_matched = "Percentage Matched (%)"
+  ) |>
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) |>
+  tab_spanner(
+    label = "Participants",
+    columns = c(matched_count, total_count, pct_matched)
+  )
+
+```
+
+
+
+
+
+```{r}
+#| layout-ncol: 2
+#| fig.height: 10
+#| fig.width: 12
+
+# Step 1: Calculate whether participants matched the target pct_goal within different tolerances
+sum1a <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(
+    target_pct = as.numeric(sub("%", "", pct_goal)) / 100,
+    match_level = case_when(
+      abs(pct_change - target_pct) <= 0.001 ~ "Exact Match",
+      abs(pct_change - target_pct) <= 0.05 ~ "Within 5%",
+      abs(pct_change - target_pct) <= 0.10 ~ "Within 10%",
+      abs(pct_change - target_pct) <= 0.20 ~ "Within 20%",
+      TRUE ~ "Over 20%"
+    ),
+    match_level = factor(match_level, levels = c("Exact Match", "Within 5%", "Within 10%", "Within 20%", "Over 20%"))
+  )
+
+# Step 2: Summarize the percentage of participants in each match level for each condition
+summary_pct <- sum1a |>
+  group_by(refClass, rounded, pct_goal, match_level) |>
+  summarise(count = n(), .groups = "drop") |>
+  group_by(refClass, rounded, pct_goal) |>
+  mutate(
+    total_count = sum(count),
+    percentage = count / total_count * 100
+  ) |>
+  ungroup()
+
+# Step 3: Create plot
+ggplot(summary_pct, aes(x = interaction(refClass, rounded), y = percentage, fill = match_level)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_wrap(~ pct_goal, scales = "free_x") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Reference Class and Rounding",
+    y = "Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggplot(summary_pct, aes(x = refClass, y = percentage, fill = match_level)) +
+  geom_bar(stat = "identity",position=position_dodge()) +
+  facet_wrap(rounded ~ pct_goal, scales = "free_x") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Reference Class and Rounding",
+    y = "Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+## Cumulative plot
+
+**Click on plots to enlarge**
+
+```{r}
+#| layout-ncol: 2
+#| fig.height: 11
+#| fig.width: 12
+
+# Step 1: Calculate match levels with cumulative groups
+sum1c <- s2_long |>
+  filter(appliance != "TOTAL") |>
+  group_by(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) |>
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(
+    target_pct = as.numeric(sub("%", "", pct_goal)) / 100,
+    match_level = case_when(
+      abs(pct_change - target_pct) <= 0.001 ~ "Exact Match",
+      abs(pct_change - target_pct) <= 0.05 ~ "Within 5%",
+      abs(pct_change - target_pct) <= 0.10 ~ "Within 10%",
+      abs(pct_change - target_pct) <= 0.20 ~ "Within 20%",
+      TRUE ~ "Over 20%"
+    ),
+    match_level = factor(
+      match_level, 
+      levels = c("Exact Match", "Within 5%", "Within 10%", "Within 20%", "Over 20%")
+    )
+  )
+
+# Step 2: Create cumulative groups for each match level
+summary_pct <- sum1c |>
+  group_by(refClass, rounded, pct_goal, match_level) |>
+  summarise(count = n(), .groups = "drop") |>
+  group_by(refClass, rounded, pct_goal) |>
+  mutate(
+    total_count = sum(count),
+    cumulative_count = cumsum(count),
+    cumulative_percentage = cumulative_count / total_count * 100
+  ) |>
+  ungroup()
+
+# Step 3: Create a plot for cumulative percentages
+ggplot(summary_pct, aes(x = refClass, y = cumulative_percentage, fill = match_level)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  facet_wrap(pct_goal~rounded, scales = "free_x") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Cumulative Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Reference Class",
+    y = "Cumulative Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggplot(summary_pct, aes(x = refClass, y = cumulative_percentage, fill = match_level)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  facet_wrap(~rounded, scales = "free_x") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Cumulative Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Reference Class",
+    y = "Cumulative Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggplot(summary_pct, aes(x = refClass, y = cumulative_percentage, fill = match_level)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Cumulative Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Reference Class",
+    y = "Cumulative Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(summary_pct, aes(x = rounded, y = cumulative_percentage, fill = match_level)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Cumulative Percentage of Participants by Match Level",
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal",
+    x = "Rounding",
+    y = "Cumulative Percentage (%)",
+    fill = "Match Level"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
+
+
+
 ## Main Effects and Interactions
 
 **Click on plots to enlarge**
+
 
 ```{r}
 #| layout-ncol: 2
@@ -367,6 +649,130 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) +
   ) 
 
 ```
+
+
+## Calculator and education
+
+
+
+
+```{r}
+
+
+# table with only education level counts, just use kable
+s2 |> 
+  group_by(edu) |> 
+  summarise(n = n(), .groups = "drop") |>
+  knitr::kable(caption = "Count of Items by Education Level", format = "html") 
+
+# table with only calculator counts
+
+s2 |> 
+  mutate(calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
+  group_by(calc) |> 
+  summarise(n = n(), .groups = "drop") |>
+  knitr::kable(caption = "Count of Items by Calculator Use", format = "html")
+
+
+
+# s2 |> 
+#   mutate(rounded = case_when(ROUNDED == 1 ~ "Not Rounded", ROUNDED == 2 ~ "Rounded")) |> 
+#   group_by(calc, refClass, rounded) |> 
+#   summarise(n = n(), .groups = "drop") |>
+#   group_by(calc, refClass) |>
+#   mutate(count_stats = as.character(n)) |>
+#   ungroup() |>
+#   tabulator(
+#     rows = c("calc", "refClass"),
+#     columns = "rounded",
+#     `Count` = as_paragraph(count_stats)
+#   ) |>
+#   as_flextable() |> 
+#   align(align = "left", part = "all") |>
+#   autofit() |>
+#   set_caption(
+#     caption = "Count of Items by Calculation Type, Reference Class, and Rounded Value",
+#     style = "Table Caption"
+#   )
+
+
+s2 |> 
+  mutate(
+    rounded = if_else(ROUNDED == 1, "Not Rounded", "Rounded"),
+    calc = if_else(calc == 0, "No Calculator", "Used Calculator")
+  ) |> 
+  count(calc, refClass, rounded) |>
+  pivot_wider(
+    names_from = c(calc, rounded),
+    values_from = n,
+    values_fill = 0
+  ) |>
+  gt() |>
+  tab_header(
+    title = md("**Count of Items by Calculator Use, Reference Class, and Rounding**")
+  ) |>
+  cols_align(align = "left") |>
+  tab_spanner_delim(delim = "_") |>
+  cols_label(
+    `No Calculator_Not Rounded` = "Not Rounded",
+    `No Calculator_Rounded` = "Rounded",
+    `Used Calculator_Not Rounded` = "Not Rounded",
+    `Used Calculator_Rounded` = "Rounded"
+  )
+
+
+# table with education level counts
+
+s2 |>
+  group_by(edu, refClass) |>
+  summarise(n = n(), .groups = "drop") |>
+  pivot_wider(names_from = refClass, values_from = n, values_fill = 0) |>
+  gt(rowname_col = "edu") |>
+  tab_header(title = md("**Count of Items by Education Level and Reference Class**")) |>
+  cols_align(align = "left", columns = everything())
+
+
+# table with calculator and education level counts
+s2 |>
+  mutate(calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
+  group_by(calc, edu) |>
+  summarise(n = n(), .groups = "drop") |>
+  pivot_wider(names_from = edu, values_from = n, values_fill = 0) |>
+  gt(rowname_col = "calc") |>
+  tab_header(title = md("**Count of Items by Calculator Use and Education Level**")) |>
+  cols_align(align = "left", columns = everything())
+
+
+
+
+sum1 |> ggplot(aes(x = calc, y = pct_change, fill = calc)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Calculator Use",
+    x = "Calculator Use",
+    y = "% Change",
+    fill = "Calculator Use"
+  )
+
+
+## education
+
+sum1 |> ggplot(aes(x = edu, y = pct_change, fill = edu)) + 
+  stat_summary(fun = mean, geom = "bar", position="dodge") +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
+  labs(
+    title = "Effect of Education",
+    x = "Education",
+    y = "% Change",
+    fill = "Education"
+  )
+
+
+
+
+```
+
 
 
 
