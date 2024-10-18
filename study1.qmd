@@ -183,6 +183,12 @@ s1 <- s1 |> group_by(id) |>
   mutate(trial=row_number(), block=ifelse(trial>=12,2,1), plan=as_factor(plan)) |> 
   select(-trial)
 
+# for id R_1kFwgoKAmNTwCs3 - when state== TEX, appliance == Heating, check values of family column
+s1 |> filter(id=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating") |> select(family) 
+# for id R_1kFwgoKAmNTwCs3 - when state== TEX, appliance == Heating, set values of family column to 6118
+s1 <- s1 |> mutate(family=ifelse(id=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating",6118,family))
+
+
 saveRDS(s1, here::here("data/s1_processed.rds"))
 
 ```
@@ -200,7 +206,13 @@ sum1 <- s1 |>
   summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif)) |> 
   mutate(matched_goal = (pct_change == .15))
 
+k <- sum1 |> group_by(id) |>  summarize(total_kWh=sum(total_kWh),orig_kWh=sum(orig_kWh),pct_change=round((orig_kWh-total_kWh)/orig_kWh,3)) |> 
+  mutate(matched_goal = (pct_change == .15))
 
+outliers <- sum1 |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
+                                     z_score=(pct_change-change_mean)/change_sd,
+                                     is_outlier=abs(z_score)>2.75)
+outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
 ```
 
 
@@ -223,6 +235,9 @@ sum1 |>
   summarise(mean_pct_change=median(pct_change), sd_pct_change=sd(pct_change), n=n()) |> 
   gt() |> 
   tab_header(title="Descriptive Statistics of Percent Change by State and Reference Class")
+
+
+sum1 <- sum1 |> filter(!id %in% outlier_id)
 
 ```
 
@@ -289,8 +304,6 @@ summary_pct |>
   ) |>
   cols_label(
     refClass = "Reference Class",
-    rounded = "Rounding",
-    pct_goal = "Pct Goal",
     matched_count = "Matched Count",
     total_count = "Total Count",
     pct_matched = "Percentage Matched (%)"

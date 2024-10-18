@@ -30,6 +30,8 @@ website:
         text: Home
       - section: "Analysis"
         contents: 
+          - href: study1.qmd
+            text: "Study 1 Analysis"
           - href: study2.qmd
             text: "Study 2 Analysis"
       - section: "Background"
@@ -38,6 +40,10 @@ website:
             text: "study_info"
           - href: initial_slides.md
             text: "initial_slides"
+          - href: study1_info.md
+            text: "study 1 info"
+          - href: study2_info.md
+            text: "study 2 info"
 
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"

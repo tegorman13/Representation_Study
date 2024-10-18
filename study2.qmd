@@ -286,8 +286,7 @@ sum1 |>
   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
   ggh4x::facet_nested_wrap(refClass~pct_goal,axes="all",scales="free",ncol=2)  + 
   labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
-  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7)),)
-
+  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7)))
 ```
 
 
