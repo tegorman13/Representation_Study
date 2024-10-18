@@ -1,0 +1,309 @@
+---
+title: "Study 1 Analysis"
+author:
+- name: Thomas E. Gorman
+  url: https://tegorman13.github.io/
+  affiliations: 
+  - name:  Communication and Cognition Lab, Purdue University, USA
+    affiliation-url: https://web.ics.purdue.edu/~treimer/
+lightbox: true
+toc: false
+code-fold: true
+code-tools: true
+execute:
+  #echo: false
+  warning: false
+format:
+  html: 
+    grid:
+      sidebar-width: 220px
+      body-width: 1200px
+      margin-width: 170px
+      gutter-width: 1.0rem
+---
+
+
+```{r}
+library(pacman)
+pacman::p_load(dplyr,purrr,tidyr,here,haven,tibble,ggplot2,gt,ggh4x,lme4,flextable)
+
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
+theme_set(theme_nice())
+
+
+```
+
+
+
+```{r}
+#| eval: FALSE
+
+# s1 <- haven::read_sav(here::here("data/data_qualtrics/Frequency & Probability - 9-23-18_October 6, 2024_20.39.sav")) # length(unique(s1$ResponseId)) = 588
+# qd <- unique(s1$ResponseId)
+
+s1 <- haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))
+
+#gd <- unique(s1$ResponseId)
+# gd %in% qd
+# qd %in% gd
+
+s1 <- s1 |> 
+  mutate(
+    state1 = case_when(
+      Colorado == 1 ~ "Colorado",
+      Massachusetts == 1 ~ "Massachusetts",
+      California == 1 ~ "California",
+      Texas == 1 ~ "Texas",
+      TRUE ~ NA_character_
+    ),
+    state2 = case_when(
+      Colorado == 2 ~ "Colorado",
+      Massachusetts == 2 ~ "Massachusetts",
+      California == 2 ~ "California",
+      Texas == 2 ~ "Texas",
+      TRUE ~ NA_character_
+    )) |> 
+  mutate(refClass = case_when(
+  ReferenceClass == 1 ~ "USD",
+  ReferenceClass == 2 ~ "kWh",
+  ReferenceClass == 3 ~ "Percentage"
+)) |> 
+  rename(calc=MATH01) |>  # replace NA's in calc with 0's
+  rename(id=ResponseId) |>
+  mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
+  relocate(refClass,state1,state2,calc, .after = id) 
+
+
+s1 <- s1 |> rename(edu=DEM04) |>
+  mutate(edu = factor(case_when(
+    edu == 1 ~ "Some schooling, but no diploma or degree",
+    edu == 2 ~ "Highschool diploma or GED",
+    edu == 3 ~ "Some college",
+    edu == 4 ~ "College degree",
+    edu == 5 ~ "Some graduate school",
+    edu == 6 ~ "Graduate degree",
+    edu == 7 ~ "Choose not to answer",
+    TRUE ~ NA_character_
+  ))) |> relocate(edu, .after = id) 
+
+# colnames(s1)
+# colnames(s1)[1000:1500]
+# colnames(s1)[1500:1843]
+
+# select all columns that start with "A"
+# s12 <- s1 |> select(id,state1,state2,refClass,calc,edu,starts_with("A")) |> 
+#   select(-starts_with("AIND"))
+
+
+# 
+# t <- s12 |> filter(state1=="Texas") |> 
+#   # select only columns that contain "TEX" in the name
+#   select(id,state1,state2,refClass,calc,edu,contains("TEX")) 
+# 
+# t2 <- s12 |> filter(state2=="Texas") |> 
+#   select(id,state1,state2,refClass,calc,edu,contains("TEX"))
+# 
+
+trim_na_and_empty_columns <- function(df) {
+  df %>%
+    select(where(~!(all(is.na(.)) | (is.character(.) && all(trimws(.) == ""))))) |> 
+    select(-starts_with("AIND"))
+}
+
+
+# Create a list of trimmed datasets for each unique ID
+dAll <- s1 %>%
+  group_by(id) %>%
+  group_split() %>%
+  map(trim_na_and_empty_columns) %>%
+  set_names(unique(s1$id))
+
+# modalities <- c(A = "kWh", D = "USD", P = "Percentage")
+# states <- c(CAL = "California", MASS = "Massachusetts", COL = "Colorado", TEX = "Texas")
+
+
+parse_action_plan <- function(df) {
+  
+  action_plan_cols <- df %>% 
+  select(-matches("01$|02$|03$|04$|05$|06$|33$|34$|35$|36$|37$")) %>%
+    select(
+      matches("^[ADP]\\d+(CAL|MASS|COL|TEX)\\d{2,3}$"), #,  # Select action plan columns
+      -matches("32$")                                     # Exclude columns ending with '32'
+    ) %>%
+    names()
+
+  df_long <- df %>%
+  select(-matches("01$|02$|03$|04$|05$|06$")) %>%
+    pivot_longer(
+      cols = all_of(action_plan_cols),
+      names_to = c("modality", "state", "item_num"),
+      names_pattern = "^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$",
+      values_to = "value"
+    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value) 
+  
+  df_long <- df_long |> 
+  mutate(
+    appliance = case_when(
+      item_num %in% c("07","08","09",7:10) ~ "Cooling",
+      item_num %in% 11:14 ~ "Heating",
+      item_num %in% 15:18 ~ "Water Heating",
+      item_num %in% 19:22 ~ "Refrigerator",
+      item_num %in% 23:26 ~ "Other Appliance",
+      item_num %in% 27:30 ~ "Total kWh",
+      item_num == 31 ~ "Preferred Plan",
+      item_num %in% 33:37 ~ "Reduction Choices",
+      TRUE ~ NA_character_
+    )
+  ) |> 
+  # item_type - family, state, plan1 or plan2
+  mutate(item_type=case_when(
+    item_num %in% c("07","11","15","19","23","27") ~ "family",
+    item_num %in% c("08","12","16","20","24","28") ~ "state_avg",
+    item_num %in% c("09","13","17","21","25","29") ~ "plan1",
+    item_num %in% c("10","14","18","22","26","30") ~ "plan2",
+    TRUE ~ "other"
+  )) 
+
+# pivot family and state_avg into their own separate columns, plan1 and plan2 into a combined column called plan
+df_long <- df_long |> 
+  filter(item_type !="other") |> 
+  select(-item_num) |> 
+  pivot_wider(names_from = c("item_type"), values_from = value) |> 
+  pivot_longer(cols = c("plan1","plan2"), names_to = "plan", values_to = "value") 
+  
+}
+
+test <- dAll |> # map each item in dAll into parse function
+  map(parse_action_plan) 
+  
+s1 <- bind_rows(test)
+
+s1 <- s1 |> group_by(id) |> 
+  mutate(trial=row_number(), block=ifelse(trial>=12,2,1), plan=as_factor(plan)) |> 
+  select(-trial)
+
+saveRDS(s1, here::here("data/s1_processed.rds"))
+
+```
+
+
+
+```{r}
+s1 <- readRDS(here::here("data/s1_processed.rds"))
+
+s1 <- s1 |> mutate(change = value-family, state_dif = value-state_avg) 
+
+sum1 <- s1 |> 
+  filter(appliance !="Total kWh") |> 
+  group_by(id,refClass,state,block,plan,calc,edu) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif)) |> 
+  mutate(matched_goal = (pct_change == .15))
+
+
+```
+
+
+```{r}
+
+sum1 |> ggplot(aes(x=pct_change)) +
+  geom_density(aes(fill=state), alpha=0.5) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  #facet_wrap(~refClass) +
+  labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2")
+
+# descriptive table to do with plot
+sum1 |> 
+  group_by(refClass,state) |> 
+  summarise(mean_pct_change=median(pct_change), sd_pct_change=sd(pct_change), n=n()) |> 
+  gt() |> 
+  tab_header(title="Descriptive Statistics of Percent Change by State and Reference Class")
+
+```
+
+
+
+
+```{r}
+#| fig.width: 10
+#| fig.height: 9
+
+  # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
+sum1 |> 
+  filter(block==1) |>
+  ungroup() |> 
+  mutate(id=reorder(id,pct_change)) |> 
+  ggplot(aes(y=id,x=pct_change)) + 
+  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+  geom_vline(aes(xintercept=.15),linetype="dashed",alpha=.5) +
+  ggh4x::facet_nested_wrap(~refClass,axes="all",scales="free",ncol=2)  + 
+  labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
+  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7)))
+```
+
+
+
+
+
+## Looking at % of subjects who hit the target reduction
+
+```{r}
+
+
+# Step 2: Summarize the percentage of participants meeting the goal for each condition
+summary_pct <- sum1 |>
+  group_by(refClass) |>
+  summarise(
+    matched_count = sum(matched_goal),
+    total_count = n(),
+    pct_matched = matched_count / total_count * 100,
+    .groups = "drop"
+  )
+
+# Step 3: Create plots for the percentage of subjects in each condition who matched the target pct
+ggplot(summary_pct, aes(x = refClass, y = pct_matched, fill = refClass)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(
+    title = "Percentage of Participants Matching Target Pct by Condition",
+    x = "Reference Class",
+    y = "Percentage Matched (%)",
+    fill = "Rounding"
+  ) +
+  theme_minimal()
+
+
+summary_pct |>
+  gt() |>
+  tab_header(
+    title = md("**Percentage of Participants Matching Target Pct by Condition**"),
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal"
+  ) |>
+  fmt_number(
+    columns = c(pct_matched),
+    decimals = 2
+  ) |>
+  cols_label(
+    refClass = "Reference Class",
+    rounded = "Rounding",
+    pct_goal = "Pct Goal",
+    matched_count = "Matched Count",
+    total_count = "Total Count",
+    pct_matched = "Percentage Matched (%)"
+  ) |>
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) |>
+  tab_spanner(
+    label = "Participants",
+    columns = c(matched_count, total_count, pct_matched)
+  )
+
+```
+
+

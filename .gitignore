@@ -24,6 +24,7 @@ background/*
 *.vdoc.r
 *.here
 *.sav
+*.zip
 
 # r created files
 *.rproj
