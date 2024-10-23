@@ -23,7 +23,9 @@ format:
 ---
 
 
+
 ```{r}
+
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable)
 
@@ -31,8 +33,11 @@ options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
 theme_set(theme_nice())
 
+
+
 s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
-s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id)
+s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id) 
+s2 <- s2 |> filter(!(id==203309)) # NA for some responses
 s2 <- s2 |> 
   mutate(
     state1 = case_when(
@@ -59,15 +64,6 @@ s2 <- s2 |>
   mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
   relocate(refClass,state1,state2,calc, .after = id) 
 
-# recode DEMO4 variable based on this mapping: 
-# 1 = "Some schooling, but no diploma or degree" 
-# 2 = "Highschool diploma or GED" 
-# 3 = "Some college" 
-# 4 = "College degree" 
-# 5 = "Some graduate school" 
-# 6 = "Graduate degree" 
-# 7 = "Choose not to answer" 
-
 s2 <- s2 |> rename(edu=DEM04) |>
   mutate(edu = factor(case_when(
     edu == '1' ~ "Some schooling, but no diploma or degree",
@@ -79,7 +75,11 @@ s2 <- s2 |> rename(edu=DEM04) |>
     edu == 7 ~ "Choose not to answer",
     TRUE ~ NA_character_
   ))) |> relocate(edu, .after = id) 
+```
 
+
+```{r}
+#| eval: false
 
 s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, calc, edu,ACFAMILY1:TOTALAPTWO1) |> 
   mutate( 
@@ -96,15 +96,10 @@ s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED, calc,edu,ACFAMILY2:
     block = 2,
     state=state2,
   pct_goal=case_when (TENPERCENT == 1 ~ "15%", TENPERCENT == 2 ~ "10%"), 
-  pct=case_when (TENPERCENT == 1 ~ .10, TENPERCENT == 2 ~ .15),
+  pct=case_when (TENPERCENT == 1 ~ .15, TENPERCENT == 2 ~ .10),
   rounded = case_when(ROUNDED == 1 ~ "Not Rounded", ROUNDED == 2 ~ "Rounded")
   ) |> relocate(id,block,refClass,pct_goal,rounded,state) |> 
   select(-TENPERCENT,-ROUNDED, -state2)
-
-
-# pivot data into longer format, so that each appliance type is on its own row, so for each appliance we have the family value, state, value, plan 1 value, and plan 2 value
-# so for the first row for id 113029, we would have ACFAMILY1 ACSTATE1 ACAPONE1 ACAPTWO1, then the next row would be HEATFAMILY1 HEATSTATE1 HEATAPONE1 HEATAPTWO1, etc.
-# so each of the bill sources, AC, HEAT, WATER, REFRIG, OTHER, will now be on its own row, with the family, state, value, plan 1 value, and plan 2 value
 
 s2_b1_long <- s2_b1 |>
   pivot_longer(
@@ -124,7 +119,6 @@ s2_b1_long <- s2_b1 |>
     plan2 = APTWO1
   ) |>
   relocate(appliance, .after = refClass)
-
 
 s2_b2_long <- s2_b2 |>
   pivot_longer(
@@ -161,26 +155,92 @@ s2_long <- s2_long |>
 
 
 #write.csv(s2_long,"data/study_2_tg.csv")
-
-# compute total kWh reduction, and total % reduction 
-sum1 <- s2_long |> 
-  filter(appliance !="TOTAL") |> 
-  group_by(id,refClass,state,pct_goal,pct,rounded,block,plan,calc,edu) |> 
-  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif))
+saveRDS(s2_long, here::here("data/s2_processed.rds"))
 
 
 
 ```
 
 
+```{r}
 
+
+s2_long <- readRDS(here::here("data/s2_processed.rds"))
+
+# compute total kWh reduction, and total % reduction 
+s2_agg <- s2_long |> 
+  filter(appliance !="TOTAL") |> 
+  group_by(id,refClass,state,pct_goal,pct,rounded,block,plan,calc,edu) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif))
+
+
+# Step 1: Calculate whether participants matched the target pct_goal
+s2_agg <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+  matched_goal2 = abs(pct_change-pct)<.03)
+
+
+```
+
+
+
+```{r}
+s2_agg |> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  group_by(refClass) |>
+  summarise(mean_pct=mean(pct), sd_pct=sd(pct), n=n()) 
+
+s2_agg |> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  group_by(refClass,mg) |>
+  summarise(n=n()) 
+
+
+s2_agg |> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=mg)) +
+  geom_histogram(aes(fill=refClass), alpha=0.5, bins=20) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(~refClass) +
+  labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2") + 
+  scale_y_continuous(breaks=seq(0,80,5))
+
+
+s2_agg |> group_by(id,refClass,pct_goal) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=mg)) +
+  geom_histogram(aes(fill=refClass), alpha=0.5, bins=20) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(pct_goal~refClass) +
+  labs(title="Distribution of Percent Change by State and Reference Class - Before outlier exclusion",
+       x="Percent Change",
+       y="Density") +
+  scale_fill_brewer(palette="Set2") + 
+  scale_y_continuous(breaks=seq(0,80,5))
+```
 
 
 ## Inspect response distribution for outliers
 
 ```{r}
 
-outliers <- sum1 |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
+outliers <- s2_agg |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
                                      z_score=(pct_change-change_mean)/change_sd,
                                      is_outlier=abs(z_score)>2.75)
 
@@ -208,15 +268,15 @@ outlier_plot <- ggplot(outliers, aes(x = state, y = z_score, color = is_outlier)
 # Assess skewness and normality of the data
 library(e1071)
 # Calculate skewness and kurtosis for the `pct_change` variable
-skewness_value <- skewness(sum1$pct_change, na.rm = TRUE)
-kurtosis_value <- kurtosis(sum1$pct_change, na.rm = TRUE)
+skewness_value <- skewness(s2_agg$pct_change, na.rm = TRUE)
+kurtosis_value <- kurtosis(s2_agg$pct_change, na.rm = TRUE)
 
 cat("Skewness:", skewness_value, "\n")
 cat("Kurtosis:", kurtosis_value, "\n")
 
 
 # Shapiro-Wilk test for normality (sample size limitation)
-shapiro_test <- shapiro.test(sum1$pct_change[1:5000])  # Using first 5000 observations if large dataset
+shapiro_test <- shapiro.test(s2_agg$pct_change[1:5000])  # Using first 5000 observations if large dataset
 print(shapiro_test)
 ```
 
@@ -233,7 +293,7 @@ print(shapiro_test)
 
 #outlier_plot
 
-sum1 |> ggplot(aes(x=pct_change)) +
+s2_agg |> ggplot(aes(x=pct_change)) +
   geom_density(aes(fill=state), alpha=0.5) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
@@ -246,10 +306,10 @@ sum1 |> ggplot(aes(x=pct_change)) +
 
 # plot densities in a better way to account for the positive skew
 
-sum1 <- sum1 |> 
+s2_agg <- s2_agg |> 
   filter(!id %in% outlier_id)
 
-sum1 |> 
+s2_agg |> 
   filter(!id %in% outlier_id) |>
   ggplot(aes(x=pct_change)) +
   geom_density(aes(fill=state), alpha=0.5) +
@@ -276,7 +336,7 @@ sum1 |>
 #| fig.height: 9
 
   # add geom_vline with x intercept based on pct_goal of the data (which is currently a string of form 10%)
-sum1 |> 
+s2_agg |> 
   filter(block==1) |>
   ungroup() |> 
   mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
@@ -298,7 +358,7 @@ sum1 |>
 ```{r}
 # plot distribution of reductions by applicance
 # s2_long |> ggplot(aes(x = change)) + geom_histogram(bins = 30) + facet_wrap(~appliance, scales = "free")
-sum1 |> mutate(refClass=factor(refClass),pct_goal=factor(pct_goal),rounded=factor(rounded),state=factor(state)) |>
+s2_agg |> mutate(refClass=factor(refClass),pct_goal=factor(pct_goal),rounded=factor(rounded),state=factor(state)) |>
 DT::datatable(extensions = 'Buttons',
   options = list(
     dom = 'Blfrtip',
@@ -318,21 +378,15 @@ DT::datatable(extensions = 'Buttons',
 
 ```{r}
 
-# Step 1: Calculate whether participants matched the target pct_goal
-sum1 <- s2_long |> 
-  filter(appliance != "TOTAL") |> 
-  group_by(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) |> 
-  summarise(
-    total_kWh = sum(value),
-    orig_kWh = sum(family),
-    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
-    state_dif = mean(state_dif),
-    .groups = "drop"
-  ) |>
-  mutate(matched_goal = (pct_change == pct))
+
+
+
+# 203309
+
+
 
 # Step 2: Summarize the percentage of participants meeting the goal for each condition
-summary_pct <- sum1 |>
+summary_pct <- s2_agg |>
   group_by(refClass, rounded, pct_goal) |>
   summarise(
     matched_count = sum(matched_goal),
@@ -576,7 +630,7 @@ ggplot(summary_pct, aes(x = rounded, y = cumulative_percentage, fill = match_lev
 ```{r}
 #| layout-ncol: 2
 
-sum1 |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) + 
+s2_agg |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -587,7 +641,7 @@ sum1 |> ggplot(aes(x = refClass, y = pct_change, fill = refClass)) +
   ) 
 
 
-sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) + 
+s2_agg |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -597,7 +651,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = pct_goal)) +
     fill = "Goal % Reduction"
   ) 
 
-sum1 |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) + 
+s2_agg |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -610,7 +664,7 @@ sum1 |> ggplot(aes(x = rounded, y = pct_change, fill = rounded)) +
 
 
 
-sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+s2_agg |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -622,7 +676,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) +
 
 
  
-sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
+s2_agg |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + 
   facet_wrap(~state) +
@@ -636,7 +690,7 @@ sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = refClass)) +
 
 
 
-sum1 |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) + 
+s2_agg |> ggplot(aes(x = pct_goal, y = pct_change, fill = rounded)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") + 
   facet_wrap(~rounded) +
@@ -744,7 +798,7 @@ s2 |>
 
 
 
-sum1 |> ggplot(aes(x = calc, y = pct_change, fill = calc)) + 
+s2_agg |> ggplot(aes(x = calc, y = pct_change, fill = calc)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -757,7 +811,7 @@ sum1 |> ggplot(aes(x = calc, y = pct_change, fill = calc)) +
 
 ## education
 
-sum1 |> ggplot(aes(x = edu, y = pct_change, fill = edu)) + 
+s2_agg |> ggplot(aes(x = edu, y = pct_change, fill = edu)) + 
   stat_summary(fun = mean, geom = "bar", position="dodge") +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +
   labs(
@@ -837,30 +891,140 @@ s2_long |>
 ```
 
 
+
+
+
 ```{r}
+#| eval: FALSE
+
+
+contingency_table <- sum1 %>%
+    group_by(refClass) %>%
+    summarise(
+      matched = sum(matched_goal),
+      unmatched = n() - sum(matched_goal)
+    ) %>%
+    select(matched, unmatched) %>%
+    as.matrix()
+
+# Perform the chi-squared test
+chisq_test <- chisq.test(contingency_table)
+
+# View the results
+chisq_test
+
+
+sum1b <- sum1 %>%
+  mutate(matched_goal = as.numeric(matched_goal)) 
+
+library(brms)
+bayesian_model <- brms::brm(
+  matched_goal ~ refClass,        # Logistic regression with reference class as predictor
+  data = sum1,                    # The dataset
+  family = bernoulli(),           # Binary outcome model
+  prior = set_prior("normal(0, 1)", class = "b"),  # Prior for coefficients
+  iter = 2000,                    # Number of iterations
+  chains = 4,                     # Number of MCMC chains
+  cores = 4,                      # Number of cores for parallel computation
+  seed = 123                      # Set seed for reproducibility
+)
+# Regression Coefficients:
+#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept             -1.27      0.14    -1.55    -1.00 1.00     3696     3393
+# refClassPercentage    -0.56      0.22    -0.98    -0.14 1.00     3308     3065
+# refClassUSD           -0.95      0.25    -1.45    -0.46 1.00     2895     2701
+
+
+bm2 <- brms::brm(
+  matched_goal ~ refClass + (1|id),        # Logistic regression with reference class as predictor
+  data = sum1,                    # The dataset
+  family = bernoulli(),           # Binary outcome model
+  prior = set_prior("normal(0, 1)", class = "b"),  # Prior for coefficients
+  iter = 2000,                    # Number of iterations
+  chains = 4,                     # Number of MCMC chains
+  cores = 4,                      # Number of cores for parallel computation
+  seed = 123                      # Set seed for reproducibility
+)
+# Regression Coefficients:
+#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept             -1.92      0.31    -2.56    -1.37 1.00     2039     2669
+# refClassPercentage    -0.73      0.36    -1.43    -0.02 1.00     2586     3142
+# refClassUSD           -1.15      0.41    -1.95    -0.37 1.00     3079     3071
+
+
+
+bm3 <- brms::brm(
+  matched_goal ~ refClass*rounded + (1|id),        # Logistic regression with reference class as predictor
+  data = sum1,                    # The dataset
+  family = bernoulli(),           # Binary outcome model
+  prior = set_prior("normal(0, 1)", class = "b"),  # Prior for coefficients
+  iter = 2000,                    # Number of iterations
+  chains = 4,                     # Number of MCMC chains
+  cores = 4,                      # Number of cores for parallel computation
+  seed = 123                      # Set seed for reproducibility
+)
+# Regression Coefficients:
+#                                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept                            -1.80      0.34    -2.49    -1.17 1.00     1896     2384
+# refClassPercentage                   -1.48      0.45    -2.37    -0.61 1.00     3108     3324
+# refClassUSD                          -1.54      0.47    -2.53    -0.66 1.00     3309     3226
+# roundedRounded                       -0.59      0.30    -1.17     0.02 1.00     4310     2857
+# refClassPercentage:roundedRounded     1.71      0.45     0.83     2.59 1.00     4076     3070
+# refClassUSD:roundedRounded            1.00      0.50     0.02     1.96 1.00     4399     3144
+
+
+
+bm4 <- brms::brm(
+  matched_goal ~ refClass*rounded + (1|id) +(1|state),        # Logistic regression with reference class as predictor
+  data = sum1,                    # The dataset
+  family = bernoulli(),           # Binary outcome model
+  prior = set_prior("normal(0, 1)", class = "b"),  # Prior for coefficients
+  iter = 2000,                    # Number of iterations
+  chains = 4,                     # Number of MCMC chains
+  cores = 4,                      # Number of cores for parallel computation
+  seed = 123                      # Set seed for reproducibility
+)
+# Regression Coefficients:
+#                                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept                            -1.77      0.44    -2.62    -0.81 1.01      526      187
+# refClassPercentage                   -1.49      0.44    -2.34    -0.62 1.00     1352     1519
+# refClassUSD                          -1.53      0.48    -2.49    -0.62 1.00     1836     2504
+# roundedRounded                       -0.58      0.29    -1.16    -0.03 1.00     2933     2938
+# refClassPercentage:roundedRounded     1.72      0.45     0.85     2.59 1.00     1936     2501
+# refClassUSD:roundedRounded            1.00      0.48     0.05     1.91 1.00     2460     2472
+
+
+
+
+```
+
+
+
+```{r}
+#| eval: false
 
 # mixed effects model testing effect of refClass, state, and pct_goal on pct_change
 # marginal effects plots
 library(ggeffects)
 
 
-m1 <- lmer(pct_change ~ refClass  + (1+plan|id) + (1|state), data = sum1)
+m1 <- lmer(pct_change ~ refClass  + (1+plan|id) + (1|state), data = s2_agg)
 summary(m1)
 ggpredict(m1, c("refClass")) |> plot()
 
-m1 <- lmer(pct_change ~ pct_goal  + (1|id) + (1|state), data = sum1)
+m1 <- lmer(pct_change ~ pct_goal  + (1|id) + (1|state), data = s2_agg)
 summary(m1)
 ggpredict(m1, c("pct_goal")) |> plot()
 
-m1 <- lmer(pct_change ~ pct_goal*rounded  + (1|id) + (1|state), data = sum1)
+m1 <- lmer(pct_change ~ pct_goal*rounded  + (1|id) + (1|state), data = s2_agg)
 summary(m1)
 ggpredict(m1, c("pct_goal","rounded")) |> plot()
 
 
-m1 <- lmer(pct_change ~ refClass*pct_goal*rounded  + (1|id) + (1|state), data = sum1)
+m1 <- lmer(pct_change ~ refClass*pct_goal*rounded  + (1|id) + (1|state), data = s2_agg)
 ggpredict(m1, c("refClass","pct_goal","rounded")) |> plot()
 
-m1 <- lmer(pct_change ~ state*pct_goal*rounded  + (1|id), data = sum1)
+m1 <- lmer(pct_change ~ state*pct_goal*rounded  + (1|id), data = s2_agg)
 summary(m1)
 ggpredict(m1, c("state","pct_goal","rounded")) |> plot()
 
