@@ -522,12 +522,11 @@ s1_agg |> group_by(id,refClass) |>
   stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
   labs(title="Distributions of % of trials that matched goal",
-       x="Percent of trials that matched goal",
+       x="% of trials (out of 4) that matched goal",
        y="Number of Participants",
        fill="Reference Class") +
   scale_fill_brewer(palette="Set2") + 
-  scale_y_continuous(breaks=seq(0,80,5)) + 
-  scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1)) 
+  scale_y_continuous(breaks=seq(0,80,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1)) 
   
 
 # s1_agg |> group_by(id,refClass) |> 
@@ -538,19 +537,28 @@ s1_agg |> group_by(id,refClass) |>
 s1_agg |> group_by(id,refClass) |> 
   summarise(mg=sum(matched_goal), n=n(), pct=mg/n) |> 
   group_by(refClass,mg) |>
-  summarise(n=n()) |>
-  setNames(c("refClass", "# of trials with matched goal", "n")) |>
-  knitr::kable(booktabs=T,col.names = c("Reference Class", 
-                            "# of correct trials ",
-                            "n"),
-               format = "html") |> 
-  kableExtra::kable_styling(full_width = F) |> column_spec(1:3, width = "2cm")
+  summarise(n=n()) |>  rename("# matched goal"=mg,"# participants"=n) |> gt() |>  tab_header(
+    title = md("**Number of Trials participants match goal by Reference class**"),
+    subtitle = "Each participant had 4 trials where they attempt to create a plan to match goal"
+  ) 
   
+  # setNames(c("refClass", "# of trials with matched goal", "n")) |>
+  # knitr::kable(booktabs=T,col.names = c("Reference Class", 
+  #                           "# of correct trials ",
+  #                           "n"),
+  #              format = "html") |> 
+  # kableExtra::kable_styling(full_width = F) |> column_spec(1:3, width = "2cm")
+  
+
+
+
+
+
 
 summary_pct |>
   gt() |>
   tab_header(
-    title = md("**Percentage of Participants Matching Target Pct by Condition**"),
+    title = md("**Percentage of Trials Matching Target Pct by Condition**"),
     subtitle = "Grouped by Reference Class, Rounding, and Pct Goal"
   ) |>
   fmt_number(
