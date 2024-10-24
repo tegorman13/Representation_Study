@@ -25,7 +25,7 @@ format:
     html-math-method: mathjax
     output-file: s2_hugo.md
   gfm:
-    echo: false
+    echo: true
     output-file: s2_gfm.md
 ---
 
@@ -65,11 +65,12 @@ options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
 theme_set(theme_nice())
 
-
+#202009 
 
 s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
-s2 <- s2 |> mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id) 
-s2 <- s2 |> filter(!(id==203309)) # NA for some responses
+s2 <- s2 |> #mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id) |> 
+  mutate(id=paste0("s2_",row_number())) |> relocate(id)
+s2 <- s2 |> filter(!(id=="s2_78")) # NA for some responses
 s2 <- s2 |> 
   mutate(
     state1 = case_when(
@@ -94,6 +95,7 @@ s2 <- s2 |>
 )) |> 
   rename(calc=MATH01) |>  # replace NA's in calc with 0's
   mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
+  mutate(calc = if_else(calc == 0, "No Calculator", "Calculator")) |> 
   relocate(refClass,state1,state2,calc, .after = id) 
 
 s2 <- s2 |> rename(edu=DEM04) |>
@@ -279,7 +281,7 @@ s2_agg |> group_by(id,refClass) |>
 s2_agg |> group_by(id,refClass) |> 
   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
   ggplot(aes(x=mg)) +
-  geom_histogram(aes(fill=refClass), alpha=0.5, bins=20) +
+  geom_bar(aes(fill=refClass)) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
   stat_boxplot(width=0.5, alpha=0.6) +
@@ -302,7 +304,7 @@ s2_agg |> group_by(id,refClass) |>
 s2_agg |> group_by(id,refClass,pct_goal) |> 
   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
   ggplot(aes(x=mg)) +
-  geom_histogram(aes(fill=refClass), alpha=0.5, bins=20) +
+  geom_bar(aes(fill=refClass)) +
   ggdist::stat_halfeye() +
   geom_rug(alpha=0.1) +
   stat_boxplot(width=0.5, alpha=0.6) +
@@ -326,7 +328,7 @@ s2_agg |> group_by(id,refClass,pct_goal) |>
 ``` r
 outliers <- s2_agg |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(pct_change,na.rm=TRUE),change_sd=sd(pct_change,na.rm=TRUE),
                                      z_score=(pct_change-change_mean)/change_sd,
-                                     is_outlier=abs(z_score)>2.75)
+                                     is_outlier=abs(z_score)>3.0)
 
 outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
 

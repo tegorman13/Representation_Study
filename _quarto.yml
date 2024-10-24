@@ -34,6 +34,7 @@ website:
             text: "Study 1 Analysis"
           - href: study2.qmd
             text: "Study 2 Analysis"
+          - href: results.qmd
       - section: "Background"
         contents:
           - href: study_info.md
@@ -44,7 +45,7 @@ website:
             text: "study 1 info"
           - href: study2_info.md
             text: "study 2 info"
-          - href: results.qmd
+
 
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
