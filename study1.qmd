@@ -20,6 +20,13 @@ format:
       body-width: 1200px
       margin-width: 170px
       gutter-width: 1.0rem
+  hugo-md:
+    include: true
+    html-math-method: mathjax
+    output-file: s1_hugo.md
+  gfm:
+    echo: true
+    output-file: s1_gfm.md
 ---
 
 ```{r}
@@ -68,7 +75,8 @@ s1 <- s1 |>
   ReferenceClass == 3 ~ "Percentage"
 )) |> 
   rename(calc=MATH01) |>  # replace NA's in calc with 0's
-  rename(id=ResponseId) |>
+  rename(id2=ResponseId) |>
+  mutate(id=row_number()) |> relocate(id) |> 
   mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
   relocate(refClass,state1,state2,calc, .after = id) 
 
@@ -138,7 +146,7 @@ parse_action_plan <- function(df) {
       names_to = c("modality", "state", "item_num"),
       names_pattern = "^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$",
       values_to = "value"
-    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value) 
+    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value,id2) 
   
   df_long <- df_long |> 
   mutate(
@@ -182,9 +190,14 @@ s1 <- s1 |> group_by(id) |>
   select(-trial)
 
 # for id R_1kFwgoKAmNTwCs3 - when state== TEX, appliance == Heating, check values of family column
-s1 |> filter(id=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating") |> select(family) 
+s1 |> filter(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating") |> select(family) 
 # for id R_1kFwgoKAmNTwCs3 - when state== TEX, appliance == Heating, set values of family column to 6118
-s1 <- s1 |> mutate(family=ifelse(id=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating",6118,family))
+s1 <- s1 |> mutate(family=ifelse(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating",6118,family))
+
+s1 <- s1 |> 
+  mutate(change = value-family, state_dif = value-state_avg,calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
+  mutate(value=as.numeric(value))
+
 
 saveRDS(s1, here::here("data/s1_processed.rds"))
 
@@ -195,7 +208,7 @@ saveRDS(s1, here::here("data/s1_processed.rds"))
 ```{r}
 s1 <- readRDS(here::here("data/s1_processed.rds"))
 
-s1 <- s1 |> mutate(change = value-family, state_dif = value-state_avg,calc = if_else(calc == 0, "No Calculator", "Used Calculator")) 
+
 
 s1_agg <- s1 |> 
   filter(appliance !="Total kWh") |> 

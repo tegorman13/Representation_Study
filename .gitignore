@@ -49,3 +49,8 @@ _freeze/*
 .vscode/*
 rsconnect/*
 _extensions/*
+
+
+
+
+data/model_cache/*

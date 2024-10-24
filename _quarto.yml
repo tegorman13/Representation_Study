@@ -44,6 +44,7 @@ website:
             text: "study 1 info"
           - href: study2_info.md
             text: "study 2 info"
+          - href: results.qmd
 
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
