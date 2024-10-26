@@ -1,6 +1,16 @@
 
 # Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations
 
+
+## Original Slides
+
+<embed src='background/MPA_2023_slides.pdf' type="application/pdf" width="100%" height="700px">
+
+
+
+
+
+
 ## Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations
 
 - Despite decades of weatherization and bill relief programs, low-income households still spend a larger portion of their income on energy compared to any other income group (8.2%)
