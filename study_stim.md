@@ -123,7 +123,7 @@ Note: The Smith family used 6,101 more kWh than the average household in Texas l
 
 ## Additional questions after the primary task
 
-** Which of these action plans that you created would you prefer to implement **
+**Which of these action plans that you created would you prefer to implement**
 
 - [ ] Action Plan 1
 - [ ] Action Plan 2
@@ -141,7 +141,8 @@ If you could reduce electricity use for two appliances in this scenario, which t
 - [ ] Other (Television, Lighting, Electronics, Washer/Dryer, etc.)
 
 ---
-*Thank you for helping the Smith family reach their kWh reduction goal.*
+
+*Thank you for helping the Smith family reach their kWh reduction goal.* \
 
 
 
