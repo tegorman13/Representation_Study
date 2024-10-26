@@ -195,7 +195,11 @@ s1 |> filter(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating") |> 
 s1 <- s1 |> mutate(family=ifelse(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating",6118,family))
 
 s1 <- s1 |> 
-  mutate(change = value-family, state_dif = value-state_avg,calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
+  mutate(change = value-family, 
+         state_p_dif = value-state_avg,
+         state_f_dif= family-state_avg,
+         less_avg = value<state_avg,
+         calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
   mutate(value=as.numeric(value))
 
 
@@ -213,7 +217,12 @@ s1 <- readRDS(here::here("data/s1_processed.rds"))
 s1_agg <- s1 |> 
   filter(appliance !="Total kWh") |> 
   group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
-  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif)) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+            n_change = sum(value!=family),
+            state_p_dif=mean(state_p_dif),
+            state_f_dif=mean(state_f_dif),
+            n_less_avg = sum(less_avg)) |> 
   mutate(matched_goal = (pct_change == pct_goal))
 
 k <- s1_agg |> group_by(id,pct_goal) |>  summarize(total_kWh=sum(total_kWh),orig_kWh=sum(orig_kWh),pct_change=round((orig_kWh-total_kWh)/orig_kWh,3)) |> 
@@ -229,6 +238,51 @@ outliers <- s1_agg |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(p
                                      z_score=(pct_change-change_mean)/change_sd,
                                      is_outlier=abs(z_score)>3.0)
 outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
+
+
+# plot frequency dist of values of n_change
+s1_agg |> ggplot(aes(x=n_change)) +
+  geom_bar(fill = 'dodgerblue4',width=1) +
+  theme_minimal() 
+
+# examine relationship between n_change and whether goal was matched
+s1_agg |> ggplot(aes(x=n_change,fill=matched_goal)) +
+  geom_bar(position="dodge") +
+  theme_minimal() +
+  labs(title="Relationship between # of changes and whether goal was matched",
+       x="# of changes",
+       y="Count") +
+  scale_fill_brewer(palette="Set2")
+
+# alternative way to examine the relationship, not a plot
+s1_agg |> group_by(n_change,matched_goal) |> summarise(n=n()) |> 
+  gt() |> tab_header(title="Relationship between # of changes and whether goal was matched")
+
+
+
+s1 |> 
+  filter(appliance !="Total kWh") |> 
+  group_by(state, appliance) |> 
+  summarise(family=mean(family),state_avg=mean(state_avg),dif=family-state_avg)
+
+
+s1 |> ungroup() |> mutate(diff=family-state_avg) |> group_by(state,appliance) |>  summarize(min(diff))
+
+s1 |> ungroup() |> mutate(diff=family-state_avg) |> group_by(state) |> filter(diff<0) |> select(id,state1,state2,state,appliance,family,state_avg,plan,value,diff)
+
+
+# examine the relationship between n_less_avg (a value btw 0 and 5) and whether goal was matched
+s1_agg |> ggplot(aes(x=n_less_avg,fill=matched_goal)) +
+  geom_bar(position="dodge") +
+  facet_wrap(~state) +
+  theme_minimal() +
+  labs(title="Relationship between # of appliances changed to below state average and whether goal was matched",
+       x="# of appliances changed to below state average",
+       y="Count") +
+  scale_x_continuous(breaks=seq(1,5,1)) 
+
+
+
 
 ```
 
@@ -736,6 +790,116 @@ m5_s1 |> emmeans(~refClass) |> gather_emmeans_draws() |>
 
 
 
+
+```
+
+
+## Data checks
+
+```{r}
+
+
+
+library(tidyverse)
+
+# for every combination of state, appliance, and refClass, calculate the number of distinct values of family, and of state_avg
+s1 |> group_by(state,appliance,refClass) |> 
+  summarise(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) 
+
+
+s1 |> group_by(state,appliance,refClass) |> 
+  mutate(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) |> 
+  group_by(state,appliance,refClass,family,state_avg) 
+  # the count of each unique value of family, and each unique value of state avg
+  
+ 
+s1 |> 
+    group_by(state, appliance, refClass) |> 
+    mutate(n_distinct_family = n_distinct(family),
+           n_distinct_state_avg = n_distinct(state_avg), 
+           distinct_family = paste(unique(family), collapse = ","),
+           distinct_state_avg = paste(unique(state_avg), collapse = ",")) |>
+    filter(n_distinct_family > 1 | n_distinct_state_avg > 1) |> 
+    group_by(state, appliance, refClass, family, state_avg) |> 
+    mutate(state_avg_count = n_distinct(state_avg),
+           family_count = n()) |> 
+    ungroup() |> 
+    group_by(state, appliance, refClass, state_avg) |> 
+    mutate(state_avg_count = n()) |> 
+    distinct(state, appliance, refClass, family, state_avg, family_count, state_avg_count) |> 
+  arrange(state,appliance,refClass)
+
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> filter(ResponseId=="R_2QMsYuHS385pTj1") -> k
+# find if any columns equal 5.26
+
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> select_if(~any(. ==11441.0)) |> 
+  # filter out any NAs from any column that is left (we don't know the column names)
+  filter_all(any_vars(!is.na(.))) |> 
+  # retain only cases of 11441.0
+  filter_all(any_vars(. == 11441.0)) 
+
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> # return the names of any columns that contain 11441.0
+  select_if(~any(. ==11441.0)) |> 
+  names() |> 
+  str_c(collapse=",") |> 
+  cat() # P3TEX15
+
+# do the same procedure for each of these values, include a line break after the output from each number
+low_freq <- c(5.26, 4534, 340,11667,5.3,400, 29046,5600,5987,34265.0,5600.0	)
+
+
+# for(val in low_freq) {
+#   haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+#     select_if(~any(. == val)) |>
+#     names() |>
+#     str_c(collapse = ",") |>
+#     cat()
+#   cat("\n")  # Add line break after each output
+# }
+
+low_freq |>
+  walk(function(val) {
+    cat(val, "\n")  # Print the current value
+    haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+      select_if(~any(. == val)) |>
+      names() |>
+      str_c(collapse = ",") |>
+      cat()
+    cat("\n\n")  # Add two line breaks before next value
+  })
+
+
+
+
+k %>% select_if(~any(is.numeric(.)) & . <10)
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> select(P3TEX15) |> unique()
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> 
+  #select(ResponseId, P3TEX15) |> 
+  filter(!is.na(P3TEX15))
+
+# A tibble: 2 × 2
+#   P3TEX15 `n()`
+#     <dbl> <int>
+# 1    5.26    10
+# 2   NA      242
 
 ```
 

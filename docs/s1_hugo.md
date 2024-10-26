@@ -29,10 +29,6 @@ format:
 ---
 
 
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-
-
 <details class="code-fold">
 <summary>Code</summary>
 
@@ -202,7 +198,11 @@ s1 |> filter(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating") |> 
 s1 <- s1 |> mutate(family=ifelse(id2=="R_1kFwgoKAmNTwCs3" & state=="TEX" & appliance=="Heating",6118,family))
 
 s1 <- s1 |> 
-  mutate(change = value-family, state_dif = value-state_avg,calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
+  mutate(change = value-family, 
+         state_p_dif = value-state_avg,
+         state_f_dif= family-state_avg,
+         less_avg = value<state_avg,
+         calc = if_else(calc == 0, "No Calculator", "Used Calculator")) |> 
   mutate(value=as.numeric(value))
 
 
@@ -221,7 +221,12 @@ s1 <- readRDS(here::here("data/s1_processed.rds"))
 s1_agg <- s1 |> 
   filter(appliance !="Total kWh") |> 
   group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
-  summarise(total_kWh = sum(value),orig_kWh=sum(family), pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif)) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+            n_change = sum(value!=family),
+            state_p_dif=mean(state_p_dif),
+            state_f_dif=mean(state_f_dif),
+            n_less_avg = sum(less_avg)) |> 
   mutate(matched_goal = (pct_change == pct_goal))
 
 k <- s1_agg |> group_by(id,pct_goal) |>  summarize(total_kWh=sum(total_kWh),orig_kWh=sum(orig_kWh),pct_change=round((orig_kWh-total_kWh)/orig_kWh,3)) |> 
@@ -237,9 +242,624 @@ outliers <- s1_agg |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(p
                                      z_score=(pct_change-change_mean)/change_sd,
                                      is_outlier=abs(z_score)>3.0)
 outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
+
+
+# plot frequency dist of values of n_change
+s1_agg |> ggplot(aes(x=n_change)) +
+  geom_bar(fill = 'dodgerblue4',width=1) +
+  theme_minimal() 
 ```
 
 </details>
+
+<img src="study1.markdown_strict_files/figure-markdown_strict/unnamed-chunk-3-1.png" width="768" />
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+# examine relationship between n_change and whether goal was matched
+s1_agg |> ggplot(aes(x=n_change,fill=matched_goal)) +
+  geom_bar(position="dodge") +
+  theme_minimal() +
+  labs(title="Relationship between # of changes and whether goal was matched",
+       x="# of changes",
+       y="Count") +
+  scale_fill_brewer(palette="Set2")
+```
+
+</details>
+
+<img src="study1.markdown_strict_files/figure-markdown_strict/unnamed-chunk-3-2.png" width="768" />
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+# alternative way to examine the relationship, not a plot
+s1_agg |> group_by(n_change,matched_goal) |> summarise(n=n()) |> 
+  gt() |> tab_header(title="Relationship between # of changes and whether goal was matched")
+```
+
+</details>
+<div id="tsxdzwviom" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tsxdzwviom table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#tsxdzwviom thead, #tsxdzwviom tbody, #tsxdzwviom tfoot, #tsxdzwviom tr, #tsxdzwviom td, #tsxdzwviom th {
+  border-style: none;
+}
+
+#tsxdzwviom p {
+  margin: 0;
+  padding: 0;
+}
+
+#tsxdzwviom .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#tsxdzwviom .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tsxdzwviom .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tsxdzwviom .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tsxdzwviom .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tsxdzwviom .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tsxdzwviom .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tsxdzwviom .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tsxdzwviom .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#tsxdzwviom .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#tsxdzwviom .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tsxdzwviom .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tsxdzwviom .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tsxdzwviom .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tsxdzwviom .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsxdzwviom .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#tsxdzwviom .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#tsxdzwviom .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#tsxdzwviom .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsxdzwviom .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#tsxdzwviom .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsxdzwviom .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tsxdzwviom .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsxdzwviom .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tsxdzwviom .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsxdzwviom .gt_left {
+  text-align: left;
+}
+
+#tsxdzwviom .gt_center {
+  text-align: center;
+}
+
+#tsxdzwviom .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tsxdzwviom .gt_font_normal {
+  font-weight: normal;
+}
+
+#tsxdzwviom .gt_font_bold {
+  font-weight: bold;
+}
+
+#tsxdzwviom .gt_font_italic {
+  font-style: italic;
+}
+
+#tsxdzwviom .gt_super {
+  font-size: 65%;
+}
+
+#tsxdzwviom .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#tsxdzwviom .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#tsxdzwviom .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#tsxdzwviom .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#tsxdzwviom .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#tsxdzwviom .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#tsxdzwviom .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#tsxdzwviom .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#tsxdzwviom div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+| Relationship between \# of changes and whether goal was matched |     |
+|-----------------------------------------------------------------|-----|
+| matched_goal                                                    | n   |
+| 0                                                               |     |
+| FALSE                                                           | 9   |
+| 1                                                               |     |
+| FALSE                                                           | 4   |
+| TRUE                                                            | 5   |
+| 2                                                               |     |
+| FALSE                                                           | 10  |
+| TRUE                                                            | 6   |
+| 3                                                               |     |
+| FALSE                                                           | 3   |
+| TRUE                                                            | 13  |
+| 4                                                               |     |
+| FALSE                                                           | 22  |
+| TRUE                                                            | 32  |
+| 5                                                               |     |
+| FALSE                                                           | 743 |
+| TRUE                                                            | 161 |
+
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+s1 |> 
+  filter(appliance !="Total kWh") |> 
+  group_by(state, appliance) |> 
+  summarise(family=mean(family),state_avg=mean(state_avg),dif=family-state_avg)
+```
+
+</details>
+
+    # A tibble: 20 × 5
+    # Groups:   state [4]
+       state appliance       family state_avg   dif
+       <chr> <chr>            <dbl>     <dbl> <dbl>
+     1 CAL   Cooling          2581      1289  1292 
+     2 CAL   Heating          6157      5597   560 
+     3 CAL   Other Appliance  7608      6916   692 
+     4 CAL   Refrigerator     1266      1055   211 
+     5 CAL   Water Heating    5062.     4600.  461.
+     6 COL   Cooling           697       498   199 
+     7 COL   Heating         17853.    16281. 1571.
+     8 COL   Other Appliance  7982      6652  1330 
+     9 COL   Refrigerator     1405.     1142   263.
+    10 COL   Water Heating   11667      5817. 5850.
+    11 MASS  Cooling           419       322    97 
+    12 MASS  Heating         26751     19108  7643 
+    13 MASS  Other Appliance  7350      6682   668 
+    14 MASS  Refrigerator     1230      1025   205 
+    15 MASS  Water Heating   10462.     5070  5392.
+    16 TEX   Cooling          6573      4249  2324 
+    17 TEX   Heating          6072.     5099   973.
+    18 TEX   Other Appliance  8440.     7883   557.
+    19 TEX   Refrigerator     2639      1318  1321 
+    20 TEX   Water Heating    5083.     4366.  717.
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+s1 |> ungroup() |> mutate(diff=family-state_avg) |> group_by(state,appliance) |>  summarize(min(diff))
+```
+
+</details>
+
+    # A tibble: 24 × 3
+    # Groups:   state [4]
+       state appliance       `min(diff)`
+       <chr> <chr>                 <dbl>
+     1 CAL   Cooling                1292
+     2 CAL   Heating                 560
+     3 CAL   Other Appliance         692
+     4 CAL   Refrigerator            211
+     5 CAL   Total kWh              3215
+     6 CAL   Water Heating           460
+     7 COL   Cooling                 199
+     8 COL   Heating               -4970
+     9 COL   Other Appliance        1330
+    10 COL   Refrigerator            228
+    # ℹ 14 more rows
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+s1 |> ungroup() |> mutate(diff=family-state_avg) |> group_by(state) |> filter(diff<0) |> select(id,state1,state2,state,appliance,family,state_avg,plan,value,diff)
+```
+
+</details>
+
+    # A tibble: 32 × 10
+    # Groups:   state [3]
+          id state1   state2 state appliance     family state_avg plan  value   diff
+       <int> <chr>    <chr>  <chr> <chr>          <dbl> <dbl+lbl> <fct> <dbl>  <dbl>
+     1     1 Colorado Texas  TEX   Water Heating   5.26 4396      plan1   700 -4391.
+     2     1 Colorado Texas  TEX   Water Heating   5.26 4396      plan2  4500 -4391.
+     3     2 Colorado Texas  TEX   Water Heating   5.26 4396      plan1  4396 -4391.
+     4     2 Colorado Texas  TEX   Water Heating   5.26 4396      plan2  4396 -4391.
+     5     3 Colorado Texas  TEX   Water Heating   5.26 4396      plan1  4468 -4391.
+     6     3 Colorado Texas  TEX   Water Heating   5.26 4396      plan2  4400 -4391.
+     7     4 Colorado Texas  TEX   Water Heating   5.26 4396      plan1  1000 -4391.
+     8     4 Colorado Texas  TEX   Water Heating   5.26 4396      plan2  1000 -4391.
+     9     5 Colorado Texas  TEX   Water Heating   5.26 4396      plan1  3756 -4391.
+    10     5 Colorado Texas  TEX   Water Heating   5.26 4396      plan2  2987 -4391.
+    # ℹ 22 more rows
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+# examine the relationship between n_less_avg (a value btw 0 and 5) and whether goal was matched
+s1_agg |> ggplot(aes(x=n_less_avg,fill=matched_goal)) +
+  geom_bar(position="dodge") +
+  facet_wrap(~state) +
+  theme_minimal() +
+  labs(title="Relationship between # of appliances changed to below state average and whether goal was matched",
+       x="# of appliances changed to below state average",
+       y="Count") +
+  scale_x_continuous(breaks=seq(1,5,1)) 
+```
+
+</details>
+
+<img src="study1.markdown_strict_files/figure-markdown_strict/unnamed-chunk-3-3.png" width="768" />
+
 <div class="cell panel-tabset">
 
 ## Calculator by Ref Class tallies
@@ -301,23 +921,23 @@ s1_agg4 |> group_by(refClass) |>
 ```
 
 </details>
-<div id="owogtflvqk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#owogtflvqk table {
+<div id="emnyitqmvg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#emnyitqmvg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#owogtflvqk thead, #owogtflvqk tbody, #owogtflvqk tfoot, #owogtflvqk tr, #owogtflvqk td, #owogtflvqk th {
+#emnyitqmvg thead, #emnyitqmvg tbody, #emnyitqmvg tfoot, #emnyitqmvg tr, #emnyitqmvg td, #emnyitqmvg th {
   border-style: none;
 }
 
-#owogtflvqk p {
+#emnyitqmvg p {
   margin: 0;
   padding: 0;
 }
 
-#owogtflvqk .gt_table {
+#emnyitqmvg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -343,12 +963,12 @@ s1_agg4 |> group_by(refClass) |>
   border-left-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_caption {
+#emnyitqmvg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#owogtflvqk .gt_title {
+#emnyitqmvg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -360,7 +980,7 @@ s1_agg4 |> group_by(refClass) |>
   border-bottom-width: 0;
 }
 
-#owogtflvqk .gt_subtitle {
+#emnyitqmvg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -372,7 +992,7 @@ s1_agg4 |> group_by(refClass) |>
   border-top-width: 0;
 }
 
-#owogtflvqk .gt_heading {
+#emnyitqmvg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -384,13 +1004,13 @@ s1_agg4 |> group_by(refClass) |>
   border-right-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_bottom_border {
+#emnyitqmvg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_col_headings {
+#emnyitqmvg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -405,7 +1025,7 @@ s1_agg4 |> group_by(refClass) |>
   border-right-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_col_heading {
+#emnyitqmvg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -425,7 +1045,7 @@ s1_agg4 |> group_by(refClass) |>
   overflow-x: hidden;
 }
 
-#owogtflvqk .gt_column_spanner_outer {
+#emnyitqmvg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -437,15 +1057,15 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 4px;
 }
 
-#owogtflvqk .gt_column_spanner_outer:first-child {
+#emnyitqmvg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#owogtflvqk .gt_column_spanner_outer:last-child {
+#emnyitqmvg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#owogtflvqk .gt_column_spanner {
+#emnyitqmvg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -457,11 +1077,11 @@ s1_agg4 |> group_by(refClass) |>
   width: 100%;
 }
 
-#owogtflvqk .gt_spanner_row {
+#emnyitqmvg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#owogtflvqk .gt_group_heading {
+#emnyitqmvg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -487,7 +1107,7 @@ s1_agg4 |> group_by(refClass) |>
   text-align: left;
 }
 
-#owogtflvqk .gt_empty_group_heading {
+#emnyitqmvg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -502,15 +1122,15 @@ s1_agg4 |> group_by(refClass) |>
   vertical-align: middle;
 }
 
-#owogtflvqk .gt_from_md > :first-child {
+#emnyitqmvg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#owogtflvqk .gt_from_md > :last-child {
+#emnyitqmvg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#owogtflvqk .gt_row {
+#emnyitqmvg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -529,7 +1149,7 @@ s1_agg4 |> group_by(refClass) |>
   overflow-x: hidden;
 }
 
-#owogtflvqk .gt_stub {
+#emnyitqmvg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -542,7 +1162,7 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 5px;
 }
 
-#owogtflvqk .gt_stub_row_group {
+#emnyitqmvg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -556,15 +1176,15 @@ s1_agg4 |> group_by(refClass) |>
   vertical-align: top;
 }
 
-#owogtflvqk .gt_row_group_first td {
+#emnyitqmvg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#owogtflvqk .gt_row_group_first th {
+#emnyitqmvg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#owogtflvqk .gt_summary_row {
+#emnyitqmvg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -574,16 +1194,16 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 5px;
 }
 
-#owogtflvqk .gt_first_summary_row {
+#emnyitqmvg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_first_summary_row.thick {
+#emnyitqmvg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#owogtflvqk .gt_last_summary_row {
+#emnyitqmvg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -593,7 +1213,7 @@ s1_agg4 |> group_by(refClass) |>
   border-bottom-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_grand_summary_row {
+#emnyitqmvg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -603,7 +1223,7 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 5px;
 }
 
-#owogtflvqk .gt_first_grand_summary_row {
+#emnyitqmvg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -613,7 +1233,7 @@ s1_agg4 |> group_by(refClass) |>
   border-top-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_last_grand_summary_row_top {
+#emnyitqmvg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -623,11 +1243,11 @@ s1_agg4 |> group_by(refClass) |>
   border-bottom-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_striped {
+#emnyitqmvg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#owogtflvqk .gt_table_body {
+#emnyitqmvg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -636,7 +1256,7 @@ s1_agg4 |> group_by(refClass) |>
   border-bottom-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_footnotes {
+#emnyitqmvg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -650,7 +1270,7 @@ s1_agg4 |> group_by(refClass) |>
   border-right-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_footnote {
+#emnyitqmvg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -659,7 +1279,7 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 5px;
 }
 
-#owogtflvqk .gt_sourcenotes {
+#emnyitqmvg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -673,7 +1293,7 @@ s1_agg4 |> group_by(refClass) |>
   border-right-color: #D3D3D3;
 }
 
-#owogtflvqk .gt_sourcenote {
+#emnyitqmvg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -681,72 +1301,72 @@ s1_agg4 |> group_by(refClass) |>
   padding-right: 5px;
 }
 
-#owogtflvqk .gt_left {
+#emnyitqmvg .gt_left {
   text-align: left;
 }
 
-#owogtflvqk .gt_center {
+#emnyitqmvg .gt_center {
   text-align: center;
 }
 
-#owogtflvqk .gt_right {
+#emnyitqmvg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#owogtflvqk .gt_font_normal {
+#emnyitqmvg .gt_font_normal {
   font-weight: normal;
 }
 
-#owogtflvqk .gt_font_bold {
+#emnyitqmvg .gt_font_bold {
   font-weight: bold;
 }
 
-#owogtflvqk .gt_font_italic {
+#emnyitqmvg .gt_font_italic {
   font-style: italic;
 }
 
-#owogtflvqk .gt_super {
+#emnyitqmvg .gt_super {
   font-size: 65%;
 }
 
-#owogtflvqk .gt_footnote_marks {
+#emnyitqmvg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#owogtflvqk .gt_asterisk {
+#emnyitqmvg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#owogtflvqk .gt_indent_1 {
+#emnyitqmvg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#owogtflvqk .gt_indent_2 {
+#emnyitqmvg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#owogtflvqk .gt_indent_3 {
+#emnyitqmvg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#owogtflvqk .gt_indent_4 {
+#emnyitqmvg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#owogtflvqk .gt_indent_5 {
+#emnyitqmvg .gt_indent_5 {
   text-indent: 25px;
 }
 
-#owogtflvqk .katex-display {
+#emnyitqmvg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#owogtflvqk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#emnyitqmvg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1005,12 +1625,11 @@ s1_agg |> group_by(id,refClass) |>
   stat_boxplot(width=0.5, alpha=0.6) +
   facet_wrap(~refClass) +
   labs(title="Distributions of % of trials that matched goal",
-       x="Percent of trials that matched goal",
+       x="% of trials (out of 4) that matched goal",
        y="Number of Participants",
        fill="Reference Class") +
   scale_fill_brewer(palette="Set2") + 
-  scale_y_continuous(breaks=seq(0,80,5)) + 
-  scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1)) 
+  scale_y_continuous(breaks=seq(0,80,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1)) 
 ```
 
 </details>
@@ -1029,83 +1648,30 @@ s1_agg |> group_by(id,refClass) |>
 s1_agg |> group_by(id,refClass) |> 
   summarise(mg=sum(matched_goal), n=n(), pct=mg/n) |> 
   group_by(refClass,mg) |>
-  summarise(n=n()) |>
-  setNames(c("refClass", "# of trials with matched goal", "n")) |>
-  knitr::kable(booktabs=T,col.names = c("Reference Class", 
-                            "# of correct trials ",
-                            "n"),
-               format = "html") |> 
-  kableExtra::kable_styling(full_width = F) |> column_spec(1:3, width = "2cm")
+  summarise(n=n()) |>  rename("# matched goal"=mg,"# participants"=n) |> gt() |>  tab_header(
+    title = md("**Number of Trials participants match goal by Reference class**"),
+    subtitle = "Each participant had 4 trials where they attempt to create a plan to match goal"
+  ) 
 ```
 
 </details>
-
-| Reference Class | \# of correct trials |   n |
-|:----------------|---------------------:|----:|
-| Percentage      |                    0 |  54 |
-| Percentage      |                    1 |   4 |
-| Percentage      |                    2 |   8 |
-| Percentage      |                    3 |   3 |
-| Percentage      |                    4 |   9 |
-| USD             |                    0 |  82 |
-| USD             |                    1 |   2 |
-| USD             |                    2 |   3 |
-| USD             |                    3 |   1 |
-| USD             |                    4 |   6 |
-| kWh             |                    0 |  44 |
-| kWh             |                    1 |   3 |
-| kWh             |                    2 |   7 |
-| kWh             |                    3 |   4 |
-| kWh             |                    4 |  22 |
-
-<details class="code-fold">
-<summary>Code</summary>
-
-``` r
-summary_pct |>
-  gt() |>
-  tab_header(
-    title = md("**Percentage of Participants Matching Target Pct by Condition**"),
-    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal"
-  ) |>
-  fmt_number(
-    columns = c(pct_matched),
-    decimals = 2
-  ) |>
-  cols_label(
-    refClass = "Reference Class",
-    matched_count = "Matched Count",
-    total_count = "Total Count",
-    pct_matched = "Percentage Matched (%)"
-  ) |>
-  cols_align(
-    align = "center",
-    columns = everything()
-  ) |>
-  tab_spanner(
-    label = "Participants",
-    columns = c(matched_count, total_count, pct_matched)
-  )
-```
-
-</details>
-<div id="tyrpalpkxg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#tyrpalpkxg table {
+<div id="qhzmujtzjr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qhzmujtzjr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#tyrpalpkxg thead, #tyrpalpkxg tbody, #tyrpalpkxg tfoot, #tyrpalpkxg tr, #tyrpalpkxg td, #tyrpalpkxg th {
+#qhzmujtzjr thead, #qhzmujtzjr tbody, #qhzmujtzjr tfoot, #qhzmujtzjr tr, #qhzmujtzjr td, #qhzmujtzjr th {
   border-style: none;
 }
 
-#tyrpalpkxg p {
+#qhzmujtzjr p {
   margin: 0;
   padding: 0;
 }
 
-#tyrpalpkxg .gt_table {
+#qhzmujtzjr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1131,12 +1697,12 @@ summary_pct |>
   border-left-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_caption {
+#qhzmujtzjr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#tyrpalpkxg .gt_title {
+#qhzmujtzjr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1148,7 +1714,7 @@ summary_pct |>
   border-bottom-width: 0;
 }
 
-#tyrpalpkxg .gt_subtitle {
+#qhzmujtzjr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1160,7 +1726,7 @@ summary_pct |>
   border-top-width: 0;
 }
 
-#tyrpalpkxg .gt_heading {
+#qhzmujtzjr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1172,13 +1738,13 @@ summary_pct |>
   border-right-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_bottom_border {
+#qhzmujtzjr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_col_headings {
+#qhzmujtzjr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1193,7 +1759,7 @@ summary_pct |>
   border-right-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_col_heading {
+#qhzmujtzjr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1213,7 +1779,7 @@ summary_pct |>
   overflow-x: hidden;
 }
 
-#tyrpalpkxg .gt_column_spanner_outer {
+#qhzmujtzjr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1225,15 +1791,15 @@ summary_pct |>
   padding-right: 4px;
 }
 
-#tyrpalpkxg .gt_column_spanner_outer:first-child {
+#qhzmujtzjr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tyrpalpkxg .gt_column_spanner_outer:last-child {
+#qhzmujtzjr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tyrpalpkxg .gt_column_spanner {
+#qhzmujtzjr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1245,11 +1811,11 @@ summary_pct |>
   width: 100%;
 }
 
-#tyrpalpkxg .gt_spanner_row {
+#qhzmujtzjr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#tyrpalpkxg .gt_group_heading {
+#qhzmujtzjr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1275,7 +1841,7 @@ summary_pct |>
   text-align: left;
 }
 
-#tyrpalpkxg .gt_empty_group_heading {
+#qhzmujtzjr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1290,15 +1856,15 @@ summary_pct |>
   vertical-align: middle;
 }
 
-#tyrpalpkxg .gt_from_md > :first-child {
+#qhzmujtzjr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tyrpalpkxg .gt_from_md > :last-child {
+#qhzmujtzjr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tyrpalpkxg .gt_row {
+#qhzmujtzjr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1317,7 +1883,7 @@ summary_pct |>
   overflow-x: hidden;
 }
 
-#tyrpalpkxg .gt_stub {
+#qhzmujtzjr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1330,7 +1896,7 @@ summary_pct |>
   padding-right: 5px;
 }
 
-#tyrpalpkxg .gt_stub_row_group {
+#qhzmujtzjr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1344,15 +1910,15 @@ summary_pct |>
   vertical-align: top;
 }
 
-#tyrpalpkxg .gt_row_group_first td {
+#qhzmujtzjr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tyrpalpkxg .gt_row_group_first th {
+#qhzmujtzjr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#tyrpalpkxg .gt_summary_row {
+#qhzmujtzjr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1362,16 +1928,16 @@ summary_pct |>
   padding-right: 5px;
 }
 
-#tyrpalpkxg .gt_first_summary_row {
+#qhzmujtzjr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_first_summary_row.thick {
+#qhzmujtzjr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tyrpalpkxg .gt_last_summary_row {
+#qhzmujtzjr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1381,7 +1947,7 @@ summary_pct |>
   border-bottom-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_grand_summary_row {
+#qhzmujtzjr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1391,7 +1957,7 @@ summary_pct |>
   padding-right: 5px;
 }
 
-#tyrpalpkxg .gt_first_grand_summary_row {
+#qhzmujtzjr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1401,7 +1967,7 @@ summary_pct |>
   border-top-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_last_grand_summary_row_top {
+#qhzmujtzjr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1411,11 +1977,11 @@ summary_pct |>
   border-bottom-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_striped {
+#qhzmujtzjr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tyrpalpkxg .gt_table_body {
+#qhzmujtzjr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1424,7 +1990,7 @@ summary_pct |>
   border-bottom-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_footnotes {
+#qhzmujtzjr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1438,7 +2004,7 @@ summary_pct |>
   border-right-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_footnote {
+#qhzmujtzjr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1447,7 +2013,7 @@ summary_pct |>
   padding-right: 5px;
 }
 
-#tyrpalpkxg .gt_sourcenotes {
+#qhzmujtzjr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1461,7 +2027,7 @@ summary_pct |>
   border-right-color: #D3D3D3;
 }
 
-#tyrpalpkxg .gt_sourcenote {
+#qhzmujtzjr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1469,72 +2035,590 @@ summary_pct |>
   padding-right: 5px;
 }
 
-#tyrpalpkxg .gt_left {
+#qhzmujtzjr .gt_left {
   text-align: left;
 }
 
-#tyrpalpkxg .gt_center {
+#qhzmujtzjr .gt_center {
   text-align: center;
 }
 
-#tyrpalpkxg .gt_right {
+#qhzmujtzjr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tyrpalpkxg .gt_font_normal {
+#qhzmujtzjr .gt_font_normal {
   font-weight: normal;
 }
 
-#tyrpalpkxg .gt_font_bold {
+#qhzmujtzjr .gt_font_bold {
   font-weight: bold;
 }
 
-#tyrpalpkxg .gt_font_italic {
+#qhzmujtzjr .gt_font_italic {
   font-style: italic;
 }
 
-#tyrpalpkxg .gt_super {
+#qhzmujtzjr .gt_super {
   font-size: 65%;
 }
 
-#tyrpalpkxg .gt_footnote_marks {
+#qhzmujtzjr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#tyrpalpkxg .gt_asterisk {
+#qhzmujtzjr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tyrpalpkxg .gt_indent_1 {
+#qhzmujtzjr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#tyrpalpkxg .gt_indent_2 {
+#qhzmujtzjr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#tyrpalpkxg .gt_indent_3 {
+#qhzmujtzjr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#tyrpalpkxg .gt_indent_4 {
+#qhzmujtzjr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#tyrpalpkxg .gt_indent_5 {
+#qhzmujtzjr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#tyrpalpkxg .katex-display {
+#qhzmujtzjr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#tyrpalpkxg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qhzmujtzjr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+| <strong>Number of Trials participants match goal by Reference class</strong> |  |
+|----|----|
+| Each participant had 4 trials where they attempt to create a plan to match goal |  |
+| \# matched goal | \# participants |
+| Percentage |  |
+| 0 | 54 |
+| 1 | 4 |
+| 2 | 8 |
+| 3 | 3 |
+| 4 | 9 |
+| USD |  |
+| 0 | 82 |
+| 1 | 2 |
+| 2 | 3 |
+| 3 | 1 |
+| 4 | 6 |
+| kWh |  |
+| 0 | 44 |
+| 1 | 3 |
+| 2 | 7 |
+| 3 | 4 |
+| 4 | 22 |
+
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+  # setNames(c("refClass", "# of trials with matched goal", "n")) |>
+  # knitr::kable(booktabs=T,col.names = c("Reference Class", 
+  #                           "# of correct trials ",
+  #                           "n"),
+  #              format = "html") |> 
+  # kableExtra::kable_styling(full_width = F) |> column_spec(1:3, width = "2cm")
+  
+
+
+
+
+
+
+summary_pct |>
+  gt() |>
+  tab_header(
+    title = md("**Percentage of Trials Matching Target Pct by Condition**"),
+    subtitle = "Grouped by Reference Class, Rounding, and Pct Goal"
+  ) |>
+  fmt_number(
+    columns = c(pct_matched),
+    decimals = 2
+  ) |>
+  cols_label(
+    refClass = "Reference Class",
+    matched_count = "Matched Count",
+    total_count = "Total Count",
+    pct_matched = "Percentage Matched (%)"
+  ) |>
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) |>
+  tab_spanner(
+    label = "Participants",
+    columns = c(matched_count, total_count, pct_matched)
+  )
+```
+
+</details>
+<div id="mqppatcyvc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mqppatcyvc table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mqppatcyvc thead, #mqppatcyvc tbody, #mqppatcyvc tfoot, #mqppatcyvc tr, #mqppatcyvc td, #mqppatcyvc th {
+  border-style: none;
+}
+
+#mqppatcyvc p {
+  margin: 0;
+  padding: 0;
+}
+
+#mqppatcyvc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mqppatcyvc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mqppatcyvc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mqppatcyvc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mqppatcyvc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mqppatcyvc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mqppatcyvc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mqppatcyvc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mqppatcyvc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mqppatcyvc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mqppatcyvc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mqppatcyvc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mqppatcyvc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mqppatcyvc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mqppatcyvc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mqppatcyvc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mqppatcyvc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mqppatcyvc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mqppatcyvc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mqppatcyvc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mqppatcyvc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mqppatcyvc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mqppatcyvc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mqppatcyvc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mqppatcyvc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mqppatcyvc .gt_left {
+  text-align: left;
+}
+
+#mqppatcyvc .gt_center {
+  text-align: center;
+}
+
+#mqppatcyvc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mqppatcyvc .gt_font_normal {
+  font-weight: normal;
+}
+
+#mqppatcyvc .gt_font_bold {
+  font-weight: bold;
+}
+
+#mqppatcyvc .gt_font_italic {
+  font-style: italic;
+}
+
+#mqppatcyvc .gt_super {
+  font-size: 65%;
+}
+
+#mqppatcyvc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mqppatcyvc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mqppatcyvc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mqppatcyvc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mqppatcyvc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mqppatcyvc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mqppatcyvc .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mqppatcyvc .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mqppatcyvc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1548,7 +2632,7 @@ summary_pct |>
 </colgroup>
 <thead>
 <tr class="gt_heading">
-<th colspan="4" class="gt_heading gt_title gt_font_normal"><strong>Percentage of Participants Matching Target Pct by Condition</strong></th>
+<th colspan="4" class="gt_heading gt_title gt_font_normal"><strong>Percentage of Trials Matching Target Pct by Condition</strong></th>
 </tr>
 <tr class="gt_heading">
 <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Grouped by Reference Class, Rounding, and Pct Goal</th>
@@ -1736,6 +2820,304 @@ m5_s1 |> emmeans(~refClass) |> gather_emmeans_draws() |>
 
 
 # transform the log-odds to odds
+```
+
+</details>
+
+## Data checks
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+library(tidyverse)
+
+# for every combination of state, appliance, and refClass, calculate the number of distinct values of family, and of state_avg
+s1 |> group_by(state,appliance,refClass) |> 
+  summarise(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) 
+```
+
+</details>
+
+    # A tibble: 11 × 7
+    # Groups:   state, appliance [10]
+       state appliance       refClass   n_distinct_family n_distinct_state_avg
+       <chr> <chr>           <chr>                  <int>                <int>
+     1 CAL   Water Heating   USD                        2                    2
+     2 COL   Heating         kWh                        3                    2
+     3 COL   Refrigerator    kWh                        2                    1
+     4 COL   Total kWh       kWh                        2                    1
+     5 COL   Water Heating   USD                        1                    2
+     6 MASS  Water Heating   USD                        2                    1
+     7 TEX   Heating         USD                        2                    1
+     8 TEX   Other Appliance USD                        2                    1
+     9 TEX   Total kWh       kWh                        1                    2
+    10 TEX   Water Heating   Percentage                 2                    1
+    11 TEX   Water Heating   USD                        3                    2
+    # ℹ 2 more variables: distinct_family <chr>, distinct_state_avg <chr>
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+s1 |> group_by(state,appliance,refClass) |> 
+  mutate(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) |> 
+  group_by(state,appliance,refClass,family,state_avg) 
+```
+
+</details>
+
+    # A tibble: 974 × 24
+    # Groups:   state, appliance, refClass, family, state_avg [25]
+          id state1   state2 refClass   calc    edu   modality state id2   appliance
+       <int> <chr>    <chr>  <chr>      <chr>   <fct> <chr>    <chr> <chr> <chr>    
+     1     1 Colorado Texas  Percentage Used C… Grad… P        TEX   R_2Q… Water He…
+     2     1 Colorado Texas  Percentage Used C… Grad… P        TEX   R_2Q… Water He…
+     3     2 Colorado Texas  Percentage Used C… Coll… P        TEX   R_2t… Water He…
+     4     2 Colorado Texas  Percentage Used C… Coll… P        TEX   R_2t… Water He…
+     5     3 Colorado Texas  Percentage Used C… Coll… P        TEX   R_3G… Water He…
+     6     3 Colorado Texas  Percentage Used C… Coll… P        TEX   R_3G… Water He…
+     7     4 Colorado Texas  Percentage Used C… Coll… P        TEX   R_Dj… Water He…
+     8     4 Colorado Texas  Percentage Used C… Coll… P        TEX   R_Dj… Water He…
+     9     5 Colorado Texas  Percentage No Cal… Grad… P        TEX   R_3f… Water He…
+    10     5 Colorado Texas  Percentage No Cal… Grad… P        TEX   R_3f… Water He…
+    # ℹ 964 more rows
+    # ℹ 14 more variables: family <dbl>, state_avg <dbl+lbl>, plan <fct>,
+    #   value <dbl>, block <dbl>, pct_goal <dbl>, change <dbl>, state_p_dif <dbl>,
+    #   state_f_dif <dbl>, less_avg <lgl>, n_distinct_family <int>,
+    #   n_distinct_state_avg <int>, distinct_family <chr>, distinct_state_avg <chr>
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+  # the count of each unique value of family, and each unique value of state avg
+  
+ 
+s1 |> 
+    group_by(state, appliance, refClass) |> 
+    mutate(n_distinct_family = n_distinct(family),
+           n_distinct_state_avg = n_distinct(state_avg), 
+           distinct_family = paste(unique(family), collapse = ","),
+           distinct_state_avg = paste(unique(state_avg), collapse = ",")) |>
+    filter(n_distinct_family > 1 | n_distinct_state_avg > 1) |> 
+    group_by(state, appliance, refClass, family, state_avg) |> 
+    mutate(state_avg_count = n_distinct(state_avg),
+           family_count = n()) |> 
+    ungroup() |> 
+    group_by(state, appliance, refClass, state_avg) |> 
+    mutate(state_avg_count = n()) |> 
+    distinct(state, appliance, refClass, family, state_avg, family_count, state_avg_count) |> 
+  arrange(state,appliance,refClass)
+```
+
+</details>
+
+    # A tibble: 25 × 7
+    # Groups:   state, appliance, refClass, state_avg [16]
+       state appliance     refClass family state_avg family_count state_avg_count
+       <chr> <chr>         <chr>     <dbl> <dbl+lbl>        <int>           <int>
+     1 CAL   Water Heating USD        5061  4601               82              82
+     2 CAL   Water Heating USD        5124  4534                2               2
+     3 COL   Heating       kWh         340   587                2               2
+     4 COL   Heating       kWh       18052 16411               72              74
+     5 COL   Heating       kWh       11441 16411                2              74
+     6 COL   Refrigerator  kWh        5600  1142                2              76
+     7 COL   Refrigerator  kWh        1370  1142               74              76
+     8 COL   Total kWh     kWh        1500 30535                2              76
+     9 COL   Total kWh     kWh       39768 30535               74              76
+    10 COL   Water Heating USD       11667  4000                2               2
+    # ℹ 15 more rows
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> filter(ResponseId=="R_2QMsYuHS385pTj1") -> k
+# find if any columns equal 5.26
+
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> select_if(~any(. ==11441.0)) |> 
+  # filter out any NAs from any column that is left (we don't know the column names)
+  filter_all(any_vars(!is.na(.))) |> 
+  # retain only cases of 11441.0
+  filter_all(any_vars(. == 11441.0)) 
+```
+
+</details>
+
+    # A tibble: 1 × 1
+      A4COL11
+        <dbl>
+    1   11441
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> # return the names of any columns that contain 11441.0
+  select_if(~any(. ==11441.0)) |> 
+  names() |> 
+  str_c(collapse=",") |> 
+  cat() # P3TEX15
+```
+
+</details>
+
+    A4COL11
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+# do the same procedure for each of these values, include a line break after the output from each number
+low_freq <- c(5.26, 4534, 340,11667,5.3,400, 29046,5600,5987,34265.0,5600.0 )
+
+
+# for(val in low_freq) {
+#   haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+#     select_if(~any(. == val)) |>
+#     names() |>
+#     str_c(collapse = ",") |>
+#     cat()
+#   cat("\n")  # Add line break after each output
+# }
+
+low_freq |>
+  walk(function(val) {
+    cat(val, "\n")  # Print the current value
+    haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+      select_if(~any(. == val)) |>
+      names() |>
+      str_c(collapse = ",") |>
+      cat()
+    cat("\n\n")  # Add two line breaks before next value
+  })
+```
+
+</details>
+
+    5.3 
+
+
+    4534 
+    D1CAL16
+
+    340 
+    A2COL11
+
+    11667 
+    P1COL15,P2COL15,P3COL15,P4COL15,D1COL15,D2COL15,D3COL15,D4COL15,D4COL17,A1COL15,A2COL15,A3COL15,A4COL15
+
+    5.3 
+
+
+    400 
+    AIND10,P1COL09,P1COL10,P1MASS09,P1MASS10,P2COL09,P2MASS09,P2MASS10,P3COL09,P3COL10,P4COL09,P4COL10,P3MASS09,P3MASS10,P4MASS09,P4MASS10,D1COL10,D1MASS09,D1MASS10,D1MASS22,D2COL09,D2COL10,D2CAL09,D2CAL10,D2CAL13,D2CAL14,D2CAL17,D2CAL18,D2CAL21,D2CAL22,D2CAL25,D2CAL26,D2CAL29,D2CAL30,D2MASS10,D3COL10,D3TEX16,D4COL10,D4COL21,D3MASS09,D3MASS10,D4MASS09,D4MASS10,A1COL10,A1MASS09,A1MASS10,A2COL10,A2CAL26,A2MASS09,A2MASS10,A4COL09,A4COL10,A3MASS09,A3MASS10,A4MASS09,A4MASS10
+
+    29046 
+    P1TEX27,P2TEX27,P3TEX27,P4TEX27,P4TEX29,D1TEX27,D1TEX30,D2TEX27,D2TEX29,D3TEX27,D4TEX27,A1TEX27,A2TEX27,A2TEX29,A2TEX30,A3TEX27,A3TEX28,A3TEX29,A3TEX30,A4TEX27
+
+    5600 
+    P3COL18,P3CAL14,D1TEX15,D2CAL14,D3CAL13,D3CAL14,A1COL25,A1MASS17,A1CAL13,A1CAL29,A2COL19,A2CAL14,A3COL26
+
+    5987 
+    D2TEX23,A1CAL13
+
+    34265 
+    D2TEX15
+
+    5600 
+    P3COL18,P3CAL14,D1TEX15,D2CAL14,D3CAL13,D3CAL14,A1COL25,A1MASS17,A1CAL13,A1CAL29,A2COL19,A2CAL14,A3COL26
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+k %>% select_if(~any(is.numeric(.)) & . <10)
+```
+
+</details>
+
+    # A tibble: 1 × 54
+      Finished  Consent      P3COL01 P3COL02 P3COL03 P3COL04 P3COL05 P3COL06 P3COL31
+      <dbl+lbl> <dbl+lbl>    <dbl+l> <dbl+l> <dbl+l> <dbl+l> <dbl+l> <dbl+l> <dbl+l>
+    1 1 [True]  1 [Yes I ag… 3 [Wat… 1 [1]   2 [2]   5 [5]   3 [3]   4 [4]   1 [Act…
+    # ℹ 45 more variables: P3COL34 <dbl+lbl>, P3COL35 <dbl+lbl>, P3TEX01 <dbl+lbl>,
+    #   P3TEX02 <dbl+lbl>, P3TEX03 <dbl+lbl>, P3TEX04 <dbl+lbl>, P3TEX05 <dbl+lbl>,
+    #   P3TEX06 <dbl+lbl>, P3TEX15 <dbl>, P3TEX31 <dbl+lbl>, P3TEX33 <dbl+lbl>,
+    #   P3TEX35 <dbl+lbl>, MATH01 <dbl+lbl>, ELS01 <dbl+lbl>, ELS02 <dbl+lbl>,
+    #   ELS03 <dbl+lbl>, ELS04 <dbl+lbl>, ELS05 <dbl+lbl>, ELS06 <dbl+lbl>,
+    #   ELS07 <dbl+lbl>, ELS08 <dbl+lbl>, DUMMYVAR01 <dbl+lbl>,
+    #   DUMMYVAR02 <dbl+lbl>, DUMMYVAR03 <dbl+lbl>, DUMMYVAR04 <dbl+lbl>, …
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> select(P3TEX15) |> unique()
+```
+
+</details>
+
+    # A tibble: 2 × 1
+      P3TEX15
+        <dbl>
+    1    5.26
+    2   NA   
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> 
+  #select(ResponseId, P3TEX15) |> 
+  filter(!is.na(P3TEX15))
+```
+
+</details>
+
+    # A tibble: 10 × 1,840
+       IPAddress       Progress Duration__in_seconds_ Finished  RecordedDate       
+       <chr>              <dbl>                 <dbl> <dbl+lbl> <dttm>             
+     1 23.81.192.193        100                  1008 1 [True]  2018-09-24 20:50:48
+     2 172.116.255.216      100                  1126 1 [True]  2018-09-24 18:32:03
+     3 173.89.169.178       100                   870 1 [True]  2018-09-24 18:32:41
+     4 138.75.69.205        100                  2763 1 [True]  2018-09-24 22:19:26
+     5 107.172.201.182      100                   920 1 [True]  2018-09-24 22:32:06
+     6 52.144.47.38         100                   878 1 [True]  2018-09-25 07:07:14
+     7 23.94.140.144        100                  2680 1 [True]  2018-09-25 07:09:47
+     8 66.110.199.87        100                  1628 1 [True]  2018-09-25 07:38:49
+     9 107.172.165.113      100                   724 1 [True]  2018-09-25 07:40:55
+    10 173.215.15.248       100                   913 1 [True]  2018-09-25 08:08:02
+    # ℹ 1,835 more variables: ResponseId <chr>, Consent <dbl+lbl>, AIND01 <dbl>,
+    #   AIND02 <dbl>, AIND03 <dbl>, AIND04 <dbl>, AIND05 <dbl>, AIND06 <dbl>,
+    #   AIND07 <dbl>, AIND08 <dbl>, AIND09 <dbl>, AIND10 <dbl>, AIND11 <dbl>,
+    #   AIND12 <dbl>, AIND13 <dbl>, AIND14 <dbl>, AIND15 <dbl>, AIND16 <dbl>,
+    #   P1TEX01 <dbl+lbl>, P1TEX02 <dbl+lbl>, P1TEX03 <dbl+lbl>, P1TEX04 <dbl+lbl>,
+    #   P1TEX05 <dbl+lbl>, P1TEX06 <dbl+lbl>, P1TEX07 <dbl>, P1TEX08 <dbl>,
+    #   P1TEX09 <dbl>, P1TEX10 <dbl>, P1TEX11 <dbl>, P1TEX12 <dbl>, …
+
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+# A tibble: 2 × 2
+#   P3TEX15 `n()`
+#     <dbl> <int>
+# 1    5.26    10
+# 2   NA      242
 ```
 
 </details>

@@ -37,14 +37,16 @@ website:
           - href: results.qmd
       - section: "Background"
         contents:
+          - href: study_stim.md
+            text: "Design and Stimulii"
           - href: study_info.md
-            text: "study_info"
+            text: "study 2 full info"
           - href: initial_slides.md
-            text: "initial_slides"
+            text: "MPA_Slides"
           - href: study1_info.md
-            text: "study 1 info"
+            text: "study 1 codebook"
           - href: study2_info.md
-            text: "study 2 info"
+            text: "study 2 codebook"
 
 
   page-footer:
