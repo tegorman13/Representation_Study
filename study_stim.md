@@ -1,4 +1,4 @@
-# Study Stimulii 
+# Study Stimulii and Design
 
 
 
@@ -53,7 +53,8 @@ Absolute numbers (kWh) should be easier to understand and deal with than the per
 
 ## Primary task - Action Plan Creation
 
-### Example 1 of task given to participants - reference class is $
+
+### Example 1 of task given to participants - reference class is USD. - Massachusetts Family
 
 The Davis family wants to reduce its household electricity bill by $1,042 next year. Please complete two possible action plans that will help the Davis family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. Enter only whole numbers. Try to provide close estimations. You may use a calculator to complete the task.
 
@@ -71,7 +72,7 @@ Note: The Davis family used 14,086 more kWh than the average household in Massac
 
 
 
-### Example 2 - reference class is kWh
+### Example 2 - reference class is kWh - Colorado Family
 
 The Wells family wants to reduce its household electricity use by 5,965 kWh next year. Please complete two possible action plans that will help the Wells family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. Enter only whole numbers. Try to provide close estimations. You may use a calculator to complete the task.
 
@@ -87,7 +88,7 @@ Note: The Wells family used 9,233 more kWh than the average household in Colorad
 | Total kWh | 39,768 | 30,535 | | |
 
 
-### Example 3 - reference class is percentage
+### Example 3 - reference class is percentage - Texas Family 
 
 The Smith family wants to reduce its household electricity use by 15% next year. Please complete two possible action plans that will help the Smith family achieve this goal. Please enter how many kWh should be used next year by each appliance category and the total kWh each plan would use. Enter only whole numbers. Try to provide close estimations. You may use a calculator to complete the task.
 
@@ -101,6 +102,21 @@ Note: The Smith family used 6,101 more kWh than the average household in Texas l
 | Refrigerator | 2,639 | 1,318 | | |
 | Other (Television, Lighting, Electronics, Washer/Dryer, etc.) | 8,459 | 7,883 | | |
 | Total kWh | 29,046 | 22,945 | | |
+
+
+### Example 4 - California Family
+
+The Adams Family
+
+| Category | Electricity Used Last Year by the Adams Family (kWh) | Average Electricity Used Last Year by Households in California (kWh) | Action Plan 1 | Action Plan 2 |
+|----------|---------------------------------------------------|------------------------------------------------------------------|--------------|--------------|
+| Cooling (Central A/C) | 2,581 | 1,289 | | |
+| Heating the Home | 6,157 | 5,597 | | |
+| Water Heating | 5,061 | 4,601 | | |
+| Refrigerator | 1,266 | 1,055 | | |
+| Other (Television, Lighting, Electronics, Washer/Dryer, etc.) | 7,608 | 6,916 | | |
+| Total kWh | 22,673 | 19,458 | | |
+
 
 
 
@@ -240,5 +256,77 @@ After completing the tasks for four families:
 
 
 -----
+
+
+
+## Study 2 specfiics 
+
+The questions in study 2 are quite similar to those in study 1, but we also included a rounding manipulation (rounded vs. not rounded), and a manipulation of the goal (10% reduction vs. 15% rediction)
+
+Note that reference class remains a between-subjects variable, while percent goal, rounding, and state are within-subjects variables. 
+ 
+In study 2, the new design is a 4 state temperature (2 warm vs. 2 cold states) X 2 task goal (10% vs. 15%) X 2 last year’s usage for the family and the state average (exact vs. rounded numbers) within X 3 task reference class (USD vs. Percentage vs. kWh) between. A note on the percentage goals is that they are rounded to the full dollar. For instance, for the Davis family, 10% of their \$6,943.95 cost of residential energy usage is \$694.395; this is rounded to \$694. For the rounded condition, participants are also told that “The numbers for their \[the family’s\] usage have been rounded for convenience.” In terms of randomization, blocks were combined so that there was a block for each condition and order combination. As an example, one block is the smith family with a 10% goal and rounded numbers for the family’s usage first, and the Wells family second, with a 15% goal and exact numbers for the family’s usage. Another block has these but in reverse, where the participant receives the Wells family first and the Smith family second. In total, there are 96 conditions, representing each possible order (2 orders x 4 states x 2 possible significant digit values, and 3 reference classes).
+
+#### Task amounts: 15% vs. 10% exact
+
+| State/Reference  | 15% kWh | 10% kWh | 15% USD | 10% USD | 15% Percent | 10% Percent |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Adams / Cali     | 3,401   | 2,267   | \$510   | \$340   | 15%         | 10%         |
+| Smith / Texas    | 4,357   | 2,905   | \$479   | \$320   | 15%         | 10%         |
+| Wells / Colorado | 5,965   | 3,977   | \$656   | \$438   | 15%         | 10%         |
+| Davis / Mass     | 6,944   | 4,629   | \$1,042 | \$694   | 15%         | 10%         |
+
+#### Task amounts: 15% vs. 10% rounded
+
+| State/Reference  | 15% kWh | 10% kWh | 15% USD | 10% USD | 15% Percent | 10% Percent |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Adams / Cali     | 3,450   | 2,300   | \$518   | \$345   | 15%         | 10%         |
+| Smith / Texas    | 4,350   | 2,900   | \$479   | \$319   | 15%         | 10%         |
+| Wells / Colorado | 6,000   | 4,000   | \$660   | \$440   | 15%         | 10%         |
+| Davis / Mass     | 6,900   | 4,600   | \$1,035 | \$690   | 15%         | 10%         |
+
+#### Adams Family / Cali (\$0.15 per kWh) (diff: 3,542)
+
+| Source        | State average | Exact      | Rounded    |
+|---------------|---------------|------------|------------|
+| Cooling       | 1,289         | 2,581      | 3,000      |
+| Heating       | 5,597         | 6,157      | 6,000      |
+| Water heating | 4,601         | 5,061      | 5,000      |
+| Refrigerator  | 1,055         | 1,266      | 1,000      |
+| Other         | 6,916         | 7,608      | 8,000      |
+| **Total**     | **19,458**    | **22,673** | **23,000** |
+
+#### Smith Family / Texas (\$0.11 per kWh) (diff: 6,055)
+
+| Source        | State average | Exact      | Rounded    |
+|---------------|---------------|------------|------------|
+| Cooling       | 4,249         | 6,573      | 7,000      |
+| Heating       | 5,099         | 6,118      | 6,000      |
+| Water heating | 4,396         | 5,257      | 5,000      |
+| Refrigerator  | 1,318         | 2,639      | 3,000      |
+| Other         | 7,883         | 8,459      | 8,000      |
+| **Total**     | **22,945**    | **29,046** | **29,000** |
+
+#### Wells Family / Colorado (\$0.11 per kWh) (diff: 9,465)
+
+| Source        | State average | Exact      | Rounded    |
+|---------------|---------------|------------|------------|
+| Cooling       | 489           | 697        | 1,000      |
+| Heating       | 16,411        | 18,052     | 18,000     |
+| Water heating | 5,832         | 11,667     | 12,000     |
+| Refrigerator  | 1,142         | 1,370      | 1,000      |
+| Other         | 6,652         | 7,982      | 8,000      |
+| **Total**     | **30,535**    | **39,768** | **40,000** |
+
+#### Davis Family / Massachusetts (\$0.15 per kWh) (diff: 13,793)
+
+| Source        | State average | Exact      | Rounded    |
+|---------------|---------------|------------|------------|
+| Cooling       | 322           | 419        | 0          |
+| Heating       | 19,108        | 26,751     | 27,000     |
+| Water heating | 5,070         | 10,543     | 11,000     |
+| Refrigerator  | 1,025         | 1,230      | 1,000      |
+| Other         | 6,682         | 7,350      | 7,000      |
+| **Total**     | **32,207**    | **46,293** | **46,000** |
 
 

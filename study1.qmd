@@ -102,6 +102,10 @@ s1 <- s1 |> rename(edu=DEM04) |>
 #   select(-starts_with("AIND"))
 
 
+
+
+ 
+ 
 # 
 # t <- s12 |> filter(state1=="Texas") |> 
 #   # select only columns that contain "TEX" in the name
@@ -146,7 +150,7 @@ parse_action_plan <- function(df) {
       names_to = c("modality", "state", "item_num"),
       names_pattern = "^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$",
       values_to = "value"
-    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value,id2) 
+    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value,id2,Duration__in_seconds_) 
   
   df_long <- df_long |> 
   mutate(
@@ -222,11 +226,15 @@ s1_agg <- s1 |>
             n_change = sum(value!=family),
             state_p_dif=mean(state_p_dif),
             state_f_dif=mean(state_f_dif),
-            n_less_avg = sum(less_avg)) |> 
-  mutate(matched_goal = (pct_change == pct_goal))
+            n_less_avg = sum(less_avg),
+            duration=first(Duration__in_seconds_)) |> 
+  mutate(matched_goal = (pct_change == pct_goal), 
+             error = pct_change - pct_goal,
+            abs_error = abs(error),
+            close_match = abs_error <= 0.02)
 
-k <- s1_agg |> group_by(id,pct_goal) |>  summarize(total_kWh=sum(total_kWh),orig_kWh=sum(orig_kWh),pct_change=round((orig_kWh-total_kWh)/orig_kWh,3)) |> 
-  mutate(matched_goal = (pct_change == pct_goal))
+# s1_agg |> filter(matched_goal==FALSE, abs_error<.02) |> pull(abs_error)
+
 
 s1_agg4 <- s1_agg |> group_by(id,refClass) |> 
   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
@@ -238,6 +246,9 @@ outliers <- s1_agg |>  ungroup() |> group_by(state) |> mutate(change_mean=mean(p
                                      z_score=(pct_change-change_mean)/change_sd,
                                      is_outlier=abs(z_score)>3.0)
 outlier_id <- outliers |> filter(is_outlier) |> pull(id) |> unique()
+
+
+
 
 
 # plot frequency dist of values of n_change
@@ -338,7 +349,23 @@ s1_agg4 |> group_by(refClass) |>
     }
   )
 
+ggplot(s1_agg |> filter(abs_error<1), aes(x = refClass, y = abs_error, fill = refClass)) +
+    geom_boxplot() +
+    labs(
+        title = "Absolute Error by Reference Class",
+        x = "Reference Class",
+        y = "Absolute Error"
+    ) +
+    theme_minimal()
 
+ggplot(s1_agg |> filter(abs_error<1), aes(x = abs_error, fill = refClass)) +
+    geom_histogram(binwidth = 0.05, alpha = 0.6, position = "identity") +
+    labs(
+        title = "Distribution of Absolute Error by Reference Class",
+        x = "Absolute Error",
+        y = "Frequency"
+    ) +
+    theme_minimal() + facet_wrap(~refClass)
 ```
 
 
@@ -539,6 +566,7 @@ summary_pct <- s1_agg |>
   group_by(refClass) |>
   summarise(
     matched_count = sum(matched_goal),
+    matched_count2 = sum(close_match),
     total_count = n(),
     pct_matched = matched_count / total_count * 100,
     .groups = "drop"
@@ -555,7 +583,15 @@ ggplot(summary_pct, aes(x = refClass, y = pct_matched, fill = refClass)) +
   ) +
   theme_minimal()
 
-
+ggplot(summary_pct, aes(x = refClass, y = matched_count2, fill = refClass)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(
+    title = "Percentage of Participants Matching Target Pct by Condition - 2% leeway",
+    x = "Reference Class",
+    y = "Percentage Matched (%)",
+    fill = "Rounding"
+  ) +
+  theme_minimal()
 
 
 

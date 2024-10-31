@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.26">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Thomas E. Gorman">
 <title>Results – Representation Study</title>
@@ -61,17 +61,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./study_stim.html" rel="next">
+<link href="./misc/outlier.html" rel="next">
 <link href="./study2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0c8af03b2fbd4cf44d6703e337af0e8d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7113c57a5f829fad3d6a2692c6003666.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bb594cf559d6c7be5da8d399972e3a16.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
@@ -174,6 +174,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Results</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/outlier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Outliers and discrepancies</span></a>
+  </div>
+</li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -273,8 +279,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">appliance</span> <span class="op">!=</span><span class="st">"Total kWh"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span>,<span class="va">state</span>,<span class="va">block</span>,<span class="va">plan</span>,<span class="va">calc</span>,<span class="va">edu</span>,<span class="va">pct_goal</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>total_kWh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,orig_kWh<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">family</span><span class="op">)</span>, </span>
-<span>            pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">orig_kWh</span><span class="op">-</span><span class="va">total_kWh</span><span class="op">)</span><span class="op">/</span><span class="va">orig_kWh</span>,<span class="fl">3</span><span class="op">)</span>, state_dif<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">state_dif</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>matched_goal <span class="op">=</span> <span class="op">(</span><span class="va">pct_change</span> <span class="op">==</span> <span class="va">pct_goal</span><span class="op">)</span><span class="op">)</span></span>
+<span>            pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">orig_kWh</span><span class="op">-</span><span class="va">total_kWh</span><span class="op">)</span><span class="op">/</span><span class="va">orig_kWh</span>,<span class="fl">3</span><span class="op">)</span>, </span>
+<span>            n_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">value</span><span class="op">!=</span><span class="va">family</span><span class="op">)</span>,</span>
+<span>            state_p_dif<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">state_p_dif</span><span class="op">)</span>,</span>
+<span>            state_f_dif<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">state_f_dif</span><span class="op">)</span>,</span>
+<span>            n_less_avg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">less_avg</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>matched_goal <span class="op">=</span> <span class="op">(</span><span class="va">pct_change</span> <span class="op">==</span> <span class="va">pct_goal</span><span class="op">)</span>, </span>
+<span>             error <span class="op">=</span> <span class="va">pct_change</span> <span class="op">-</span> <span class="va">pct_goal</span>,</span>
+<span>            abs_error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">error</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span></span>
 <span><span class="va">s1_agg4</span> <span class="op">&lt;-</span> <span class="va">s1_agg</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span>,<span class="va">calc</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>mg<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">matched_goal</span><span class="op">)</span>,n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span>, pct<span class="op">=</span><span class="va">mg</span><span class="op">/</span><span class="va">n</span><span class="op">)</span> </span>
@@ -318,18 +331,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/model_cache"</span>,<span class="st">'s1_bb1.rds'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mted1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu">describe_posterior</span><span class="op">(</span><span class="va">s1_bb1</span>, centrality <span class="op">=</span> <span class="st">"Mean"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mted1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>, <span class="st">"pd"</span><span class="op">)</span></span>
+<span><span class="va">mted1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu">describe_posterior</span><span class="op">(</span><span class="va">s1_bb1</span>, centrality <span class="op">=</span> <span class="st">"Median"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#colnames(mted1) &lt;- c("Term", "Estimate"," 95% CrI Lower", " 95% CrI Upper", "pd")</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mted1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Term"</span>, <span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>, <span class="st">"pd"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mted1</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Estimate"</span>, <span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span><span class="op">)</span>, </span>
-<span>                \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">remove_rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span><span class="va">intercept</span> <span class="op">&lt;-</span> <span class="va">mted1</span><span class="op">$</span><span class="va">Estimate</span><span class="op">[</span><span class="va">mted1</span><span class="op">$</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"b_Intercept"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># mted1 |&gt;</span></span>
+<span><span class="co">#   mutate(</span></span>
+<span><span class="co">#     Estimate_prob = plogis(Estimate + if_else(Term == "b_Intercept", 0, intercept)),</span></span>
+<span><span class="co">#     Lower_prob = plogis(`95% CrI Lower` + if_else(Term == "b_Intercept", 0, intercept)),</span></span>
+<span><span class="co">#     Upper_prob = plogis(`95% CrI Upper` + if_else(Term == "b_Intercept", 0, intercept))</span></span>
+<span><span class="co">#   )</span></span>
+<span></span>
+<span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="va">mted1</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">Term</span>, <span class="st">"b_"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">kable</span><span class="op">(</span>booktabs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
+<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span><span class="op">)</span>, </span>
+<span>                \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">if_else</span><span class="op">(</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"Intercept"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">intercept</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"Intercept"</span>, <span class="st">"Intercept (kWh)"</span>, <span class="va">Term</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">remove_rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span>booktabs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># plogis(-.58+ -.70) = .22</span></span>
+<span></span>
+<span><span class="co"># parameters::parameters(s1_bb1, effect = "fixed") </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="tbl-s1-bb" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-bb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: <strong>Experiment 1 main effect</strong>. Beta binomial regression results for the main effect of Reference Class.
+</figcaption><div aria-describedby="tbl-s1-bb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
 <thead><tr class="header">
 <th style="text-align: left;">Term</th>
 <th style="text-align: right;">Estimate</th>
@@ -339,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Intercept</td>
+<td style="text-align: left;">Intercept (kWh)</td>
 <td style="text-align: right;">0.36</td>
 <td style="text-align: right;">0.35</td>
 <td style="text-align: right;">0.36</td>
@@ -347,21 +383,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: left;">refClassPercentage</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.32</td>
-<td style="text-align: right;">0.34</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.21</td>
+<td style="text-align: right;">0.22</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">refClassUSD</td>
-<td style="text-align: right;">0.15</td>
-<td style="text-align: right;">0.14</td>
-<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.09</td>
 <td style="text-align: right;">1</td>
 </tr>
 </tbody>
 </table>
 </div>
+</figure>
 </div>
 <div class="cell">
 <details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">s1_bb1</span>, effects<span class="op">=</span><span class="st">"refClass"</span><span class="op">)</span>,points<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -379,7 +416,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>            alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'blue'</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_bar</span><span class="op">(</span>data<span class="op">=</span><span class="va">s1_agg4</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">mg</span>, fill<span class="op">=</span><span class="va">refClass</span><span class="op">)</span>,</span>
 <span>           inherit.aes<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">refClass</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">refClass</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">s1_bb1</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">gather_draws</span><span class="op">(</span><span class="va">b_Intercept</span>, <span class="va">b_refClassPercentage</span>, <span class="va">b_refClassUSD</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>   <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">.variable</span>, <span class="st">"b_"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu">mutate</span><span class="op">(</span>prob<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">.value</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"Intercept"</span>, <span class="st">"kWh"</span>, <span class="va">Term</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">prob</span>, fill <span class="op">=</span> <span class="va">Term</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">stat_halfeye</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Posterior Distributions of Reference Class Estimates"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Coefficient Value"</span>,</span>
+<span>       fill <span class="op">=</span> <span class="st">"Reference Class"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <div id="fig-s1-mg1-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s1-mg1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -400,6 +451,16 @@ Figure&nbsp;2: Study 1
 </figcaption></figure>
 </div>
 </div>
+<div class="cell-output-display">
+<div id="fig-s1-mg1-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s1-mg1-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="results_files/figure-html/fig-s1-mg1-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Study 1"><img src="results_files/figure-html/fig-s1-mg1-3.png" class="img-fluid figure-img" width="1056"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s1-mg1-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Study 1
+</figcaption></figure>
+</div>
+</div>
 </div>
 <div class="cell">
 <details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">##| label: tbl-s2-bb</span></span>
@@ -416,24 +477,33 @@ Figure&nbsp;2: Study 1
 <span>  iter<span class="op">=</span><span class="fl">5000</span>,</span>
 <span>  file<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/model_cache"</span>,<span class="st">'s2_bb2_r_g.rds'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span></span>
 <span><span class="va">mted2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu">describe_posterior</span><span class="op">(</span><span class="va">s2_bb2_r_g</span>, centrality <span class="op">=</span> <span class="st">"Mean"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mted2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>, <span class="st">"pd"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mted2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>, <span class="st">"pd"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mted2</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Estimate"</span>, <span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span><span class="op">)</span>, </span>
-<span>                \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">remove_rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># mted2 |&gt;</span></span>
+<span><span class="co">#   mutate(across(c("Estimate", " 95% CrI Lower", " 95% CrI Upper"), </span></span>
+<span><span class="co">#                 \(x) plogis(x))) |&gt;</span></span>
+<span><span class="co">#   mutate(across(where(is.numeric), \(x) round(x, 3))) |&gt;</span></span>
+<span><span class="co">#   tibble::remove_rownames() |&gt;</span></span>
+<span><span class="co">#   mutate(Term = stringr::str_remove(Term, "b_")) |&gt;</span></span>
+<span><span class="co">#   kable(booktabs = TRUE)</span></span>
+<span></span>
+<span></span>
+<span> <span class="va">mted2</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">Term</span>, <span class="st">"b_"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span><span class="op">)</span>, </span>
+<span>                \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">if_else</span><span class="op">(</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"Intercept"</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">intercept</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Term <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span><span class="va">Term</span> <span class="op">==</span> <span class="st">"Intercept"</span>, <span class="st">"Intercept (kWh)"</span>, <span class="va">Term</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">remove_rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>booktabs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 52%">
+<col style="width: 53%">
 <col style="width: 10%">
-<col style="width: 17%">
-<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 16%">
 <col style="width: 3%">
 </colgroup>
 <thead><tr class="header">
@@ -445,7 +515,7 @@ Figure&nbsp;2: Study 1
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Intercept</td>
+<td style="text-align: left;">Intercept (kWh)</td>
 <td style="text-align: right;">0.40</td>
 <td style="text-align: right;">0.40</td>
 <td style="text-align: right;">0.41</td>
@@ -453,79 +523,79 @@ Figure&nbsp;2: Study 1
 </tr>
 <tr class="even">
 <td style="text-align: left;">refClassPercentage</td>
-<td style="text-align: right;">0.14</td>
-<td style="text-align: right;">0.13</td>
-<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.09</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">refClassUSD</td>
-<td style="text-align: right;">0.20</td>
-<td style="text-align: right;">0.19</td>
-<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.12</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">roundedRounded</td>
-<td style="text-align: right;">0.54</td>
-<td style="text-align: right;">0.53</td>
-<td style="text-align: right;">0.56</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">0.39</td>
+<td style="text-align: right;">0.41</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">pct_goal15%</td>
-<td style="text-align: right;">0.48</td>
-<td style="text-align: right;">0.47</td>
-<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.34</td>
+<td style="text-align: right;">0.33</td>
+<td style="text-align: right;">0.35</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">refClassPercentage:roundedRounded</td>
-<td style="text-align: right;">0.84</td>
-<td style="text-align: right;">0.83</td>
-<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">0.73</td>
+<td style="text-align: right;">0.76</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">refClassUSD:roundedRounded</td>
-<td style="text-align: right;">0.53</td>
-<td style="text-align: right;">0.51</td>
-<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">0.39</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: right;">0.41</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">refClassPercentage:pct_goal15%</td>
-<td style="text-align: right;">0.80</td>
-<td style="text-align: right;">0.78</td>
-<td style="text-align: right;">0.81</td>
+<td style="text-align: right;">0.69</td>
+<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">0.70</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">refClassUSD:pct_goal15%</td>
-<td style="text-align: right;">0.65</td>
-<td style="text-align: right;">0.63</td>
-<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">0.53</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">roundedRounded:pct_goal15%</td>
-<td style="text-align: right;">0.54</td>
-<td style="text-align: right;">0.53</td>
-<td style="text-align: right;">0.56</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">0.39</td>
+<td style="text-align: right;">0.42</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">refClassPercentage:roundedRounded:pct_goal15%</td>
-<td style="text-align: right;">0.14</td>
-<td style="text-align: right;">0.13</td>
-<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.09</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">refClassUSD:roundedRounded:pct_goal15%</td>
-<td style="text-align: right;">0.27</td>
-<td style="text-align: right;">0.25</td>
-<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.19</td>
 <td style="text-align: right;">1</td>
 </tr>
 </tbody>
@@ -542,10 +612,10 @@ Figure&nbsp;2: Study 1
 </details><div class="cell-output-display">
 <div id="fig-s2-mg1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s2-mg1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="results_files/figure-html/fig-s2-mg1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Study 2"><img src="results_files/figure-html/fig-s2-mg1-1.png" class="img-fluid figure-img" width="1056"></a>
+<a href="results_files/figure-html/fig-s2-mg1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Study 2"><img src="results_files/figure-html/fig-s2-mg1-1.png" class="img-fluid figure-img" width="1056"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-mg1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Study 2
+Figure&nbsp;4: Study 2
 </figcaption></figure>
 </div>
 </div>
@@ -572,6 +642,13 @@ Figure&nbsp;3: Study 2
 <span> <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">refClass</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span></span>
+<span></span>
+<span><span class="va">s2_bb2_r_g</span> <span class="op">|&gt;</span> <span class="fu">emmeans</span><span class="op">(</span> <span class="op">~</span><span class="va">refClass</span>, type<span class="op">=</span><span class="st">"response"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gather_emmeans_draws</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span> <span class="fu">condEffects</span><span class="op">(</span><span class="va">refClass</span><span class="op">)</span> <span class="op">+</span> <span class="fu">labs</span><span class="op">(</span>y<span class="op">=</span><span class="st">"Absolute Deviation From Band"</span>, x<span class="op">=</span><span class="st">"Band Type"</span><span class="op">)</span> </span>
+<span></span>
+<span></span>
+<span></span>
 <span><span class="va">s2_bb2_r_g</span> <span class="op">|&gt;</span> <span class="fu">emmeans</span><span class="op">(</span><span class="va">pairwise</span> <span class="op">~</span> <span class="va">refClass</span> <span class="op">*</span> <span class="va">rounded</span>, type<span class="op">=</span><span class="st">"response"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"contrasts"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gather_emmeans_draws</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -581,12 +658,22 @@ Figure&nbsp;3: Study 2
 <span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept<span class="op">=</span><span class="fl">0</span>, alpha<span class="op">=</span><span class="fl">.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x<span class="op">=</span><span class="st">"Model Error Difference"</span>,y<span class="op">=</span><span class="st">"Contrast"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
-<div id="fig-s2-mg2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s2-mg2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="results_files/figure-html/fig-s2-mg2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Study 2"><img src="results_files/figure-html/fig-s2-mg2-1.png" class="img-fluid figure-img" width="1056"></a>
+<div id="fig-s2-mg2-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s2-mg2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="results_files/figure-html/fig-s2-mg2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Study 2"><img src="results_files/figure-html/fig-s2-mg2-1.png" class="img-fluid figure-img" width="1056"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-mg2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Study 2
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-mg2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Study 2
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-s2-mg2-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-s2-mg2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="results_files/figure-html/fig-s2-mg2-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: Study 2"><img src="results_files/figure-html/fig-s2-mg2-2.png" class="img-fluid figure-img" width="1056"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-mg2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Study 2
 </figcaption></figure>
 </div>
 </div>
@@ -1076,8 +1163,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./study_stim.html" class="pagination-link" aria-label="Design and Stimulii">
-        <span class="nav-page-text">Design and Stimulii</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./misc/outlier.html" class="pagination-link" aria-label="Outliers and discrepancies">
+        <span class="nav-page-text">Outliers and discrepancies</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -1134,181 +1221,257 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(appliance <span class="sc">!=</span><span class="st">"Total kWh"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id,refClass,state,block,plan,calc,edu,pct_goal) <span class="sc">|&gt;</span> </span>
 <span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_kWh =</span> <span class="fu">sum</span>(value),<span class="at">orig_kWh=</span><span class="fu">sum</span>(family), </span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>            <span class="at">pct_change =</span> <span class="fu">round</span>((orig_kWh<span class="sc">-</span>total_kWh)<span class="sc">/</span>orig_kWh,<span class="dv">3</span>), <span class="at">state_dif=</span><span class="fu">mean</span>(state_dif)) <span class="sc">|&gt;</span> </span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matched_goal =</span> (pct_change <span class="sc">==</span> pct_goal))</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>s1_agg4 <span class="ot">&lt;-</span> s1_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,calc) <span class="sc">|&gt;</span> </span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>s2_long <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/s2_processed.rds"</span>))</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>            <span class="at">pct_change =</span> <span class="fu">round</span>((orig_kWh<span class="sc">-</span>total_kWh)<span class="sc">/</span>orig_kWh,<span class="dv">3</span>), </span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_change =</span> <span class="fu">sum</span>(value<span class="sc">!=</span>family),</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>            <span class="at">state_p_dif=</span><span class="fu">mean</span>(state_p_dif),</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>            <span class="at">state_f_dif=</span><span class="fu">mean</span>(state_f_dif),</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_less_avg =</span> <span class="fu">sum</span>(less_avg)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matched_goal =</span> (pct_change <span class="sc">==</span> pct_goal), </span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>             <span class="at">error =</span> pct_change <span class="sc">-</span> pct_goal,</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>            <span class="at">abs_error =</span> <span class="fu">abs</span>(error))</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>s2_agg <span class="ot">&lt;-</span> s2_long <span class="sc">|&gt;</span> </span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(appliance <span class="sc">!=</span> <span class="st">"TOTAL"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) <span class="sc">|&gt;</span> </span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_kWh =</span> <span class="fu">sum</span>(value),</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">orig_kWh =</span> <span class="fu">sum</span>(family),</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_change =</span> <span class="fu">round</span>((orig_kWh <span class="sc">-</span> total_kWh) <span class="sc">/</span> orig_kWh, <span class="dv">3</span>),</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_dif =</span> <span class="fu">mean</span>(state_dif),</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matched_goal =</span> (pct_change <span class="sc">==</span> pct),</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>         <span class="at">matched_goal2 =</span> <span class="fu">abs</span>(pct_change<span class="sc">-</span>pct)<span class="sc">&lt;</span>.<span class="dv">03</span>)</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>s2_agg4 <span class="ot">&lt;-</span> s2_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,calc) <span class="sc">|&gt;</span> </span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>s2_agg2 <span class="ot">&lt;-</span> s2_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,rounded,pct_goal,pct,calc) <span class="sc">|&gt;</span> </span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="fu">## Experiment 1</span></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="do">##| label: tbl-s1-bb</span></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="do">##| tbl-cap: "E1. beta-binomial regression results</span></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>s1_agg4 <span class="ot">&lt;-</span> s1_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,calc) <span class="sc">|&gt;</span> </span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>s2_long <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/s2_processed.rds"</span>))</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>s2_agg <span class="ot">&lt;-</span> s2_long <span class="sc">|&gt;</span> </span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(appliance <span class="sc">!=</span> <span class="st">"TOTAL"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id, refClass, state, pct_goal, pct, rounded, block, plan, calc, edu) <span class="sc">|&gt;</span> </span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_kWh =</span> <span class="fu">sum</span>(value),</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">orig_kWh =</span> <span class="fu">sum</span>(family),</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_change =</span> <span class="fu">round</span>((orig_kWh <span class="sc">-</span> total_kWh) <span class="sc">/</span> orig_kWh, <span class="dv">3</span>),</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_dif =</span> <span class="fu">mean</span>(state_dif),</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">matched_goal =</span> (pct_change <span class="sc">==</span> pct),</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>         <span class="at">matched_goal2 =</span> <span class="fu">abs</span>(pct_change<span class="sc">-</span>pct)<span class="sc">&lt;</span>.<span class="dv">03</span>)</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>s2_agg4 <span class="ot">&lt;-</span> s2_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,calc) <span class="sc">|&gt;</span> </span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>s2_agg2 <span class="ot">&lt;-</span> s2_agg <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id,refClass,rounded,pct_goal,pct,calc) <span class="sc">|&gt;</span> </span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mg=</span><span class="fu">sum</span>(matched_goal),<span class="at">n=</span><span class="fu">n</span>(), <span class="at">pct=</span>mg<span class="sc">/</span>n) </span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Experiment 1</span></span>
 <span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>s1_bb1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  mg <span class="sc">|</span> <span class="fu">trials</span>(<span class="dv">4</span>) <span class="sc">~</span> refClass,</span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">beta_binomial</span>(),</span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="at">cores=</span><span class="dv">4</span>,</span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter=</span><span class="dv">5000</span>,</span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s1_agg4,</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">file=</span><span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/model_cache"</span>,<span class="st">'s1_bb1.rds'</span>))</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>mted1 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">describe_posterior</span>(s1_bb1, <span class="at">centrality =</span> <span class="st">"Mean"</span>))[, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mted1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>, <span class="st">"pd"</span>)</span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>mted1 <span class="sc">|&gt;</span></span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>), </span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>                \(x) <span class="fu">plogis</span>(x))) <span class="sc">|&gt;</span></span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">remove_rownames</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> stringr<span class="sc">::</span><span class="fu">str_remove</span>(Term, <span class="st">"b_"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">booktabs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a><span class="do">##| label: tbl-s1-bb</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="do">##| tbl-cap: "E1. beta-binomial regression results</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>s1_bb1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>  mg <span class="sc">|</span> <span class="fu">trials</span>(<span class="dv">4</span>) <span class="sc">~</span> refClass,</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">beta_binomial</span>(),</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">cores=</span><span class="dv">4</span>,</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter=</span><span class="dv">5000</span>,</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s1_agg4,</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">file=</span><span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/model_cache"</span>,<span class="st">'s1_bb1.rds'</span>))</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>mted1 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">describe_posterior</span>(s1_bb1, <span class="at">centrality =</span> <span class="st">"Median"</span>))[, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a><span class="co">#colnames(mted1) &lt;- c("Term", "Estimate"," 95% CrI Lower", " 95% CrI Upper", "pd")</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mted1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Term"</span>, <span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>, <span class="st">"pd"</span>)</span>
 <span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> mted1<span class="sc">$</span>Estimate[mted1<span class="sc">$</span>Term <span class="sc">==</span> <span class="st">"b_Intercept"</span>]</span>
 <span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s1-mg1</span></span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 1</span></span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">conditional_effects</span>(s1_bb1, <span class="at">effects=</span><span class="st">"refClass"</span>),<span class="at">points=</span><span class="cn">FALSE</span>)</span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="fu">posterior_predict</span>(s1_bb1,<span class="at">ndraws=</span><span class="dv">200</span>) <span class="sc">|&gt;</span> <span class="fu">array_branch</span>(<span class="at">margin=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(</span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(yrep_iter){</span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>      s1_agg4 <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">pred=</span>yrep_iter)</span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    <span class="at">.id=</span><span class="st">'iter'</span></span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">iter=</span><span class="fu">as.numeric</span>(iter)) <span class="sc">|&gt;</span> </span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(pred, <span class="at">group=</span>iter)) <span class="sc">+</span></span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scale density to match the count scale</span></span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat=</span><span class="st">'density'</span>, <span class="fu">aes</span>(<span class="at">y=</span>..count..), </span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>            <span class="at">alpha=</span><span class="fl">0.7</span>, <span class="at">color=</span><span class="st">'blue'</span>) <span class="sc">+</span></span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>s1_agg4, <span class="fu">aes</span>(mg, <span class="at">fill=</span>refClass),</span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>           <span class="at">inherit.aes=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>refClass)</span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="do">##| label: tbl-s2-bb</span></span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="do">##| tbl-cap: "Study 2. beta-binomial regression results</span></span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="do">##| </span></span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="do">##| </span></span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="co"># mted1 |&gt;</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="co">#     Estimate_prob = plogis(Estimate + if_else(Term == "b_Intercept", 0, intercept)),</span></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a><span class="co">#     Lower_prob = plogis(`95% CrI Lower` + if_else(Term == "b_Intercept", 0, intercept)),</span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="co">#     Upper_prob = plogis(`95% CrI Upper` + if_else(Term == "b_Intercept", 0, intercept))</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a><span class="co">#   )</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> mted1 <span class="sc">|&gt;</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> stringr<span class="sc">::</span><span class="fu">str_remove</span>(Term, <span class="st">"b_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>), </span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>                \(x) <span class="fu">if_else</span>(Term <span class="sc">==</span> <span class="st">"Intercept"</span>, <span class="fu">plogis</span>(x), <span class="fu">plogis</span>(x <span class="sc">+</span> intercept)))) <span class="sc">|&gt;</span></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> <span class="fu">if_else</span>(Term <span class="sc">==</span> <span class="st">"Intercept"</span>, <span class="st">"Intercept (kWh)"</span>, Term)) <span class="sc">|&gt;</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">remove_rownames</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">booktabs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="co"># plogis(-.58+ -.70) = .22</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters::parameters(s1_bb1, effect = "fixed") </span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>::: {#tbl-s1-bb}</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>|Term               | Estimate| 95% CrI Lower| 95% CrI Upper| pd|</span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>|:------------------|--------:|-------------:|-------------:|--:|</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>|Intercept (kWh)    |     0.36|          0.35|          0.36|  1|</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>|refClassPercentage |     0.22|          0.21|          0.22|  1|</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>|refClassUSD        |     0.09|          0.09|          0.09|  1|</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>: **Experiment 1 main effect**. Beta binomial regression results for the main effect of Reference Class. </span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>s2_bb2_r_g <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>  mg <span class="sc">|</span> <span class="fu">trials</span>(<span class="dv">2</span>) <span class="sc">~</span> refClass<span class="sc">*</span>rounded<span class="sc">*</span>pct_goal,</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">beta_binomial</span>(),</span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s2_agg2,</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">cores=</span><span class="dv">4</span>,</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter=</span><span class="dv">5000</span>,</span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>  <span class="at">file=</span><span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/model_cache"</span>,<span class="st">'s2_bb2_r_g.rds'</span>))</span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>mted2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">describe_posterior</span>(s2_bb2_r_g, <span class="at">centrality =</span> <span class="st">"Mean"</span>))[, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mted2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>, <span class="st">"pd"</span>)</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s1-mg1</span></span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 1</span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 8</span></span>
 <span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>mted2 <span class="sc">|&gt;</span></span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">" 95% CrI Lower"</span>, <span class="st">" 95% CrI Upper"</span>), </span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>                \(x) <span class="fu">plogis</span>(x))) <span class="sc">|&gt;</span></span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">remove_rownames</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> stringr<span class="sc">::</span><span class="fu">str_remove</span>(Term, <span class="st">"b_"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">booktabs =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s2-mg1</span></span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 2</span></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(conditional_effects(s2_bb2_r_g, </span></span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="co">#                          effects = "rounded:pct_goal", </span></span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="co">#                          conditions=make_conditions(s2_bb2_r_g,"refClass" )),</span></span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a><span class="co">#      points=FALSE,plot=TRUE)</span></span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">wrap_plots</span>(<span class="fu">plot</span>(<span class="fu">conditional_effects</span>(s2_bb2_r_g),<span class="at">points=</span><span class="cn">FALSE</span>,<span class="at">plot=</span><span class="cn">FALSE</span>))</span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">conditional_effects</span>(s1_bb1, <span class="at">effects=</span><span class="st">"refClass"</span>),<span class="at">points=</span><span class="cn">FALSE</span>)</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="fu">posterior_predict</span>(s1_bb1,<span class="at">ndraws=</span><span class="dv">200</span>) <span class="sc">|&gt;</span> <span class="fu">array_branch</span>(<span class="at">margin=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(yrep_iter){</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>      s1_agg4 <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">pred=</span>yrep_iter)</span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>    <span class="at">.id=</span><span class="st">'iter'</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">iter=</span><span class="fu">as.numeric</span>(iter)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(pred, <span class="at">group=</span>iter)) <span class="sc">+</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scale density to match the count scale</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat=</span><span class="st">'density'</span>, <span class="fu">aes</span>(<span class="at">y=</span>..count..), </span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>            <span class="at">alpha=</span><span class="fl">0.7</span>, <span class="at">color=</span><span class="st">'blue'</span>) <span class="sc">+</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>s1_agg4, <span class="fu">aes</span>(mg, <span class="at">fill=</span>refClass),</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>           <span class="at">inherit.aes=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>refClass)</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>s1_bb1 <span class="sc">%&gt;%</span></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_draws</span>(b_Intercept, b_refClassPercentage, b_refClassUSD) <span class="sc">%&gt;%</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">Term =</span> stringr<span class="sc">::</span><span class="fu">str_remove</span>(.variable, <span class="st">"b_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">prob=</span><span class="fu">plogis</span>(.value)) <span class="sc">|&gt;</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> <span class="fu">if_else</span>(Term <span class="sc">==</span> <span class="st">"Intercept"</span>, <span class="st">"kWh"</span>, Term)) <span class="sc">|&gt;</span></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> prob, <span class="at">fill =</span> Term)) <span class="sc">+</span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior Distributions of Reference Class Estimates"</span>,</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Coefficient Value"</span>,</span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Reference Class"</span>)</span>
 <span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s2-mg2</span></span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 2</span></span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>condEffects <span class="ot">&lt;-</span> <span class="cf">function</span>(m,xvar){</span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>  m <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> {{xvar}}, <span class="at">y =</span> .value, <span class="at">color =</span> refClass, <span class="at">fill =</span> refClass)) <span class="sc">+</span> </span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_dist_pointinterval</span>() <span class="sc">+</span> </span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">height=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)) </span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>pe3td <span class="ot">&lt;-</span> s2_agg2 <span class="sc">|&gt;</span>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span>refClass, <span class="at">y =</span> mg,<span class="at">fill=</span>pct_goal)) <span class="sc">+</span></span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"bar"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">fun =</span> mean) <span class="sc">+</span></span>
-<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"errorbar"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(.<span class="dv">9</span>), <span class="at">fun.data =</span> mean_se, <span class="at">width =</span> .<span class="dv">4</span>, <span class="at">alpha =</span> .<span class="dv">7</span>) <span class="sc">+</span> </span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>rounded,<span class="at">ncol=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Band"</span>, <span class="at">y=</span><span class="st">"Deviation From Target"</span>)</span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>pe3ce <span class="ot">&lt;-</span> s2_bb2_r_g <span class="sc">|&gt;</span> <span class="fu">emmeans</span>( <span class="sc">~</span>refClass <span class="sc">*</span>rounded<span class="sc">*</span>pct_goal, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_emmeans_draws</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a> <span class="fu">condEffects</span>(pct_goal) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Absolute Deviation From Band"</span>, <span class="at">x=</span><span class="st">"Band Type"</span>) <span class="sc">+</span> </span>
-<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a> <span class="fu">facet_wrap</span>(<span class="sc">~</span>refClass,<span class="at">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>s2_bb2_r_g <span class="sc">|&gt;</span> <span class="fu">emmeans</span>(pairwise <span class="sc">~</span> refClass <span class="sc">*</span> rounded, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"contrasts"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_emmeans_draws</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(contrast,.draw) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">value=</span><span class="fu">mean</span>(.value), <span class="at">n=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>contrast,<span class="at">fill=</span>contrast)) <span class="sc">+</span></span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>() <span class="sc">+</span> </span>
-<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="dv">0</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Model Error Difference"</span>,<span class="at">y=</span><span class="st">"Contrast"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) </span>
-<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a><span class="do">##| label: tbl-s2-bb</span></span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a><span class="do">##| tbl-cap: "Study 2. beta-binomial regression results</span></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="do">##| </span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a><span class="do">##| </span></span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>s2_bb2_r_g <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>  mg <span class="sc">|</span> <span class="fu">trials</span>(<span class="dv">2</span>) <span class="sc">~</span> refClass<span class="sc">*</span>rounded<span class="sc">*</span>pct_goal,</span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">beta_binomial</span>(),</span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> s2_agg2,</span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>  <span class="at">cores=</span><span class="dv">4</span>,</span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter=</span><span class="dv">5000</span>,</span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>  <span class="at">file=</span><span class="fu">paste0</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/model_cache"</span>,<span class="st">'s2_bb2_r_g.rds'</span>))</span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>mted2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">describe_posterior</span>(s2_bb2_r_g, <span class="at">centrality =</span> <span class="st">"Mean"</span>))[, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mted2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Term"</span>, <span class="st">"Estimate"</span>,<span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>, <span class="st">"pd"</span>)</span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a><span class="co"># mted2 |&gt;</span></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(across(c("Estimate", " 95% CrI Lower", " 95% CrI Upper"), </span></span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a><span class="co">#                 \(x) plogis(x))) |&gt;</span></span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(across(where(is.numeric), \(x) round(x, 3))) |&gt;</span></span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a><span class="co">#   tibble::remove_rownames() |&gt;</span></span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(Term = stringr::str_remove(Term, "b_")) |&gt;</span></span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a><span class="co">#   kable(booktabs = TRUE)</span></span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a> mted2 <span class="sc">|&gt;</span></span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> stringr<span class="sc">::</span><span class="fu">str_remove</span>(Term, <span class="st">"b_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"Estimate"</span>, <span class="st">"95% CrI Lower"</span>, <span class="st">"95% CrI Upper"</span>), </span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>                \(x) <span class="fu">if_else</span>(Term <span class="sc">==</span> <span class="st">"Intercept"</span>, <span class="fu">plogis</span>(x), <span class="fu">plogis</span>(x <span class="sc">+</span> intercept)))) <span class="sc">|&gt;</span></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Term =</span> <span class="fu">if_else</span>(Term <span class="sc">==</span> <span class="st">"Intercept"</span>, <span class="st">"Intercept (kWh)"</span>, Term)) <span class="sc">|&gt;</span></span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">remove_rownames</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">booktabs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s2-mg1</span></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 2</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(conditional_effects(s2_bb2_r_g, </span></span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a><span class="co">#                          effects = "rounded:pct_goal", </span></span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a><span class="co">#                          conditions=make_conditions(s2_bb2_r_g,"refClass" )),</span></span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a><span class="co">#      points=FALSE,plot=TRUE)</span></span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">wrap_plots</span>(<span class="fu">plot</span>(<span class="fu">conditional_effects</span>(s2_bb2_r_g),<span class="at">points=</span><span class="cn">FALSE</span>,<span class="at">plot=</span><span class="cn">FALSE</span>))</span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-s2-mg2</span></span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Study 2</span></span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 11</span></span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 10</span></span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>condEffects <span class="ot">&lt;-</span> <span class="cf">function</span>(m,xvar){</span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>  m <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> {{xvar}}, <span class="at">y =</span> .value, <span class="at">color =</span> refClass, <span class="at">fill =</span> refClass)) <span class="sc">+</span> </span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_dist_pointinterval</span>() <span class="sc">+</span> </span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">height=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)) </span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>pe3td <span class="ot">&lt;-</span> s2_agg2 <span class="sc">|&gt;</span>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span>refClass, <span class="at">y =</span> mg,<span class="at">fill=</span>pct_goal)) <span class="sc">+</span></span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"bar"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(), <span class="at">fun =</span> mean) <span class="sc">+</span></span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"errorbar"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(.<span class="dv">9</span>), <span class="at">fun.data =</span> mean_se, <span class="at">width =</span> .<span class="dv">4</span>, <span class="at">alpha =</span> .<span class="dv">7</span>) <span class="sc">+</span> </span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>rounded,<span class="at">ncol=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>(),<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Band"</span>, <span class="at">y=</span><span class="st">"Deviation From Target"</span>)</span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>pe3ce <span class="ot">&lt;-</span> s2_bb2_r_g <span class="sc">|&gt;</span> <span class="fu">emmeans</span>( <span class="sc">~</span>refClass <span class="sc">*</span>rounded<span class="sc">*</span>pct_goal, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_emmeans_draws</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a> <span class="fu">condEffects</span>(pct_goal) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Absolute Deviation From Band"</span>, <span class="at">x=</span><span class="st">"Band Type"</span>) <span class="sc">+</span> </span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a> <span class="fu">facet_wrap</span>(<span class="sc">~</span>refClass,<span class="at">ncol=</span><span class="dv">1</span>)</span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>s2_bb2_r_g <span class="sc">|&gt;</span> <span class="fu">emmeans</span>( <span class="sc">~</span>refClass, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_emmeans_draws</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a> <span class="fu">condEffects</span>(refClass) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Absolute Deviation From Band"</span>, <span class="at">x=</span><span class="st">"Band Type"</span>) </span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>s2_bb2_r_g <span class="sc">|&gt;</span> <span class="fu">emmeans</span>(pairwise <span class="sc">~</span> refClass <span class="sc">*</span> rounded, <span class="at">type=</span><span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"contrasts"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_emmeans_draws</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(contrast,.draw) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">value=</span><span class="fu">mean</span>(.value), <span class="at">n=</span><span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>contrast,<span class="at">fill=</span>contrast)) <span class="sc">+</span></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>() <span class="sc">+</span> </span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="dv">0</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Model Error Difference"</span>,<span class="at">y=</span><span class="st">"Contrast"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) </span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
@@ -1329,7 +1492,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </ul>
 </div>
   </div>
-</footer><script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom"});
+</footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

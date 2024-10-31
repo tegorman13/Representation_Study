@@ -1,4 +1,4 @@
-
+# Study 1 codebook and dataset info
 
 
 ## Practice problems 
@@ -546,3 +546,7 @@ colnames(s1)[1500:1843]
 [331] "DEM02"              "DEM03"              "DEM05"              "DEM06"              "DEM07"             
 [336] "Texas"              "California"         "Colorado"           "Massachusetts"      "ReferenceClass"    
 [341] "familystatechanges" "qualtricscheck"     "changedpractice"    "conditionerror"    
+
+
+
+

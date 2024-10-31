@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.26">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Thomas E. Gorman">
 <title>Study 2 Analysis – Representation Study</title>
@@ -68,10 +68,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0c8af03b2fbd4cf44d6703e337af0e8d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7113c57a5f829fad3d6a2692c6003666.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bb594cf559d6c7be5da8d399972e3a16.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
@@ -182,6 +182,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Results</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/outlier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Outliers and discrepancies</span></a>
+  </div>
+</li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -264,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header><div class="cell">
 <details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
-<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>, <span class="va">haven</span>,<span class="va">tibble</span>,<span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span><span class="op">)</span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>, <span class="va">haven</span>,<span class="va">tibble</span>,<span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span>,<span class="va">ggh4x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fl">2</span>, scipen<span class="op">=</span><span class="fl">999</span>, dplyr.summarise.inform<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">walk</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fun_plot"</span><span class="op">)</span>, <span class="op">~</span> <span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Scripts/"</span>, <span class="va">.x</span>, <span class="st">".R"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -5002,7 +5008,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
-<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable)</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable,ggh4x)</span>
 <span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">2</span>, <span class="at">scipen=</span><span class="dv">999</span>, <span class="at">dplyr.summarise.inform=</span><span class="cn">FALSE</span>)</span>
 <span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">c</span>(<span class="st">"fun_plot"</span>), <span class="sc">~</span> <span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="fu">paste0</span>(<span class="st">"Scripts/"</span>, .x, <span class="st">".R"</span>))))</span>
@@ -6143,7 +6149,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </ul>
 </div>
   </div>
-</footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom","loop":false,"selector":".lightbox"});
+</footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
