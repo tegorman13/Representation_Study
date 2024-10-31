@@ -172,6 +172,7 @@ saveRDS(s2_long, here::here("data/s2_processed.rds"))
 ```
 
 
+
 ```{r}
 
 

@@ -30,8 +30,6 @@ format:
 ---
 
 
-
-
 ```{r}
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable,ggdist)

@@ -36,6 +36,7 @@ website:
             text: "Study 2 Analysis"
           - href: results.qmd
           - href: misc/outlier.qmd
+          - href: misc/indiv.qmd
       - section: "Background"
         contents:
           - href: study_stim.md
