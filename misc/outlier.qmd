@@ -307,7 +307,6 @@ s2_long |> filter(id=="s2_10") |> head(20) # no effort
 
 
 
-
 ```
 
 
@@ -384,6 +383,7 @@ s2_long |> filter(family==1)
 
 
 
+## Inspects counts for each distinct value of prior year family use, and state average
 
 ```{r}
 library(dplyr)
@@ -461,6 +461,8 @@ s1 %>%
   select(state, refClass, appliance, family, n, is_correct) %>%  # Swapped order here
   arrange(state, appliance, refClass, family) %>%
   flextable() %>%
+  add_header_lines(values = "Family prior year use per utility counts (green=most frequent)") %>%
+  bold(part = "header", i = 1) %>%
   # Merge cells
   merge_v(j = "state") %>%
   merge_v(j = c("appliance", "refClass")) %>%
@@ -496,6 +498,10 @@ library(dplyr)
 library(flextable)
 library(officer)
 
+library(dplyr)
+library(flextable)
+library(officer)
+
 s1 %>%
   filter(appliance != "Total kWh", plan == "plan1") %>%
   group_by(appliance, state, refClass) %>%
@@ -510,6 +516,9 @@ s1 %>%
   select(state, refClass, appliance, state_avg, n) %>%
   arrange(state, appliance, refClass, state_avg) %>%
   flextable() %>%
+  # Add title
+  add_header_lines(values = "State Avg. per utility counts (green=most frequent)") %>%
+  bold(part = "header", i = 1) %>%
   # Merge cells
   merge_v(j = "state") %>%
   merge_v(j = c("appliance", "refClass")) %>%
