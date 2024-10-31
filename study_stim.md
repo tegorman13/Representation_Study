@@ -19,7 +19,6 @@
 Absolute numbers (kWh) should be easier to understand and deal with than the percentage of total energy use and money.
 
 
-
 ## Study 1 methods
 
 • Participants receive energy use information found on electricity bills of various families

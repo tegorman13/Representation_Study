@@ -51,8 +51,15 @@ s1_agg <- s1 |>
   filter(appliance !="Total kWh") |> 
   group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
   summarise(total_kWh = sum(value),orig_kWh=sum(family), 
-            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), state_dif=mean(state_dif)) |> 
-  mutate(matched_goal = (pct_change == pct_goal))
+            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+            n_change = sum(value!=family),
+            state_p_dif=mean(state_p_dif),
+            state_f_dif=mean(state_f_dif),
+            n_less_avg = sum(less_avg)) |> 
+  mutate(matched_goal = (pct_change == pct_goal), 
+             error = pct_change - pct_goal,
+            abs_error = abs(error))
+
 
 s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
@@ -102,26 +109,47 @@ s1_bb1 <- brm(
   file=paste0(here::here("data/model_cache",'s1_bb1.rds'))
 )
 
-mted1 <- as.data.frame(describe_posterior(s1_bb1, centrality = "Mean"))[, c(1,2,4,5,6)]
-colnames(mted1) <- c("Term", "Estimate"," 95% CrI Lower", " 95% CrI Upper", "pd")
+mted1 <- as.data.frame(describe_posterior(s1_bb1, centrality = "Median"))[, c(1,2,4,5,6)]
+#colnames(mted1) <- c("Term", "Estimate"," 95% CrI Lower", " 95% CrI Upper", "pd")
+colnames(mted1) <- c("Term", "Estimate", "95% CrI Lower", "95% CrI Upper", "pd")
 
-mted1 |>
-  mutate(across(c("Estimate", " 95% CrI Lower", " 95% CrI Upper"), 
-                \(x) plogis(x))) |>
-  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
-  tibble::remove_rownames() |>
+
+intercept <- mted1$Estimate[mted1$Term == "b_Intercept"]
+
+# mted1 |>
+#   mutate(
+#     Estimate_prob = plogis(Estimate + if_else(Term == "b_Intercept", 0, intercept)),
+#     Lower_prob = plogis(`95% CrI Lower` + if_else(Term == "b_Intercept", 0, intercept)),
+#     Upper_prob = plogis(`95% CrI Upper` + if_else(Term == "b_Intercept", 0, intercept))
+#   )
+
+t1 <- mted1 |>
   mutate(Term = stringr::str_remove(Term, "b_")) |>
+  mutate(across(c("Estimate", "95% CrI Lower", "95% CrI Upper"), 
+                \(x) if_else(Term == "Intercept", plogis(x), plogis(x + intercept)))) |>
+  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+  mutate(Term = if_else(Term == "Intercept", "Intercept (kWh)", Term)) |>
+  tibble::remove_rownames() |>
   kable(booktabs = TRUE)
+
+
+
+# plogis(-.58+ -.70) = .22
+
+# parameters::parameters(s1_bb1, effect = "fixed") 
 ```
 
 </details>
+<div id="tbl-s1-bb">
 
 | Term               | Estimate | 95% CrI Lower | 95% CrI Upper |  pd |
 |:-------------------|---------:|--------------:|--------------:|----:|
-| Intercept          |     0.36 |          0.35 |          0.36 |   1 |
-| refClassPercentage |     0.33 |          0.32 |          0.34 |   1 |
-| refClassUSD        |     0.15 |          0.14 |          0.16 |   1 |
+| Intercept (kWh)    |     0.36 |          0.35 |          0.36 |   1 |
+| refClassPercentage |     0.22 |          0.21 |          0.22 |   1 |
+| refClassUSD        |     0.09 |          0.09 |          0.09 |   1 |
 
+Table 1: **Experiment 1 main effect**. Beta binomial regression results for the main effect of Reference Class.
+</div>
 <details class="code-fold">
 <summary>Code</summary>
 
@@ -142,6 +170,20 @@ posterior_predict(s1_bb1,ndraws=200) |> array_branch(margin=1) |>
   geom_bar(data=s1_agg4, aes(mg, fill=refClass),
            inherit.aes=FALSE) +
   facet_wrap(~refClass)
+
+
+s1_bb1 %>%
+  gather_draws(b_Intercept, b_refClassPercentage, b_refClassUSD) %>%
+   mutate(Term = stringr::str_remove(.variable, "b_")) |>
+   mutate(prob=plogis(.value)) |>
+  mutate(Term = if_else(Term == "Intercept", "kWh", Term)) |>
+  ggplot(aes(x = prob, fill = Term)) +
+  geom_density(alpha = 0.6) +
+    stat_halfeye() +
+  theme_minimal() +
+  labs(title = "Posterior Distributions of Reference Class Estimates",
+       x = "Coefficient Value",
+       fill = "Reference Class")
 ```
 
 </details>
@@ -152,6 +194,10 @@ id="fig-s1-mg1-1" alt="Figure 1: Study 1" />
 <img
 src="results.markdown_strict_files/figure-markdown_strict/fig-s1-mg1-2.png"
 id="fig-s1-mg1-2" alt="Figure 2: Study 1" />
+
+<img
+src="results.markdown_strict_files/figure-markdown_strict/fig-s1-mg1-3.png"
+id="fig-s1-mg1-3" alt="Figure 3: Study 1" />
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -171,35 +217,44 @@ s2_bb2_r_g <- brm(
   iter=5000,
   file=paste0(here::here("data/model_cache",'s2_bb2_r_g.rds'))
 )
-
 mted2 <- as.data.frame(describe_posterior(s2_bb2_r_g, centrality = "Mean"))[, c(1,2,4,5,6)]
-colnames(mted2) <- c("Term", "Estimate"," 95% CrI Lower", " 95% CrI Upper", "pd")
+colnames(mted2) <- c("Term", "Estimate","95% CrI Lower", "95% CrI Upper", "pd")
 
-mted2 |>
-  mutate(across(c("Estimate", " 95% CrI Lower", " 95% CrI Upper"), 
-                \(x) plogis(x))) |>
-  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
-  tibble::remove_rownames() |>
+# mted2 |>
+#   mutate(across(c("Estimate", " 95% CrI Lower", " 95% CrI Upper"), 
+#                 \(x) plogis(x))) |>
+#   mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+#   tibble::remove_rownames() |>
+#   mutate(Term = stringr::str_remove(Term, "b_")) |>
+#   kable(booktabs = TRUE)
+
+
+ mted2 |>
   mutate(Term = stringr::str_remove(Term, "b_")) |>
+  mutate(across(c("Estimate", "95% CrI Lower", "95% CrI Upper"), 
+                \(x) if_else(Term == "Intercept", plogis(x), plogis(x + intercept)))) |>
+  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+  mutate(Term = if_else(Term == "Intercept", "Intercept (kWh)", Term)) |>
+  tibble::remove_rownames() |>
   kable(booktabs = TRUE)
 ```
 
 </details>
 
 | Term | Estimate | 95% CrI Lower | 95% CrI Upper | pd |
-|:-----------------------------------|-------:|------------:|------------:|---:|
-| Intercept | 0.40 | 0.40 | 0.41 | 1 |
-| refClassPercentage | 0.14 | 0.13 | 0.15 | 1 |
-| refClassUSD | 0.20 | 0.19 | 0.20 | 1 |
-| roundedRounded | 0.54 | 0.53 | 0.56 | 1 |
-| pct_goal15% | 0.48 | 0.47 | 0.49 | 1 |
-| refClassPercentage:roundedRounded | 0.84 | 0.83 | 0.85 | 1 |
-| refClassUSD:roundedRounded | 0.53 | 0.51 | 0.55 | 1 |
-| refClassPercentage:pct_goal15% | 0.80 | 0.78 | 0.81 | 1 |
-| refClassUSD:pct_goal15% | 0.65 | 0.63 | 0.67 | 1 |
-| roundedRounded:pct_goal15% | 0.54 | 0.53 | 0.56 | 1 |
-| refClassPercentage:roundedRounded:pct_goal15% | 0.14 | 0.13 | 0.15 | 1 |
-| refClassUSD:roundedRounded:pct_goal15% | 0.27 | 0.25 | 0.30 | 1 |
+|:------------------------------------|-------:|-----------:|-----------:|---:|
+| Intercept (kWh) | 0.40 | 0.40 | 0.41 | 1 |
+| refClassPercentage | 0.08 | 0.08 | 0.09 | 1 |
+| refClassUSD | 0.12 | 0.11 | 0.12 | 1 |
+| roundedRounded | 0.40 | 0.39 | 0.41 | 1 |
+| pct_goal15% | 0.34 | 0.33 | 0.35 | 1 |
+| refClassPercentage:roundedRounded | 0.75 | 0.73 | 0.76 | 1 |
+| refClassUSD:roundedRounded | 0.39 | 0.37 | 0.41 | 1 |
+| refClassPercentage:pct_goal15% | 0.69 | 0.67 | 0.70 | 1 |
+| refClassUSD:pct_goal15% | 0.51 | 0.49 | 0.53 | 1 |
+| roundedRounded:pct_goal15% | 0.40 | 0.39 | 0.42 | 1 |
+| refClassPercentage:roundedRounded:pct_goal15% | 0.09 | 0.08 | 0.09 | 1 |
+| refClassUSD:roundedRounded:pct_goal15% | 0.17 | 0.16 | 0.19 | 1 |
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -216,7 +271,7 @@ patchwork::wrap_plots(plot(conditional_effects(s2_bb2_r_g),points=FALSE,plot=FAL
 </details>
 <img
 src="results.markdown_strict_files/figure-markdown_strict/fig-s2-mg1-1.png"
-id="fig-s2-mg1" alt="Figure 3: Study 2" />
+id="fig-s2-mg1" alt="Figure 4: Study 2" />
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -243,6 +298,13 @@ pe3ce <- s2_bb2_r_g |> emmeans( ~refClass *rounded*pct_goal, type="response") |>
  facet_wrap(~refClass,ncol=1)
 
 
+
+s2_bb2_r_g |> emmeans( ~refClass, type="response") |>
+  gather_emmeans_draws() |>
+ condEffects(refClass) + labs(y="Absolute Deviation From Band", x="Band Type") 
+
+
+
 s2_bb2_r_g |> emmeans(pairwise ~ refClass * rounded, type="response") |> 
   pluck("contrasts") |>
   gather_emmeans_draws() |> 
@@ -256,4 +318,8 @@ s2_bb2_r_g |> emmeans(pairwise ~ refClass * rounded, type="response") |>
 </details>
 <img
 src="results.markdown_strict_files/figure-markdown_strict/fig-s2-mg2-1.png"
-id="fig-s2-mg2" alt="Figure 4: Study 2" />
+id="fig-s2-mg2-1" alt="Figure 5: Study 2" />
+
+<img
+src="results.markdown_strict_files/figure-markdown_strict/fig-s2-mg2-2.png"
+id="fig-s2-mg2-2" alt="Figure 6: Study 2" />

@@ -18,7 +18,7 @@ listing:
   sort:
     - "date desc"
     - "title desc"
-  image-height: 300px
+  image-height: 400px
 #   contents:
 #     - gpt4_sim.qmd
 ---
