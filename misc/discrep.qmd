@@ -23,7 +23,7 @@ execute:
 ```{r}
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here,tibble, haven,
-               ggplot2,gt,knitr,kableExtra,ggh4x,lme4,flextable)
+               ggplot2,gt,knitr,kableExtra,ggh4x,ggdist,gghalves,patchwork,lme4,flextable)
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
 theme_set(theme_nice())
@@ -504,3 +504,336 @@ haven::read_sav(here::here("data/Frequency & Probability Study 2 - 3-24-19.sav")
 s2_long |> filter_all(any_vars(is.na(.)))
 
 ```
+
+
+## Data after exclusions
+
+
+
+### Study 1
+
+
+```{r}
+
+# number of unique ids per condition
+s1 |> group_by(refClass) |> 
+filter(!(id %in% s1_discrep_ids)) |>
+rename("Reference Class" = refClass) |>
+summarise(n=n_distinct(id)) |> gt() |> tab_header(title="Study 1: Number of unique IDs per condition")
+
+
+s1 |> group_by(refClass,state) |> 
+  filter(!(id %in% s1_discrep_ids)) |>
+  rename("Reference Class" = refClass) |>
+  summarise(n=n_distinct(id)) |> 
+  rowwise() |> 
+  mutate(state=lookup_code(state)) |> 
+  pivot_wider(names_from=state,values_from=n) |>
+  gt() |> tab_header(title="Study 1: Number of unique IDs per condition by state") 
+
+
+s1 |> group_by(refClass,calc) |> 
+  filter(!(id %in% s1_discrep_ids)) |>
+  rename("Reference Class" = refClass) |>
+  summarise(n=n_distinct(id)) |> 
+  pivot_wider(names_from=calc,values_from=n) |>
+  gt() |> tab_header(title="Study 1: Number of unique IDs per condition by calculation")
+
+
+s2_long |> group_by(refClass) |>
+filter(!(id %in% s2_discrep_ids)) |>
+rename("Reference Class" = refClass) |>
+summarise(n=n_distinct(id)) |> gt() |> tab_header(title="Study 2: Number of unique IDs per condition")
+
+s2_long |> group_by(refClass,calc) |>
+filter(!(id %in% s2_discrep_ids)) |>
+rename("Reference Class" = refClass) |>
+mutate(calc=case_when(calc=="Calculator" ~ "Used Calculator",
+                      calc=="No Calculator" ~ "No Calculator")) |>
+summarise(n=n_distinct(id)) |>
+pivot_wider(names_from=calc,values_from=n) |>
+gt() |> tab_header(title="Study 2: Number of unique IDs per condition by calculation")
+
+
+
+# s2_long |> group_by(id) |> summarise(nrc=n_distinct(refClass),npct=n_distinct(pct_goal),nround=n_distinct(rounded))
+
+```
+
+
+
+### Performance before and after exclusions - Study 1
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+
+s1_agg <- s1 |> 
+  filter(appliance !="Total kWh") |> 
+  group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+  summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+            n_change = sum(value!=family),
+            state_p_dif=mean(state_p_dif),
+            state_f_dif=mean(state_f_dif),
+            n_less_avg = sum(less_avg),
+            duration=first(Duration__in_seconds_)) |> 
+  mutate(matched_goal = (pct_change == pct_goal), 
+             error = pct_change - pct_goal,
+            abs_error = abs(error),
+            close_match = abs_error <= 0.02)
+
+s1_agg4 <- s1_agg |> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
+
+
+# s1_agg4 |> group_by(refClass) |> 
+#   summarise(mean=mean(pct),sd=sd(pct),n=n()) |> 
+#   gt() |> tab_header(title="Study 1: Performance before exclusions")
+
+# s1_agg4 |> 
+#   filter(!(id %in% s1_discrep_ids)) |> 
+#   group_by(refClass) |> 
+#   summarise(mean=mean(pct),sd=sd(pct),n=n()) |> 
+#   gt() |> tab_header(title="Study 1: Performance after exclusions")
+
+
+
+bind_rows(
+  s1_agg4 |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      dataset = "Before exclusions"
+    ),
+  s1_agg4 |> 
+    filter(!(id %in% s1_discrep_ids)) |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      dataset = "After exclusions"
+    )
+) |>
+  pivot_wider(
+    names_from = dataset,
+    values_from = c(mean, sd, n),
+    names_glue = "{dataset}_{.value}"
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Study 1: Performance Before and After Exclusions"
+  ) |>
+  fmt_number(
+    columns = contains("mean"),
+    decimals = 2
+  ) |>
+  fmt_number(
+    columns = contains("sd"),
+    decimals = 2
+  ) |>
+  cols_label(
+    refClass = "Reference Class",
+    `Before exclusions_mean` = "Mean",
+    `Before exclusions_sd` = "SD",
+    `Before exclusions_n` = "N",
+    `After exclusions_mean` = "Mean",
+    `After exclusions_sd` = "SD",
+    `After exclusions_n` = "N"
+  ) |>
+  tab_spanner(
+    label = "Before Exclusions",
+    columns = starts_with("Before")
+  ) |>
+  tab_spanner(
+    label = "After Exclusions",
+    columns = starts_with("After")
+  )
+
+
+
+sp1b <- s1_agg4 |> 
+  ggplot(aes(x=refClass,y=pct,fill=refClass)) +
+  stat_summary(fun=mean, geom="bar") +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+  labs(title="Mean % meeting goal - Before Exclusions",
+       x="Reference Class",
+       y="% of trials meeting goal",
+       fill="Reference Class") 
+
+sp1a <- s1_agg4 |> 
+  filter(!(id %in% s1_discrep_ids)) |>
+  ggplot(aes(x=refClass,y=pct,fill=refClass)) +
+  stat_summary(fun=mean, geom="bar") +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+    labs(title="Mean % meeting goal - After Exclusions",
+       x="Reference Class",
+       y="% of trials meeting goal",
+       fill="Reference Class") 
+
+
+sp2b <- s1_agg |> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=pct)) +
+  geom_bar(aes(fill=refClass)) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(~refClass) +
+  labs(title="Distributions of % of trials that matched goal - Before Exclusions",
+       x="% of trials (out of 4) that matched goal",
+       y="Number of Participants",
+       fill="Reference Class") +
+  scale_y_continuous(limits=c(0,85),breaks=seq(0,85,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1)) 
+
+
+sp2a <- s1_agg |> 
+  filter(!(id %in% s1_discrep_ids)) |> 
+  group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=pct)) +
+  geom_bar(aes(fill=refClass)) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(~refClass) +
+  labs(title="Distributions of % of trials that matched goal - After Exclusions",
+       x="% of trials (out of 4) that matched goal",
+       y="Number of Participants",
+       fill="Reference Class") +
+  scale_y_continuous(limits=c(0,85),breaks=seq(0,85,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1))
+
+sp1b + sp1a
+
+sp2b + sp2a
+
+```
+
+### After Exclusions - Study 2
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+
+
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id, refClass,pct,plan) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+  matched_goal2 = abs(pct_change-pct)<.03)
+
+s2_agg4 <- s2_agg1|> group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
+
+
+bind_rows(
+  s2_agg4 |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      dataset = "Before exclusions"
+    ),
+  s2_agg4 |> 
+    filter(!(id %in% s2_discrep_ids)) |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      dataset = "After exclusions"
+    )) |> 
+    pivot_wider(names_from = dataset,
+    values_from = c(mean, sd, n),
+    names_glue = "{dataset}_{.value}") |> gt() |>
+    tab_header(title = "Study 2: Performance Before and After Exclusions") |>
+    cols_label(
+    refClass = "Reference Class",
+    `Before exclusions_mean` = "Mean",
+    `Before exclusions_sd` = "SD",
+    `Before exclusions_n` = "N",
+    `After exclusions_mean` = "Mean",
+    `After exclusions_sd` = "SD",
+    `After exclusions_n` = "N"
+  ) |>
+  tab_spanner(
+    label = "Before Exclusions",
+    columns = starts_with("Before")
+  ) |>
+  tab_spanner(
+    label = "After Exclusions",
+    columns = starts_with("After"))
+
+
+
+s2p1b <- s2_agg4 |> 
+  ggplot(aes(x=refClass,y=pct,fill=refClass)) +
+  stat_summary(fun=mean, geom="bar") +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+  labs(title="Mean % meeting goal - Before Exclusions",
+       x="Reference Class",
+       y="% of trials meeting goal",
+       fill="Reference Class")
+
+s2p1a <- s2_agg4 |> 
+  filter(!(id %in% s2_discrep_ids)) |>
+  ggplot(aes(x=refClass,y=pct,fill=refClass)) +
+  stat_summary(fun=mean, geom="bar") +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+  labs(title="Mean % meeting goal - After Exclusions",
+       x="Reference Class",
+       y="% of trials meeting goal",
+       fill="Reference Class")
+
+
+s2p2b <- s2_agg1 |> group_by(id,refClass) |>
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=pct)) +
+  geom_bar(aes(fill=refClass)) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(~refClass) +
+  labs(title="Distributions of % of trials that matched goal - Before Exclusions",
+       x="% of trials (out of 4) that matched goal",
+       y="Number of Participants",
+       fill="Reference Class") + 
+       # make title text smaller
+        theme(plot.title = element_text(size=10)) +
+  scale_y_continuous(limits=c(0,85),breaks=seq(0,85,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1))
+
+s2p2a <- s2_agg1 |> 
+  filter(!(id %in% s2_discrep_ids)) |> 
+  group_by(id,refClass) |> 
+  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) |> 
+  ggplot(aes(x=pct)) +
+  geom_bar(aes(fill=refClass)) +
+  ggdist::stat_halfeye() +
+  geom_rug(alpha=0.1) +
+  stat_boxplot(width=0.5, alpha=0.6) +
+  facet_wrap(~refClass) +
+  labs(title="Distributions of % of trials that matched goal - After Exclusions",
+       x="% of trials (out of 4) that matched goal",
+       y="Number of Participants",
+       fill="Reference Class") +
+  scale_y_continuous(limits=c(0,85),breaks=seq(0,85,5)) + scale_x_continuous(breaks=seq(0,1,.25),labels=scales::percent_format(accuracy=1))
+
+s2p1b + s2p1a
+
+s2p2b + s2p2a
+
+
+``` 
+

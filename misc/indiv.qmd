@@ -55,16 +55,21 @@ s1_agg <- s1 |>
 
 
 ## Study 1 - comparison against state average
+
 ```{r}
-
-
-
 s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
   filter(appliance!="TOTAL",state=="California") |> 
   ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
   geom_point(aes(y=state_avg),color="red") +
   geom_point(aes(y=family),color="blue") +
   facet_wrap(~id) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+
+
+
+
 
 
 s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 

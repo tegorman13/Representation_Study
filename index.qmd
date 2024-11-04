@@ -3,6 +3,20 @@ title: "Representation Project"
 author:
 - name: Thomas Gorman
   url: https://tegorman13.github.io/
+listing:
+  - id: analyses
+    contents: "/*.qmd"
+    type: grid
+  # - id: misc
+  #   contents: "misc/*.qmd"
+  #   type: grid
+  #   exclude:
+  #     filename: 
+  #       - "misc/indiv.qmd"
+  #       - "misc/discrep.qmd"
+  - id: bg
+    contents: "/*.md"
+    type: grid
   #orcid: 0000-0001-5366-5442
 # format:
 #   html: 
