@@ -116,6 +116,25 @@ mutate(matched_goal = (pct_change == pct_goal),
   facet_wrap(~matched_goal)
 
 
+s1 |> 
+filter(appliance !="Total kWh") |> 
+group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+mutate(total_kWh = sum(value),orig_kWh=sum(family), 
+        pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+        n_change = sum(value!=family),
+        state_p_dif=mean(state_p_dif),
+        state_f_dif=mean(state_f_dif),
+        n_less_avg = sum(less_avg),
+        duration=first(Duration__in_seconds_)) |> 
+mutate(matched_goal = (pct_change == pct_goal), 
+            error = pct_change - pct_goal,
+        abs_error = abs(error)) |> 
+          filter(appliance!="TOTAL",state=="CAL",value<20000) |> 
+  ggplot(aes(x=appliance,y=value)) + 
+  geom_jitter(aes(color=matched_goal)) +
+geom_point(aes(y=state_avg),color="red",size=10) +
+  geom_point(aes(y=family),color="blue",size=5) 
+
 
 s1 |> 
 filter(appliance !="Total kWh") |> 
@@ -130,12 +149,55 @@ mutate(total_kWh = sum(value),orig_kWh=sum(family),
 mutate(matched_goal = (pct_change == pct_goal), 
             error = pct_change - pct_goal,
         abs_error = abs(error)) |> 
-          filter(appliance!="TOTAL",value<20000) |> 
-  ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=matched_goal)) +
-  geom_point(aes(y=state_avg),color="red") +
-  geom_point(aes(y=family),color="blue") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  facet_wrap(state~matched_goal,scales="free_y")
+          filter(appliance!="TOTAL",value<20000,family<25000) |> 
+  ggplot(aes(x=appliance,y=value)) + 
+  geom_jitter(aes(color=matched_goal)) +
+ # gghalves::geom_half_violin(aes(fill=matched_goal)) +
+  geom_boxplot(aes(fill=matched_goal),alpha=.5) +
+geom_point(aes(y=state_avg),color="red",size=7,shape=8) +
+  geom_point(aes(y=family),color="blue",size=7,shape=17) +
+  facet_wrap(~state)
+
+
+
+s1 |> 
+filter(appliance !="Total kWh") |> 
+group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+mutate(total_kWh = sum(value),orig_kWh=sum(family), 
+        pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+        n_change = sum(value!=family),
+        state_p_dif=mean(state_p_dif),
+        state_f_dif=mean(state_f_dif),
+        n_less_avg = sum(less_avg),
+        duration=first(Duration__in_seconds_)) |> 
+mutate(matched_goal = (pct_change == pct_goal), 
+            error = pct_change - pct_goal,
+        abs_error = abs(error)) |> 
+          filter(appliance!="TOTAL",value<20000,family<25000) |> 
+  ggplot(aes(x=appliance,y=state_p_dif)) + 
+  geom_jitter(aes(color=matched_goal)) +
+  geom_point(aes(y=state_avg),color="red",size=10) +
+  geom_point(aes(y=family),color="blue",size=5)
+
+s1 |> 
+filter(appliance !="Total kWh") |> 
+group_by(id,refClass,state,block,plan,calc,edu,pct_goal,appliance) |> 
+summarize(total_kWh = sum(value),orig_kWh=sum(family), 
+            adjust=orig_kWh-total_kWh,
+        pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+        n_change = sum(value!=family),
+        state_p_dif=mean(state_p_dif),
+        state_f_dif=mean(state_f_dif),
+        n_less_avg = sum(less_avg),
+        duration=first(Duration__in_seconds_)) |> 
+mutate(matched_goal = (pct_change == pct_goal), 
+            error = pct_change - pct_goal,
+        abs_error = abs(error)) |> 
+          filter(appliance!="TOTAL") |> 
+  ggplot(aes(x=appliance,y=adjust)) + 
+  geom_jitter(aes(color=matched_goal)) +
+  facet_wrap(~state)
+
 ```
 
 

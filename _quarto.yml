@@ -1,8 +1,8 @@
 project:
   type: website
   output-dir: docs
-  preview:
-    port: 4205
+  # preview:
+  #   port: 4205
   render:
     - "*.qmd"
     - "*.md"
@@ -37,6 +37,7 @@ website:
           - href: results.qmd
           - href: misc/outlier.qmd
           - href: misc/indiv.qmd
+          - href: misc/discrep.qmd
       - section: "Background"
         contents:
           - href: study_stim.md

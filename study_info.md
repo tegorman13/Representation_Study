@@ -49,7 +49,7 @@ In the re-launch of the frequency and probability study, the new design is a 4 s
 
 | Source        | State average | Exact      | Rounded    |
 |---------------|---------------|------------|------------|
-| Cooling       | 489           | 697        | 1,000      |
+| Cooling       | 498           | 697        | 1,000      |
 | Heating       | 16,411        | 18,052     | 18,000     |
 | Water heating | 5,832         | 11,667     | 12,000     |
 | Refrigerator  | 1,142         | 1,370      | 1,000      |

@@ -866,7 +866,7 @@ s1 |>
            n_distinct_state_avg = n_distinct(state_avg), 
            distinct_family = paste(unique(family), collapse = ","),
            distinct_state_avg = paste(unique(state_avg), collapse = ",")) |>
-    filter(n_distinct_family > 1 | n_distinct_state_avg > 1) |> 
+    filter(n_distinct_family > 1 | n_distinct_state_avg > 1,plan=="plan1") |> 
     group_by(state, appliance, refClass, family, state_avg) |> 
     mutate(state_avg_count = n_distinct(state_avg),
            family_count = n()) |> 
@@ -881,6 +881,17 @@ s1 |>
 haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> filter(ResponseId=="R_2QMsYuHS385pTj1") -> k
 # find if any columns equal 5.26
 
+
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+  filter(ResponseId == "R_vB56XspT1LqhrkB") |>
+  # Select columns with non-NA values and not empty strings, handling character and numeric columns separately
+  select(
+    where(~ is.numeric(.) && !all(is.na(.))),
+    where(~ is.character(.) && !all(is.na(.)) && !all(. == ""))
+  ) |>
+  # Remove columns that start with "AIN"
+  select(-starts_with("AIN"))
 
 
 haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> select_if(~any(. ==11441.0)) |> 

@@ -30,6 +30,7 @@ format:
 ---
 
 
+
 ```{r}
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable,ggdist)
@@ -319,6 +320,21 @@ r$> s1 |> filter(family==34265) |> select(id,state1,state2,refClass,id2,state,ap
 
 
 
+ s1 |> filter(state_avg==29046)
+# A tibble: 2 × 21
+# Groups:   id [1]
+     id state1   state2 refClass calc  edu   modality state id2   Duration__in_seconds_ appliance family state_avg plan  value block
+  <int> <chr>    <chr>  <chr>    <chr> <fct> <chr>    <chr> <chr>                 <dbl> <chr>      <dbl> <dbl+lbl> <fct> <dbl> <dbl>
+1    12 Colorado Texas  kWh      Used… Grad… A        TEX   R_ab…                   644 Total kWh  29046 29046     plan1 29046     2
+2    12 Colorado Texas  kWh      Used… Grad… A        TEX   R_ab…                   644 Total kWh  29046 29046     plan2 29046     2
+ℹ 5 more variables: pct_goal <dbl>, change <dbl>, state_p_dif <dbl>, state_f_dif <dbl>, less_avg <lgl>
+
+
+
+
+
+
+
 
 s2_long |> group_by(state,appliance,refClass,rounded) |> 
   mutate(state_avg=as.numeric(state_avg)) |> 
@@ -377,6 +393,7 @@ s2_long |> filter(family==1)
 6 s2_3      2 Percentage WATER     10%      Not Rounded Texas Calculator    Graduate degree   0.1   5.26      4396 plan2  3027  3022.     -1369
 7 s2_4      2 Percentage WATER     10%      Not Rounded Texas Calculator    Graduate degree   0.1   5.26      4396 plan1  4800  4795.       404
 8 s2_4      2 Percentage WATER     10%      Not Rounded Texas Calculator    Graduate degree   0.1   5.26      4396 plan2  5000  4995.       604
+
 
 
 
@@ -897,6 +914,15 @@ correct_values <- correct_values %>%
     family_correct = family,
     state_avg_correct = state_avg
   )
+
+
+state_code_map <- c(
+  "CAL" = "California",
+  "TEX" = "Texas",
+  "COL" = "Colorado",
+  "MASS" = "Massachusetts"
+)
+
 
 # Join participant data with correct values
 comparison <- left_join(s1_check, correct_values, by = c("state", "appliance"))

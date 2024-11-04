@@ -770,29 +770,29 @@ s2 |>
 #   )
 
 
-s2 |> 
-  mutate(
-    rounded = if_else(ROUNDED == 1, "Not Rounded", "Rounded"),
-    calc = if_else(calc == 0, "No Calculator", "Used Calculator")
-  ) |> 
-  count(calc, refClass, rounded) |>
-  pivot_wider(
-    names_from = c(calc, rounded),
-    values_from = n,
-    values_fill = 0
-  ) |>
-  gt() |>
-  tab_header(
-    title = md("**Count of Items by Calculator Use, Reference Class, and Rounding**")
-  ) |>
-  cols_align(align = "left") |>
-  tab_spanner_delim(delim = "_") |>
-  cols_label(
-    `No Calculator_Not Rounded` = "Not Rounded",
-    `No Calculator_Rounded` = "Rounded",
-    `Used Calculator_Not Rounded` = "Not Rounded",
-    `Used Calculator_Rounded` = "Rounded"
-  )
+# s2 |> 
+#   mutate(
+#     rounded = if_else(ROUNDED == 1, "Not Rounded", "Rounded"),
+#     calc = if_else(calc == 0, "No Calculator", "Used Calculator")
+#   ) |> 
+#   count(calc, refClass, rounded) |>
+#   pivot_wider(
+#     names_from = c(calc, rounded),
+#     values_from = n,
+#     values_fill = 0
+#   ) |>
+#   gt() |>
+#   tab_header(
+#     title = md("**Count of Items by Calculator Use, Reference Class, and Rounding**")
+#   ) |>
+#   cols_align(align = "left") |>
+#   tab_spanner_delim(delim = "_") |>
+#   cols_label(
+#     `No Calculator_Not Rounded` = "Not Rounded",
+#     `No Calculator_Rounded` = "Rounded",
+#     `Used Calculator_Not Rounded` = "Not Rounded",
+#     `Used Calculator_Rounded` = "Rounded"
+#   )
 
 
 # table with education level counts

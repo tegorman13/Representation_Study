@@ -1,15 +1,16 @@
 {
   "listing": "/index.html",
   "items": [
-    "/study_stim.html",
-    "/study2.html",
-    "/study1_info.html",
-    "/study1.html",
-    "/study2_info.html",
-    "/results.html",
-    "/misc/indiv.html",
-    "/study_info.html",
+    "/initial_slides.html",
     "/misc/outlier.html",
-    "/initial_slides.html"
+    "/study_info.html",
+    "/misc/indiv.html",
+    "/results.html",
+    "/study2_info.html",
+    "/study1.html",
+    "/study1_info.html",
+    "/misc/discrep.html",
+    "/study2.html",
+    "/study_stim.html"
   ]
 }

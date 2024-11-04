@@ -1,7 +1,7 @@
 # Study Stimulii and Design
 
 
-
+<!-- issue in slides where colorado cooling is shown as 489 in a few cases instead of 498 - all of the data has 498. 498 corresponds with total value as well  -->
 
 ## Research Questions and Hypothesis
 
@@ -41,7 +41,7 @@ Absolute numbers (kWh) should be easier to understand and deal with than the per
 
 | Source | Texas average | Texas Family | California average | California Family | Colorado average | Colorado Family | Mass. average | Mass. Family |
 |---------|---------------|--------------|------------------|------------------|-----------------|-----------------|---------------|--------------|
-| Cooling | 4,249 | | 1,289 | | 489 | | 322 | |
+| Cooling | 4,249 | | 1,289 | | 498 | | 322 | |
 | Heating | 5,099 | | 5,597 | | 16,411 | | 19,108 | |
 | Water heating | 4,396 | | 4,601 | | 5,832 | | 5,070 | |
 | Refrigerator | 1,318 | | 1,055 | | 1,142 | | 1,025 | |
@@ -124,7 +124,7 @@ The Adams Family
 
 | Source | Texas average | Texas Family | California average | California Family | Colorado average | Colorado Family | Mass. average | Mass. Family |
 |---------|---------------|--------------|------------------|------------------|-----------------|-----------------|---------------|--------------|
-| Cooling | 4,249 | 6,573 | 1,289 | 2,581 | 489 | 697 | 322 | 419 |
+| Cooling | 4,249 | 6,573 | 1,289 | 2,581 | 498 | 697 | 322 | 419 |
 | Heating | 5,099 | 6,118 | 5,597 | 6,157 | 16,411 | 18,052 | 19,108 | 26,751 |
 | Water heating | 4,396 | 5,257 | 4,601 | 5,061 | 5,832 | 11,667 | 5,070 | 10,543 |
 | Refrigerator | 1,318 | 2,639 | 1,055 | 1,266 | 1,142 | 1,370 | 1,025 | 1,230 |
@@ -310,7 +310,7 @@ In study 2, the new design is a 4 state temperature (2 warm vs. 2 cold states) X
 
 | Source        | State average | Exact      | Rounded    |
 |---------------|---------------|------------|------------|
-| Cooling       | 489           | 697        | 1,000      |
+| Cooling       | 498           | 697        | 1,000      |
 | Heating       | 16,411        | 18,052     | 18,000     |
 | Water heating | 5,832         | 11,667     | 12,000     |
 | Refrigerator  | 1,142         | 1,370      | 1,000      |

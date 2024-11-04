@@ -1,0 +1,306 @@
+---
+title: "Discrep_Patterns"
+author:
+- name: Thomas E. Gorman
+  url: https://tegorman13.github.io/
+  affiliations: 
+  - name:  Communication and Cognition Lab, Purdue University, USA
+    affiliation-url: https://web.ics.purdue.edu/~treimer/
+lightbox: true
+toc: false
+code-fold: show
+code-tools: true
+execute:
+  warning: false
+---
+
+
+
+
+
+## Study 1
+
+```{r}
+library(pacman)
+pacman::p_load(dplyr,purrr,tidyr,here,tibble, haven,
+               ggplot2,gt,knitr,kableExtra,ggh4x,lme4,flextable)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
+theme_set(theme_nice())
+
+s1 <- readRDS(here::here("data/s1_processed.rds"))
+s2_long <- readRDS(here::here("data/s2_processed.rds"))
+
+```
+
+
+
+```{r}
+
+s1 %>%
+  filter(appliance != "Total kWh", plan == "plan1") %>%
+  group_by(appliance, state, refClass) %>%
+  mutate(distinct_state_avg = n_distinct(state_avg)) %>%
+  ungroup() %>%
+  filter(distinct_state_avg > 1) %>%
+  group_by(appliance, state_avg, state, refClass) |> arrange(id)
+
+s1 |> group_by(state,appliance,refClass) |> 
+  mutate(state_avg=as.numeric(state_avg)) |> 
+  mutate(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) 
+
+s1 %>%
+  filter(appliance != "Total kWh", plan == "plan1") %>%
+  group_by(appliance, state, refClass) %>%
+  mutate(
+    distinct_families = n_distinct(family),
+    distinct_state_avgs = n_distinct(state_avg),
+  ) %>%
+  ungroup() %>%
+  filter(distinct_families > 1 | distinct_state_avgs>1) %>%
+  group_by(appliance, family, state, refClass) %>%
+  summarise(n = n(), .groups = "drop") |> gt()
+
+
+```
+
+
+
+```{r}
+
+state_code_map <- c(
+  "CAL" = "California",
+  "TEX" = "Texas",
+  "COL" = "Colorado",
+  "MASS" = "Massachusetts"
+)
+
+
+state_to_code <- state_code_map
+code_to_state <- setNames(names(state_code_map), state_code_map)
+lookup_code <- function(state) {
+  if (state %in% names(state_to_code)) {
+    return(state_to_code[[state]])
+  } else if (state %in% names(code_to_state)) {
+    return(code_to_state[[state]])
+  } else {
+    return(NA)  # Return NA if not found in either mapping
+  }
+}
+
+
+correct_values <- tribble(
+  ~state, ~appliance, ~family, ~state_avg,
+  # Texas values
+  "Texas", "Cooling", 6573, 4249,
+  "Texas", "Heating", 6118, 5099,
+  "Texas", "Water Heating", 5257, 4396,
+  "Texas", "Refrigerator", 2639, 1318,
+  "Texas", "Other Appliance", 8459, 7883,
+  "Texas", "Total kWh", 29046, 22945,
+  
+  # California values
+  "California", "Cooling", 2581, 1289,
+  "California", "Heating", 6157, 5597,
+  "California", "Water Heating", 5061, 4601,
+  "California", "Refrigerator", 1266, 1055,
+  "California", "Other Appliance", 7608, 6916,
+  "California", "Total kWh", 22673, 19458,
+  
+  # Colorado values
+  "Colorado", "Cooling", 697, 498,
+  "Colorado", "Heating", 18052, 16411,
+  "Colorado", "Water Heating", 11667, 5832,
+  "Colorado", "Refrigerator", 1370, 1142,
+  "Colorado", "Other Appliance", 7982, 6652,
+  "Colorado", "Total kWh", 39768, 30535,
+  
+  # Massachusetts values
+  "Massachusetts", "Cooling", 419, 322,
+  "Massachusetts", "Heating", 26751, 19108,
+  "Massachusetts", "Water Heating", 10543, 5070,
+  "Massachusetts", "Refrigerator", 1230, 1025,
+  "Massachusetts", "Other Appliance", 7350, 6682,
+  "Massachusetts", "Total kWh", 46293, 32207
+) |> 
+  rowwise() |>
+  mutate(state_abrv=lookup_code(state))
+
+
+
+
+ s1 |> 
+       filter(#appliance != "Total kWh", 
+       plan == "plan1") %>%
+        group_by(state, appliance, refClass) |> 
+        mutate(n_distinct_family = n_distinct(family),
+               n_distinct_state_avg = n_distinct(state_avg), 
+               distinct_family = paste(unique(family), collapse = ","),
+               distinct_state_avg = paste(unique(state_avg), collapse = ",")) |>
+        filter(n_distinct_family > 1 | n_distinct_state_avg > 1) |> 
+        group_by(state, appliance, refClass, family, state_avg) |> 
+        mutate(state_avg_count = n_distinct(state_avg),
+               family_count = n()) |> 
+        ungroup() |> 
+        group_by(state, appliance, refClass, state_avg) |> 
+        mutate(state_avg_count = n()) |> 
+        distinct(state, appliance, refClass, family, state_avg, family_count, state_avg_count) |> 
+      arrange(state,appliance,refClass,-family_count) |> 
+      rowwise() |> 
+      mutate(fam_in = family %in% correct_values$family,
+             state_in = state_avg %in% correct_values$state_avg) |>
+       kable() # print(n=25)
+
+
+# Function to check values
+check_values <- function(data, reference) {
+  # Join the datasets
+  data %>%
+    left_join(reference |> rename(family_true=family,state_true=state_avg), by = c("state" = "state_abrv", "appliance" = "appliance")) %>%
+    mutate(
+      # Convert to numeric to ensure proper comparison
+      family_numeric = as.numeric(family),
+      state_avg_numeric = as.numeric(state_avg),
+      # Flag discrepancies (using a small tolerance for floating point differences)
+      family_discrepant =family_numeric != family_true,
+      state_avg_discrepant = state_avg_numeric != state_true
+    )
+}
+
+
+discrepant_counts <- s1 %>%
+  # Remove total kWh as specified
+  #filter(appliance != "Total kWh") %>%
+  # Use only one plan to avoid duplicates
+  filter(plan == "plan1") %>%
+  # Check against correct values
+  check_values(correct_values) %>%
+  select(id,id2,starts_with("sta"),starts_with("fam"),appliance,refClass) |> 
+  # Filter to show only discrepant cases
+  filter(family_discrepant | state_avg_discrepant) %>%
+  # Get unique subject IDs and their discrepancies
+  group_by(refClass,state) %>%
+  summarise(
+    discrepant_states = paste(unique(state), collapse = ", "),
+    discrepant_appliances = paste(unique(appliance), collapse = ", "),
+    n_family_discrepancies = sum(family_discrepant),
+    n_state_avg_discrepancies = sum(state_avg_discrepant),
+    .groups = 'drop'
+  )
+
+
+# Identify discrepant subjects
+discrepant_subjects <- s1 %>%
+  # Remove total kWh as specified
+  #filter(appliance != "Total kWh") %>%
+  # Use only one plan to avoid duplicates
+  filter(plan == "plan1") %>%
+  # Check against correct values
+  check_values(correct_values) %>%
+  select(id,id2,refClass,starts_with("sta"),starts_with("fam"),appliance) |> 
+  # Filter to show only discrepant cases
+  filter(family_discrepant | state_avg_discrepant) %>%
+  # Get unique subject IDs and their discrepancies
+  group_by(id, id2,refClass) %>%
+  summarise(
+    discrepant_states = paste(unique(state), collapse = ", "),
+    discrepant_appliances = paste(unique(appliance), collapse = ", "),
+    n_family_discrepancies = sum(family_discrepant),
+    n_state_avg_discrepancies = sum(state_avg_discrepant),
+    .groups = 'drop'
+  )
+
+
+discrepant_counts |> gt()
+discrepant_subjects |> gt()
+
+
+s1_discrep_ids <- discrepant_subjects |> pull(id) |> unique()
+
+s1_discrep_ids
+
+# for every combination of state, appliance, and refClass, calculate the number of distinct values of family, and of state_avg
+s1 |> group_by(state,appliance,refClass) |> 
+  filter(appliance != "Total kWh") %>%
+  filter(!(id %in% s1_discrep_ids)) |>
+  mutate(state_avg=as.numeric(state_avg)) |> 
+  summarise(n_distinct_family=n_distinct(family),
+            n_distinct_state_avg=n_distinct(state_avg), 
+            # paste a string of each distinct value, separated by a comma
+            distinct_family=paste(unique(family),collapse=","),
+            distinct_state_avg=paste(unique(state_avg),collapse=",")) |>
+  filter(n_distinct_family>1 | n_distinct_state_avg>1) 
+
+# <!-- issue in slides where colorado cooling is shown as 489 in a few cases instead of 498 - all of the data has 498. 498 corresponds with total value as well  -->
+s1 |> filter(state=="COL",appliance=="Cooling") |> pull(state_avg) |> unique() #498
+s2_long |> filter(state=="Colorado",appliance=="AC") |> pull(state_avg) |> unique() #498
+
+
+s1 |> select(id,id2,starts_with("sta"),starts_with("fam"),appliance,refClass,plan,value) |> check_values(correct_values) %>% 
+filter(plan=="plan1") |> 
+select(-state_f_dif,-state_p_dif,-plan,-state.y,-state_avg) |> ungroup() |> as_tibble() |> 
+relocate(id,state, appliance,value,family_numeric,family_true,state_avg_numeric,state_true, family_discrepant,state_avg_discrepant) |>
+# mutate to turn applilance, state and id columns into factors
+mutate(across(c(appliance,state,id),factor)) |>
+#reactable::reactable()
+  DT::datatable(extensions = 'Buttons',
+    options = list(
+       dom = 'Blfrtip',
+       buttons = list('copy', 'csv', 'excel', 'pdf', 'print'),
+      pageLength = 25,
+      autoWidth = TRUE
+    ),
+    filter = 'top') 
+
+```
+
+
+```{r}
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> select(P3TEX15) |> unique()
+
+s1 |> filter(id==18,plan=="plan1")
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |>
+  filter(ResponseId == "R_vB56XspT1LqhrkB") |>
+  # Select columns with non-NA values and not empty strings, handling character and numeric columns separately
+  select(
+    where(~ is.numeric(.) && !all(is.na(.))),
+    where(~ is.character(.) && !all(is.na(.)) && !all(. == ""))
+  ) |>
+  # Remove columns that start with "AIN"
+  select(-starts_with("AIN"))
+
+haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))  |> select_if(~any(. ==5124)) |> 
+  # filter out any NAs from any column that is left (we don't know the column names)
+  filter_all(any_vars(!is.na(.)))
+
+```
+
+
+
+
+```{r}
+
+
+
+s2_long %>%
+  filter(appliance != "TOTAL", plan == "plan1") %>%
+  group_by(appliance, rounded, state) %>%
+  mutate(
+    distinct_families = n_distinct(family),
+    color_flag = distinct_families > 1  # Flag as TRUE if more than 1 distinct value
+  ) %>%
+  ungroup() %>%
+  # Continue grouping for plotting
+  group_by(appliance, family, rounded, state,color_flag) %>%
+  summarise(n = n(), .groups = "drop") 
+
+
+  
+```

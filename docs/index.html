@@ -32,8 +32,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./study1.html" rel="next">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -42,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-841f44c19c9c21cac93599347df043fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7c8a9fc74683d866a968c7201d440969.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -72,66 +70,8 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-sample-listings .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-sample-listings'] = new List('listing-sample-listings', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="assets/style_qt.css">
 </head>
@@ -223,6 +163,12 @@ window.Quarto = {
  <span class="menu-text">Response Patterns</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/discrep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Discrep_Patterns</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -305,214 +251,7 @@ window.Quarto = {
 
 
 
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-sample-listings">
-<div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1730370436710" data-listing-reading-time-sort="17" data-listing-word-count-sort="3287">
-<a href="./study_stim.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study_stim.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study Stimulii and Design
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study_stim.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1730368918245" data-listing-reading-time-sort="33" data-listing-word-count-sort="6521">
-<a href="./study2.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study2.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study 2 Analysis
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study2.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1730347155442" data-listing-reading-time-sort="111" data-listing-word-count-sort="22185">
-<a href="./study1_info.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study1_info.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study 1 codebook and dataset info
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study1_info.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1730368929343" data-listing-reading-time-sort="32" data-listing-word-count-sort="6391">
-<a href="./study1.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study1.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study 1 Analysis
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study1.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-listing-file-modified-sort="1727993292541" data-listing-reading-time-sort="7" data-listing-word-count-sort="1351">
-<a href="./study2_info.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study2_info.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Scenario 1
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study2_info.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-listing-file-modified-sort="1730364187596" data-listing-reading-time-sort="6" data-listing-word-count-sort="1184">
-<a href="./results.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:results.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Results
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:results.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="6" data-listing-file-modified-sort="1730370390223" data-listing-reading-time-sort="10" data-listing-word-count-sort="1910">
-<a href="./misc/indiv.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:misc/indiv.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Response Patterns
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:misc/indiv.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="7" data-listing-file-modified-sort="1726667066822" data-listing-reading-time-sort="20" data-listing-word-count-sort="3823">
-<a href="./study_info.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:study_info.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Relaunch of Frequency and Probability Study
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:study_info.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="8" data-listing-file-modified-sort="1730368794881" data-listing-reading-time-sort="48" data-listing-word-count-sort="9508">
-<a href="./misc/outlier.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:misc/outlier.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Outliers and discrepancies
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:misc/outlier.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="9" data-listing-file-modified-sort="1729903368890" data-listing-reading-time-sort="34" data-listing-word-count-sort="6683">
-<a href="./initial_slides.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<!-- img(9CEB782EFEE6)[progressive=false, height=300px]:sample-listings:initial_slides.html -->
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations
-</h5>
-<div class="card-text listing-description">
-<!-- desc(5A0113B34292)[max=175]:initial_slides.html -->
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
