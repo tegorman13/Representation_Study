@@ -287,20 +287,88 @@ haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")
 
 ```{r}
 
+correct_values_s2 <- tribble(
+  ~state, ~appliance, ~family_exact, ~family_rounded, ~state_avg,
+  # Texas values (Smith Family)
+  "Texas", "Cooling", 6573, 7000, 4249,
+  "Texas", "Heating", 6118, 6000, 5099,
+  "Texas", "Water Heating", 5257, 5000, 4396,
+  "Texas", "Refrigerator", 2639, 3000, 1318,
+  "Texas", "Other Appliance", 8459, 8000, 7883,
+  "Texas", "Total kWh", 29046, 29000, 22945,
+  
+  # California values (Adams Family)
+  "California", "Cooling", 2581, 3000, 1289,
+  "California", "Heating", 6157, 6000, 5597,
+  "California", "Water Heating", 5061, 5000, 4601,
+  "California", "Refrigerator", 1266, 1000, 1055,
+  "California", "Other Appliance", 7608, 8000, 6916,
+  "California", "Total kWh", 22673, 23000, 19458,
+  
+  # Colorado values (Wells Family)
+  "Colorado", "Cooling", 697, 1000, 498,
+  "Colorado", "Heating", 18052, 18000, 16411,
+  "Colorado", "Water Heating", 11667, 12000, 5832,
+  "Colorado", "Refrigerator", 1370, 1000, 1142,
+  "Colorado", "Other Appliance", 7982, 8000, 6652,
+  "Colorado", "Total kWh", 39768, 40000, 30535,
+  
+  # Massachusetts values (Davis Family)
+  "Massachusetts", "Cooling", 419, 0, 322,
+  "Massachusetts", "Heating", 26751, 27000, 19108,
+  "Massachusetts", "Water Heating", 10543, 11000, 5070,
+  "Massachusetts", "Refrigerator", 1230, 1000, 1025,
+  "Massachusetts", "Other Appliance", 7350, 7000, 6682,
+  "Massachusetts", "Total kWh", 46293, 46000, 32207
+) %>%
+  rowwise() %>%
+  mutate(
+    state_abrv = case_when(
+      state == "Texas" ~ "TEX",
+      state == "California" ~ "CAL",
+      state == "Colorado" ~ "COL",
+      state == "Massachusetts" ~ "MASS"
+    ),
+    family_name = case_when(
+      state == "Texas" ~ "Smith Family",
+      state == "California" ~ "Adams Family",
+      state == "Colorado" ~ "Wells Family",
+      state == "Massachusetts" ~ "Davis Family"
+    ))
+
+
+
+
 
 
 s2_long %>%
-  filter(appliance != "TOTAL", plan == "plan1") %>%
-  group_by(appliance, rounded, state) %>%
+  filter( plan == "plan1") %>%
+  group_by(appliance, rounded, state,pct_goal) %>%
   mutate(
     distinct_families = n_distinct(family),
-    color_flag = distinct_families > 1  # Flag as TRUE if more than 1 distinct value
-  ) %>%
-  ungroup() %>%
-  # Continue grouping for plotting
-  group_by(appliance, family, rounded, state,color_flag) %>%
-  summarise(n = n(), .groups = "drop") 
+    distinct_state_avg = n_distinct(state_avg),
+  ) %>% 
+  filter(distinct_families > 1 | distinct_state_avg > 1)  |> 
+   group_by(appliance, rounded, state,pct_goal, family) |>
+   mutate(family_count = n()) |>
+   group_by(appliance, rounded, state,pct_goal, state_avg) |>
+    mutate(state_avg_count = n()) |>
+  distinct(rounded,state,refClass,appliance,family,state_avg,state_avg_count,family_count) |> 
+     rowwise() |> 
+  mutate(
+    fam_in = if (rounded == "Rounded") {
+      family %in% correct_values_s2$family_rounded
+    } else {
+      family %in% correct_values_s2$family_exact
+    },
+    state_in = state_avg %in% correct_values_s2$state_avg
+  ) |> arrange(rounded,refClass,state,appliance,family_count) |> 
+  relocate(rounded,pct_goal,refClass,state,appliance,family,family_count,state_avg,state_avg_count,fam_in,state_in) |> 
+  kable()
 
 
-  
+  # ungroup() %>%
+  # group_by(appliance, family, rounded, state) %>%
+  # summarise(n = n(), .groups = "drop") 
+
 ```
