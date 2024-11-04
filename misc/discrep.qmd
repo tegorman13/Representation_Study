@@ -510,7 +510,7 @@ s2_long |> filter_all(any_vars(is.na(.)))
 
 
 
-### Study 1
+### Study 1 - Subject counts 
 
 
 ```{r}
@@ -540,6 +540,21 @@ s1 |> group_by(refClass,calc) |>
   gt() |> tab_header(title="Study 1: Number of unique IDs per condition by calculation")
 
 
+
+
+prop.table(xtabs(~refClass,s1)) |> kable()
+prop.table(xtabs(~refClass+calc,s1)) |> kable()
+prop.table(xtabs(~refClass+state,s1)) |> kable()
+
+
+# s2_long |> group_by(id) |> summarise(nrc=n_distinct(refClass),npct=n_distinct(pct_goal),nround=n_distinct(rounded))
+
+```
+
+
+### Study 2 - Subject counts 
+```{r}
+
 s2_long |> group_by(refClass) |>
 filter(!(id %in% s2_discrep_ids)) |>
 rename("Reference Class" = refClass) |>
@@ -555,12 +570,14 @@ pivot_wider(names_from=calc,values_from=n) |>
 gt() |> tab_header(title="Study 2: Number of unique IDs per condition by calculation")
 
 
-
-# s2_long |> group_by(id) |> summarise(nrc=n_distinct(refClass),npct=n_distinct(pct_goal),nround=n_distinct(rounded))
-
+prop.table(xtabs(~refClass,s2_long)) |> kable()
+prop.table(xtabs(~refClass+state,s2_long))
+prop.table(xtabs(~refClass+calc,
+s2_long |> mutate(calc=case_when(calc=="Calculator" ~ "Used Calculator",
+                      calc=="No Calculator" ~ "No Calculator")))) |> kable()
 ```
 
-
+##  Performance before and after exclusions
 
 ### Performance before and after exclusions - Study 1
 
@@ -606,6 +623,7 @@ bind_rows(
       mean = mean(pct),
       sd = sd(pct),
       n = n(),
+      se=sd(pct)/sqrt(n),
       dataset = "Before exclusions"
     ),
   s1_agg4 |> 
@@ -615,12 +633,13 @@ bind_rows(
       mean = mean(pct),
       sd = sd(pct),
       n = n(),
+      se=sd(pct)/sqrt(n),
       dataset = "After exclusions"
     )
 ) |>
   pivot_wider(
     names_from = dataset,
-    values_from = c(mean, sd, n),
+    values_from = c(mean, sd, se,n),
     names_glue = "{dataset}_{.value}"
   ) |>
   gt() |>
@@ -639,9 +658,11 @@ bind_rows(
     refClass = "Reference Class",
     `Before exclusions_mean` = "Mean",
     `Before exclusions_sd` = "SD",
+    `Before exclusions_se` = "SE",
     `Before exclusions_n` = "N",
     `After exclusions_mean` = "Mean",
     `After exclusions_sd` = "SD",
+    `After exclusions_se` = "SE",
     `After exclusions_n` = "N"
   ) |>
   tab_spanner(
@@ -744,6 +765,7 @@ bind_rows(
       mean = mean(pct),
       sd = sd(pct),
       n = n(),
+      se=sd(pct)/sqrt(n),
       dataset = "Before exclusions"
     ),
   s2_agg4 |> 
@@ -753,19 +775,22 @@ bind_rows(
       mean = mean(pct),
       sd = sd(pct),
       n = n(),
+      se=sd(pct)/sqrt(n),
       dataset = "After exclusions"
     )) |> 
     pivot_wider(names_from = dataset,
-    values_from = c(mean, sd, n),
+    values_from = c(mean, sd,se, n),
     names_glue = "{dataset}_{.value}") |> gt() |>
     tab_header(title = "Study 2: Performance Before and After Exclusions") |>
     cols_label(
     refClass = "Reference Class",
     `Before exclusions_mean` = "Mean",
     `Before exclusions_sd` = "SD",
+    `Before exclusions_se` = "SE",
     `Before exclusions_n` = "N",
     `After exclusions_mean` = "Mean",
     `After exclusions_sd` = "SD",
+    `After exclusions_se` = "SE",
     `After exclusions_n` = "N"
   ) |>
   tab_spanner(
@@ -833,6 +858,39 @@ s2p2a <- s2_agg1 |>
 s2p1b + s2p1a
 
 s2p2b + s2p2a
+
+
+s1_agg4 |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      se=sd(pct)/sqrt(n),
+      dataset = "Before exclusions"
+    )
+
+s1_agg4 |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      se=sd/sqrt(n),
+      dataset = "Before exclusions"
+    )
+
+s1_agg4 |> 
+    group_by(refClass) |> 
+    summarise(
+      mean = mean(pct),
+      sd = sd(pct),
+      n = n(),
+      se = sd/sqrt(n),  # Using sd calculated above
+      dataset = "After exclusions"
+    )
+
+
 
 
 ``` 
