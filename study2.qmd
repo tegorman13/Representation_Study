@@ -46,7 +46,9 @@ theme_set(theme_nice())
 s2 <- haven::read_sav("data/Frequency & Probability Study 2 - 3-24-19.sav")
 s2 <- s2 |> #mutate(id = as.numeric(format(EndDate, "%H%M%S"))) |> relocate(id) |> 
   mutate(id=paste0("s2_",row_number())) |> relocate(id)
-s2 <- s2 |> filter(!(id=="s2_78")) # NA for some responses
+s2 <- s2 |> filter(!(id=="s2_78")) |> # NA for some responses
+  filter(!(id=="s2_196")) # NA for state_avg for COL HEAT - (HEATSTATE2)
+  # filter(!(id=="s2_208")) # NA for response for California not rounded Total (TOTALAPONE1 and TOTALAPTWO1) - leave them in since all the acutal app values are okay
 s2 <- s2 |> 
   mutate(
     state1 = case_when(
@@ -163,6 +165,8 @@ s2_long <- s2_long |>
   ) |> 
   mutate(change = value-family, state_dif = value-state_avg,plan=as_factor(plan)) 
 
+# s2 |> filter(id=="s2_208") |> select(starts_with("T"))
+# s2_long |> filter_all(any_vars(is.na(.)))
 
 #write.csv(s2_long,"data/study_2_tg.csv")
 saveRDS(s2_long, here::here("data/s2_processed.rds"))

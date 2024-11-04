@@ -223,6 +223,7 @@ discrepant_subjects |> gt()
 s1_discrep_ids <- discrepant_subjects |> pull(id) |> unique()
 
 s1_discrep_ids
+#saveRDS(s1_discrep_ids,here::here("data/s1_discrep_ids.rds"))
 
 # for every combination of state, appliance, and refClass, calculate the number of distinct values of family, and of state_avg
 s1 |> group_by(state,appliance,refClass) |> 
@@ -284,6 +285,9 @@ haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")
 
 
 
+## Study 2
+
+### Counts per unique value of family prior year, and state average
 
 ```{r}
 
@@ -329,6 +333,14 @@ correct_values_s2 <- tribble(
       state == "Colorado" ~ "COL",
       state == "Massachusetts" ~ "MASS"
     ),
+    app_abrv = case_when(
+      appliance == "Cooling" ~ "AC",
+      appliance == "Heating" ~ "HEAT",
+      appliance == "Water Heating" ~ "WATER",
+      appliance == "Refrigerator" ~ "REFRIG",
+      appliance == "Other Appliance" ~ "OTHER",
+      appliance == "Total kWh" ~ "TOTAL"
+    ),
     family_name = case_when(
       state == "Texas" ~ "Smith Family",
       state == "California" ~ "Adams Family",
@@ -370,5 +382,125 @@ s2_long %>%
   # ungroup() %>%
   # group_by(appliance, family, rounded, state) %>%
   # summarise(n = n(), .groups = "drop") 
+
+```
+
+
+
+### Discrepant Subjects
+
+```{r}
+
+s2_long %>%
+  filter(plan == "plan1",
+  id !="s2_208") %>% # s2_208 is just missing a value for a total column - but has all their app values
+  group_by(appliance, rounded, state, pct_goal) %>%
+  mutate(
+    distinct_families = n_distinct(family),
+    distinct_state_avg = n_distinct(state_avg),
+  ) %>% 
+  filter(distinct_families > 1 | distinct_state_avg > 1) %>%
+  group_by(appliance, rounded, state, pct_goal, family) %>%
+  mutate(family_count = n()) %>%
+  group_by(appliance, rounded, state, pct_goal, state_avg) %>%
+  mutate(state_avg_count = n()) %>%
+  distinct(rounded, state, refClass, appliance, family, state_avg, 
+          state_avg_count, family_count) %>%
+  mutate(
+    # Check family values
+    fam_in = map2_lgl(rounded, family, ~ {
+      if (.x == "Rounded") {
+        .y %in% correct_values_s2$family_rounded
+      } else {
+        .y %in% correct_values_s2$family_exact
+      }
+    }),
+    # Check state averages
+    state_in = pmap_lgl(list(state, appliance, state_avg), function(s, a, sa) {
+      correct_row <- correct_values_s2 %>%
+        filter(state == s, app_abrv == a)
+        #print(nrow(correct_row))  
+      if(nrow(correct_row) == 0) FALSE else sa == correct_row$state_avg
+    })
+  ) %>%
+  arrange(rounded, refClass, state, appliance, family_count) %>%
+  relocate(rounded, pct_goal, refClass, state, appliance, family, 
+          family_count, state_avg, state_avg_count, fam_in, state_in) |> kable()
+
+
+discrepant_subjects_s2 <- s2_long |> 
+  filter(plan == "plan1") |>
+  group_by(id, rounded, refClass) |> 
+  mutate(
+    # Compute state_in based on exact match for state, appliance abbreviation, and state_avg
+    state_in = pmap_lgl(list(state, appliance, state_avg), function(s, a, sa) {
+      correct_row <- correct_values_s2 %>%
+        filter(state == s, app_abrv == a)
+      if (nrow(correct_row) == 0) FALSE else sa == correct_row$state_avg
+    }),
+    # Compute fam_in based on `rounded` value and appropriate family column in `correct_values_s2`
+    fam_in = pmap_lgl(list(state, appliance, family, rounded), function(s, a, fam, rnd) {
+      correct_row <- correct_values_s2 %>%
+        filter(state == s, app_abrv == a)
+      if (nrow(correct_row) == 0) {
+        FALSE
+      } else if (rnd == "Rounded") {
+        fam == correct_row$family_rounded
+      } else {
+        fam == correct_row$family_exact
+      }
+    })
+  )
+
+discrepant_subjects_s2 |> filter(state_in==FALSE | fam_in==FALSE) |>  arrange(state, appliance,refClass,pct_goal,rounded) |> select(-calc,-edu, -plan,-state_dif) |> kable()
+
+s2_discrep_ids <- discrepant_subjects_s2 |> filter(state_in==FALSE | fam_in==FALSE) |> pull(id) |> unique()
+s2_discrep_ids
+# saveRDS(s2_discrep_ids,here::here("data/s2_discrep_ids.rds"))
+
+
+# mutate(
+#   fam_in = if_else(rounded == "Rounded",
+#                   family %in% correct_values_s2$family_rounded,
+#                   family %in% correct_values_s2$family_exact),
+# # Use `map_lgl` to evaluate each row individually
+#   state_in = map_lgl(
+#     seq_along(appliance),
+#     ~ any(correct_values_s2$appliance[correct_values_s2$state_avg == state_avg[.x]] == appliance[.x])
+#   ) )
+
+
+
+```
+
+
+
+
+
+```{r}
+
+
+# 3 s2_185     2 USD      HEAT      10%      Rounded Colorado Calculator    Some graduate school   0.1  18000     16411 plan1 17000  -1000       589
+# 4 s2_196     2 USD      HEAT      10%      Rounded Colorado Calculator    College degree         0.1  18000        NA plan1 17000  -1000        NA
+# 5 s2_197     2 USD      HEAT      10%      Rounded Colorado Calculator    Some college           0.1  18000     16411 plan1 17000  -1000       589
+
+#  s2 |>
+#   mutate(id=paste0("s2_",row_number())) |> relocate(id) |> filter(id=="s2_196") |> 
+#    select(-starts_with("AIN")) |> select(starts_with("HEAT"))
+
+
+# s2 |> filter(id=="s2_196") |> select(starts_with("HEAT"))
+
+
+s2_long |> filter(state=="Colorado",state_avg==1142,appliance=="WATER")
+
+haven::read_sav(here::here("data/Frequency & Probability Study 2 - 3-24-19.sav")) |>
+  mutate(id=paste0("s2_",row_number())) |> 
+  relocate(id) |> filter(id=="s2_196") |> 
+   select(-starts_with("AIN")) |> select(starts_with("HEAT"))
+
+
+#s2 |> filter(id=="s2_208") |> select(starts_with("T"))
+s2_long |> filter_all(any_vars(is.na(.)))
 
 ```
