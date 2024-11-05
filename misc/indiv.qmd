@@ -34,9 +34,24 @@ format:
 library(pacman)
 pacman::p_load(dplyr,purrr,tidyr,here, haven,tibble,ggplot2,gt,ggh4x,lme4,flextable,ggdist)
 
-s1 <- readRDS(here::here("data/s1_processed.rds"))
+#https://arelbundock.com/posts/quarto_figures/index.html
+knitr::opts_chunk$set(
+    out.width = "75%", # enough room to breath
+    fig.width = 6,     # reasonable size
+    fig.asp = 0.618,   # golden ratio
+    fig.align = "center" # mostly what I want
+)
 
-s2_long <- readRDS(here::here("data/s2_processed.rds"))
+out2fig = function(out.width, out.width.default = 0.7, fig.width.default = 6) {
+    fig.width.default * out.width / out.width.default 
+}
+
+
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds"))))
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds"))))
+
+
 
 s1_agg <- s1 |> 
   filter(appliance !="Total kWh") |> 
@@ -57,6 +72,9 @@ s1_agg <- s1 |>
 ## Study 1 - comparison against state average
 
 ```{r}
+#| fig-asp: .8
+
+#| 
 s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
   filter(appliance!="TOTAL",state=="California") |> 
   ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
@@ -66,7 +84,8 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
 ```
 
 ```{r}
-
+#| fig.height: 13
+#| fig.width: 12
 
 
 
@@ -211,7 +230,8 @@ mutate(matched_goal = (pct_change == pct_goal),
 
 
 ```{r}
-
+#| fig.height: 13
+#| fig.width: 12
 
 s2_long |> 
   filter(appliance != "TOTAL") |> 
@@ -311,7 +331,8 @@ s2_long %>%
 
 
 ```{r}
-
+#| fig.height: 13
+#| fig.width: 12
 
 s2_long |> 
   filter(appliance != "TOTAL") |> 
@@ -331,17 +352,17 @@ s2_long |>
     # Non-matching plans (plotted first, in background)
     geom_point(data = . %>% filter(!matched_goal2),
                aes(y = value, color = "Plan (Not Matching)", shape = "Plan"), 
-               size = 2, alpha = 0.4) +
+               size = 1, alpha = 0.4) +
     # Matching plans
     geom_point(data = . %>% filter(matched_goal2),
                aes(y = value, color = "Plan (Matching Goal)", shape = "Plan"), 
-               size = 2.5) +
+               size = 1.5) +
     # Prior year values
     geom_point(aes(y = family, color = "Prior Year", shape = "Prior Year"), 
-               size = 3.5) +
+               size = 2.5) +
     # State averages with star shape, plotted last and largest
     geom_point(aes(y = state_avg, color = "State Average", shape = "State Average"), 
-               size = 3, stroke = 2) +
+               size = 2, stroke = 2) +
     scale_color_manual(
       name = "Values",
       values = c(

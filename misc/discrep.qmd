@@ -859,39 +859,5 @@ s2p1b + s2p1a
 
 s2p2b + s2p2a
 
-
-s1_agg4 |> 
-    group_by(refClass) |> 
-    summarise(
-      mean = mean(pct),
-      sd = sd(pct),
-      n = n(),
-      se=sd(pct)/sqrt(n),
-      dataset = "Before exclusions"
-    )
-
-s1_agg4 |> 
-    group_by(refClass) |> 
-    summarise(
-      mean = mean(pct),
-      sd = sd(pct),
-      n = n(),
-      se=sd/sqrt(n),
-      dataset = "Before exclusions"
-    )
-
-s1_agg4 |> 
-    group_by(refClass) |> 
-    summarise(
-      mean = mean(pct),
-      sd = sd(pct),
-      n = n(),
-      se = sd/sqrt(n),  # Using sd calculated above
-      dataset = "After exclusions"
-    )
-
-
-
-
 ``` 
 
