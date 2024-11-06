@@ -6,7 +6,7 @@
 
 ## Original Slides
 
-<embed src='background/MPA_2023_slides.pdf' type="application/pdf" width="100%" height="700px">
+<embed src='/background/MPA_2023_slides.pdf' type="application/pdf" width="100%" height="700px">
 
 
 

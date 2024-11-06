@@ -40,15 +40,15 @@ website:
           - href: misc/discrep.qmd
       - section: "Background"
         contents:
-          - href: study_stim.md
+          - href: background/study_stim.md
             text: "Design and Stimulii"
-          - href: study_info.md
+          - href: background/study_info.md
             text: "study 2 full info"
-          - href: initial_slides.md
+          - href: background/initial_slides.md
             text: "MPA_Slides"
-          - href: study1_info.md
+          - href: background/study1_info.md
             text: "study 1 codebook"
-          - href: study2_info.md
+          - href: background/study2_info.md
             text: "study 2 codebook"
 
 

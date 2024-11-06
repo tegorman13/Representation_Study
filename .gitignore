@@ -6,8 +6,14 @@
 .Rproj.user
 .cursorignore
 
-sps/*
+*/sps/*
 background/*
+
+# don't ignore .md files in background/*
+!background/*.md
+
+
+
 
 ~$*
 
