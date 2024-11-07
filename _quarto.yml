@@ -35,6 +35,7 @@ website:
           - href: study2.qmd
             text: "Study 2 Analysis"
           - href: results.qmd
+          - href: overview.qmd
           - href: misc/outlier.qmd
           - href: misc/indiv.qmd
           - href: misc/discrep.qmd

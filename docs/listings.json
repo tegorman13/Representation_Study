@@ -2,14 +2,10 @@
   {
     "listing": "/index.html",
     "items": [
+      "/overview.html",
       "/results.html",
       "/study1.html",
-      "/study2.html",
-      "/initial_slides.html",
-      "/study_info.html",
-      "/study2_info.html",
-      "/study1_info.html",
-      "/study_stim.html"
+      "/study2.html"
     ]
   }
 ]

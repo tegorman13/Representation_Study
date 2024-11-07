@@ -1,0 +1,9 @@
+---
+title: "Supplemental Materials"
+---
+
+
+
+
+
+![Example trial in the energy planning task. Participants are shown the prior year electricity use of a household, and are tasked with creating a plan for the next year that will meet the energy reduction goal. Study 1 manipulates the format of the reduction goal to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656)](/images/Smith_10R_Wells_15E.png){#fig-task}

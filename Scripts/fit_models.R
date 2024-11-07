@@ -919,17 +919,17 @@ s1_zib_close_c <- brm(
    control = list(adapt_delta = .94, max_treedepth = 13),
   file=paste0(here::here("data/model_cache",'s1_zib_close_c.rds'))
 )
-summary(s1_zib_close_c)
-Regression Coefficients:
-                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept             -0.88      0.93    -2.74     0.95 1.01      439     1421
-refClassPercentage    -1.90      0.78    -3.49    -0.43 1.01      783     1322
-refClassUSD           -3.78      0.80    -5.47    -2.30 1.00      908     1529
-calcUsedCalculator     2.59      0.76     1.16     4.10 1.01     1070     1957
-
-Further Distributional Parameters:
-   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-zi     0.13      0.07     0.01     0.27 1.02      216      774
+# summary(s1_zib_close_c)
+# Regression Coefficients:
+#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept             -0.88      0.93    -2.74     0.95 1.01      439     1421
+# refClassPercentage    -1.90      0.78    -3.49    -0.43 1.01      783     1322
+# refClassUSD           -3.78      0.80    -5.47    -2.30 1.00      908     1529
+# calcUsedCalculator     2.59      0.76     1.16     4.10 1.01     1070     1957
+# 
+# Further Distributional Parameters:
+#    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# zi     0.13      0.07     0.01     0.27 1.02      216      774
 
 s1_zib_close_c |> emmeans(~refClass, type="response")
 #  refClass   prob lower.HPD upper.HPD
