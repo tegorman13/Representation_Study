@@ -24,7 +24,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="manuscript_files/libs/clipboard/clipboard.min.js"></script>
@@ -135,8 +155,9 @@ h2.hide {
   <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a></li>
   </ul></li>
   <li><a href="#discusion" id="toc-discusion" class="nav-link" data-scroll-target="#discusion">Discusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="rep_study.pdf"><i class="bi bi-file-pdf"></i>PDF version (hikmah-manuscript)</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="manuscript_gfm.md"><i class="bi bi-file-code"></i>Github (GFM)</a></li><li><a href="rep_study.pdf"><i class="bi bi-file-pdf"></i>PDF (hikmah-manuscript)</a></li><li><a href="manuscript.docx"><i class="bi bi-file-word"></i>MS Word (hikmah-manuscript)</a></li></ul></div></nav>
 </div>
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -146,11 +167,32 @@ h2.hide {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="literature-review" class="level4">
+<h4 class="anchored" data-anchor-id="literature-review">Literature Review</h4>
+<p>Energy poverty continues to be a pervasive issue in the United States <span class="citation" data-cites="memmottSociodemographicDisparitiesEnergy2021">Memmott et al. (<a href="#ref-memmottSociodemographicDisparitiesEnergy2021" role="doc-biblioref">2021</a>)</span> . This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans <span class="citation" data-cites="reimerNumericCommunicationRisk2015">Reimer et al. (<a href="#ref-reimerNumericCommunicationRisk2015" role="doc-biblioref">2015</a>)</span>. Prior research by <span class="citation" data-cites="canfieldPerceptionsElectricityuseCommunications2017">Canfield et al. (<a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">2017</a>)</span> demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs.</p>
+</section>
+<section id="hypotheses" class="level4">
+<h4 class="anchored" data-anchor-id="hypotheses">Hypotheses</h4>
+<p>Building on these findings and informed by prior work showing that frequencies (like absolute units in kWh) are easier to comprehend and facilitate more precise decision-making compared to percentages, our study also utilizes a tabular format, but manipulates whether participants must consider energy information presented as absolute units (kWh), percentages (%), or monetary costs (USD). We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.</p>
+</section>
 </section>
 <section id="experiment-1" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-1">Experiment 1</h2>
+<p>See <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a> for an example of a planning trial as it was seen by participants.</p>
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
+<section id="participants" class="level4">
+<h4 class="anchored" data-anchor-id="participants">Participants</h4>
+<p>We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were intially recruited, but data from 17 participants were corrupted due to experimenter error, leaving a final sample of 235 participants. Most participants (76%) reported using a calculator to complete the task.</p>
+</section>
+<section id="materials-and-design" class="level4">
+<h4 class="anchored" data-anchor-id="materials-and-design">Materials and Design</h4>
+<p>The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states, with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. We obtain average utility use from each state by CITE SOURCE FOR STATE AVGS?</p>
+</section>
+<section id="procedure" class="level4">
+<h4 class="anchored" data-anchor-id="procedure">Procedure</h4>
+<p>Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and an other appliances (e.g., TV, lighting).</p>
+<p>For each family scenario, the particpipants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a>). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.</p>
 <div id="fig-task" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -161,25 +203,335 @@ Figure&nbsp;1: Example trial in the energy planning task. Participants are shown
 </figcaption>
 </figure>
 </div>
+<p>Additional data collected included:</p>
+<ul>
+<li><strong>Energy Literacy Quiz</strong>: An 8-item questionnaire assessing participants’ knowledge of energy consumption and conversion.</li>
+<li><strong>Calculator Usage Tracking</strong>: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.</li>
+<li><strong>Demographic Survey</strong>: Collected information on gender, age, income, education, employment status, and state of residence.</li>
+<li><strong>Environmental Attitudes Survey</strong>: Assessed participants’ pro-environmental attitudes and perceived importance of energy conservation.</li>
+</ul>
+</section>
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
+<div id="tbl-s1-agg" class="cell anchored" data-caption="Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal.">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">refClass</th>
+<th style="text-align: left;">Avg. % meeting goal</th>
+<th style="text-align: left;">Avg. Deviation From Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">kWh</td>
+<td style="text-align: left;">0.38</td>
+<td style="text-align: left;">0.15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Percentage</td>
+<td style="text-align: left;">0.22</td>
+<td style="text-align: left;">0.16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">USD</td>
+<td style="text-align: left;">0.10</td>
+<td style="text-align: left;">0.19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For our primary analyses of participants’ ability to create accurate energy-saving plans, we employed an accuracy level binning approach by categorizing responses into four distinct levels: Exact match, 0.01–2% error, 2.01–15% error, and Over 15% error.</p>
+<div id="tbl-s1-prop" class="cell anchored" data-caption="Study 1: The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Accuracy Level</th>
+<th style="text-align: left;">kWh</th>
+<th style="text-align: left;">Percentage</th>
+<th style="text-align: left;">USD</th>
+<th style="text-align: left;">Combined Groups %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Exact match</td>
+<td style="text-align: left;">37.5%</td>
+<td style="text-align: left;">22.1%</td>
+<td style="text-align: left;">9.8%</td>
+<td style="text-align: left;">22.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.01-2% error</td>
+<td style="text-align: left;">15.1%</td>
+<td style="text-align: left;">17.6%</td>
+<td style="text-align: left;">11.2%</td>
+<td style="text-align: left;">14.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2.01-15% error</td>
+<td style="text-align: left;">26.3%</td>
+<td style="text-align: left;">41.9%</td>
+<td style="text-align: left;">47.8%</td>
+<td style="text-align: left;">38.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Over 15% error</td>
+<td style="text-align: left;">21.2%</td>
+<td style="text-align: left;">18.4%</td>
+<td style="text-align: left;">31.2%</td>
+<td style="text-align: left;">24.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-caption="Study 1: Proportion of participants in each accuracy level, colored by reference class. A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance.">
+<div class="cell-output-display">
+<div id="fig-s1-plot" class="quarto-float quarto-figure quarto-figure-center anchored" width="672">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s1-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s1-plot-1.png" id="fig-s1-plot" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s1-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We analyzed planning accuracy using Bayesian ordinal regression. The dependent variable, plan error, was computed by binning the goal deviation into four ordered levels: exact match (0% error), minor deviations (0.01-2% error), moderate deviations (2.01-15% error), and major deviations (&gt;15% error). For each comparison, we provide posterior odds ratios (OR) and their 95% CIs.</p>
+<div id="tbl-s1-ord" class="cell anchored" data-caption="Study 1: Odds ratios of for group comparisons. ">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">comparison</th>
+<th style="text-align: left;">odds_ratio</th>
+<th style="text-align: left;">ci_lower</th>
+<th style="text-align: left;">ci_upper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Percentage vs kWh</td>
+<td style="text-align: left;">2.27407</td>
+<td style="text-align: left;">0.6177874</td>
+<td style="text-align: left;">6.14783</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">USD vs kWh</td>
+<td style="text-align: left;">14.09463</td>
+<td style="text-align: left;">4.0796697</td>
+<td style="text-align: left;">38.03732</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="manuscript_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1056"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="manuscript_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="1056"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 1
+ $ legend.background: list()
+  ..- attr(*, "class")= chr [1:2] "element_blank" "element"
+ - attr(*, "class")= chr [1:2] "theme" "gg"
+ - attr(*, "complete")= logi FALSE
+ - attr(*, "validate")= logi TRUE</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="experiment-2" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-2">Experiment 2</h2>
 <section id="methods-1" class="level3">
 <h3 class="anchored" data-anchor-id="methods-1">Methods</h3>
-<p>The questions in study 2 are quite similar to those in study 1, but we also included a rounding manipulation (rounded vs.&nbsp;not rounded), and a manipulation of the goal (10% reduction vs.&nbsp;15% rediction)</p>
-<p>Note that reference class remains a between-subjects variable, while percent goal, rounding, and state are within-subjects variables.</p>
-<p>In study 2, the new design is a 4 state temperature (2 warm vs.&nbsp;2 cold states) X 2 task goal (10% vs.&nbsp;15%) X 2 last year’s usage for the family and the state average (exact vs.&nbsp;rounded numbers) within X 3 task reference class (USD vs.&nbsp;Percentage vs.&nbsp;kWh) between. A note on the percentage goals is that they are rounded to the full dollar. For instance, for the Davis family, 10% of their $6,943.95 cost of residential energy usage is $694.395; this is rounded to $694. For the rounded condition, participants are also told that “The numbers for their [the family’s] usage have been rounded for convenience.” In terms of randomization, blocks were combined so that there was a block for each condition and order combination. As an example, one block is the smith family with a 10% goal and rounded numbers for the family’s usage first, and the Wells family second, with a 15% goal and exact numbers for the family’s usage. Another block has these but in reverse, where the participant receives the Wells family first and the Smith family second. In total, there are 96 conditions, representing each possible order (2 orders x 4 states x 2 possible significant digit values, and 3 reference classes).</p>
+<p>The experimental procedures in study 2 are quite similar to those in study 1, but we also included a rounding manipulation (rounded vs.&nbsp;not rounded), and a manipulation of the goal (10% reduction vs.&nbsp;15% rediction). We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.</p>
+<p>Note that reference class remains a between-subjects variable, while percent goal, rounding, and state are within-subjects variables. In study 2, the new design is a 4 state temperature (2 warm vs.&nbsp;2 cold states) X 2 task goal (10% vs.&nbsp;15%) X 2 last year’s usage for the family and the state average (exact vs.&nbsp;rounded numbers) within X 3 task reference class (USD vs.&nbsp;Percentage vs.&nbsp;kWh) between.</p>
 </section>
 <section id="results-1" class="level3">
 <h3 class="anchored" data-anchor-id="results-1">Results</h3>
+<div id="tbl-s2-agg" class="cell anchored" data-caption="Study 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal.">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">refClass</th>
+<th style="text-align: left;">Avg. % meeting goal</th>
+<th style="text-align: left;">Avg. Deviation From Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">kWh</td>
+<td style="text-align: left;">0.44</td>
+<td style="text-align: left;">0.13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Percentage</td>
+<td style="text-align: left;">0.27</td>
+<td style="text-align: left;">0.16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">USD</td>
+<td style="text-align: left;">0.18</td>
+<td style="text-align: left;">0.17</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="tbl-s2-prop" class="cell anchored" data-caption="Study 2: The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Accuracy Level</th>
+<th style="text-align: left;">kWh</th>
+<th style="text-align: left;">Percentage</th>
+<th style="text-align: left;">USD</th>
+<th style="text-align: left;">Combined Groups %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Exact match</td>
+<td style="text-align: left;">43.5%</td>
+<td style="text-align: left;">26.8%</td>
+<td style="text-align: left;">18.5%</td>
+<td style="text-align: left;">30.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.01-2% error</td>
+<td style="text-align: left;">8%</td>
+<td style="text-align: left;">13.8%</td>
+<td style="text-align: left;">9.1%</td>
+<td style="text-align: left;">10.3%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2.01-15% error</td>
+<td style="text-align: left;">21%</td>
+<td style="text-align: left;">33.3%</td>
+<td style="text-align: left;">38.4%</td>
+<td style="text-align: left;">30.5%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Over 15% error</td>
+<td style="text-align: left;">27.5%</td>
+<td style="text-align: left;">26.1%</td>
+<td style="text-align: left;">34.1%</td>
+<td style="text-align: left;">29%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-caption="Study 2: Proportion of participants in each accuracy level, colored by reference class. A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance.">
+<div class="cell-output-display">
+<div id="fig-s2-plot" class="quarto-float quarto-figure quarto-figure-center anchored" width="672">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s2-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s2-plot-1.png" id="fig-s2-plot" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s2-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-caption="Study 2: Proportion of participants in each accuracy level, colored by reference class, and seprated in facets based on the levels of reduction goal, and rounding.  A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance.">
+<div class="cell-output-display">
+<div id="fig-s2-plot2" class="quarto-float quarto-figure quarto-figure-center anchored" width="1056">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s2-plot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s2-plot2-1.png" id="fig-s2-plot2" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s2-plot2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="individual-differences" class="level4">
+<h4 class="anchored" data-anchor-id="individual-differences">Individual Differences</h4>
+<div class="cell" data-caption="Study 2: Individual performance in the energy planning task, colored by reference class. The dashed line represents the target reduction goal. Participants are shown along the y axis, those who fall above or below the dashed line have not met the target goal.  The x-axis represents the percent change in energy usage from the prior year.">
+<div class="cell-output-display">
+<div id="fig-s2-indv" class="quarto-float quarto-figure quarto-figure-center anchored" width="1056">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s2-indv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s2-indv-1.png" id="fig-s2-indv" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s2-indv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-caption="Study 2: Respones patterns for a subset of individiual participants. Black points are participant responses, red points are the state average, and blue points are the family average. The x-axis represents the appliance category, and the y-axis represents the energy usage in kWh.">
+<div class="cell-output-display">
+<div id="fig-s2-indv2-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="1056">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s2-indv2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s2-indv2-1.png" id="fig-s2-indv2-1" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s2-indv2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-s2-indv2-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="1056">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-s2-indv2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-s2-indv2-2.png" id="fig-s2-indv2-2" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-s2-indv2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="discusion" class="level2">
 <h2 class="anchored" data-anchor-id="discusion">Discusion</h2>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-canfieldPerceptionsElectricityuseCommunications2017" class="csl-entry" role="listitem">
+Canfield, C., Bruine De Bruin, W., &amp; Wong-Parodi, G. (2017). Perceptions of electricity-use communications: Effects of information, format, and individual differences. <em>Journal of Risk Research</em>, <em>20</em>(9), 1132–1153. <a href="https://doi.org/10.1080/13669877.2015.1121909">https://doi.org/10.1080/13669877.2015.1121909</a>
+</div>
+<div id="ref-memmottSociodemographicDisparitiesEnergy2021" class="csl-entry" role="listitem">
+Memmott, T., Carley, S., Graff, M., &amp; Konisky, D. M. (2021). Sociodemographic disparities in energy insecurity among low-income households before and during the <span>COVID-19</span> pandemic. <em>Nature Energy</em>, <em>6</em>(2), 186–193. <a href="https://doi.org/10.1038/s41560-020-00763-9">https://doi.org/10.1038/s41560-020-00763-9</a>
+</div>
+<div id="ref-reimerNumericCommunicationRisk2015" class="csl-entry" role="listitem">
+Reimer, T., Jones, C., &amp; Skubisz, C. (2015). Numeric <span>Communication</span> of <span>Risk</span>. In <em>The <span>SAGE</span> handbook of risk communication</em> (pp. 167–179).
+</div>
+</div>
 </section>
 
 </main>

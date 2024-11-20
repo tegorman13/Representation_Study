@@ -24,8 +24,13 @@ repo-actions: false
   <a class="btn btn-danger btn-sm mb-1" target="_blank" href="/manuscript/output/rep_study.pdf">
   <i class="fa-solid fa-file-arrow-down"></i>&ensp;PDF <small>(download)</small>
   </a>
+
+  <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/Manuscript/output/manuscript.docx">
+  <iconify-icon inline="" icon="fa6-solid:file-arrow-down"></iconify-icon> &ensp;docx <small>(download)</small>
+  </a>
+  
   
 </p>
 
-<iframe src="/manuscript/output/manuscript.html" frameborder="0" style="overflow:hidden;height:88%;width:100%;border:2px solid #ccc;" height="88%" width="100%" name="manuscript"></iframe>
+<iframe src="/manuscript/output/manuscript.html" frameborder="0" style="overflow:hidden;height:75%;width:95%;border:2px solid #ccc;" height="75%" width="95%" name="manuscript"></iframe>
 ```

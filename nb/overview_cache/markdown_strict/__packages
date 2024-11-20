@@ -23,3 +23,5 @@ flextable
 pander
 wesanderson
 glue
+stringr
+patchwork

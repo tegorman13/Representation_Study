@@ -3,6 +3,9 @@ project:
   output-dir: output
   render: 
   - "manuscript.qmd"
+  - "Manuscript/output/"
+  - "Manuscript/Assets/"
+  - "Manuscript/Assets/figs/"
   #- "manuscript_full.qmd"
 
 execute: 
@@ -11,6 +14,8 @@ execute:
   include: true
   freeze: auto
   cache: true
+  echo: false
+
 
 
 

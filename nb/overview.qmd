@@ -1,15 +1,5 @@
 ---
-title: "Effect of Reference Class on Planning to Conserve"
-author:
-- name: Thomas E. Gorman
-  url: https://tegorman13.github.io/
-  affiliations: 
-  - name:  Communication and Cognition Lab, Purdue University, USA
-    affiliation-url: https://web.ics.purdue.edu/~treimer/
-#lightbox: true
-toc: false
-code-fold: true
-code-tools: true
+title: "Results Overview"
 execute:
   #echo: false
   warning: false
@@ -31,14 +21,20 @@ format:
 
 ```{r}
 
-pacman::p_load(dplyr,purrr,tidyr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,
-               ggplot2,gt,knitr,kableExtra,ggh4x,lme4,flextable,pander)
+pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,ggplot2,gt,knitr,kableExtra,ggh4x,patchwork,lme4,flextable,pander)
+
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
 walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
 theme_set(theme_nice())
 
-s1 <- readRDS(here::here("data/s1_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds"))))
-s2_long <- readRDS(here::here("data/s2_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds"))))
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 state_code_map <- c(
   "CAL" = "California",
@@ -64,7 +60,18 @@ lookup_code <- function(state) {
 
 
 
+
+
+### Study 1 Subject Counts
+
 ```{r}
+#| label: tbl-s1-counts
+# total subjects
+n_s1 <- s1 |> ungroup() |> summarise(n=n_distinct(id))
+n_s1_removed <-  readRDS(here::here("data/s1_discrep_ids.rds")) |> length()
+
+print(paste("Study 1: Total subjects:", n_s1$n, "Removed subjects:", n_s1_removed))
+
 
 
 s1 |> group_by(refClass) |> 
@@ -102,7 +109,15 @@ prop.table(xtabs(~refClass+state,s1)) |> kable()
 
 
 ### Study 2 - Subject counts 
+
+
 ```{r}
+
+n_s2 <- s2_long |> ungroup() |> summarise(n=n_distinct(id))
+n_s2_removed <-  readRDS(here::here("data/s2_discrep_ids.rds")) |> length()
+
+print(paste("Study 2: Total subjects:", n_s2$n, "Removed subjects:", n_s2_removed))
+
 
 
 s2_long |> group_by(refClass) |>
@@ -196,7 +211,7 @@ summarise(
 
 
 
-### Study 2
+### Study 2 Performance
 
 ```{r}
 
@@ -338,14 +353,357 @@ s2_agg1 |> group_by(id, pct_goal,rounded,refClass) |>
 
 
 
+## Group comparison via proportions
+
+### Study 1
+
+```{r}
+#| label: tbl-s1-agg
+
+s1_agg <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                close_match = abs_error <= 0.03) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+  
+
+
+
+# s1_agg |> arrange(id,accuracy_level) |> 
+#   select(id,refClass,state,block,plan,total_kWh,orig_kWh,pct_change,accuracy_level,n_change,matched_goal,error,abs_error) |> print(n=20)
+
+observed_props <- s1_agg |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  pivot_wider(
+    names_from = accuracy_level,
+    values_from = c(n, prop)
+  )
+
+
+prop_acc_s1 <- s1_agg %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    group_by(refClass) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+
+
+# compute percentage of subjects per accuracy level per group
+observed_props_s1 <- s1_agg |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" ), pct_grp=paste0(round(prop*100,1), "%")) |> ungroup()
+
+observed_props_s1 |> 
+  mutate(n_total=sum(n)/4) |> 
+  group_by(accuracy_level) |>
+  mutate(ns=sum(n)/4) |> 
+  mutate(Total = paste0(round(ns/n_total*100,1), "%")) |>
+  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp, "Combined Groups %" =Total) |>
+  pivot_wider(
+    names_from = 'Reference Class',
+    values_from = c('% in Group')
+  ) |> relocate("Combined Groups %" , .after=last_col()) |> 
+  pander::pandoc.table(caption="Study 1: Proportion of participants per accuracy level by condition")
+
+
+
+# observed_props_s1 |> 
+#   select('Reference'=refClass, 'Accuracy Level'=accuracy_level, 'n (% group)'=n_prop) |>
+#   pivot_wider(
+#     names_from = 'Accuracy Level',
+#     values_from = c('n (% group)')
+#   ) 
+
+
+# % of accuracy_level
+prop_acc_s1 <- s1_agg %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    group_by(accuracy_level) |>
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+# % of entire sample 
+prop_acc_s1 <- s1_agg %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    ungroup() |> 
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+
+```
+
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| label: tbl-s1-interactive
+
+
+
+s1_agg4 |> 
+    DT::datatable(extensions = 'Buttons',
+    options = list(
+       dom = 'Blfrtip',
+       buttons = list('copy', 'csv', 'excel', 'pdf', 'print'),
+      pageLength = 25,
+      autoWidth = TRUE
+    ),
+    filter = 'top', caption="Exp 1. Participant global averages") 
+
+
+s1_agg |> 
+  select(id,refClass,calc,state,plan,pct_change,accuracy_level,n_change,matched_goal,abs_error,total_kWh,orig_kWh) |> 
+    group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    mutate(mean_abs_error=mean(abs_error), .after=abs_error) |> 
+    mutate(across(where(is.numeric), \(x) round(x, 3))) %>%
+    DT::datatable(extensions = 'Buttons',
+    options = list(
+       dom = 'Blfrtip',
+       buttons = list('copy', 'csv', 'excel', 'pdf', 'print'),
+      pageLength = 25,
+      autoWidth = TRUE
+    ),
+    filter = 'top', caption="Exp 1. Participant trial level performance") 
+
+
+
+s1_agg |> filter(id==124) |> 
+  select(id,refClass,state,block,plan,total_kWh,orig_kWh,pct_change,accuracy_level,n_change,matched_goal,abs_error) |> 
+  group_by(id) |> mutate(mean_abs_error=mean(abs_error), .after=abs_error) |> 
+  pander::pandoc.table(caption="Study 1: Example of participant performance (sbj 124")
+
+
+```
+
+:::
+
+
+
+
+### Study 2
+
+```{r}
+#| label: tbl-s2-agg
+#| fig-width: 12
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+                error = pct_change - pct,
+                abs_error = abs(error)) |> 
+      ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+  
+
+
+
+# s1_agg |> arrange(id,accuracy_level) |> 
+#   select(id,refClass,state,block,plan,total_kWh,orig_kWh,pct_change,accuracy_level,n_change,matched_goal,error,abs_error) |> print(n=20)
+
+
+# compute percentage of subjects per accuracy level per group
+observed_props <- s2_agg1 |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" )) 
+
+
+# confirm that the proportions are with respect to the total number of subjects in each refClass
+# 74/.268 = 276; 69*4=276;  38/.138=275;  .435 + .0797 + .21 + .275 = 1
+
+
+# compute percentage of subjects per accuracy level per group
+observed_props_s2 <- s2_agg1 |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" ), pct_grp=paste0(round(prop*100,1), "%")) |> ungroup()
+
+observed_props_s2 |> 
+  mutate(n_total=sum(n)/4) |> 
+  group_by(accuracy_level) |>
+  mutate(ns=sum(n)/4) |> 
+  mutate(Total = paste0(round(ns/n_total*100,1), "%")) |>
+  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp, "Combined Groups %" =Total) |>
+  pivot_wider(
+    names_from = 'Reference Class',
+    values_from = c('% in Group')
+  ) |> relocate("Combined Groups %" , .after=last_col()) |> 
+  pander::pandoc.table(caption="Study 1: Proportion of participants per accuracy level by condition")
+
+
+
+observed_props_s2 |>  select('Reference'=refClass, 'Accuracy Level'=accuracy_level, 'n (% group)'=n_prop) |>
+  pivot_wider(
+    names_from = 'Accuracy Level',
+    values_from = c('n (% group)')
+  )
+
+
+# % of accuracy_level
+prop_acc_s2 <- s2_agg1 %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    group_by(accuracy_level) |>
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+# % of entire sample 
+prop_combo_s2 <- s2_agg1 %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    group_by(refClass) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+
+
+
+ 
+```
+
+
+## Study 2 proportion in accuracy plots
+
+```{r}
+
+
+
+
+p1 <- ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(labels = scales::percent) +
+    labs(title = "Within-Group %'s per Accuracy bin",
+        x = "Accuracy Level",
+        y = "Percentage of Participants",
+        fill = "Reference Class") +
+    theme_minimal() 
+
+ p2 <- ggplot(data = s2_agg1, aes(x = accuracy_level, fill = refClass)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Combined Participant %'s per bin",
+       x = "Accuracy Level",
+       y = "Percentage of Participants",
+       fill = "Reference Class") +
+  theme_minimal()
+ 
+ 
+
+ p3 <- ggplot(prop_acc_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(labels = scales::percent) +
+    labs(title = "Aggregate by Accuracy Bin",
+        x = "Accuracy Level",
+        y = "Percentage of Participants",
+        fill = "Reference Class") +
+    theme_minimal() 
+ 
+ # combined plots, and unify axes and legends
+{ p1 + p2 +p3 + plot_layout(guides = 'collect') & theme(legend.position = 'right') } + plot_annotation(title = "Study 2: Accuracy Level Proportions")
+
+```
+
+
+
+
+
 ## Analysis
 
 ### Study 1
 
 ```{r}
+#| eval: false
+#| include: false
+
+
+pacman::p_load(brms,rstan,bayestestR,emmeans,tidybayes,modelsummary)
 
 # binomial regression on trial level data
-
 s1_br <- brm(
     matched_goal ~ refClass + (1|id),
     data = s1_agg,
@@ -422,6 +780,9 @@ s1_agg <- s1 |>
 ## Ordinal Regression alternative
 
 ```{r}
+#| eval: false
+#| include: false
+
 
 s1_agg <- s1 |> 
     filter(appliance !="Total kWh") |> 
@@ -601,6 +962,9 @@ ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = .category)) +
 #### Frequentist alternative
 
 ```{r}
+#| eval: false
+#| include: false
+
 s1_glm <- glm(matched_goal ~ refClass, data = s1_agg, family = binomial())
 summary(s1_glm)
 
@@ -616,7 +980,8 @@ chisq.test(s1_table)
 ### Study 2
 
 ```{r}
-
+#| eval: false
+#| include: false
 # binomial regression on trial level data
 
 s2_br_3 <- brm(
@@ -675,7 +1040,9 @@ mr_s2_3_2 |>
 
 
 ```{r}
-
+#| eval: false
+#| include: false
+#| 
 s2_glm <- glm(matched_goal ~ refClass + rounded + pct_goal, data = s2_agg1, family = binomial())
 summary(s2_glm)
 
