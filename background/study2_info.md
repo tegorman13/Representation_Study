@@ -1,4 +1,6 @@
-
+---
+date: today
+---
 
 
 ### Scenario 1

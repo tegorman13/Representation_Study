@@ -1,3 +1,7 @@
+---
+date: today
+---
+
 # Relaunch of Frequency and Probability Study
 
 

@@ -1,0 +1,370 @@
+---
+title: "MPA abstract analysis"
+execute:
+    warning: false
+format:
+    html: 
+        grid:
+            sidebar-width: 220px
+            body-width: 1200px
+            margin-width: 170px
+            gutter-width: 1.0rem
+    hugo-md:
+        include: true
+        html-math-method: mathjax
+        output-file: mpa_hugo.md
+    gfm:
+        echo: true
+        output-file: mpa_gfm.md
+---
+
+
+```{r}
+pacman::p_load(dplyr,purrr,tidyr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,
+               ggplot2,gt,knitr,kableExtra,ggh4x,lme4,flextable,pander)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
+theme_set(theme_nice())
+options(brms.backend="cmdstanr",mc.cores=4)
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds"))))
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds"))))
+```
+
+
+
+## Fit Ordinal model accuracy_level ~ refClass + (1|id) + (1|state)
+```{r}
+
+ordinal_model_s1 <- brm(
+    accuracy_level ~ refClass + (1|id) + (1|state),
+    data = s1_agg,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 2000,
+    control = list(adapt_delta = 0.99), 
+    prior = c(prior(normal(0, 2), class = "Intercept"), 
+                prior(normal(0, 1.5), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal3.rds')) 
+)
+
+summary(ordinal_model_s1)
+
+
+pp_check(ordinal_model_s1)
+
+describe_posterior(ordinal_model_s1, centrality = "Mode") |> 
+    filter(stringr::str_detect(Parameter, "b_")) |> 
+    mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
+    mutate(across(where(is.numeric), round, 3)) |> 
+    kable(booktabs = TRUE)
+
+# Get predicted probabilities
+pred_summary <- ordinal_model_s1 |>
+    epred_draws(newdata = data.frame(refClass = c("kWh", "Percentage", "USD")),
+                ndraws = 1000, re_formula = NA) |>
+    group_by(refClass, .category) |>
+    summarise(
+        mean_prob = mean(.epred),
+        lower_ci = quantile(.epred, 0.025),
+        upper_ci = quantile(.epred, 0.975)
+    )
+pred_summary |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy")
+
+
+# Convert log-odds to odds ratios
+posterior_samples <- as.data.frame(ordinal_model_s1)
+odds_ratios <- data.frame(
+  Percentage_vs_kWh = exp(posterior_samples$b_refClassPercentage),
+  USD_vs_kWh = exp(posterior_samples$b_refClassUSD)
+)
+
+# Calculate summary statistics
+odds_ratio_summary <- data.frame(
+    comparison = c("Percentage vs kWh", "USD vs kWh"),
+    odds_ratio = c(mean(odds_ratios$Percentage_vs_kWh),
+                    mean(odds_ratios$USD_vs_kWh)),
+    ci_lower = c(quantile(odds_ratios$Percentage_vs_kWh, 0.025),
+                quantile(odds_ratios$USD_vs_kWh, 0.025)),
+    ci_upper = c(quantile(odds_ratios$Percentage_vs_kWh, 0.975),
+                quantile(odds_ratios$USD_vs_kWh, 0.975))
+)
+
+
+odds_ratio_summary |> kable()
+# |comparison        | odds_ratio| ci_lower| ci_upper|
+# |:-----------------|----------:|--------:|--------:|
+# |Percentage vs kWh |        2.3|     0.62|      6.2|
+# |USD vs kWh        |       14.1|     4.08|     38.0|
+
+
+odds_ratio_summary |> pander::pandoc.table(caption="Study 1: Odds ratios of accuracy")
+
+
+# Plot predicted probabilities
+ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = .category)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci),
+                    position = position_dodge(width = 0.9), width = 0.2) +
+    labs(y = "Predicted Probability", x = "Reference Class", fill = "Accuracy Level") +
+    ggtitle("Study 1: Predicted Probabilities of Accuracy Level by Reference Class") +
+    theme_minimal()
+
+```
+
+
+|comparison        | odds_ratio| ci_lower| ci_upper|
+|:-----------------|----------:|--------:|--------:|
+|Percentage vs kWh |        2.3|     0.62|      6.2|
+|USD vs kWh        |       14.1|     4.08|     38.0|
+
+
+
+
+
+# Study 2
+
+```{r}
+
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id, state,refClass,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+                error = pct_change - pct,
+                abs_error = abs(error)) |> 
+      ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+
+
+
+
+ggplot(data = s2_agg1, aes(x = accuracy_level, fill = refClass)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Accuracy Levels by Reference Class",
+       x = "Accuracy Level",
+       y = "Percentage of Participants",
+       fill = "Reference Class") +
+  theme_minimal()
+
+observed_props2 <- s2_agg1 |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  pivot_wider(
+    names_from = accuracy_level,
+    values_from = c(n, prop)
+  )
+
+  # Calculate proportions
+prop_acc_s2 <- s2_agg1 %>%
+    group_by(refClass, accuracy_level) %>%
+    summarise(count = n()) %>%
+    group_by(refClass) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+# Plot
+ggplot(prop_acc_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Distribution of Accuracy Levels by Reference Class",
+        x = "Accuracy Level",
+        y = "Probability",
+        fill = "Reference Class") +
+    theme_minimal() +
+    scale_fill_brewer(palette = "Set1")
+
+
+
+
+ggplot(data = s2_agg1, aes(x = accuracy_level, fill = refClass)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Accuracy Levels by Reference Class",
+       x = "Accuracy Level",
+       y = "Percentage of Participants",
+       fill = "Reference Class") +
+  theme_minimal() + facet_wrap(~rounded+pct_goal)
+
+
+prop4_acc_s2 <- s2_agg1 %>%
+    group_by(refClass, accuracy_level,rounded,pct_goal) %>%
+    summarise(count = n()) %>%
+    group_by(refClass) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+# Plot
+
+
+s2_agg1 %>%
+    group_by( accuracy_level,rounded) %>%
+    summarise(count = n()) %>%
+    group_by(rounded) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+
+ggplot(prop4_acc_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Distribution of Accuracy Levels by Reference Class",
+        x = "Accuracy Level",
+        y = "Probability",
+        fill = "Reference Class") +
+    theme_minimal() +
+    scale_fill_brewer(palette = "Set1") + facet_wrap(~rounded+pct_goal)
+
+
+
+ggplot(prop4_acc_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    labs(title = "Distribution of Accuracy Levels by Reference Class",
+        x = "Accuracy Level",
+        y = "Probability",
+        fill = "Reference Class") +
+    theme_minimal() +
+    scale_fill_brewer(palette = "Set1") 
+
+
+```
+
+
+# no interaction model used in MPA
+```{r}
+
+s2_agg1 <- s2_agg1 %>%
+  mutate(
+    refClass = factor(refClass, levels = c("kWh", "Percentage", "USD")),
+    rounded = factor(rounded, levels = c("Not Rounded", "Rounded")),
+    pct_goal = factor(pct_goal, levels = c("10%", "15%"))
+  )
+
+
+
+ordinal_model_s2_probit <- brm(
+  accuracy_level ~ refClass +rounded+pct_goal + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("probit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 2), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 2), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_op.rds')) # Cache for efficiency
+)
+
+summary(ordinal_model_s2_probit)
+# Regression Coefficients:
+#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept[1]          -1.12      0.38    -1.88    -0.37 1.01      686     1070
+# Intercept[2]          -0.28      0.38    -1.04     0.47 1.01      693     1085
+# Intercept[3]           1.81      0.38     1.04     2.56 1.01      702     1248
+# refClassPercentage     0.58      0.45    -0.32     1.49 1.01      446      741
+# refClassUSD            1.19      0.47     0.29     2.11 1.01      583     1087
+# roundedRounded        -0.37      0.10    -0.57    -0.17 1.00     5613     2928
+# pct_goal15%           -0.26      0.10    -0.46    -0.06 1.00     5136     2842
+
+pred_summary_s2 <- ordinal_model_s2_probit %>%
+  epred_draws(newdata = s2_agg1, re_formula = NA) %>%
+  group_by(refClass, rounded, pct_goal, .category) %>%
+  summarise(
+    mean_prob = mean(.epred),
+    lower_ci = quantile(.epred, 0.025),
+    upper_ci = quantile(.epred, 0.975),
+    .groups = "drop"
+  )
+
+pred_summary_s2 |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy level by reference class")
+
+
+# Extract posterior samples
+posterior_samples_s2 <- as.data.frame(ordinal_model_s2_probit)
+
+
+odds_ratios_s2 <- posterior_samples_s2 %>%
+    transmute(
+        refClass_Percentage_vs_kWh = exp(b_refClassPercentage),
+        refClass_USD_vs_kWh = exp(b_refClassUSD),
+        rounded_Yes_vs_No = exp(b_roundedRounded),
+        pct_goal_15_vs_10 = exp(`b_pct_goal15%`)  # Note the backticks here
+    )
+
+
+# Calculate summary statistics
+odds_ratio_summary_s2 <- data.frame(
+    comparison = c("Percentage vs kWh", "USD vs kWh", "Rounded vs Not", "15% Goal vs 10% Goal"),
+    odds_ratio = c(
+        mean(odds_ratios_s2$refClass_Percentage_vs_kWh),
+        mean(odds_ratios_s2$refClass_USD_vs_kWh),
+        mean(odds_ratios_s2$rounded_Yes_vs_No),
+        mean(odds_ratios_s2$pct_goal_15_vs_10)
+    ),
+    ci_lower = c(
+        quantile(odds_ratios_s2$refClass_Percentage_vs_kWh, 0.025),
+        quantile(odds_ratios_s2$refClass_USD_vs_kWh, 0.025),
+        quantile(odds_ratios_s2$rounded_Yes_vs_No, 0.025),
+        quantile(odds_ratios_s2$pct_goal_15_vs_10, 0.025)
+    ),
+    ci_upper = c(
+        quantile(odds_ratios_s2$refClass_Percentage_vs_kWh, 0.975),
+        quantile(odds_ratios_s2$refClass_USD_vs_kWh, 0.975),
+        quantile(odds_ratios_s2$rounded_Yes_vs_No, 0.975),
+        quantile(odds_ratios_s2$pct_goal_15_vs_10, 0.975)
+    )
+)
+
+#             comparison odds_ratio ci_lower ci_upper
+# 1    Percentage vs kWh       1.99     0.73     4.43
+# 2           USD vs kWh       3.69     1.33     8.29
+# 3       Rounded vs Not       0.70     0.57     0.84
+# 4 15% Goal vs 10% Goal       0.78     0.63     0.94
+
+odds_ratio_summary_s2 |> kable()
+
+odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of accuracy")
+
+
+
+ggplot(pred_summary, 
+        aes(x = .category, y = mean_prob, fill = refClass )) +
+    geom_col(position = position_dodge(width = 0.8)) +
+    geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), 
+                    position = position_dodge(width = 0.8)) +
+    labs(x = "Reference Class", 
+        y = "Predicted Probability",
+        fill = "Accuracy Level",
+        title = "Predicted Probabilities of Accuracy Levels by Reference Class") +
+    scale_fill_brewer(palette = "RdYlBu") +
+    theme_minimal() 
+
+
+```
+
+
+|comparison           | odds_ratio| ci_lower| ci_upper|
+|:--------------------|----------:|--------:|--------:|
+|Percentage vs kWh    |       1.99|     0.73|     4.43|
+|USD vs kWh           |       3.69|     1.33|     8.29|
+|Rounded vs Not       |       0.70|     0.57|     0.84|
+|15% Goal vs 10% Goal |       0.78|     0.63|     0.94|

@@ -1,3 +1,7 @@
+---
+date: today
+---
+
 
 # Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations
 

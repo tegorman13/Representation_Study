@@ -1,0 +1,13 @@
+---
+title: "Analysis"
+# author:
+# - name: Thomas Gorman
+#   url: https://tegorman13.github.io/
+listing:
+    id: analysis
+    contents: ../nb/*.qmd
+    type: grid
+    exclude: 
+        title: "Analysis"
+repo-actions: false
+---

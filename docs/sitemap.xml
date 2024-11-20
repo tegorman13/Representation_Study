@@ -1,71 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study_stim.html</loc>
-    <lastmod>2024-11-03T00:04:11.526Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/mpa/reqs.html</loc>
+    <lastmod>2024-11-19T19:20:41.594Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study2_info.html</loc>
-    <lastmod>2024-10-03T22:08:12.541Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/background/study_stim.html</loc>
+    <lastmod>2024-11-20T08:22:15.879Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/initial_slides.html</loc>
-    <lastmod>2024-11-03T00:04:18.888Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/background/study2_info.html</loc>
+    <lastmod>2024-11-20T08:22:32.646Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study2.html</loc>
-    <lastmod>2024-11-04T03:51:40.587Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/background/initial_slides.html</loc>
+    <lastmod>2024-11-20T08:21:52.630Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study1_info.html</loc>
-    <lastmod>2024-10-31T03:59:15.442Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/nb/study2.html</loc>
+    <lastmod>2024-11-20T08:14:42.488Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study_info.html</loc>
-    <lastmod>2024-11-02T23:59:01.181Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/nb/results.html</loc>
+    <lastmod>2024-11-20T06:05:13.968Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/index.html</loc>
-    <lastmod>2024-11-04T06:02:49.783Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/nb/analysis.html</loc>
+    <lastmod>2024-11-20T08:36:57.249Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/mpa/mpa_analysis.html</loc>
+    <lastmod>2024-11-20T06:05:15.405Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/misc/ordinal.html</loc>
+    <lastmod>2024-11-20T06:05:16.094Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/Representation_Study/misc/discrep.html</loc>
-    <lastmod>2024-11-04T07:00:26.059Z</lastmod>
+    <lastmod>2024-11-20T08:19:08.251Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/study1.html</loc>
-    <lastmod>2024-11-03T01:27:52.247Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/background/bg.html</loc>
+    <lastmod>2024-11-20T08:37:09.203Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/index.html</loc>
+    <lastmod>2024-11-20T08:37:05.133Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/Representation_Study/misc/indiv.html</loc>
-    <lastmod>2024-11-05T01:26:04.873Z</lastmod>
+    <lastmod>2024-11-20T08:19:34.639Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/mpa/reqs.html</loc>
-    <lastmod>2024-11-06T03:05:56.348Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/misc/outlier.html</loc>
+    <lastmod>2024-11-20T08:19:33.273Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/background/study_info.html</loc>
-    <lastmod>2024-11-02T23:59:01.181Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/mpa/supp.html</loc>
+    <lastmod>2024-11-19T19:17:18.731Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/nb/overview.html</loc>
+    <lastmod>2024-11-20T06:05:14.673Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/nb/study1.html</loc>
+    <lastmod>2024-11-20T08:06:42.251Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tegorman13.github.io/Representation_Study/paper.html</loc>
+    <lastmod>2024-11-20T08:29:53.400Z</lastmod>
   </url>
   <url>
     <loc>https://tegorman13.github.io/Representation_Study/background/study1_info.html</loc>
     <lastmod>2024-10-31T03:59:15.442Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/background/initial_slides.html</loc>
-    <lastmod>2024-11-06T03:09:09.318Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/background/study_info.html</loc>
+    <lastmod>2024-11-20T08:22:21.270Z</lastmod>
   </url>
   <url>
-    <loc>https://tegorman13.github.io/Representation_Study/background/study2_info.html</loc>
-    <lastmod>2024-11-05T22:16:31.625Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/background/study_stim.html</loc>
-    <lastmod>2024-11-03T00:04:11.526Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tegorman13.github.io/Representation_Study/overview.html</loc>
-    <lastmod>2024-11-06T10:47:46.679Z</lastmod>
+    <loc>https://tegorman13.github.io/Representation_Study/mpa/mpa_abstract.html</loc>
+    <lastmod>2024-11-19T19:25:00.025Z</lastmod>
   </url>
 </urlset>

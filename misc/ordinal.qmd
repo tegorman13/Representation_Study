@@ -1,15 +1,5 @@
 ---
 title: "Ordinal Models"
-author:
-- name: Thomas E. Gorman
-  url: https://tegorman13.github.io/
-  affiliations: 
-  - name:  Communication and Cognition Lab, Purdue University, USA
-    affiliation-url: https://web.ics.purdue.edu/~treimer/
-#lightbox: true
-toc: false
-code-fold: true
-code-tools: true
 execute:
   #echo: false
   warning: false
@@ -33,20 +23,16 @@ format:
 
 ```{r}
 
-pacman::p_load(dplyr,purrr,tidyr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,
+pacman::p_load(dplyr,purrr,tidyr,here,tibble,stringr,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,
                ggplot2,gt,knitr,kableExtra,ggh4x,lme4,flextable,pander)
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
-walk(c("fun_plot"), ~ source(here::here(paste0("Scripts/", .x, ".R"))))
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
 theme_set(theme_nice())
 options(brms.backend="cmdstanr",mc.cores=4)
 
 
 s1 <- readRDS(here::here("data/s1_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds"))))
 s2_long <- readRDS(here::here("data/s2_processed.rds")) |> filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds"))))
-
-
-
-
 ```
 
 
@@ -157,8 +143,6 @@ describe_posterior(ordinal_model_s1, centrality = "Mode") |>
   kable(booktabs = TRUE)
 
 
-library(tidybayes)
-
 # Get predicted probabilities
 pred_summary <- ordinal_model_s1 |>
     epred_draws(newdata = data.frame(refClass = c("kWh", "Percentage", "USD")),
@@ -169,65 +153,7 @@ pred_summary <- ordinal_model_s1 |>
         lower_ci = quantile(.epred, 0.025),
         upper_ci = quantile(.epred, 0.975)
     )
-pred_summary |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy level by reference class")
-
-ggplot(pred_summary, 
-        aes(x = .category, y = mean_prob, fill = refClass )) +
-    geom_col(position = position_dodge(width = 0.8)) +
-    geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), 
-                    position = position_dodge(width = 0.8)) +
-    labs(x = "Reference Class", 
-        y = "Predicted Probability",
-        fill = "Accuracy Level",
-        title = "Predicted Probabilities of Accuracy Levels by Reference Class") +
-    scale_fill_brewer(palette = "RdYlBu") +
-    theme_minimal() 
-
-ggplot(pred_summary, 
-        aes(x = refClass, y = mean_prob, fill = .category )) +
-    geom_col(position = position_dodge(width = 0.8)) +
-    geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), 
-                    position = position_dodge(width = 0.8)) +
-    labs(x = "Reference Class", 
-        y = "Predicted Probability",
-        fill = "Accuracy Level",
-        title = "Predicted Probabilities of Accuracy Levels by Reference Class") +
-    scale_fill_brewer(palette = "RdYlBu") +
-    theme_minimal() 
-
-
-
-# Calculate cumulative probabilities
-cum_probs <- pred_summary |>
-  group_by(refClass) |>
-  arrange(refClass, .category) |>
-  mutate(
-    cum_prob = cumsum(mean_prob),
-    cum_lower = cumsum(lower_ci),
-    cum_upper = cumsum(upper_ci)
-  )
-
-ggplot(cum_probs, 
-    aes(x = refClass, y = cum_prob, color = .category)) +
-geom_point(size = 3,position=position_dodge()) +
-geom_errorbar(aes(ymin = cum_lower, ymax = cum_upper), 
-            width = 0.2,position=position_dodge()) +
-labs(x = "Reference Class",
-    y = "Cumulative Probability",
-    color = "Accuracy Level",
-    title = "Cumulative Probabilities of Accuracy Levels") +
-theme_minimal() +
-scale_color_brewer(palette = "Blues") 
-
-
-summary_table <- pred_summary |>
-  pivot_wider(
-    names_from = .category,
-    values_from = c(mean_prob, lower_ci, upper_ci)
-  ) |>
-  kable(digits = 3)
-
-print(summary_table)
+pred_summary |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy")
 
 
 # Convert log-odds to odds ratios
@@ -249,6 +175,16 @@ odds_ratio_summary <- data.frame(
 )
 
 
+odds_ratio_summary |> kable()
+# |comparison        | odds_ratio| ci_lower| ci_upper|
+# |:-----------------|----------:|--------:|--------:|
+# |Percentage vs kWh |        2.3|     0.62|      6.2|
+# |USD vs kWh        |       14.1|     4.08|     38.0|
+
+
+odds_ratio_summary |> pander::pandoc.table(caption="Study 1: Odds ratios of accuracy")
+
+
 # Plot predicted probabilities
 ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = .category)) +
   geom_bar(stat = "identity", position = position_dodge()) +
@@ -261,13 +197,19 @@ ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = .category)) +
 ```
 
 
+|comparison        | odds_ratio| ci_lower| ci_upper|
+|:-----------------|----------:|--------:|--------:|
+|Percentage vs kWh |        2.3|     0.62|      6.2|
+|USD vs kWh        |       14.1|     4.08|     38.0|
 
+
+## S1  posterior predictive checks
 
 ```{r}
 
 
 
-bayesplot::color_scheme_set(wes_palettes[1])
+bayesplot::color_scheme_set(wes_palettes[1]$BottleRocket1[1:6])
 
 pp_check(ordinal_model_s1, type = "bars", ndraws = 1000, fatten = 2) +
     scale_x_continuous("y", breaks = 1:7) +
@@ -292,16 +234,23 @@ f <- fitted(ordinal_model_s1,newdata_pred <- expand.grid(
     state = unique(s1_agg$state)
     ))
 
-f |> str()
 
-f <-
-  rbind(
-    f[, , 1],
-    f[, , 2],
-    f[, , 3]
-  ) |> data.frame() |> bind_cols(expand_grid(new_data, Y=1:3))
+# Create new_data with one id and state
+new_data <- expand.grid(
+  refClass = c("kWh", "Percentage", "USD"),
+  id = unique(s1_agg$id)[1],      # Take first id
+  state = unique(s1_agg$state)[1] # Take first state
+)
 
 
+f_df <- as.data.frame.table(f) |>
+  rename(Probability = Freq) |>
+  # Extract Y levels from the Var3 column
+  mutate(Y = str_extract(Var3, "(?<=P\\(Y = ).*(?=\\))")) |>
+  # Join with new_data using crossing instead of bind_cols
+  crossing(new_data) |>
+  # Select and arrange columns as needed
+  select(refClass, id, state, Y, Probability)
 
 ```
 
@@ -540,10 +489,9 @@ ggplot(subject_preds,
 ```
 
 
-```{r}
+## Alt s1 visual of predicted probs
 
-library(tidybayes)
-library(stringr)
+```{r}
 
 predicted_probs_s1 <- ordinal_model_s1 %>%
     # gather draws that contain refClass ("b_refClassPercentage"    "b_refClassUSD"  )
@@ -585,73 +533,10 @@ ggplot(predicted_probs_s1, aes(x = Accuracy_Level, y = Probability, fill = refCl
        fill = "Reference Class") +
   theme_minimal()
 
-
-# Calculate Odds Ratios
-odds_ratios_s1 <- posterior_samples(ordinal_model_s1) %>%
-  mutate(
-    OR_Percentage = exp(`b_refClassPercentage`),
-    OR_USD = exp(`b_refClassUSD`)
-  ) %>%
-  select(OR_Percentage, OR_USD) %>%
-  summarise_all(list(mean = mean, lower = ~ quantile(., 0.025), upper = ~ quantile(., 0.975))) %>%
-  pivot_longer(cols = everything(),
-               names_to = c("Reference Class", ".value"),
-               names_pattern = "OR_(.*)_(.*)") %>%
-  mutate(
-    Reference_Class = case_when(
-      str_detect(name, "Percentage") ~ "Percentage",
-      str_detect(name, "USD") ~ "USD",
-      TRUE ~ "kWh"
-    )
-  )
-
-odds_ratios_s1 <- posterior_summary(ordinal_model_s1, prob = 0.95) %>%
-  as.data.frame() %>%
-  rownames_to_column(var = "Term") %>%
-  filter(str_detect(Term, "refClass")) %>%
-  mutate(
-    OR = exp(Estimate),
-    lower = exp(`Q2.5`),
-    upper = exp(`Q97.5`)
-  ) %>%
-  select(Term, OR, lower, upper)
-
-# Display Odds Ratios
-odds_ratios_s1 %>%
-  rename(`Reference Class` = Term,
-         `Odds Ratio` = OR,
-         `95% CrI Lower` = lower,
-         `95% CrI Upper` = upper) %>%
-  mutate(`Reference Class` = str_replace(`Reference Class`, "refClass", "")) %>%
-  kable(booktabs = TRUE, caption = "Study 1: Odds Ratios for Matching Goals by Reference Class") %>%
-  kable_styling(full_width = FALSE)
-
-
-library(caret)
-
-# Create confusion matrix
-observed <- s1_agg$accuracy_level
-predicted <- predict(ordinal_model_s1, newdata = s1_agg, type = "response")
-predicted_class <- apply(predicted, 1, function(x) which.max(x))
-
-confusion_matrix <- confusionMatrix(
-  factor(predicted_class, levels = 1:4, labels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error")),
-  factor(observed, levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"))
-)
-
-# Display Confusion Matrix
-confusion_matrix$table %>%
-  as.data.frame.matrix() %>%
-  rownames_to_column(var = "Predicted") %>%
-  kable(booktabs = TRUE, caption = "Study 1: Confusion Matrix for Matched Goals") %>%
-  kable_styling(full_width = FALSE)
-
-
-
-
 ```
 
 
+## s1 probit 
 
 ```{r}
 
@@ -685,8 +570,7 @@ waic(ordinal_model_s1)
 waic(ordinal_model_s1_prb)
 
 # compare
-loo_compare(loo(ordinal_model_s1), loo(ordinal_model_s1_prb))
-compare_models(ordinal_model_s1, ordinal_model_s1_prb)
+rstanarm::loo_compare(loo_logit, loo_probit)
 
 
 # Obtain predicted probabilities
@@ -729,6 +613,12 @@ predicted_probs_s1 <- ordinal_model_s1_prb %>%
     theme_minimal()
 
 
+pred_data <- data.frame(
+  refClass = c("kWh", "Percentage", "USD"),
+  id = unique(s1_agg$id)[1],      # Take first id
+  state = unique(s1_agg$state)[1] # Take first state
+)
+
 # Predicted probabilities from logit model
 pred_probs_logit <- posterior_epred(ordinal_model_s1, newdata = pred_data, re_formula = NA)
 
@@ -754,8 +644,6 @@ print(comparison)
 
 
 # Study 2
-
-
 
 ```{r}
 
@@ -967,12 +855,14 @@ odds_ratio_summary_s2 <- data.frame(
     )
 )
 
-odds_ratio_summary_s2
 #             comparison odds_ratio ci_lower ci_upper
 # 1    Percentage vs kWh       1.99     0.73     4.43
 # 2           USD vs kWh       3.69     1.33     8.29
 # 3       Rounded vs Not       0.70     0.57     0.84
 # 4 15% Goal vs 10% Goal       0.78     0.63     0.94
+
+odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of accuracy")
+
 
 
 ggplot(pred_summary, 
@@ -991,9 +881,10 @@ ggplot(pred_summary,
 ```
 
 
+## Interaction model 
 
 ```{r}
-
+#| eval: false
 
 # Fit the full model with interactions
 ordinal_model_s2 <- brm(
@@ -1007,8 +898,11 @@ ordinal_model_s2 <- brm(
     prior(normal(0, 2), class = "Intercept"),
     prior(normal(0, 2), class = "b")
   ),
-  file = "s2_ordinal_full6.rds"
+  file = paste0(here::here("data/model_cache","s2_ordinal_full6.rds"))
 )
+
+
+
 
 
 
@@ -1021,6 +915,59 @@ pred_summary_s2 <- ordinal_model_s2 %>%
     upper_ci = quantile(.epred, 0.975),
     .groups = "drop"
   )
+
+# |refClass   |rounded     |pct_goal |.category      | mean_prob| lower_ci| upper_ci|
+# |:----------|:-----------|:--------|:--------------|---------:|--------:|--------:|
+# |kWh        |Not Rounded |10%      |Exact match    |      0.09|     0.02|     0.25|
+# |kWh        |Not Rounded |10%      |0.01-2% error  |      0.20|     0.06|     0.36|
+# |kWh        |Not Rounded |10%      |2.01-15% error |      0.64|     0.38|     0.77|
+# |kWh        |Not Rounded |10%      |Over 15% error |      0.07|     0.01|     0.19|
+# |kWh        |Not Rounded |15%      |Exact match    |      0.19|     0.05|     0.44|
+# |kWh        |Not Rounded |15%      |0.01-2% error  |      0.29|     0.14|     0.41|
+# |kWh        |Not Rounded |15%      |2.01-15% error |      0.49|     0.22|     0.73|
+# |kWh        |Not Rounded |15%      |Over 15% error |      0.03|     0.01|     0.09|
+# |kWh        |Rounded     |10%      |Exact match    |      0.22|     0.06|     0.49|
+# |kWh        |Rounded     |10%      |0.01-2% error  |      0.31|     0.16|     0.41|
+# |kWh        |Rounded     |10%      |2.01-15% error |      0.45|     0.18|     0.71|
+# |kWh        |Rounded     |10%      |Over 15% error |      0.02|     0.00|     0.07|
+# |kWh        |Rounded     |15%      |Exact match    |      0.28|     0.07|     0.61|
+# |kWh        |Rounded     |15%      |0.01-2% error  |      0.32|     0.18|     0.42|
+# |kWh        |Rounded     |15%      |2.01-15% error |      0.38|     0.11|     0.68|
+# |kWh        |Rounded     |15%      |Over 15% error |      0.02|     0.00|     0.06|
+# |Percentage |Not Rounded |10%      |Exact match    |      0.04|     0.01|     0.13|
+# |Percentage |Not Rounded |10%      |0.01-2% error  |      0.12|     0.03|     0.28|
+# |Percentage |Not Rounded |10%      |2.01-15% error |      0.70|     0.53|     0.78|
+# |Percentage |Not Rounded |10%      |Over 15% error |      0.14|     0.03|     0.38|
+# |Percentage |Not Rounded |15%      |Exact match    |      0.10|     0.02|     0.29|
+# |Percentage |Not Rounded |15%      |0.01-2% error  |      0.21|     0.06|     0.37|
+# |Percentage |Not Rounded |15%      |2.01-15% error |      0.63|     0.34|     0.77|
+# |Percentage |Not Rounded |15%      |Over 15% error |      0.07|     0.01|     0.20|
+# |Percentage |Rounded     |10%      |Exact match    |      0.15|     0.03|     0.40|
+# |Percentage |Rounded     |10%      |0.01-2% error  |      0.26|     0.09|     0.39|
+# |Percentage |Rounded     |10%      |2.01-15% error |      0.55|     0.24|     0.75|
+# |Percentage |Rounded     |10%      |Over 15% error |      0.04|     0.01|     0.13|
+# |Percentage |Rounded     |15%      |Exact match    |      0.13|     0.03|     0.35|
+# |Percentage |Rounded     |15%      |0.01-2% error  |      0.25|     0.09|     0.39|
+# |Percentage |Rounded     |15%      |2.01-15% error |      0.57|     0.28|     0.76|
+# |Percentage |Rounded     |15%      |Over 15% error |      0.05|     0.01|     0.14|
+# |USD        |Not Rounded |10%      |Exact match    |      0.02|     0.00|     0.07|
+# |USD        |Not Rounded |10%      |0.01-2% error  |      0.07|     0.01|     0.19|
+# |USD        |Not Rounded |10%      |2.01-15% error |      0.67|     0.42|     0.78|
+# |USD        |Not Rounded |10%      |Over 15% error |      0.24|     0.06|     0.56|
+# |USD        |Not Rounded |15%      |Exact match    |      0.06|     0.01|     0.18|
+# |USD        |Not Rounded |15%      |0.01-2% error  |      0.14|     0.03|     0.32|
+# |USD        |Not Rounded |15%      |2.01-15% error |      0.68|     0.47|     0.78|
+# |USD        |Not Rounded |15%      |Over 15% error |      0.13|     0.02|     0.37|
+# |USD        |Rounded     |10%      |Exact match    |      0.05|     0.01|     0.18|
+# |USD        |Rounded     |10%      |0.01-2% error  |      0.13|     0.03|     0.32|
+# |USD        |Rounded     |10%      |2.01-15% error |      0.68|     0.47|     0.78|
+# |USD        |Rounded     |10%      |Over 15% error |      0.13|     0.02|     0.37|
+# |USD        |Rounded     |15%      |Exact match    |      0.04|     0.01|     0.14|
+# |USD        |Rounded     |15%      |0.01-2% error  |      0.11|     0.02|     0.28|
+# |USD        |Rounded     |15%      |2.01-15% error |      0.69|     0.50|     0.78|
+# |USD        |Rounded     |15%      |Over 15% error |      0.15|     0.03|     0.41|
+
+
 
 # Extract posterior samples
 posterior_samples_s2 <- as.data.frame(ordinal_model_s2)
@@ -1056,17 +1003,31 @@ odds_ratio_summary_s2 <- data.frame(
     )
 )
 
-odds_ratio_summary_s2
+#  odds_ratio_summary_s2
+#             comparison odds_ratio ci_lower ci_upper
+# 1    Percentage vs kWh       3.31     0.43     11.3
+# 2           USD vs kWh       6.64     0.84     25.2
+# 3       Rounded vs Not       0.41     0.09      1.1
+# 4 15% Goal vs 10% Goal       0.51     0.12      1.5
+
+
+odds_ratio_summary_s2 |> kable()
+
+
 ```
 
-            comparison odds_ratio ci_lower ci_upper
-1    Percentage vs kWh       3.31     0.43     11.3
-2           USD vs kWh       6.64     0.84     25.2
-3       Rounded vs Not       0.41     0.09      1.1
-4 15% Goal vs 10% Goal       0.51     0.12      1.5
+
+|comparison           | odds_ratio| ci_lower| ci_upper|
+|:--------------------|----------:|--------:|--------:|
+|Percentage vs kWh    |       3.31|     0.43|     11.2|
+|USD vs kWh           |       6.64|     0.84|     25.2|
+|Rounded vs Not       |       0.41|     0.09|      1.1|
+|15% Goal vs 10% Goal |       0.51|     0.12|      1.5|
+
+
 
 ```{r}
-
+#| eval: false
 
 
 
@@ -1089,7 +1050,7 @@ ordinal_model_s2 <- brm(
     prior(normal(0, 2), class = "Intercept"),
     prior(normal(0, 2), class = "b")
   ),
-  file = "s2_ordinal_full6.rds"
+  file = paste0(here::here("data/model_cache","s2_ordinal_full6.rds"))
 )
 
 
@@ -1126,34 +1087,9 @@ odds_ratio_summary_s2 <- odds_ratios_s2 %>%
   )
 
 odds_ratio_summary_s2
+#   Percentage_vs_kWh USD_vs_kWh Rounded_vs_Not Goal15_vs_Goal10
+# 1               3.3        6.6           0.41             0.51
 
-
-posterior_samples_s2 <- as.data.frame(ordinal_model_s2)
-
-
-
-
-odds_ratio_summary_s2 <- data.frame(
-  comparison = c("Percentage vs kWh", "USD vs kWh", "Rounded vs Not", "15% Goal vs 10% Goal"),
-  odds_ratio = c(
-    mean(odds_ratios_s2$Percentage_vs_kWh),
-    mean(odds_ratios_s2$USD_vs_kWh),
-    mean(odds_ratios_s2$Rounded_vs_Not),
-    mean(odds_ratios_s2$Goal15_vs_10)
-  ),
-  ci_lower = c(
-    quantile(odds_ratios_s2$Percentage_vs_kWh, 0.025),
-    quantile(odds_ratios_s2$USD_vs_kWh, 0.025),
-    quantile(odds_ratios_s2$Rounded_vs_Not, 0.025),
-    quantile(odds_ratios_s2$Goal15_vs_10, 0.025)
-  ),
-  ci_upper = c(
-    quantile(odds_ratios_s2$Percentage_vs_kWh, 0.975),
-    quantile(odds_ratios_s2$USD_vs_kWh, 0.975),
-    quantile(odds_ratios_s2$Rounded_vs_Not, 0.975),
-    quantile(odds_ratios_s2$Goal15_vs_10, 0.975)
-  )
-)
 
 
 ```

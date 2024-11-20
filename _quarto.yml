@@ -7,9 +7,10 @@ project:
     - "*.qmd"
     - "*.md"
     - "!_*" # ignore any file that starts with a _
+    - "!manuscript/"
     
-  # resources: 
-  #   - "Task/index.html"
+  resources:
+    - "manuscript/output"
 
 
 website:
@@ -17,45 +18,87 @@ website:
   repo-url: https://github.com/tegorman13/Representation_Study
   site-url: https://tegorman13.github.io/Representation_Study/
   repo-actions: [source]
-  reader-mode: true
+  #reader-mode: true
+
+
   page-navigation: true
+
+  navbar:
+    pinned: true
+    background: dark # "#F5F5F5"
+    search: true
+    right:
+      - text: Study Info 
+        file: background/bg.qmd
+      - text: Analysis
+        file: nb/analysis.qmd
+      - text: Paper
+        file: paper.qmd
+    left: 
+      - icon: github
+        aria-label: github
+        href: https://github.com/tegorman13/Representation_Study
+
+
   sidebar:
-    style: docked 
-    background: light
-    tools:
-    - icon: github
-      href: https://github.com/tegorman13/Representation_Study
+   # search: true
+    style: docked #floating
+    background: "#ECECEC" #light
     contents:
       - href: index.qmd
         text: Home
-      - section: "Analysis"
+      - section: <strong>Paper</strong>
         contents: 
-          - href: study1.qmd
-            text: "Study 1 Analysis"
-          - href: study2.qmd
-            text: "Study 2 Analysis"
-          - href: results.qmd
-          - href: overview.qmd
+          - href: manuscript/manuscript.qmd
+            text: "Manuscript"
+            icon: file-text-fill
+      - section: <strong>Analysis</strong>
+        contents: 
+          - href: nb/study1.qmd
+            text: "Study 1"
+            icon: laptop
+          - href: nb/study2.qmd
+            text: "Study 2"
+            icon: laptop
+          - href: nb/results.qmd
+            icon: bar-chart-fill
+          - href: nb/overview.qmd
+            text: Overview
+            icon: signpost-split-fill
           - href: misc/outlier.qmd
+            text: Outliers
+            icon: graph-down
           - href: misc/indiv.qmd
+            icon: bar-chart-steps
           - href: misc/discrep.qmd
-      - section: "Background"
+            icon: columns-gap
+          - href: misc/ordinal.qmd
+            icon: grid-3x2-gap-fill
+          - href: mpa/mpa_analysis.qmd
+            text: MPA
+            icon: clipboard
+      - section: <strong>Background</strong>
         contents:
           - href: background/study_stim.md
             text: "Design and Stimulii"
+            icon: pencil
           - href: background/study_info.md
             text: "study 2 full info"
+            icon: file-earmark
           - href: background/initial_slides.md
             text: "MPA_Slides"
+            icon: file-earmark-slides-fill
           - href: background/study1_info.md
             text: "study 1 codebook"
+            icon: file-post
           - href: background/study2_info.md
             text: "study 2 codebook"
+            icon: file-post
 
 
   page-footer:
     left: "© 2024 [Thomas Gorman](https://tegorman13.github.io)"
-    center: "site created with [R](https://cran.r-project.org/) and [quarto](https://quarto.org)"
+    center: "site made with [{{< fa brands r-project >}}](https://cran.r-project.org/) and [Quarto](https://quarto.org/)"
     right: 
       - text: "{{< fa brands github size=2.0x >}}"
         aria-label: GitHub
@@ -66,36 +109,47 @@ website:
 
 execute:
   freeze: auto
+  cache: true
   tidy: true
+  warning: false
   
-bibliography: [assets/Medical.bib] #, assets/grateful-refs.bib
+bibliography: [assets/ccl_bib.bib] #, assets/grateful-refs.bib
 csl: assets/apa.csl
+google-scholar: false
 
 format:
   html:
-    # theme:
-    #   light: spacelab #[default]
-    #   dark: cyborg
-    #theme: Assets/Style/lux-modified.scss 
+    #theme: zephyr
+    date: today
     css: "assets/style_qt.css"
     page-layout: full
     tbl-cap-location: top
     fig-cap-location: bottom
     toc: true
     toc-location: right
-    toc-depth: 2
+    toc-depth: 3
     cold-fold: true
     cold-tools: true
     code-link: true
     code-line-numbers: false
     code-summary: "Display code"
     citations-hover: true
-    #code-overflow: wrap
+    code-overflow: scroll
     code-copy: true
     number-depth: 3
     smooth-scroll: true
+    link-citations: true
+    lightbox: true
     # code-block-bg: "#f8f8f8" #"#272822"
     # highlight-style: monochrome #monokai #github #a11y
     html-math-method: mathjax
     link-external-newwindow: true
     #link-external-filter: '^(?:http:|https:)\/\/www\.tegorman13.github.io/dot_variability\/custom'
+    # knitr:
+    #   opts_chunk:
+    #     dev: "ragg_png"
+    #     dpi: 300
+    # other-links:
+    #   - text: GitHub repository
+    #     href: https://github.com/tegorman13/Representation_Study
+    #     icon: github

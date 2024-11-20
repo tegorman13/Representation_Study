@@ -1,3 +1,7 @@
+---
+date: today
+---
+
 # Study Stimulii and Design
 
 

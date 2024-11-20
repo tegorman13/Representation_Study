@@ -1,0 +1,25 @@
+project:
+  title: "Manuscript"
+  output-dir: output
+  render: 
+  - "manuscript.qmd"
+  #- "manuscript_full.qmd"
+
+execute: 
+  warning: false
+  eval: true
+  include: true
+  freeze: auto
+  cache: true
+
+
+
+
+bibliography: ../assets/ccl_bib.bib
+csl: ../assets/apa.csl
+google-scholar: false
+
+
+# profile:
+#   group: 
+#     - [plain, nice,thesis, ms, md]

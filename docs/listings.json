@@ -1,11 +1,40 @@
 [
   {
+    "listing": "/nb/analysis.html",
+    "items": [
+      "/nb/overview.html",
+      "/nb/results.html",
+      "/nb/study1.html",
+      "/nb/study2.html"
+    ]
+  },
+  {
+    "listing": "/background/bg.html",
+    "items": [
+      "/background/initial_slides.html",
+      "/background/study_info.html",
+      "/background/study2_info.html",
+      "/background/study1_info.html",
+      "/background/study_stim.html"
+    ]
+  },
+  {
     "listing": "/index.html",
     "items": [
-      "/overview.html",
-      "/results.html",
-      "/study1.html",
-      "/study2.html"
+      "/nb/analysis.html",
+      "/misc/discrep.html",
+      "/nb/overview.html",
+      "/background/initial_slides.html",
+      "/misc/ordinal.html",
+      "/misc/outlier.html",
+      "/background/study_info.html",
+      "/misc/indiv.html",
+      "/nb/results.html",
+      "/background/study2_info.html",
+      "/nb/study1.html",
+      "/background/study1_info.html",
+      "/nb/study2.html",
+      "/background/study_stim.html"
     ]
   }
 ]

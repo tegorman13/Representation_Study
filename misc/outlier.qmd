@@ -1,18 +1,5 @@
 ---
 title: "Outliers and discrepancies"
-author:
-- name: Thomas E. Gorman
-  url: https://tegorman13.github.io/
-  affiliations: 
-  - name:  Communication and Cognition Lab, Purdue University, USA
-    affiliation-url: https://web.ics.purdue.edu/~treimer/
-lightbox: true
-toc: false
-code-fold: true
-code-tools: true
-execute:
-  #echo: false
-  warning: false
 format:
   html: 
     grid:

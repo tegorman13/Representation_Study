@@ -1,0 +1,125 @@
+---
+title: "Planning to Save Energy: How Information Format Affects Accuracy"
+aliases:
+  - /manuscript.html
+author:
+    - name: Thomas E. Gorman
+      url: https://tegorman13.github.io/
+      orcid: "0000-0001-5366-5442"
+      affiliations: 
+        - name:  Purdue University, USA
+          city: West Lafayette
+          region: IN
+          country: USA
+          postal-code: 47907
+          affiliation-url: https://web.ics.purdue.edu/~treimer/
+      attributes: 
+          corresponding: true
+    - name: Torsten Reimer
+      affiliation: Brian Lamb School of Communication, Purdue University
+      affiliation-url: https://cla.purdue.edu/communication/
+      url: https://web.ics.purdue.edu/~treimer/
+      orcid: 0000-0002-7419-0076
+    - name: Juan Pablo Loaiza Ramirez
+      affiliation: Brian Lamb School of Communication, Purdue University
+      affiliation-url: https://cla.purdue.edu/communication/
+      url: https://web.ics.purdue.edu/~treimer/
+      orcid: 0000-0001-9663-0522
+format:
+    # html: 
+    #     grid:
+    #         sidebar-width: 220px
+    #         body-width: 1200px
+    #         margin-width: 170px
+    #         gutter-width: 1.0rem
+    wordcount-html: 
+        #output-file: index.html
+        wordcount-banner: true
+        theme: 
+            - zephyr
+            - ../assets/custom.scss
+        toc: true
+        shift-heading-level-by: 1
+        title-block-banner: "#000D51"
+        include-in-header:
+            - text: |
+                <style type="text/css">
+                h2.hide {
+                    display: none;
+                }
+                </style>
+    # hugo-md:
+    #     include: true
+    #     html-math-method: mathjax
+    #     output-file: manuscript_hugo.md
+    # gfm:
+    #     echo: true
+    #     output-file: manuscript_gfm.md
+    hikmah-manuscript-pdf:
+        output-file: rep_study.pdf
+        mainfont: "Linux Libertine O"
+        mainfontoptions:
+        - "Numbers=Proportional"
+        - "Numbers=OldStyle"
+        mathfont: "Libertinus Math"
+        knitr:
+            opts_chunk:
+                dev: "cairo_pdf"
+    #hikmah-manuscript-docx: default
+format-links:   
+    - html
+    - gfm
+    - format: hikmah-manuscript-pdf
+      text: PDF version
+      icon: file-pdf
+date: 2024-11-19
+abstract: |
+    This study examines how presenting energy information in different formats (kWh, %, USD) affects planning accuracy. Across two experiments, the kWh format generally led to better accuracy, while the USD format consistently led to the worst performance. These findings highlight the importance of effective information presentation to promote energy conservation.
+---
+
+
+```{r}
+#| label: setup
+#| include: false
+
+knitr::opts_chunk$set(
+  echo = FALSE, include = FALSE, warning = FALSE, message = FALSE,
+  fig.width = 6, fig.height = (6 * 0.618), fig.retina = 3,
+  out.width = "100%", fig.align = "center"
+)
+```
+
+
+# Introduction
+
+
+# Experiment 1
+
+## Methods
+
+![Example trial in the energy planning task. Participants are shown the prior year electricity use of a household, and are tasked with creating a plan for the next year that will meet the energy reduction goal. Study 1 manipulates the format of the reduction goal to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656)](/assets/images/Smith_10R_Wells_15E.png){#fig-task}
+
+
+
+## Results
+
+
+
+# Experiment 2
+
+## Methods
+
+The questions in study 2 are quite similar to those in study 1, but we also included a rounding manipulation (rounded vs. not rounded), and a manipulation of the goal (10% reduction vs. 15% rediction)
+
+Note that reference class remains a between-subjects variable, while percent goal, rounding, and state are within-subjects variables. 
+ 
+In study 2, the new design is a 4 state temperature (2 warm vs. 2 cold states) X 2 task goal (10% vs. 15%) X 2 last year’s usage for the family and the state average (exact vs. rounded numbers) within X 3 task reference class (USD vs. Percentage vs. kWh) between. A note on the percentage goals is that they are rounded to the full dollar. For instance, for the Davis family, 10% of their \$6,943.95 cost of residential energy usage is \$694.395; this is rounded to \$694. For the rounded condition, participants are also told that “The numbers for their \[the family’s\] usage have been rounded for convenience.” In terms of randomization, blocks were combined so that there was a block for each condition and order combination. As an example, one block is the smith family with a 10% goal and rounded numbers for the family’s usage first, and the Wells family second, with a 15% goal and exact numbers for the family’s usage. Another block has these but in reverse, where the participant receives the Wells family first and the Smith family second. In total, there are 96 conditions, representing each possible order (2 orders x 4 states x 2 possible significant digit values, and 3 reference classes).
+
+## Results
+
+
+
+# Discusion
+
+
+

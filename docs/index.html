@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.32">
+<meta name="generator" content="quarto-1.6.35">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Thomas Gorman">
+<meta name="dcterms.date" content="2024-11-20">
 
 <title>Representation Project – Representation Study</title>
 <style>
@@ -25,13 +25,12 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./study1.html" rel="next">
+<link href="./manuscript/manuscript.qmd" rel="next">
 <script src="site_libs/quarto-listing/list.min.js"></script>
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -39,18 +38,18 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-383d4a065b21370043bc4709e21900a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7c8a9fc74683d866a968c7201d440969.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f0d64b0355f40f485f10dc0027316eca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -75,48 +74,20 @@ ul.task-list li input[type="checkbox"] {
 <script>
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-analyses .list');
+    const listingTargetEl = window.document.querySelector('#listing-analysis .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-analyses'] = new List('listing-analyses', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-bg .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-filename','listing-file-modified',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-filename","listing-file-modified"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-bg'] = new List('listing-bg', options);
+    window['quarto-listings']['listing-analysis'] = new List('listing-analysis', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -164,10 +135,48 @@ window.Quarto = {
 <link rel="stylesheet" href="assets/style_qt.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Representation Study</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tegorman13/Representation_Study"> <i class="bi bi-github" role="img" aria-label="github">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./background/bg.html"> 
+<span class="menu-text">Study Info</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./nb/analysis.html"> 
+<span class="menu-text">Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./paper.html"> 
+<span class="menu-text">Paper</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -176,34 +185,13 @@ window.Quarto = {
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Home</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">Representation Study</a> 
-        <div class="sidebar-tools-main">
-    <a href="https://github.com/tegorman13/Representation_Study" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
-  <div class="quarto-reader-toggle-btn">
-  <i class="bi"></i>
-  </div>
-</a>
-</div>
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -215,7 +203,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Analysis</span></a>
+ <span class="menu-text"><strong>Paper</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -223,44 +211,9 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./study1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Study 1 Analysis</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./study2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Study 2 Analysis</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Results</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./overview.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Effect of Reference Class on Planning to Conserve</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./misc/outlier.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Outliers and discrepancies</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./misc/indiv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Response Patterns</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./misc/discrep.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Discrep_Patterns</span></a>
+  <a href="./manuscript/manuscript.qmd" class="sidebar-item-text sidebar-link"><i class="bi bi-file-text-fill" role="img">
+</i> 
+ <span class="menu-text">Manuscript</span></a>
   </div>
 </li>
       </ul>
@@ -268,7 +221,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Background</span></a>
+ <span class="menu-text"><strong>Analysis</strong></span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -276,31 +229,110 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./background/study_stim.html" class="sidebar-item-text sidebar-link">
+  <a href="./nb/study1.html" class="sidebar-item-text sidebar-link"><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text">Study 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nb/study2.html" class="sidebar-item-text sidebar-link"><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text">Study 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nb/results.html" class="sidebar-item-text sidebar-link"><i class="bi bi-bar-chart-fill" role="img">
+</i> 
+ <span class="menu-text">Results</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nb/overview.html" class="sidebar-item-text sidebar-link"><i class="bi bi-signpost-split-fill" role="img">
+</i> 
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/outlier.html" class="sidebar-item-text sidebar-link"><i class="bi bi-graph-down" role="img">
+</i> 
+ <span class="menu-text">Outliers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/indiv.html" class="sidebar-item-text sidebar-link"><i class="bi bi-bar-chart-steps" role="img">
+</i> 
+ <span class="menu-text">Response Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/discrep.html" class="sidebar-item-text sidebar-link"><i class="bi bi-columns-gap" role="img">
+</i> 
+ <span class="menu-text">Discrep_Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc/ordinal.html" class="sidebar-item-text sidebar-link"><i class="bi bi-grid-3x2-gap-fill" role="img">
+</i> 
+ <span class="menu-text">Ordinal Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mpa/mpa_analysis.html" class="sidebar-item-text sidebar-link"><i class="bi bi-clipboard" role="img">
+</i> 
+ <span class="menu-text">MPA</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Background</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./background/study_stim.html" class="sidebar-item-text sidebar-link"><i class="bi bi-pencil" role="img">
+</i> 
  <span class="menu-text">Design and Stimulii</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./background/study_info.html" class="sidebar-item-text sidebar-link">
+  <a href="./background/study_info.html" class="sidebar-item-text sidebar-link"><i class="bi bi-file-earmark" role="img">
+</i> 
  <span class="menu-text">study 2 full info</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./background/initial_slides.html" class="sidebar-item-text sidebar-link">
+  <a href="./background/initial_slides.html" class="sidebar-item-text sidebar-link"><i class="bi bi-file-earmark-slides-fill" role="img">
+</i> 
  <span class="menu-text">MPA_Slides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./background/study1_info.html" class="sidebar-item-text sidebar-link">
+  <a href="./background/study1_info.html" class="sidebar-item-text sidebar-link"><i class="bi bi-file-post" role="img">
+</i> 
  <span class="menu-text">study 1 codebook</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./background/study2_info.html" class="sidebar-item-text sidebar-link">
+  <a href="./background/study2_info.html" class="sidebar-item-text sidebar-link"><i class="bi bi-file-post" role="img">
+</i> 
  <span class="menu-text">study 2 codebook</span></a>
   </div>
 </li>
@@ -326,13 +358,13 @@ window.Quarto = {
 
 <div class="quarto-title-meta column-page-right">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p><a href="https://tegorman13.github.io/">Thomas Gorman</a> </p>
-          </div>
-  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 20, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -346,131 +378,203 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-analyses">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1730890066679" data-listing-reading-time-sort="9" data-listing-word-count-sort="1738">
-<a href="./overview.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Effect of Reference Class on Planning to Conserve
-</h5>
-<div class="card-text listing-description">
-
-<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>,<span class="va">tibble</span>,<span class="va">brms</span>,<span class="va">rstan</span>,<span class="va">bayestestR</span>,<span class="va">emmeans</span>,<span class="va">tidybayes</span>,<span class="va">modelsummary</span>,</span>
-<span>               <span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">knitr</span>,<span class="va">kableExtra</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span>…<span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="cn"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="cn"></span><span class="op"></span><span class="co"></span></span><span><span class="op"></span></span><span><span class="op"></span></span></code></pre></div></details>
+<div class="quarto-listing quarto-listing-container-table" id="listing-analysis">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-analysis-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-analysis'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-title-sort" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
 </div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1730364187596" data-listing-reading-time-sort="6" data-listing-word-count-sort="1184">
-<a href="./results.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="results_files/figure-html/fig-s1-mg1-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Results
-</h5>
-<div class="card-text listing-description">
-
-<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">pacman</span><span class="op">)</span></span>
-<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>,<span class="va">tibble</span>,<span class="va">brms</span>,<span class="va">rstan</span>,<span class="va">bayestestR</span>,<span class="va">emmeans</span>,<span class="va">tidybayes</span>,<span class="va">modelsummary</span>,</span>
-<span>               <span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">knitr</span>,<span class="va">kableExtra</span>,<span class="va">ggh…</span><span class="va"></span><span class="va"></span><span class="op"></span></span><span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="cn"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="fl"></span><span class="op"></span></span><span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="fl"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="fl"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="st"></span></span><span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fl"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span></code></pre></div></details>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1730597272247" data-listing-reading-time-sort="33" data-listing-word-count-sort="6453">
-<a href="./study1.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA+gAAAH0CAYAAACuKActAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAA9hAAAPYQGoP6dpAAAgAElEQVR4nO3df5Dfd2Hf+df7uyssCQvbQitjTCAmtklsbBoLkjQhlwKuU9v6rmpPdAHam/DD0NzFoZdx2+vlene+lkwzcTimx01aH6ExJG1mUO8w2rWdmCulvgwZppE75QJT4h6Q0hD8/X6FY9lGa2n1ed8fki86R3K09tf7ee93H48ZDd7vdyW/5s1Xaz313c/3mwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALCZjEajvzCZTC7te8esmUwmt0wmk+v73jFrxuPx60aj0eV975g1jz766I+Px+PFvnfMmsOHD3/Xo48+em3fO2bNaDT60fF4/Pa+d8yab37zm7smk8kP9r1j1ozH4zeORqN3971j1nzzm9/cPh6P39L3jllz+PDhq8fj8W211pf0vWWW1FrLaDS6qe8d0zLoe8AmcFOS7+t7xKyptf69ruv+q753zJpa648MBoMf6nvHrBkMBh+otf63fe+YNSdOnLhmMBjc0PeOWVNK+alSyj/se8es2bJly6trrfv73jFrSil/tZTyK33vmDVbtmy5IMl7+94xa2qtb0ny0ccee2xb31tmTSnljr43TItABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAbM9z1gM7j8Pb/2mQsX7+p7xky54r33JMl1Fy7eVXueMlOuvO3j+Q/9N3/Rd87AABgM/IMOgAAADRAoAMAAEADBDoAAAA0QKADAABAAwQ6AAAANECgAwAAQAMEOgAAADRAoAMAAEADBDoAAAA0QKADAABAAwQ6AAAANECgAwAAQAMEOgAAADRAoAMAAEADBDoAAAA0QKADAABAAwQ6AAAANECgAwAAQAMEOgAAADRAoAMAAEADBDoAAAA0QKADAABAAwQ6AAAANECgAwAAQAMEOgAAADRAoAMAAEADBDoAAAA0QKADAABAA+b7HvB8fO1rX9u6Y8eON/S941zUWr+r7w2wFqWU75lMJj/Y944Zc2Gt9XznOl211teVUl7tXKduodZ6nnOdutfVWi9xrlN3aSll4Fynq9a6q9a6y7lOV631u5Ok67o3TiaTJ3ueMzO+/e1vlyQv2yiP19XV1a+94hWvGJ3t/g0Z6Dt37tz+9NNP7+t7xzn6vr4HwFp0Xben1npe3ztmSSnl4lLK1q7rNsrXrY3ie5LsqrU61ykqpbwmyXaP16l7RSnle5zr1F05GAwGznXqzi+lvMq5TtdgMLim1ppa60211qf73jMrBoNBkixslMfr/Pz8p5LMVqBfcMEF307y833vOBej0ejnk/xY3zvgXJVSPrmwsPAbfe+YJePx+A211p27d+/eEF+3NorRaHRTkqt27979y31vmSXj8Xh3KeWChYUFj9cpGo/H1yV5p68D0zWZTD5Ya73OuU7XeDy+JIn/bk3ZZDK5PckNc3Nzf3/nzp2P971nVtRay2Qy+cFZeby6Bh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAECHQAAABog0AEAAKABAh0AAAAaINABAACgAQIdAAAAGiDQAQAAoAHz6/0v3Lt376WllD/Ys2fPjjvvvLNLkn379l3Vdd3Hk1xZa/3Etm3b7jhw4MCx9d4GAAAAfVnXZ9BvvPHG85J8Msn2Z24bDofbu657qNb6zq1bt+4cD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vuunDxLm8mO0VXvPeeJMmFi3fVfpfMlivee08e+di7PtT3DgDa5hl0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABowHzfA4C2XP6eX/v1Cxfv+vW+d8ySK957T5LkwsW7ar9LZsuVt3287wkAAFPlGXQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABoQOl7wKwbjUY/f+VtH/+FvncAAADMokc+9q7PLiwsvK3vHdPgGXQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGCHQAAABogEAHAACABgh0AAAAaIBABwAAgAYIdAAAAGiAQAcAAIAGzPc9IEn27dt3Vdd1H09yZa31E9u2bbvjwIEDx/reBQAAAOul92fQh8Ph9q7rHqq1vnPr1q07B4PB148ePfqhvncBAADAemrhGfQ3J/nk8vLyI0myf/+u1dWVsZJPpCknuknjMfjHUl+cv0mPn+11jf2vQEAAGCGvXI8Ht/W94hzUUr5nV27dv37s96/nmPOZDgc/lySI0tLSx877bbVUspFBw8efOJMP+db3/rWZXNzc19dt5EAAADwwr1vYWHhV892Z+/PoJdSBklWn33zyspKd7afc/HFF39jPB5f8uIum46u6/7mYDD4t0ke6nvLjHkwyX9K8p6+h8ySUso7SinHuq773/veMktKKb+R5MJa696+t8ySUsrbcvK1S/5x31tmyWAw+FCSH+267gf63jJL5ubmrum67tZa6/U95ZZMhgM/m6t9adrrd/d95ZZUmu9uJTyPyT5mb63zJLBYPCeWusvJHldrfVI33tmRSmlJPlkrXV/31vOxerq6nP+f997oCf5UpK3PvPB4uLijlrrkw8++OBTZ/sJpZTVJN9aj3Ev1Gg0emIwGHx7165d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" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study 1 Analysis
-</h5>
-<div class="card-text listing-description">
-
-<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">pacman</span><span class="op">)</span></span>
-<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>,<span class="va">haven</span>,<span class="va">tibble</span>,<span class="va">brms</span>,<span class="va">bayestestR</span>,<span class="va">emmeans</span>,<span class="va">tidybayes</span>,<span class="va">modelsummary</span>,</span>
-<span>               <span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span>,<span class="va">…</span><span class="op"></span></span><span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="cn"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span></span></code></pre></div></details>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1730692300587" data-listing-reading-time-sort="33" data-listing-word-count-sort="6591">
-<a href="./study2.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="study2_files/figure-html/unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Study 2 Analysis
-</h5>
-<div class="card-text listing-description">
-<strong>Click on plots to enlarge</strong>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div><div class="quarto-listing quarto-listing-container-grid" id="listing-bg">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1730890351776">
-<a href="./overview_gfm.md" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-footer">
-<div class="card-filename listing-filename">
-<p>overview_gfm.md</p>
-</div>
-<div class="card-file-modified listing-file-modified">
-<p>11/6/24, 5:52:31 AM</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1730890351786">
-<a href="./overview_hugo.md" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-footer">
-<div class="card-filename listing-filename">
-<p>overview_hugo.md</p>
-</div>
-<div class="card-file-modified listing-file-modified">
-<p>11/6/24, 5:52:31 AM</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-author" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Author</a>
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-listing-file-modified-sort="1732091817249" data-listing-reading-time-sort="1" data-listing-word-count-sort="1" data-listing-title-sort="Analysis" data-listing-filename-sort="analysis.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./nb/analysis.html" class="title listing-title">Analysis</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="1" data-listing-file-modified-sort="1732090748251" data-listing-reading-time-sort="23" data-listing-word-count-sort="4456" data-listing-title-sort="Discrep_Patterns" data-listing-filename-sort="discrep.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./misc/discrep.html" class="title listing-title">Discrep_Patterns</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="2" data-listing-file-modified-sort="1732082714673" data-listing-reading-time-sort="19" data-listing-word-count-sort="3686" data-listing-title-sort="Effect of Reference Class on Planning to Conserve" data-listing-filename-sort="overview.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./nb/overview.html" class="title listing-title">Effect of Reference Class on Planning to Conserve</a>
+</td>
+<td>
+<span class="listing-author">Thomas E. Gorman</span>
+</td>
+</tr>
+<tr data-index="3" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090912630" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="34" data-listing-word-count-sort="6714" data-listing-title-sort="Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations" data-listing-filename-sort="initial_slides.md">
+<td>
+<span class="listing-date">Nov 20, 2024</span>
+</td>
+<td>
+<a href="./background/initial_slides.html" class="title listing-title">Energy-Saving Decisions: Turning Goals into Appliance-Specific Allocations</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="4" data-listing-file-modified-sort="1732082716094" data-listing-reading-time-sort="43" data-listing-word-count-sort="8466" data-listing-title-sort="Ordinal Models" data-listing-filename-sort="ordinal.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./misc/ordinal.html" class="title listing-title">Ordinal Models</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="5" data-listing-file-modified-sort="1732090773273" data-listing-reading-time-sort="49" data-listing-word-count-sort="9752" data-listing-title-sort="Outliers and discrepancies" data-listing-filename-sort="outlier.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./misc/outlier.html" class="title listing-title">Outliers and discrepancies</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="6" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090941270" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="20" data-listing-word-count-sort="3823" data-listing-title-sort="Relaunch of Frequency and Probability Study" data-listing-filename-sort="study_info.md">
+<td>
+<span class="listing-date">Nov 20, 2024</span>
+</td>
+<td>
+<a href="./background/study_info.html" class="title listing-title">Relaunch of Frequency and Probability Study</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="7" data-listing-file-modified-sort="1732090774639" data-listing-reading-time-sort="12" data-listing-word-count-sort="2376" data-listing-title-sort="Response Patterns" data-listing-filename-sort="indiv.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./misc/indiv.html" class="title listing-title">Response Patterns</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="8" data-listing-file-modified-sort="1732082713968" data-listing-reading-time-sort="6" data-listing-word-count-sort="1184" data-listing-title-sort="Results" data-listing-filename-sort="results.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./nb/results.html" class="title listing-title">Results</a>
+</td>
+<td>
+<span class="listing-author">Thomas E. Gorman</span>
+</td>
+</tr>
+<tr data-index="9" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090952646" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1351" data-listing-title-sort="Scenario 1" data-listing-filename-sort="study2_info.md">
+<td>
+<span class="listing-date">Nov 20, 2024</span>
+</td>
+<td>
+<a href="./background/study2_info.html" class="title listing-title">Scenario 1</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="10" data-listing-file-modified-sort="1732090002251" data-listing-reading-time-sort="33" data-listing-word-count-sort="6453" data-listing-title-sort="Study 1 Analysis" data-listing-filename-sort="study1.qmd">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./nb/study1.html" class="title listing-title">Study 1 Analysis</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="11" data-listing-file-modified-sort="1730347155442" data-listing-reading-time-sort="111" data-listing-word-count-sort="22185" data-listing-title-sort="Study 1 codebook and dataset info" data-listing-filename-sort="study1_info.md">
+<td>
+<span class="listing-date">&nbsp;</span>
+</td>
+<td>
+<a href="./background/study1_info.html" class="title listing-title">Study 1 codebook and dataset info</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="12" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090482488" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="33" data-listing-word-count-sort="6591" data-listing-title-sort="Study 2 Analysis" data-listing-filename-sort="study2.qmd">
+<td>
+<span class="listing-date">Nov 20, 2024</span>
+</td>
+<td>
+<a href="./nb/study2.html" class="title listing-title">Study 2 Analysis</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+<tr data-index="13" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090935879" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3320" data-listing-title-sort="Study Stimulii and Design" data-listing-filename-sort="study_stim.md">
+<td>
+<span class="listing-date">Nov 20, 2024</span>
+</td>
+<td>
+<a href="./background/study_stim.html" class="title listing-title">Study Stimulii and Design</a>
+</td>
+<td>
+<span class="listing-author">&nbsp;</span>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="listing-no-matching d-none">
 No matching items
 </div>
@@ -557,8 +661,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -674,7 +776,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -904,8 +1005,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./study1.html" class="pagination-link" aria-label="Study 1 Analysis">
-        <span class="nav-page-text">Study 1 Analysis</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./manuscript/manuscript.qmd" class="pagination-link" aria-label="Manuscript">
+        <span class="nav-page-text">Manuscript</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -916,12 +1017,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <p>© 2024 <a href="https://tegorman13.github.io">Thomas Gorman</a></p>
 </div>   
     <div class="nav-footer-center">
-<p>site created with <a href="https://cran.r-project.org/">R</a> and <a href="https://quarto.org">quarto</a></p>
-<div class="toc-actions"><ul><li><a href="https://github.com/tegorman13/Representation_Study/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div>
+<p>site made with <a href="https://cran.r-project.org/"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a> and <a href="https://quarto.org/">Quarto</a></p>
+</div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link active" href="https://github.com/tegorman13/Representation_Study" target="_blank" aria-current="page">
+    <a class="nav-link" href="https://github.com/tegorman13/Representation_Study" target="_blank">
 <p><i class="fa-brands fa-github fa-2.0x" aria-label="github"></i></p>
 </a>
   </li>  

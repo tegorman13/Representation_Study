@@ -31,4 +31,4 @@ You have the option of uploading one document containing tables or figures to su
 
 _****50-word Abstract for Program.****_ A short abstract not to exceed 50 words is also required. If your paper is accepted, this abstract and all of your contact information will be inserted directly into the program, so proofread it carefully.
 
-****Edit**** your paper, poster, or professional development session at the following link: [****SUBMISSION SITE FOR PAPERS, POSTERS, PROFESSIONAL DEVELOPMENT SESSIONS****.](https://www.xcdsystem.com/mpa/abstract/index.cfm?ID=ygQ8c1a) 
+****Edit**** your paper, poster, or professional development session at the following link: [****SUBMISSION SITE FOR PAPERS, POSTERS, PROFESSIONAL DEVELOPMENT SESSIONS****.]

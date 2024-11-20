@@ -1,40 +1,18 @@
 ---
 title: "Representation Project"
-author:
-- name: Thomas Gorman
-  url: https://tegorman13.github.io/
 listing:
-  - id: analyses
-    contents: "/*.qmd"
-    type: grid
-  # - id: misc
-  #   contents: "misc/*.qmd"
-  #   type: grid
-  #   exclude:
-  #     filename: 
-  #       - "misc/indiv.qmd"
-  #       - "misc/discrep.qmd"
-  - id: bg
-    contents: "/*.md"
-    type: grid
-  #orcid: 0000-0001-5366-5442
-# format:
-#   html: 
-#     grid:
-#       sidebar-width: 200px
-#       body-width: 1200px
-#       margin-width: 150px
-#       gutter-width: 1.0rem
-# listing:
-#   id: sample-listings
-#   type: grid #default
-  # grid-columns: 2
-  # sort:
-  #   - "date desc"
-  #   - "title desc"
-  # image-height: 400px
-#   contents:
-#     - gpt4_sim.qmd
+  - id: analysis
+    contents: 
+      - "nb/*.qmd"
+      - "background/*.md"
+      - "misc/*.qmd"
+    type: table
+    exclude: 
+        title: {"Study Info","Analysis"}
+repo-actions: false
 ---
+
+
+
 
 
