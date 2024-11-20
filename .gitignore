@@ -58,7 +58,7 @@ rsconnect/*
 _extensions/*
 
 
-_/scratch/*
+/_scratch/*
 
 data/model_cache/*
 
@@ -69,3 +69,6 @@ nb/**/*.png
 # ignore all png files in misc, included recursive
 
 misc/indiv_files/figure-html/**
+
+
+manuscript/.quarto/** 

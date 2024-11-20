@@ -24,7 +24,7 @@ format:
 
 Energy poverty continues to be a pervasive issue in the United States @memmottSociodemographicDisparitiesEnergy2021 . This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans @reimerNumericCommunicationRisk2015. Prior research by @canfieldPerceptionsElectricityuseCommunications2017 demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs. Building on these findings and informed by prior work showing that frequencies (like absolute units in kWh) are easier to comprehend and facilitate more precise decision-making compared to percentages, our study also utilizes a tabular format, but manipulates whether participants must consider energy information presented as absolute units (kWh), percentages (%), or monetary costs (USD). We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.
 
-## Purpose
+## Procedure
 
 We conducted two experiments. Study 1 (N=235) manipulated representation format (kWh, percentage, USD) between subjects. Participants crafted plans to meet specific reduction targets by adjusting the energy usage across five appliance categories. Study 2 (N=196) includes additional factors: rounding (rounded vs. exact numbers) and task goal (10% vs. 15% reduction).
 

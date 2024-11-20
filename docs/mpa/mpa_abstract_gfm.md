@@ -20,7 +20,7 @@ units (kWh), percentages (%), or monetary costs (USD). We hypothesize
 that presenting information in absolute units (kWh) will lead to more
 accurate household energy conservation planning.
 
-## Purpose
+## Procedure
 
 We conducted two experiments. Study 1 (N=235) manipulated representation
 format (kWh, percentage, USD) between subjects. Participants crafted
