@@ -14,9 +14,9 @@ format:
   #   include: true
   #   html-math-method: mathjax
   #   output-file: results_hugo.md
-  # gfm:
-  #   echo: true
-  #   output-file: results_gfm.md
+  gfm:
+    echo: true
+    output-file: indiv_gfm.md
 ---
 
 

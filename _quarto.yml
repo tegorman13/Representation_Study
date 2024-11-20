@@ -49,8 +49,11 @@ website:
         text: Home
       - section: <strong>Paper</strong>
         contents: 
-          - href: manuscript/manuscript.qmd
+          - href:  paper.qmd  #manuscript/output/manuscript.html
             text: "Manuscript"
+            icon: file-text-fill
+          - href: mpa/mpa_abstract.md
+            text: MPA
             icon: file-text-fill
       - section: <strong>Analysis</strong>
         contents: 
