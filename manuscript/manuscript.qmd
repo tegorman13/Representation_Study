@@ -3,28 +3,53 @@ title: "Planning to Save Energy: How Information Format Affects Accuracy"
 aliases:
   - /manuscript.html
 author:
-    - name: Thomas E. Gorman
-      url: https://tegorman13.github.io/
-      orcid: "0000-0001-5366-5442"
-      affiliations: 
-        - name:  Purdue University, USA
-          city: West Lafayette
-          region: IN
-          country: USA
-          postal-code: 47907
-          affiliation-url: https://web.ics.purdue.edu/~treimer/
-      attributes: 
-          corresponding: true
-    - name: Torsten Reimer
-      affiliation: Brian Lamb School of Communication, Purdue University
-      affiliation-url: https://cla.purdue.edu/communication/
-      url: https://web.ics.purdue.edu/~treimer/
-      orcid: 0000-0002-7419-0076
-    - name: Juan Pablo Loaiza Ramirez
-      affiliation: Brian Lamb School of Communication, Purdue University
-      affiliation-url: https://cla.purdue.edu/communication/
-      url: https://web.ics.purdue.edu/~treimer/
-      orcid: 0000-0001-9663-0522
+  - name: Thomas E. Gorman
+    url: https://tegorman13.github.io/
+    orcid: "0000-0001-5366-5442"
+    affiliations: 
+      - ref: cclab
+      - ref: clara
+    attributes: 
+      corresponding: true
+  - name: Torsten Reimer
+    url: https://web.ics.purdue.edu/~treimer/
+    orcid: 0000-0002-7419-0076
+    affiliations:
+      - ref: cclab
+      - ref: clara
+  - name: Juan Pablo Loaiza Ramirez
+    url: https://www.cla.purdue.edu/directory/profiles/loaiza-ramirez,juan-pablo.html
+    orcid: 0000-0001-9663-0522
+    affiliations:
+      - ref: cclab
+      - ref: clara
+  - name: Hayden Barber
+    url: https://www.sdstate.edu/directory/hayden-barber
+    orcid: 0000-0002-3465-8615
+    affiliations:
+      - ref: sdsu
+affiliations:
+  - id: cclab
+    name: Communication and Cognition Lab, Purdue University
+    city: West Lafayette
+    region: IN
+    country: USA
+    postal-code: 47907
+    url: https://web.ics.purdue.edu/~treimer/
+  - id: clara
+    name: College of Liberal Arts Research Academy
+    department: Purdue University
+    city: West Lafayette
+    region: IN
+    country: USA
+    postal-code: 47907
+    url: https://cla.purdue.edu/about/college-initiatives/research-academy/
+  - id: sdsu
+    name: School of Communication & Journalism, South Dakota State University
+    city: Brookings
+    region: SD
+    country: USA
+    url: https://www.sdstate.edu/directory/hayden-barber
 format:
     # html: 
     #     grid:
@@ -50,10 +75,11 @@ format:
                     display: none;
                 }
                 </style>
-    # hugo-md:
-    #     include: true
-    #     html-math-method: mathjax
-    #     output-file: manuscript_hugo.md
+    hugo-md:
+        include: true
+        echo: false
+        html-math-method: mathjax
+        output-file: manuscript_hugo.md
     gfm:
         echo: true
         output-file: manuscript_gfm.md
@@ -74,9 +100,9 @@ format:
 #     - format: hikmah-manuscript-pdf
 #       text: PDF version
 #       icon: file-pdf
-date: 2024-11-19
+date: 2024-12-03
 abstract: |
-    This study examines how presenting energy information in different formats (kWh, %, USD) affects planning accuracy. Across two experiments, the kWh format generally led to better accuracy, while the USD format consistently led to the worst performance. These findings highlight the importance of effective information presentation to promote energy conservation.
+    This study aims to examine how the format of energy information impacts individuals’ ability to develop precise energy reduction plans. By manipulating the reference class (kWh, %, USD) and assessing planning accuracy, we seek to determine which format facilitates better comprehension and decision-making.Across two experiments, the kWh format generally led to better accuracy, while the USD format consistently led to the worst performance. These findings highlight the importance of effective information presentation to promote energy conservation, and may contribute to the development of more effective energy communication strategies that can enhance conservation efforts.
 ---
 
 
@@ -84,13 +110,36 @@ abstract: |
 # Introduction
 
 
+- highlight the significant contribution of residential energy consumption to carbon emissions and the potential for substantial reductions. Make point about urgency of climate change? (IPCC (2014) and EIA (2012) ).
+
+- Electricity bills are a primary source of energy-use information for consumers and offer a promising avenue for enhancing communication about energy consumption (Fischer, 2008)
+
+
 ### Literature Review
 
+- Canfield et al. (2017) found that tables were more effective than graphs for conveying specific electricity usage data, likely because tables facilitate straightforward point reading. However, they also noted that individuals with lower energy literacy had reduced comprehension across all formats.
+- Canfield et al.'s (2017) findings on preferences for historical use information and the impact of neighbor comparisons
+- The concept of cognitive fit posits that performance improves when the information presentation format aligns with the task requirements (Vessey, 1991)
+- alignment can reduce cognitive load and enhance accuracy in planning (Shah & Freedman, 2009)
+- Reimer et al. (2015) provide  context on how numerical formats affect risk perception, the reference class problem, and the benefits of natural frequencies.
+
+
 Energy poverty continues to be a pervasive issue in the United States @memmottSociodemographicDisparitiesEnergy2021 . This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans @reimerNumericCommunicationRisk2015. Prior research by @canfieldPerceptionsElectricityuseCommunications2017 demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs. 
+
+
+The way numerical information is presented can significantly affect how individuals process and use that information (Reimer et al., 2015). The reference class problem highlights that numbers without clear reference points can lead to misinterpretation, as the meaning of a statistic depends on the category or class it refers to (Gigerenzer & Edwards, 2003; Reimer et al., 2015). Presenting energy information in absolute units (e.g., kWh) provides a clear reference class, potentially enhancing comprehension.
+
+Furthermore, research suggests that natural frequencies and absolute numbers are generally easier for individuals to understand compared to percentages or probabilities (Gigerenzer & Hoffrage, 1995; Hoffrage et al., 2000). In the context of energy conservation, using absolute units may facilitate more accurate planning and decision-making by aligning with intuitive cognitive processing.
+
+Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. Addressing this gap is crucial for developing effective interventions that promote energy conservation behaviors.
 
 ### Hypotheses
 
 Building on these findings and informed by prior work showing that frequencies (like absolute units in kWh) are easier to comprehend and facilitate more precise decision-making compared to percentages, our study also utilizes a tabular format, but manipulates whether participants must consider energy information presented as absolute units (kWh), percentages (%), or monetary costs (USD). We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.
+
+
+
+
 
 # Experiment 1
 
@@ -384,7 +433,7 @@ pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) 
     ggtitle("Data with posterior predictions",
             subtitle = "S1. red bars are empirical data, black points are model predictions and credible intervals") +
     labs(x = "Accuracy Level: 1= exact match,   +1= 0.01-2% error, +2= 2.01-15% error, +3= Over 15% error") +
-    theme_minimal()
+    theme_minimal() +
     theme(legend.background = element_blank() #,legend.position = c(.9, .75)
     )
 
@@ -574,7 +623,7 @@ s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |>
   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
   ggh4x::facet_nested_wrap(~pct_goal,axes="all",scales="free",ncol=2)  + 
   labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
-  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7))) + 
+  theme(axis.text.y=element_text(face = "plain", size = rel(0.7))) + 
     scale_x_continuous(breaks = seq(0, 0.5, by = 0.05),
                     labels = scales::percent_format(accuracy = 1))
 

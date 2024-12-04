@@ -582,15 +582,6 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |>
 #   select(id,refClass,state,block,plan,total_kWh,orig_kWh,pct_change,accuracy_level,n_change,matched_goal,error,abs_error) |> print(n=20)
 
 
-# compute percentage of subjects per accuracy level per group
-observed_props <- s2_agg1 |>
-  group_by(refClass, accuracy_level) |>
-  summarise(n = n()) |>
-  group_by(refClass) |>
-  mutate(prop = n/sum(n)) |>
-  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" )) 
-
-
 # confirm that the proportions are with respect to the total number of subjects in each refClass
 # 74/.268 = 276; 69*4=276;  38/.138=275;  .435 + .0797 + .21 + .275 = 1
 
@@ -632,13 +623,13 @@ prop_acc_s2 <- s2_agg1 %>%
     mutate(Probability = count / sum(count)) %>%
     ungroup()
 
-# % of entire sample 
-prop_combo_s2 <- s2_agg1 %>%
-    group_by(refClass, accuracy_level) %>%
-    summarise(count = n()) %>%
-    group_by(refClass) %>%
-    mutate(Probability = count / sum(count)) %>%
-    ungroup()
+  # % of entire sample 
+  prop_combo_s2 <- s2_agg1 %>%
+      group_by(refClass, accuracy_level) %>%
+      summarise(count = n()) %>%
+      group_by(refClass) %>%
+      mutate(Probability = count / sum(count)) %>%
+      ungroup()
 
 
 

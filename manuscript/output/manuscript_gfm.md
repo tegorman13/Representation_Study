@@ -1,10 +1,36 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
-Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez
-2024-11-19
+Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
+Barber
+2024-12-03
 
 # Introduction
 
+- highlight the significant contribution of residential energy
+  consumption to carbon emissions and the potential for substantial
+  reductions. Make point about urgency of climate change? (IPCC (2014)
+  and EIA (2012) ).
+
+- Electricity bills are a primary source of energy-use information for
+  consumers and offer a promising avenue for enhancing communication
+  about energy consumption (Fischer, 2008)
+
 ### Literature Review
+
+- Canfield et al. (2017) found that tables were more effective than
+  graphs for conveying specific electricity usage data, likely because
+  tables facilitate straightforward point reading. However, they also
+  noted that individuals with lower energy literacy had reduced
+  comprehension across all formats.
+- Canfield et al.’s (2017) findings on preferences for historical use
+  information and the impact of neighbor comparisons
+- The concept of cognitive fit posits that performance improves when the
+  information presentation format aligns with the task requirements
+  (Vessey, 1991)
+- alignment can reduce cognitive load and enhance accuracy in planning
+  (Shah & Freedman, 2009)
+- Reimer et al. (2015) provide context on how numerical formats affect
+  risk perception, the reference class problem, and the benefits of
+  natural frequencies.
 
 Energy poverty continues to be a pervasive issue in the United States
 Memmott et al. (2021) . This challenge partly arises from difficulties
@@ -13,6 +39,31 @@ development of precise energy reduction plans Reimer et al. (2015).
 Prior research by Canfield et al. (2017) demonstrated that presenting
 energy information in tabular formats enhances comprehension relative to
 graphs.
+
+The way numerical information is presented can significantly affect how
+individuals process and use that information (Reimer et al., 2015). The
+reference class problem highlights that numbers without clear reference
+points can lead to misinterpretation, as the meaning of a statistic
+depends on the category or class it refers to (Gigerenzer & Edwards,
+2003; Reimer et al., 2015). Presenting energy information in absolute
+units (e.g., kWh) provides a clear reference class, potentially
+enhancing comprehension.
+
+Furthermore, research suggests that natural frequencies and absolute
+numbers are generally easier for individuals to understand compared to
+percentages or probabilities (Gigerenzer & Hoffrage, 1995; Hoffrage et
+al., 2000). In the context of energy conservation, using absolute units
+may facilitate more accurate planning and decision-making by aligning
+with intuitive cognitive processing.
+
+Despite existing studies on energy-use communication and format effects,
+limited research has explored how different numerical representations
+influence consumers’ ability to create accurate energy conservation
+plans. Specifically, there is a gap in understanding how presenting
+energy information in absolute units versus percentages or monetary
+terms affects the precision of planning appliance-specific reductions.
+Addressing this gap is crucial for developing effective interventions
+that promote energy conservation behaviors.
 
 ### Hypotheses
 
@@ -358,22 +409,12 @@ pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) 
     ggtitle("Data with posterior predictions",
             subtitle = "S1. red bars are empirical data, black points are model predictions and credible intervals") +
     labs(x = "Accuracy Level: 1= exact match,   +1= 0.01-2% error, +2= 2.01-15% error, +3= Over 15% error") +
-    theme_minimal()
-```
-
-![](manuscript_files/figure-commonmark/unnamed-chunk-6-2.png)
-
-``` r
+    theme_minimal() +
     theme(legend.background = element_blank() #,legend.position = c(.9, .75)
     )
 ```
 
-    List of 1
-     $ legend.background: list()
-      ..- attr(*, "class")= chr [1:2] "element_blank" "element"
-     - attr(*, "class")= chr [1:2] "theme" "gg"
-     - attr(*, "complete")= logi FALSE
-     - attr(*, "validate")= logi TRUE
+![](manuscript_files/figure-commonmark/unnamed-chunk-6-2.png)
 
 # Experiment 2
 
@@ -560,7 +601,7 @@ s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |>
   geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
   ggh4x::facet_nested_wrap(~pct_goal,axes="all",scales="free",ncol=2)  + 
   labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
-  theme(axis.text.y = element_text(family = "Manrope Light", face = "plain", size = rel(0.7))) + 
+  theme(axis.text.y=element_text(face = "plain", size = rel(0.7))) + 
     scale_x_continuous(breaks = seq(0, 0.5, by = 0.05),
                     labels = scales::percent_format(accuracy = 1))
 ```
