@@ -35,7 +35,8 @@ theme_nice_dist <- function() {
 # theme_set(theme_nice())
 
 theme_nice <- function() {
-  theme_minimal(base_family = "Manrope") +
+  #theme_minimal(base_family = "Manrope") +
+  theme_minimal() +
     theme(
       panel.grid.minor = element_blank(),
       plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.35)),

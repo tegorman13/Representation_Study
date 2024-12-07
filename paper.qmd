@@ -6,7 +6,6 @@ sidebar: false
 repo-actions: false
 ---
 
-
 ```{=html}
 <p class="text-center">
   <a class="btn btn-success btn-sm mb-1" href="/manuscript/output/manuscript.html" target="manuscript">

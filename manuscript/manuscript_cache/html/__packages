@@ -5,6 +5,14 @@ tidyr
 stringr
 here
 tibble
+Rcpp
+brms
+StanHeaders
+rstan
+bayestestR
+emmeans
+tidybayes
+modelsummary
 ggplot2
 gt
 knitr
@@ -17,11 +25,3 @@ flextable
 pander
 wesanderson
 glue
-Rcpp
-brms
-StanHeaders
-rstan
-bayestestR
-emmeans
-tidybayes
-modelsummary

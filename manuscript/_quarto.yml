@@ -3,6 +3,7 @@ project:
   output-dir: output
   render: 
   - "manuscript.qmd"
+  - "test.qmd"
   - "Manuscript/output/"
   - "Manuscript/Assets/"
   - "Manuscript/Assets/figs/"
@@ -18,9 +19,76 @@ execute:
 
 
 
+author:
+  - name: Thomas E. Gorman
+    url: https://tegorman13.github.io/
+    orcid: "0000-0001-5366-5442"
+    affiliations: 
+      - ref: cclab
+      - ref: clara
+    attributes: 
+      corresponding: true
+  - name: Torsten Reimer
+    url: https://web.ics.purdue.edu/~treimer/
+    orcid: 0000-0002-7419-0076
+    affiliations:
+      - ref: cclab
+      - ref: clara
+  - name: Juan Pablo Loaiza Ramirez
+    url: https://www.cla.purdue.edu/directory/profiles/loaiza-ramirez,juan-pablo.html
+    orcid: 0000-0001-9663-0522
+    affiliations:
+      - ref: cclab
+      - ref: clara
+  - name: Hayden Barber
+    url: https://www.sdstate.edu/directory/hayden-barber
+    orcid: 0000-0002-3465-8615
+    affiliations:
+      - ref: sdsu
+affiliations:
+  - id: cclab
+    name: Communication and Cognition Lab, Purdue University
+    city: West Lafayette
+    region: IN
+    country: USA
+    postal-code: 47907
+    url: https://web.ics.purdue.edu/~treimer/
+  - id: clara
+    name: College of Liberal Arts Research Academy
+    department: Purdue University
+    city: West Lafayette
+    region: IN
+    country: USA
+    postal-code: 47907
+    url: https://cla.purdue.edu/about/college-initiatives/research-academy/
+  - id: sdsu
+    name: School of Communication & Journalism, South Dakota State University
+    city: Brookings
+    region: SD
+    country: USA
+    url: https://www.sdstate.edu/directory/hayden-barber
 
 
-bibliography: ../assets/ccl_bib.bib
+format: 
+  html: 
+    wordcount-banner: true
+    theme: 
+      - zephyr
+      - ../assets/custom.scss
+    toc: true
+    shift-heading-level-by: 1
+    code-summary: "Show the code"
+    title-block-banner: "#000D51"
+    include-in-header:
+        - text: |
+            <style type="text/css">
+            h2.hide {
+                display: none;
+            }
+            </style>
+
+
+bibliography: ../assets/rs_bib.bib
 csl: ../assets/apa.csl
 google-scholar: false
 

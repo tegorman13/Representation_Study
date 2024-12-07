@@ -1,7 +1,7 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
 Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
-2024-12-03
+2024-12-07
 
 # Introduction
 
@@ -16,32 +16,32 @@ Barber
 
 ### Literature Review
 
-- Canfield et al. (2017) found that tables were more effective than
+- Canfield et al. (2017) found that tables were more effective than
   graphs for conveying specific electricity usage data, likely because
   tables facilitate straightforward point reading. However, they also
   noted that individuals with lower energy literacy had reduced
   comprehension across all formats.
-- Canfield et al.’s (2017) findings on preferences for historical use
+- Canfield et al. (2017)’s findings on preferences for historical use
   information and the impact of neighbor comparisons
 - The concept of cognitive fit posits that performance improves when the
   information presentation format aligns with the task requirements
   (Vessey, 1991)
 - alignment can reduce cognitive load and enhance accuracy in planning
-  (Shah & Freedman, 2009)
+  (Shah & Freedman, 2011)
 - Reimer et al. (2015) provide context on how numerical formats affect
   risk perception, the reference class problem, and the benefits of
   natural frequencies.
 
 Energy poverty continues to be a pervasive issue in the United States
-Memmott et al. (2021) . This challenge partly arises from difficulties
-in converting information across numerical formats, impeding the
+Memmott et al. (2021). This challenge partly arises from difficulties in
+converting information across numerical formats, impeding the
 development of precise energy reduction plans Reimer et al. (2015).
 Prior research by Canfield et al. (2017) demonstrated that presenting
 energy information in tabular formats enhances comprehension relative to
 graphs.
 
 The way numerical information is presented can significantly affect how
-individuals process and use that information (Reimer et al., 2015). The
+individuals process and use that information (Reimer et al., 2015) . The
 reference class problem highlights that numbers without clear reference
 points can lead to misinterpretation, as the meaning of a statistic
 depends on the category or class it refers to (Gigerenzer & Edwards,
@@ -51,10 +51,10 @@ enhancing comprehension.
 
 Furthermore, research suggests that natural frequencies and absolute
 numbers are generally easier for individuals to understand compared to
-percentages or probabilities (Gigerenzer & Hoffrage, 1995; Hoffrage et
-al., 2000). In the context of energy conservation, using absolute units
-may facilitate more accurate planning and decision-making by aligning
-with intuitive cognitive processing.
+percentages or probabilities Hoffrage et al. (2000). In the context of
+energy conservation, using absolute units may facilitate more accurate
+planning and decision-making by aligning with intuitive cognitive
+processing.
 
 Despite existing studies on energy-use communication and format effects,
 limited research has explored how different numerical representations
@@ -155,8 +155,8 @@ Additional data collected included:
 
 ``` r
 pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,ggplot2,gt,knitr,kableExtra,ggh4x,patchwork,lme4,flextable,pander)
-
 options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
 walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
 theme_set(theme_nice())
 
@@ -229,7 +229,17 @@ s1_agg4 |> group_by(refClass) |>
     #se=sd(pct)/sqrt(n)
 ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+ #pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")
 ```
+
+<div id="tbl-s1-agg">
+
+Table 1: Study 1: Summary of planning accuracy by reference class. The
+table shows performance as both the % of trials where participants
+matched the goal, and the mean absolute error from the target reduction
+goal.
+
+<div class="cell-output-display">
 
 | refClass   | Avg. % meeting goal | Avg. Deviation From Goal |
 |:-----------|:--------------------|:-------------------------|
@@ -237,14 +247,21 @@ s1_agg4 |> group_by(refClass) |>
 | Percentage | 0.22                | 0.16                     |
 | USD        | 0.10                | 0.19                     |
 
-``` r
- #pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")
-```
+</div>
+
+</div>
 
 For our primary analyses of participants’ ability to create accurate
 energy-saving plans, we employed an accuracy level binning approach by
 categorizing responses into four distinct levels: Exact match, 0.01–2%
-error, 2.01–15% error, and Over 15% error.
+error, 2.01–15% error, and Over 15% error. The current analysis employs
+a cumulative ordinal regression model, implemented via a Bayesian
+hierarchical framework (Bürkner, 2017) . This approach allows the
+estimation of threshold parameters and regression coefficients that
+characterize how changes in predictor variables (such as the reference
+class: kWh, percentage, or USD) relate to probabilities of being in each
+accuracy category. All analyses were carried out in R (Team, 2020) and
+the tidyverse package (Wickham et al., 2019).
 
 ``` r
 # compute percentage of subjects per accuracy level per group
@@ -268,12 +285,29 @@ observed_props_s1 |>
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
+<div id="tbl-s1-prop">
+
+Table 2: Study 1: The table shows the percentage of participants who
+fell into each accuracy level for each reference class condition
+(percentages of kWh, \$, and USD columns reflect within condition
+percentages). The combined group column reflects the percentage of
+participants in each accuracy level when aggregating across across all
+reference class conditions.
+
+<div class="cell-output-display">
+
 | Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
 |:---------------|:------|:-----------|:------|:------------------|
 | Exact match    | 37.5% | 22.1%      | 9.8%  | 22.6%             |
 | 0.01-2% error  | 15.1% | 17.6%      | 11.2% | 14.4%             |
 | 2.01-15% error | 26.3% | 41.9%      | 47.8% | 38.9%             |
 | Over 15% error | 21.2% | 18.4%      | 31.2% | 24.1%             |
+
+</div>
+
+</div>
+
+see <a href="#fig-s1-plot" class="quarto-xref">Figure 2</a>
 
 ``` r
 prop_acc_s1 <- s1_agg %>%
@@ -296,10 +330,11 @@ ggplot(prop_acc_s1, aes(x = accuracy_level, y = Probability, fill = refClass)) +
 
 <div id="fig-s1-plot">
 
-<img src="manuscript_files/figure-commonmark/fig-s1-plot-1.png"
-id="fig-s1-plot" />
+![](manuscript_files/figure-commonmark/fig-s1-plot-1.png)
 
-Figure 2
+Figure 2: Study 1: Proportion of participants in each accuracy level,
+colored by reference class. A larger % of participants in the Exact
+Match, or 0.01-2% error bins indicates better performance.
 
 </div>
 
@@ -310,35 +345,43 @@ deviations (0.01-2% error), moderate deviations (2.01-15% error), and
 major deviations (\>15% error). For each comparison, we provide
 posterior odds ratios (OR) and their 95% CIs.
 
+<div id="tbl-s1-ord">
+
+Table 3
+
 ``` r
+##| tbl-cap: "Study 1: Ordinal Regression Model Results."
+
+
 ordinal_model_s1 <- brm(
     accuracy_level ~ refClass + (1|id) + (1|state),
     data = s1_agg,
     family = cumulative("logit"),
     cores = 4,
-    iter = 2000,
+    iter = 5000,
+    save_pars = save_pars(all = TRUE),
     control = list(adapt_delta = 0.99), 
-    prior = c(prior(normal(0, 2), class = "Intercept"), 
-                prior(normal(0, 1.5), class = "b")), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
     file = paste0(here::here("data/model_cache",'s1_ordinal3.rds')) 
 )
 
-#summary(ordinal_model_s1)
 
 
 
 
-# describe_posterior(ordinal_model_s1, centrality = "Mode") |> 
-#     filter(stringr::str_detect(Parameter, "b_")) |> 
-#     mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
-#     mutate(across(where(is.numeric), round, 3)) |> 
-#     kable(booktabs = TRUE)
+#colnames(mted1) <- c("Term", "Estimate","95% CrI Lower", "95% CrI Upper", "pd")
+
+# as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[, c(1,2,4,5,6)] |> 
+#   setNames(c("Parameter", "Estimate", "CI_Lower", "CI_Upper", "pd")) |> 
+#   mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> kable(escape=FALSE,booktabs=TRUE,align=c("l"), row.names = FALSE)
+
 
 # Get predicted probabilities
 pred_summary <- ordinal_model_s1 |>
     epred_draws(newdata = data.frame(refClass = c("kWh", "Percentage", "USD")),
                 ndraws = 1000, re_formula = NA) |>
-    group_by(refClass, .category) |>
+    group_by(refClass, Category=.category) |>
     summarise(
         mean_prob = mean(.epred),
         lower_ci = quantile(.epred, 0.025),
@@ -347,74 +390,112 @@ pred_summary <- ordinal_model_s1 |>
 #pred_summary |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy")
 
 
-# Convert log-odds to odds ratios
-posterior_samples <- as.data.frame(ordinal_model_s1)
-odds_ratios <- data.frame(
-  Percentage_vs_kWh = exp(posterior_samples$b_refClassPercentage),
-  USD_vs_kWh = exp(posterior_samples$b_refClassUSD)
-)
+#plot(conditional_effects(ordinal_model_s1),points=TRUE)
 
-# Calculate summary statistics
-odds_ratio_summary <- data.frame(
-    comparison = c("Percentage vs kWh", "USD vs kWh"),
-    odds_ratio = c(mean(odds_ratios$Percentage_vs_kWh),
-                    mean(odds_ratios$USD_vs_kWh)),
-    ci_lower = c(quantile(odds_ratios$Percentage_vs_kWh, 0.025),
-                quantile(odds_ratios$USD_vs_kWh, 0.025)),
-    ci_upper = c(quantile(odds_ratios$Percentage_vs_kWh, 0.975),
-                quantile(odds_ratios$USD_vs_kWh, 0.975))
-)
+# or_table |>
+#       rownames_to_column(var = "Term") |>
+#       filter(!stringr::str_detect(Term, "Intercept")) |> kable(escape=FALSE,booktabs=TRUE,align=c("l"))
 
 
-odds_ratio_summary |> kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+# or_table <- data.frame(exp(fixef(ordinal_model_s1)))
+# or_table |>
+#   rownames_to_column(var = "Term") |>
+#   filter(!stringr::str_detect(Term, "Intercept")) |>
+#   as_flextable() |>
+#   set_header_labels(values = list(
+#     OR = "Odds Ratio",
+#     `2.5 %` = "Lower 95% CI",
+#     `97.5 %` = "Upper 95% CI"
+#   )) |>
+#   flextable::add_footer_lines(values = "Note: Odds ratios derived from the ordinal logistic regression model.") |> 
+#   align(align = 'center', part = 'all') |>
+#   fontsize(size = 10, part = "all")
 ```
 
-| comparison        | odds_ratio | ci_lower  | ci_upper |
-|:------------------|:-----------|:----------|:---------|
-| Percentage vs kWh | 2.27407    | 0.6177874 | 6.14783  |
-| USD vs kWh        | 14.09463   | 4.0796697 | 38.03732 |
+</div>
+
+<div id="tbl-s1-or">
+
+Table 4: **Experiment 1**: Ordinal Regression results.
+
+| Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
+|:-------------------|:---------|:---------|:---------|:-----|
+| Intercept\[1\]     | -1.94    | -3.19    | -0.74    | 1.00 |
+| Intercept\[2\]     | 0.20     | -1.02    | 1.42     | 0.63 |
+| Intercept\[3\]     | 4.36     | 3.11     | 5.65     | 1.00 |
+| refClassPercentage | 0.85     | -0.54    | 2.23     | 0.88 |
+| refClassUSD        | 2.72     | 1.41     | 4.06     | 1.00 |
+
+</div>
+
+<div id="tbl-s1-epred">
+
+Table 5: **Experiment 1**: Odds ratios for group comparisons.
+
+| Term               | Estimate | Est.Error | Q2.5 | Q97.5 |
+|:-------------------|:---------|:----------|:-----|:------|
+| refClassPercentage | 2.3      | 2         | 0.58 | 9.3   |
+| refClassUSD        | 15.2     | 2         | 4.11 | 58.1  |
+
+</div>
+
+The ordinal model is parameterized with thresholds (intercepts), and
+positive coefficients can indicate that it is more difficult to achieve
+higher accuracy categories in the USD condition. The model output
+suggests that, compared to the kWh condition, the USD condition shows a
+positive coefficient (Estimate = 2.72, 95% CI: 1.41 to 4.06) for the
+ordinal outcome. At least to me, this positive coefficient appears to
+indicate that, relative to the kWh reference class, participants in the
+USD condition are more likely to fall into higher numerical categories
+of the dependent variable coding. However, because the dependent
+variable is ordered from best (Exact match) to worst (Over 15% error),
+care is needed in interpretation. The Percentage condition coefficient
+(Estimate = 0.85, 95% CI: -0.54 to 2.23) is more uncertain, with its
+credible interval overlapping zero. Posterior predictive checks (Figure
+3) showed that the ordinal model provided a reasonable fit to the
+observed data (see
+<a href="#fig-s1-plot2" class="quarto-xref">Figure 3</a>).
 
 ``` r
-# |comparison        | odds_ratio| ci_lower| ci_upper|
-# |:-----------------|----------:|--------:|--------:|
-# |Percentage vs kWh |        2.3|     0.62|      6.2|
-# |USD vs kWh        |       14.1|     4.08|     38.0|
-
-
-#odds_ratio_summary |> pander::pandoc.table(caption="Study 1: Odds ratios of accuracy")
-```
-
-``` r
-bayesplot::color_scheme_set(wes_palettes[1]$BottleRocket1[1:6])
+#bayesplot::color_scheme_set(wes_palettes[1]$BottleRocket1[1:6])
 
 # Plot predicted probabilities
-ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = .category)) +
-    geom_bar(stat = "identity", position = position_dodge()) +
-    geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci),
-                    position = position_dodge(width = 0.9), width = 0.2) +
-    labs(y = "Predicted Probability", x = "Reference Class", fill = "Accuracy Level") +
-    ggtitle("Study 1: Predicted Probabilities of Accuracy Level by Reference Class") +
-    theme_minimal()
-```
+# ggplot(pred_summary, aes(x = refClass, y = mean_prob, fill = Category)) +
+#     geom_bar(stat = "identity", position = position_dodge()) +
+#     geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci),
+#                     position = position_dodge(width = 0.9), width = 0.2) +
+#     labs(y = "Predicted Probability", x = "Reference Class", fill = "Accuracy Level") +
+#     ggtitle("Study 1: Predicted Probabilities of Accuracy Level by Reference Class") +
+#     theme_minimal()
 
-![](manuscript_files/figure-commonmark/unnamed-chunk-6-1.png)
 
-``` r
+
 #pp_check(ordinal_model_s1) + ggtitle("Study 1: Posterior Predictive Checks for Ordinal Regression Model") + theme_minimal()
 
-
 pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) +
-    # scale_x_continuous("y", breaks = 1:7) +
-    # scale_y_continuous(NULL, breaks = NULL, expand = expansion(mult = c(0, 0.05))) +
-    ggtitle("Data with posterior predictions",
-            subtitle = "S1. red bars are empirical data, black points are model predictions and credible intervals") +
-    labs(x = "Accuracy Level: 1= exact match,   +1= 0.01-2% error, +2= 2.01-15% error, +3= Over 15% error") +
-    theme_minimal() +
-    theme(legend.background = element_blank() #,legend.position = c(.9, .75)
-    )
+  scale_x_continuous("Response Category", breaks = 1:4, 
+            labels = c("Exact", "0.01-2%", "2.01-15%", ">15%")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  ggtitle("Posterior Predictive Check by Reference Class") +
+  theme_minimal() +
+  theme(
+    legend.background = element_blank(),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
-![](manuscript_files/figure-commonmark/unnamed-chunk-6-2.png)
+<div id="fig-s1-plot2">
+
+![](manuscript_files/figure-commonmark/fig-s1-plot2-1.png)
+
+Figure 3: Study 1: Proportion of participants in each accuracy level,
+colored by reference class, and seprated in facets based on the levels
+of reduction goal. A larger % of participants in the Exact Match, or
+0.01-2% error bins indicates better performance.
+
+</div>
 
 # Experiment 2
 
@@ -449,7 +530,8 @@ s2_agg1 <- s2_long |>
   ) |>
   mutate(matched_goal = (pct_change == pct),
                 error = pct_change - pct,
-                abs_error = abs(error)) |> 
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.001)) |> 
       ungroup() |> # Add ungroup here
         mutate(
             accuracy_level = factor(
@@ -466,7 +548,9 @@ s2_agg1 <- s2_long |>
 
 s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
-    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
@@ -483,19 +567,57 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |>
 s2_agg4 |> group_by(refClass) |>
     summarise(
     'Avg. % meeting goal' = mean(pct),
-    'Avg. Deviation From Goal' = median(mean_pct_change),
+    'Avg. Abs. Deviation From Goal' = median(mean_pct_change),
+    'Log Deviation' = (median(mean_log_abs_error)),
     # sd = sd(pct),
     # n = n(),
     #se=sd(pct)/sqrt(n)
 ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+# s2_agg1 |> group_by(id,refClass,calc) |> 
+#     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+#     summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
+#     mean_abs_error=mean(abs_error),mean_log_abs_error=mean(log_abs_error),
+#     n_accuracy=first(n_accuracy)) 
+
+
+
+# s2_agg4 %>% ggplot(aes(x=refClass,y=mean_log_abs_error,fill=refClass)) + 
+#   stat_summary(fun=mean, geom="bar") +
+#   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+#   geom_jitter(alpha = 0.2, width = 0.2, height = 0) 
+            
+
+
+
+# s2_agg4 |> 
+#   ggplot(aes(x = mean_log_abs_error,fill = refClass)) +
+#   geom_density(alpha = 0.7) 
+
+# library(ggridges)
+# s2_agg1 |>  ggplot(aes(y = refClass, x=log_abs_error,fill=refClass,col=refClass)) +
+#     geom_density_ridges(alpha = 0.5) +
+#     geom_vline(aes(xintercept=(log_abs_error)))
 ```
 
-| refClass   | Avg. % meeting goal | Avg. Deviation From Goal |
-|:-----------|:--------------------|:-------------------------|
-| kWh        | 0.44                | 0.13                     |
-| Percentage | 0.27                | 0.16                     |
-| USD        | 0.18                | 0.17                     |
+<div id="tbl-s2-agg">
+
+Table 6: Study 2: Summary of planning accuracy by reference class. The
+table shows performance as both the % of trials where participants
+matched the goal, and the mean absolute error from the target reduction
+goal.
+
+<div class="cell-output-display">
+
+| refClass   | Avg. % meeting goal | Avg. Abs. Deviation From Goal | Log Deviation |
+|:-----------|:--------------------|:------------------------------|:--------------|
+| kWh        | 0.44                | 0.13                          | -4.7          |
+| Percentage | 0.27                | 0.16                          | -3.5          |
+| USD        | 0.18                | 0.17                          | -2.5          |
+
+</div>
+
+</div>
 
 ``` r
 # compute percentage of subjects per accuracy level per group
@@ -519,12 +641,27 @@ observed_props_s2 |>
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
+<div id="tbl-s2-prop">
+
+Table 7: Study 2: The table shows the percentage of participants who
+fell into each accuracy level for each reference class condition
+(percentages of kWh, \$, and USD columns reflect within condition
+percentages). The combined group column reflects the percentage of
+participants in each accuracy level when aggregating across across all
+reference class conditions.
+
+<div class="cell-output-display">
+
 | Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
 |:---------------|:------|:-----------|:------|:------------------|
 | Exact match    | 43.5% | 26.8%      | 18.5% | 30.2%             |
 | 0.01-2% error  | 8%    | 13.8%      | 9.1%  | 10.3%             |
 | 2.01-15% error | 21%   | 33.3%      | 38.4% | 30.5%             |
 | Over 15% error | 27.5% | 26.1%      | 34.1% | 29%               |
+
+</div>
+
+</div>
 
 ``` r
 # % of entire sample 
@@ -551,7 +688,7 @@ ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = refClass))
 <img src="manuscript_files/figure-commonmark/fig-s2-plot-1.png"
 id="fig-s2-plot" />
 
-Figure 3
+Figure 4
 
 </div>
 
@@ -578,14 +715,158 @@ ggplot(prop_combo_s2_full, aes(x = accuracy_level, y = Probability, fill = refCl
 
 <div id="fig-s2-plot2">
 
-<img src="manuscript_files/figure-commonmark/fig-s2-plot2-1.png"
-id="fig-s2-plot2" />
+![](manuscript_files/figure-commonmark/fig-s2-plot2-1.png)
 
-Figure 4
+Figure 5: Study 2: Proportion of participants in each accuracy level,
+colored by reference class, and seprated in facets based on the levels
+of reduction goal, and rounding. A larger % of participants in the Exact
+Match, or 0.01-2% error bins indicates better performance.
+
+</div>
+
+<div id="tbl-s2-ord">
+
+Table 8
+
+``` r
+##| tbl-cap: "Study 2: Ordinal Regression Model Results."
+
+ordinal_model_s2_logit <- brm(
+  accuracy_level ~ refClass +rounded+pct_goal + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 2), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 2), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_add.rds')) # Cache for efficiency
+)
+#summary(ordinal_model_s2_logit)
+
+
+
+
+# as.data.frame(describe_posterior(ordinal_model_s2_logit, centrality = "Mean"))[, c(1,2,4,5,6)] |> 
+#   setNames(c("Parameter", "Estimate", "CI_Lower", "CI_Upper", "pd")) |> 
+#   mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
+#   kable(escape = FALSE, booktabs = TRUE, align = c("l"), row.names = FALSE)
+
+
+pred_summary_s2 <- ordinal_model_s2_logit %>%
+  epred_draws(newdata = s2_agg1, re_formula = NA,ndraws=200) %>%
+ # group_by("Reference Class"=refClass, rounded, "% Goal"=pct_goal, Category=.category) %>%
+  group_by("Reference Class"=refClass, Category=.category) %>%
+  summarise(
+    mean_prob = mean(.epred),
+    lower_ci = quantile(.epred, 0.025),
+    upper_ci = quantile(.epred, 0.975),
+    .groups = "drop"
+  )
+
+#pred_summary_s2 |> kable(escape=FALSE,booktabs=TRUE,align=c("l"), row.names = FALSE)
+
+
+
+# Create a new data frame with the predictor values
+# new_data <- expand.grid(
+#   refClass = c("kWh", "Percentage", "USD"),
+#   id = unique(s2_agg1$id)[1],      # Take first id
+#   state = unique(s2_agg1$state)[1], # Take first state,
+#   rounded = unique(s2_agg1$rounded)[1], # Take first rounded
+#   pct_goal = unique(s2_agg1$pct_goal)[1] # Take first pct_goal
+# )
+
+
+# or_table <- data.frame(exp(fixef(ordinal_model_s2_logit)))
+# or_table |>
+#   rownames_to_column(var = "Term") |>
+#   filter(!stringr::str_detect(Term, "Intercept")) |>
+#   as_flextable() |>
+#   set_header_labels(values = list(
+#     OR = "Odds Ratio",
+#     `2.5 %` = "Lower 95% CI",
+#     `97.5 %` = "Upper 95% CI"
+#   )) |>
+#   flextable::add_footer_lines(values = "Note: Odds ratios derived from the ordinal logistic regression model.") |> 
+#   align(align = 'center', part = 'all') |>
+#   fontsize(size = 10, part = "all")
+```
+
+</div>
+
+<div id="tbl-s2-or">
+
+Table 9: **Experiment 2.** Ordinal Regression Model Results.
+
+| Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
+|:-------------------|:---------|:---------|:---------|:-----|
+| Intercept\[1\]     | -2.13    | -3.39    | -0.86    | 1.00 |
+| Intercept\[2\]     | -0.62    | -1.89    | 0.63     | 0.84 |
+| Intercept\[3\]     | 3.15     | 1.88     | 4.42     | 1.00 |
+| refClassPercentage | 0.83     | -0.64    | 2.33     | 0.87 |
+| refClassUSD        | 1.87     | 0.31     | 3.35     | 0.99 |
+| roundedRounded     | -0.66    | -1.01    | -0.31    | 1.00 |
+| pct_goal15%        | -0.44    | -0.79    | -0.10    | 0.99 |
+
+</div>
+
+<div id="tbl-s2-epred">
+
+Table 10: **Experiment 2.** Odds ratios for group comparisons.
+
+| comparison           | odds_ratio | ci_lower | ci_upper |
+|:---------------------|-----------:|---------:|---------:|
+| Percentage vs kWh    |       3.02 |     0.53 |    10.31 |
+| USD vs kWh           |       8.80 |     1.37 |    28.42 |
+| Rounded vs Not       |       0.53 |     0.36 |     0.73 |
+| 15% Goal vs 10% Goal |       0.66 |     0.45 |     0.91 |
+
+</div>
+
+``` r
+# ggplot(pred_summary_s2, 
+#         aes(x = .category, y = mean_prob, fill = refClass )) +
+#     geom_col(position = position_dodge(width = 0.8)) +
+#     geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), 
+#                     position = position_dodge(width = 0.8)) +
+#     labs(x = "Reference Class", 
+#         y = "Predicted Probability",
+#         fill = "Accuracy Level",
+#         title = "Predicted Probabilities of Accuracy Levels by Reference Class") +
+#     scale_fill_brewer(palette = "RdYlBu") +
+#     theme_minimal() 
+
+
+
+
+
+
+pp_check(ordinal_model_s2_logit, type = "bars_grouped", group="refClass", fatten = 2) +
+  scale_x_continuous("Response Category", breaks = 1:4, 
+            labels = c("Exact", "0.01-2%", "2.01-15%", ">15%")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  ggtitle("Posterior Predictive Check by Reference Class") +
+  theme_minimal() +
+  theme(
+    legend.background = element_blank(),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+<div id="fig-s2-plot3">
+
+<img src="manuscript_files/figure-commonmark/fig-s2-plot3-1.png"
+id="fig-s2-plot3" />
+
+Figure 6
 
 </div>
 
 ### Individual Differences
+
+see <a href="#fig-s2-indv" class="quarto-xref">Figure 7</a>
 
 ``` r
 s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |> 
@@ -608,10 +889,13 @@ s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |>
 
 <div id="fig-s2-indv">
 
-<img src="manuscript_files/figure-commonmark/fig-s2-indv-1.png"
-id="fig-s2-indv" />
+![](manuscript_files/figure-commonmark/fig-s2-indv-1.png)
 
-Figure 5
+Figure 7: Study 2: Individual performance in the energy planning task,
+colored by reference class. The dashed line represents the target
+reduction goal. Participants are shown along the y axis, those who fall
+above or below the dashed line have not met the target goal. The x-axis
+represents the percent change in energy usage from the prior year.
 
 </div>
 
@@ -623,7 +907,7 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
   geom_point(aes(y=family),color="blue") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-#| 
+
 s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
   filter(appliance!="TOTAL",state=="California") |> 
   ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
@@ -634,28 +918,45 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
 
 <div id="fig-s2-indv2-1">
 
-<img src="manuscript_files/figure-commonmark/fig-s2-indv2-1.png"
-id="fig-s2-indv2-1" />
+![](manuscript_files/figure-commonmark/fig-s2-indv2-1.png)
 
-Figure 6
+Figure 8: Study 2: Respones patterns for a subset of individiual
+participants. Black points are participant responses, red points are the
+state average, and blue points are the family average. The x-axis
+represents the appliance category, and the y-axis represents the energy
+usage in kWh.
 
 </div>
 
 <div id="fig-s2-indv2-2">
 
-<img src="manuscript_files/figure-commonmark/fig-s2-indv2-2.png"
-id="fig-s2-indv2-2" />
+![](manuscript_files/figure-commonmark/fig-s2-indv2-2.png)
 
-Figure 7
+Figure 9: Study 2: Respones patterns for a subset of individiual
+participants. Black points are participant responses, red points are the
+state average, and blue points are the family average. The x-axis
+represents the appliance category, and the y-axis represents the energy
+usage in kWh.
 
 </div>
 
 # Discusion
 
+Karjalainen 2011 - people prefer information about price (Karjalainen,
+2011)
+
 # References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
+
+<div id="ref-burknerBrmsPackageBayesian2017" class="csl-entry">
+
+Bürkner, P.-C. (2017). Brms: An R Package for Bayesian Multilevel Models
+Using Stan. *Journal of Statistical Software*, *80*, 1–28.
+<https://doi.org/10.18637/jss.v080.i01>
+
+</div>
 
 <div id="ref-canfieldPerceptionsElectricityuseCommunications2017"
 class="csl-entry">
@@ -664,6 +965,48 @@ Canfield, C., Bruine De Bruin, W., & Wong-Parodi, G. (2017). Perceptions
 of electricity-use communications: Effects of information, format, and
 individual differences. *Journal of Risk Research*, *20*(9), 1132–1153.
 <https://doi.org/10.1080/13669877.2015.1121909>
+
+</div>
+
+<div id="ref-fischerFeedbackHouseholdElectricity2008" class="csl-entry">
+
+Fischer, C. (2008). Feedback on household electricity consumption: A
+tool for saving energy? *Energy Efficiency*, *1*(1), 79–104.
+<https://doi.org/10.1007/s12053-008-9009-7>
+
+</div>
+
+<div id="ref-gigerenzerSimpleToolsUnderstanding2003" class="csl-entry">
+
+Gigerenzer, G., & Edwards, A. (2003). Simple tools for understanding
+risks: From innumeracy to insight. *BMJ*, *327*(7417), 741–744.
+<https://doi.org/10.1136/bmj.327.7417.741>
+
+</div>
+
+<div id="ref-gigerenzerHowImproveBayesian1995" class="csl-entry">
+
+Gigerenzer, G., & Hoffrage, U. (1995). How to improve Bayesian reasoning
+without instruction: Frequency formats. *Psychological Review*,
+*102*(4), 684–704. <https://doi.org/10.1037/0033-295X.102.4.684>
+
+</div>
+
+<div id="ref-hoffrageCommunicatingStatisticalInformation2000"
+class="csl-entry">
+
+Hoffrage, U., Lindsey, S., Hertwig, R., & Gigerenzer, G. (2000).
+Communicating Statistical Information. *Science*, *290*(5500),
+2261–2262. <https://doi.org/10.1126/science.290.5500.2261>
+
+</div>
+
+<div id="ref-karjalainenConsumerPreferencesFeedback2011"
+class="csl-entry">
+
+Karjalainen, S. (2011). Consumer preferences for feedback on household
+electricity consumption. *Energy and Buildings*, *43*(2-3), 458–467.
+<https://doi.org/10.1016/j.enbuild.2010.10.010>
 
 </div>
 
@@ -681,6 +1024,42 @@ households before and during the COVID-19 pandemic. *Nature Energy*,
 
 Reimer, T., Jones, C., & Skubisz, C. (2015). Numeric Communication of
 Risk. In *The SAGE handbook of risk communication* (pp. 167–179).
+
+</div>
+
+<div id="ref-shahBarLineGraph2011" class="csl-entry">
+
+Shah, P., & Freedman, E. G. (2011). Bar and Line Graph Comprehension: An
+Interaction of Top-Down and Bottom-Up Processes. *Topics in Cognitive
+Science*, *3*(3), 560–578.
+<https://doi.org/10.1111/j.1756-8765.2009.01066.x>
+
+</div>
+
+<div id="ref-rcoreteamLanguageEnvironmentStatistical2020"
+class="csl-entry">
+
+Team, R. C. (2020). *R: A Language and Environment for Statistical
+Computing*. R: A Language and Environment for Statistical Computing.
+
+</div>
+
+<div id="ref-vesseyCognitiveFitTheoryBased1991" class="csl-entry">
+
+Vessey, I. (1991). Cognitive Fit: A Theory-Based Analysis of the Graphs
+Versus Tables Literature. *Decision Sciences*, *22*(2), 219–240.
+<https://doi.org/10.1111/j.1540-5915.1991.tb00344.x>
+
+</div>
+
+<div id="ref-wickhamWelcomeTidyverse2019" class="csl-entry">
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D.,
+François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M.,
+Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J.,
+Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to
+the Tidyverse. *Journal of Open Source Software*, *4*(43), 1686.
+<https://doi.org/10.21105/joss.01686>
 
 </div>
 

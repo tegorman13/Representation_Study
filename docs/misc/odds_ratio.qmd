@@ -1,0 +1,471 @@
+
+
+
+
+
+```{r}
+
+pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,ggplot2,gt,knitr,kableExtra,ggh4x,patchwork,lme4,flextable,pander)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
+theme_set(theme_nice())
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
+s1_agg <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                close_match = abs_error <= 0.03) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+```
+
+
+
+
+```{r}
+#| label: tbl-s1-ord
+#| tbl-cap: "Study 1: Odds ratios of for group comparisons. "
+
+
+ordinal_model_s1 <- brm(
+    accuracy_level ~ refClass + (1|id) + (1|state),
+    data = s1_agg,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 5000,
+    save_pars = save_pars(all = TRUE),
+    control = list(adapt_delta = 0.99), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal3.rds')) 
+)
+# 
+# ordinal_model_s1_null <- brm(
+#     accuracy_level ~  (1|id) + (1|state),
+#     data = s1_agg,
+#     family = cumulative("logit"),
+#     cores = 4,
+#     iter = 5000,
+#     save_pars = save_pars(all = TRUE),
+#     control = list(adapt_delta = 0.99), 
+#     prior = c(prior(normal(0, 3), class = "Intercept")),
+#     file = paste0(here::here("data/model_cache",'s1_null.rds')) 
+# )
+
+
+
+
+
+
+
+
+#colnames(mted1) <- c("Term", "Estimate","95% CrI Lower", "95% CrI Upper", "pd")
+
+as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[, c(1,2,4,5,6)] |> 
+  setNames(c("Parameter", "Estimate", "CI_Lower", "CI_Upper", "pd")) |> 
+  mutate(Parameter = stringr::str_remove(Parameter, "b_"))
+
+
+# ordinal_model_s1 |> emmeans(~refClass) |> contrast(method="pairwise") |>  
+#   gather_emmeans_draws() %>%
+#   mean_hdi(.width = .95)
+
+
+
+
+
+# describe_posterior(ordinal_model_s1, centrality = "Mode") |> 
+#     filter(stringr::str_detect(Parameter, "b_")) |> 
+#     mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
+#     mutate(across(where(is.numeric), round, 3)) |> 
+#     kable(booktabs = TRUE)
+
+
+
+# Get predicted probabilities
+pred_summary <- ordinal_model_s1 |>
+    epred_draws(newdata = data.frame(refClass = c("kWh", "Percentage", "USD")),
+                ndraws = 1000, re_formula = NA) |>
+    group_by(refClass, Category=.category) |>
+    summarise(
+        mean_prob = mean(.epred),
+        lower_ci = quantile(.epred, 0.025),
+        upper_ci = quantile(.epred, 0.975)
+    )
+#pred_summary |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy")
+
+
+# Convert log-odds to odds ratios
+posterior_samples <- as.data.frame(ordinal_model_s1)
+odds_ratios <- data.frame(
+  Percentage_vs_kWh = exp(posterior_samples$b_refClassPercentage),
+  USD_vs_kWh = exp(posterior_samples$b_refClassUSD)
+)
+
+# Calculate summary statistics
+odds_ratio_summary <- data.frame(
+    comparison = c("Percentage vs kWh", "USD vs kWh"),
+    odds_ratio = c(mean(odds_ratios$Percentage_vs_kWh),
+                    mean(odds_ratios$USD_vs_kWh)),
+    ci_lower = c(quantile(odds_ratios$Percentage_vs_kWh, 0.025),
+                quantile(odds_ratios$USD_vs_kWh, 0.025)),
+    ci_upper = c(quantile(odds_ratios$Percentage_vs_kWh, 0.975),
+                quantile(odds_ratios$USD_vs_kWh, 0.975))
+)
+
+
+odds_ratio_summary |> kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+# |comparison        | odds_ratio| ci_lower| ci_upper|
+# |:-----------------|----------:|--------:|--------:|
+# |Percentage vs kWh |        2.3|     0.62|      6.2|
+# |USD vs kWh        |       14.1|     4.08|     38.0|
+
+
+#odds_ratio_summary |> pander::pandoc.table(caption="Study 1: Odds ratios of accuracy")
+
+
+# odds ratios of fixed effects
+as.data.frame(fixef(ordinal_model_s1)[,-2])|> as.data.frame() %>%
+    rownames_to_column(var = "Parameter") %>%
+    mutate(across(where(is.numeric), exp)) |>
+    filter(!stringr::str_detect(Parameter, "Intercept")) 
+
+describe_posterior(ordinal_model_s1, centrality = "Median")[, c(1,2,4,5)] %>%
+  as_tibble() |> # remove rows with Intercept
+  mutate(across(where(is.numeric), exp)) |>
+  filter(!stringr::str_detect(Parameter, "Intercept")) |>
+  mutate(Parameter = stringr::str_remove(Parameter, "b_"))
+
+
+or_table <- data.frame(exp(fixef(ordinal_model_s1)))
+or_table |>
+  rownames_to_column(var = "Term") |>
+  as_flextable() |>
+  set_header_labels(values = list(
+    OR = "Odds Ratio",
+    `2.5 %` = "Lower 95% CI",
+    `97.5 %` = "Upper 95% CI"
+  )) |>
+  flextable::add_footer_lines(values = "Note: Odds ratios derived from the ordinal logistic regression model.") |> 
+  align(align = 'center', part = 'all') |>
+  fontsize(size = 10, part = "all")
+
+
+
+
+posterior_draws <- as_draws_df(ordinal_model_s1) |> select(starts_with("b_"))
+
+# Compute posterior summaries and exponentiate to get odds ratios
+or_summary <- posterior_draws %>%
+  summarise(across(starts_with("b_"),
+                   list(mean = ~mean(.x),
+                        sd = ~sd(.x),
+                        lower95 = ~quantile(.x, 0.025),
+                        upper95 = ~quantile(.x, 0.975)))) %>%
+  tidyr::pivot_longer(cols = everything(),
+                      names_to = c("parameter", ".value"),
+                      names_pattern = "(b_.*)_(.*)") %>%
+  mutate(odds_ratio = exp(mean),
+         lower95_or = exp(lower95),
+         upper95_or = exp(upper95))
+
+or_table <- or_summary %>%
+  select(parameter, odds_ratio, lower95_or, upper95_or) %>%
+  mutate(parameter = gsub("b_", "", parameter)) %>%
+  rename("Predictor" = parameter,
+         "OR" = odds_ratio,
+         "2.5% CI" = lower95_or,
+         "97.5% CI" = upper95_or) %>%
+  kbl(digits = 2, booktabs = TRUE, align = "lccc",
+      caption = "Odds Ratios for Ordinal Model") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+print(or_table)
+
+```
+
+
+
+```{r}
+
+
+summary(ordinal_model_s1)
+
+pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) +
+  scale_x_continuous("Response Category", breaks = 1:4, 
+            labels = c("Exact", "0.01-2%", "2.01-15%", ">15%")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  ggtitle("Posterior Predictive Check - ordinal_model_s1") +
+  theme_minimal() +
+  theme(
+    legend.background = element_blank(),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+pp_check(ordinal_model_s1, type = "dens_overlay_grouped", group="refClass", fatten = 2,ndraws=100) +   scale_x_continuous("Response Category", breaks = 1:4, 
+            labels = c("Exact", "0.01-2%", "2.01-15%", ">15%")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  ggtitle("Posterior Predictive Check - ordinal_model_s1") +
+  theme_minimal() +
+  theme(
+    legend.background = element_blank(),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+
+
+
+```{r}
+
+multinomial_model_s1 <- brm(
+  accuracy_level ~ refClass + (1|id) + (1|state),
+  data = s1_agg,
+  family = categorical(), # Note: categorical() for multinomial
+  cores = 4,
+  iter = 1000,
+  save_pars = save_pars(all = TRUE),
+  control = list(adapt_delta = 0.99, max_treedepth=12),
+#   prior = c(prior(normal(0, 3), class = "Intercept"), 
+#             prior(normal(0, 3), class = "b")),
+  file = paste0(here::here("data/model_cache",'s1_multinomial.rds')) 
+)
+
+summary(multinomial_model_s1)
+pp_check(multinomial_model_s1, type = "bars_grouped", group="refClass", fatten = 2,ndraws=100) + labs(title = "Study 1: Posterior predictive check for the multinomial model") + theme_minimal()
+
+```
+
+
+
+```{r}
+#| eval: false
+
+loo_ordinal <- LOO(ordinal_model_s1, moment_match=TRUE)
+loo_multinomial <- LOO(multinomial_model_s1, moment_match=TRUE, reloo=TRUE)
+loo_compare(loo_ordinal, loo_multinomial)
+
+
+
+loo_ordinal <- LOO(ordinal_model_s1)
+loo_multinomial <- LOO(multinomial_model_s1)
+loo_compare(loo_ordinal, loo_multinomial)
+
+
+```
+
+
+
+
+
+
+# S2
+
+
+
+```{r}
+#| label: tbl-s2-agg
+#| tbl-cap: "Study 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+                error = pct_change - pct,
+                abs_error = abs(error)) |> 
+      ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+  
+
+# overall pct of subjects who matched their goal
+s2_agg4 |> group_by(refClass) |>
+    summarise(
+    'Avg. % meeting goal' = mean(pct),
+    'Avg. Deviation From Goal' = median(mean_pct_change),
+    # sd = sd(pct),
+    # n = n(),
+    #se=sd(pct)/sqrt(n)
+) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
+  kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+
+
+
+```
+
+```{r}
+
+
+ordinal_model_s2_logit <- brm(
+  accuracy_level ~ refClass +rounded+pct_goal + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 2), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 2), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_add.rds')) # Cache for efficiency
+)
+summary(ordinal_model_s2_logit)
+
+
+
+
+pred_summary_s2 <- ordinal_model_s2_logit %>%
+  epred_draws(newdata = s2_agg1, re_formula = NA,ndraws=200) %>%
+  group_by("Reference Class"=refClass, rounded, "% Goal"=pct_goal, Category=.category) %>%
+  summarise(
+    mean_prob = mean(.epred),
+    lower_ci = quantile(.epred, 0.025),
+    upper_ci = quantile(.epred, 0.975),
+    .groups = "drop"
+  )
+
+
+
+# Create a new data frame with the predictor values
+new_data <- expand.grid(
+  refClass = c("kWh", "Percentage", "USD"),
+  id = unique(s2_agg1$id)[1],      # Take first id
+  state = unique(s2_agg1$state)[1], # Take first state,
+  rounded = unique(s2_agg1$rounded)[1], # Take first rounded
+  pct_goal = unique(s2_agg1$pct_goal)[1] # Take first pct_goal
+)
+
+
+# Generate predicted probabilities
+predicted_probabilities <- predict(ordinal_model_s2_logit, newdata = new_data, 
+                                  summary = FALSE, ndraws = 1000)
+
+# Calculate the predicted probability of "Exact match"
+predicted_probability_exact_match <- mean(predicted_probabilities <= 1)
+
+print(predicted_probability_exact_match)
+
+
+
+pred_summary_s2 |> pander::pandoc.table(caption="Study 1: Predicted probabilities of accuracy level by reference class",split.table=Inf)
+
+
+# Extract posterior samples
+posterior_samples_s2 <- as.data.frame(ordinal_model_s2_logit)
+
+
+odds_ratios_s2 <- posterior_samples_s2 %>%
+    transmute(
+        refClass_Percentage_vs_kWh = exp(b_refClassPercentage),
+        refClass_USD_vs_kWh = exp(b_refClassUSD),
+        rounded_Yes_vs_No = exp(b_roundedRounded),
+        pct_goal_15_vs_10 = exp(`b_pct_goal15%`)  # Note the backticks here
+    )
+
+
+# Calculate summary statistics
+odds_ratio_summary_s2 <- data.frame(
+    comparison = c("Percentage vs kWh", "USD vs kWh", "Rounded vs Not", "15% Goal vs 10% Goal"),
+    odds_ratio = c(
+        mean(odds_ratios_s2$refClass_Percentage_vs_kWh),
+        mean(odds_ratios_s2$refClass_USD_vs_kWh),
+        mean(odds_ratios_s2$rounded_Yes_vs_No),
+        mean(odds_ratios_s2$pct_goal_15_vs_10)
+    ),
+    ci_lower = c(
+        quantile(odds_ratios_s2$refClass_Percentage_vs_kWh, 0.025),
+        quantile(odds_ratios_s2$refClass_USD_vs_kWh, 0.025),
+        quantile(odds_ratios_s2$rounded_Yes_vs_No, 0.025),
+        quantile(odds_ratios_s2$pct_goal_15_vs_10, 0.025)
+    ),
+    ci_upper = c(
+        quantile(odds_ratios_s2$refClass_Percentage_vs_kWh, 0.975),
+        quantile(odds_ratios_s2$refClass_USD_vs_kWh, 0.975),
+        quantile(odds_ratios_s2$rounded_Yes_vs_No, 0.975),
+        quantile(odds_ratios_s2$pct_goal_15_vs_10, 0.975)
+    )
+)
+
+#             comparison odds_ratio ci_lower ci_upper
+# 1    Percentage vs kWh       1.99     0.73     4.43
+# 2           USD vs kWh       3.69     1.33     8.29
+# 3       Rounded vs Not       0.70     0.57     0.84
+# 4 15% Goal vs 10% Goal       0.78     0.63     0.94
+
+odds_ratio_summary_s2 |> kable()
+
+odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of accuracy")
+
+
+
+
+
+
+```

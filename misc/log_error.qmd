@@ -1,0 +1,331 @@
+
+```{r}
+
+pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,ggplot2,gt,knitr,kableExtra,ggh4x,patchwork,lme4,flextable,pander)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
+theme_set(theme_nice())
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
+s1_agg <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                close_match = abs_error <= 0.03) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+```
+
+
+
+```{r}
+
+pacman::p_load(lmerTest) #provides p-values in lmer summary
+# Log transformation of absolute error (add a small constant to avoid log(0))
+s1_agg$log_abs_error <- log(s1_agg$abs_error + 0.001)
+
+s1_agg$log_abs_error <- log(s1_agg$abs_error + 0.001)
+# Linear mixed-effects model with log-transformed error
+error_model <- lmer(log_abs_error ~ refClass + (1|id) + (1|state), data = s1_agg)
+summary(error_model)
+
+
+
+error_model_table <- broom.mixed::tidy(error_model) %>%
+mutate(Estimate = exp(estimate)) %>%
+rename('Coefficient' = term,
+        'Estimate (Exp)' = Estimate) %>%
+select(effect, Coefficient, `Estimate (Exp)`, std.error, statistic)
+
+error_model_table %>%
+kable(escape = FALSE, booktabs = TRUE, align = c("lccc"), caption = "Effect of Reference Class on Log-Transformed Error Magnitude (Mixed Model)") %>%
+kable_styling(full_width = FALSE)
+
+
+
+# diagnostic plots to assess model assumptions
+plot(error_model) # residual plot
+qqnorm(resid(error_model))
+qqline(resid(error_model))
+
+
+
+#rename coefficients and add stars to indicate significance
+coef_map2 <- c("refClassPercentage" = "Reference Class: Percentage",
+              "refClassUSD" = "Reference Class: USD",
+              "(Intercept)" = "Intercept")
+error_model_table <- modelsummary(error_model,
+                                  stars=c('*' = .1, '**' = .05, '***' = .01),
+                                  coef_rename = coef_map2,
+                                  gof_omit = 'AIC|BIC|Log.Lik.|RMSE|Std.Dev.|VC|sigma|R2 Within',
+                                  title = 'Linear Mixed-Effects Model on Log-Transformed Error') 
+
+
+error_model_table
+```
+
+
+Table: Effect of Reference Class on Log-Transformed Error Magnitude (Mixed Model)
+
+|effect   |    Coefficient     | Estimate (Exp) | std.error |statistic |
+|:--------|:------------------:|:--------------:|:---------:|:---------|
+|fixed    |    (Intercept)     |      0.01      |   0.22    |-19.1     |
+|fixed    | refClassPercentage |      1.64      |   0.32    |1.6       |
+|fixed    |    refClassUSD     |      4.12      |   0.29    |4.8       |
+|ran_pars |  sd__(Intercept)   |      6.26      |    NA     |NA        |
+|ran_pars |  sd__(Intercept)   |      1.12      |    NA     |NA        |
+|ran_pars |  sd__Observation   |      2.73      |    NA     |NA        |
+
+
+Fixed effects:
+                   Estimate Std. Error      df t value             Pr(>|t|)    
+(Intercept)          -4.244      0.222 162.883  -19.11 < 0.0000000000000002 ***
+refClassPercentage    0.496      0.316 232.000    1.57                 0.12    
+refClassUSD           1.416      0.295 231.832    4.80            0.0000028 ***
+
+
+
+```{r}
+
+
+error_model2 <- glmer(
+  log_abs_error ~ refClass + (1|id) + (1|state),
+  data = s1_agg,
+  family = gaussian(link = "identity")
+)
+summary(error_model2)
+
+
+# Publication-worthy table
+error_model_table <- broom.mixed::tidy(error_model2) %>%
+  mutate(Estimate = exp(estimate)) %>%
+  rename('Coefficient' = term,
+         'Estimate (Exp)' = Estimate) %>%
+  select(effect,Coefficient, `Estimate (Exp)`,std.error,statistic)
+
+error_model_table %>%
+  kable(escape = FALSE, booktabs = TRUE, align = c("lccc"), caption = "Effect of Reference Class on Log-Transformed Error Magnitude (Mixed Model)")
+
+```
+
+
+
+Table: Effect of Reference Class on Log-Transformed Error Magnitude (Mixed Model)
+
+|effect   |    Coefficient     | Estimate (Exp) | std.error |statistic |
+|:--------|:------------------:|:--------------:|:---------:|:---------|
+|fixed    |    (Intercept)     |      0.01      |   0.22    |-19.1     |
+|fixed    | refClassPercentage |      1.64      |   0.32    |1.6       |
+|fixed    |    refClassUSD     |      4.12      |   0.29    |4.8       |
+|ran_pars |  sd__(Intercept)   |      6.26      |    NA     |NA        |
+|ran_pars |  sd__(Intercept)   |      1.12      |    NA     |NA        |
+|ran_pars |  sd__Observation   |      2.73      |    NA     |NA        |
+
+
+
+## Bayesian version
+
+```{r}
+
+log_error_model_s1 <- brm(
+  log_abs_error ~ refClass + (1|id) + (1|state),
+  data = s1_agg,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 2000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s1.rds')) 
+)
+
+summary(log_error_model_s1)
+
+# exp and make table
+log_error_model_table <- as.data.frame(describe_posterior(log_error_model_s1, centrality = "Mean"))[, c(1,2,4,5,6)] |> 
+  setNames(c("Parameter", "Estimate", "CI_Lower", "CI_Upper", "pd")) |> 
+  mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
+    mutate(across(where(is.numeric), exp)) |>
+  kable(booktabs = TRUE)
+
+
+# plot density of raw data
+s1_agg |> 
+  ggplot(aes(x = abs_error)) +
+  geom_density(fill = "skyblue", alpha = 0.7) +
+  facet_wrap(~ refClass, scales = "free") +ggtitle("Error density by reference class")
+
+# plot density of log-transformed data
+s1_agg |> 
+  ggplot(aes(x = log_abs_error)) +
+  geom_density(fill = "skyblue", alpha = 0.7) +
+  facet_wrap(~ refClass, scales = "free") + ggtitle("Log-transformed error density by reference class")
+
+
+
+# Regression Coefficients:
+#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept             -4.23      0.25    -4.72    -3.73 1.01      630      722
+# refClassPercentage     0.51      0.31    -0.08     1.12 1.00      583     1050
+# refClassUSD            1.42      0.30     0.86     2.01 1.01      502      795
+
+
+pp_check(log_error_model_s1, type = "dens_overlay_grouped", group="refClass", fatten = 2,ndraws=100) +
+  ggtitle("Posterior Predictive Check - log_error_model_s1") +
+  theme_minimal() +
+  theme(
+    legend.background = element_blank(),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+|Parameter          | Estimate| CI_Lower| CI_Upper|  pd|
+|:------------------|--------:|--------:|--------:|---:|
+|Intercept          |     0.01|     0.01|     0.02| 2.7|
+|refClassPercentage |     1.66|     0.92|     3.08| 2.6|
+|refClassUSD        |     4.15|     2.36|     7.49| 2.7|
+
+
+
+```{r}
+
+
+
+model_list <- list("Ordinal Model (Accuracy)" = ordinal_model_s1,
+                   "Gamma Model (Error Magnitude)" = log_error_model_s1)
+
+
+ms_table <- modelsummary(model_list,
+                         exponentiate = c(TRUE, FALSE), # first model OR, second model no transform
+                         statistic = "{estimate} [{conf.low}, {conf.high}]",
+                         output = "kableExtra",
+                         booktabs = TRUE,
+                         align = "lcc",
+                         title = "Model Comparison: Accuracy (Ordinal) and Error Magnitude (Gamma)",
+                         stars = TRUE) %>%
+  kable_styling(full_width = FALSE)
+
+print(ms_table)
+
+
+```
+
+
+
+## quantile regression
+
+
+
+```{r}
+
+
+library(quantreg)
+
+# Fit quantile regression for median and upper quantiles
+error_qr <- rq(abs_error ~ refClass, data = s1_agg, tau = c(0.5, 0.9))
+
+# Summarize results
+summary(error_qr)
+
+# Publication-worthy table
+
+```
+
+Call: rq(formula = abs_error ~ refClass, tau = c(0.5, 0.9), data = s1_agg)
+
+tau: [1] 0.9
+
+Coefficients:
+                   coefficients lower bd upper bd
+(Intercept)         0.3720       0.2818   0.5205 
+refClassPercentage -0.1180      -0.2234  -0.0031 
+refClassUSD        -0.0140      -0.1405   0.1016 
+
+
+
+```{r}
+
+#--------------------------------------
+# 2. Model the effect of refClass on error magnitude
+#--------------------------------------
+# Considering abs_error as a continuous variable:
+# Because this variable might be zero or very small, check its range. If strictly positive, Gamma can be used.
+# If zero values exist, consider adding a small constant or using a zero-inflated model.
+# Here, we assume abs_error > 0.
+
+# Fit a Gamma regression model with a log link:
+error_model_gamma <- brm(
+  abs_error ~ refClass + (1 | id) + (1 | state),
+  data = s1_agg,
+  family = Gamma(link = "log"),
+  cores = 4, iter = 5000, control = list(adapt_delta = 0.95),
+  prior = c(
+    prior(normal(0, 1), class = "b"),
+    prior(normal(0, 3), class = "Intercept")
+  )
+)
+```
+
+
+
+
+```{r}
+
+ mix <- mixture(gaussian, gaussian) 
+ 
+    # Priors for the mixture model (adjust as needed)
+    prior_mix <- c(
+      prior(normal(0, 4), class = "b", dpar = "mu1"),
+      prior(normal(0, 4), class = "b", dpar = "mu2"),
+      prior(cauchy(0, .5), class = "sd", dpar = "mu1"),
+      prior(cauchy(0, .5), class = "sd", dpar = "mu2"),
+      prior(dirichlet(2, 2), class = "theta") # Prior for mixing proportions
+    )
+
+
+# Fit the mixture model
+mixture_model_s1 <- brm(
+  log_abs_error ~ refClass + (1|id),
+  data = s1_agg,
+  family = mix,
+  prior = prior_mix,
+  iter = 2000, chains = 2, cores = 2,
+  file = paste0(here::here("data/model_cache",'mixture_model_s1.rds'))
+)
+
+summary(mixture_model_s1)
+pp_check(mixture_model_s1, type = "dens_overlay_grouped", group="refClass", ndraws=100) + ggtitle("mixture_model_s1") + theme_minimal()
+
+pp_check(mixture_model_s1, type = "dens_overlay_grouped", group="refClass", ndraws=100) 
+```
