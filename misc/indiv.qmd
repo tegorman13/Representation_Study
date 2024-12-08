@@ -215,6 +215,113 @@ mutate(matched_goal = (pct_change == pct_goal),
 ```
 
 
+
+```{r}
+
+
+
+s1_agg2 <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.03) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+s1_agg4 <- s1_agg2 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+
+
+s1_agg2 |> 
+  ggplot(aes(x =log_abs_error,fill=refClass)) +
+  geom_density(alpha=.5) +
+  geom_boxplot(aes(x =log_abs_error,fill=refClass),y=-.1, width=.1, alpha = 0.5) 
+
+library(ggridges)
+library(ggstance)
+ggplot(s1_agg2, aes(y = refClass, x = log_abs_error, color = refClass)) +
+  geom_density_ridges(aes(fill = refClass), alpha = 0.2, scale = 0.5,
+                      jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
+                      position = position_raincloud(width = 0.05, height = 0.3,
+                                                    ygap = 0.05)) +
+  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  #scale_y_discrete(expand = expansion(mult = c(0.2, 0.4))) +
+ # guides(fill = "none", color = guide_legend(reverse = TRUE)) +
+  guides(fill = "none", color = "none") +
+  labs(x = "Log Absolute Deviation", y = "Reference Class", color = "Reference Class") +
+  theme(legend.position = "top")
+
+
+s1_agg2 |> 
+  ggplot(aes(x = log_abs_error,fill=refClass,col=refClass)) +
+  ggdist::stat_halfeye(alpha=.7) +
+    geom_point(
+    aes(y = -.05),
+    size = 4, alpha = 0.75,
+    shape = 21,
+    position = position_jitter(
+      height = 0.01,
+      seed = 2343
+    )
+  ) +
+  facet_wrap(~ refClass,ncol=1) + ggtitle("Log-transformed error density by reference class")
+
+s1_agg4 |> 
+  ggplot(aes(x = mean_log_abs_error,fill=refClass,col=refClass)) +
+  ggdist::stat_halfeye(alpha=.7) +
+    geom_point(
+    aes(y = -.1),
+    size = 2, alpha = 0.75,
+    shape = 21,
+    position = position_jitter(
+      height = 0.01,
+      seed = 2343
+    )
+  ) +
+  facet_wrap(~ refClass,ncol=1) + ggtitle("Log-transformed error density by reference class")
+
+
+```
+
+
+
+
 ## Study 2 - comparison against state average
 
 

@@ -1,0 +1,284 @@
+
+
+
+```{r}
+#| cache: false
+pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,
+    ggplot2,gt,knitr,kableExtra,ggh4x,patchwork, ggridges,ggstance,lme4,flextable,pander)
+
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
+
+theme_set(theme_nice())
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
+
+s1_agg <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(matched_goal = (pct_change == pct),
+                error = pct_change - pct,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007)) |> 
+      ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+  
+
+```
+
+
+
+## Study 1
+
+
+
+### Amount of change
+
+
+```{r}
+
+# plot mean_pct_change distribution
+s1_agg4 |> ggplot(aes(x = refClass, y = mean_pct_change, fill = refClass)) +
+    geom_boxplot() +
+    labs(title = "S1. Mean % Change by Reference Class",
+        x = "Reference Class",
+        y = "Mean % Change",
+        fill = "Reference Class") +
+    theme_minimal()
+
+# plot mean_pct_change density
+s1_agg4 |> ggplot(aes(x = mean_pct_change, fill = refClass)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "S1. Mean % Change Density by Reference Class",
+        x = "Mean % Change",
+        fill = "Reference Class") +
+    theme_minimal()
+
+```
+
+
+
+
+## Study2
+
+
+
+### Goal Manipulation
+
+
+
+```{r}
+
+
+
+
+ggplot(s2_agg1, aes(y = pct_goal, x = log_abs_error, color = calc)) +
+  geom_density_ridges(aes(fill = calc), alpha = 0.2, scale = 0.5,
+                      jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
+                      position = position_raincloud(width = 0.05, height = 0.1,
+                                                    ygap = 0.05)) +
+  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  #scale_y_discrete(expand = expansion(mult = c(0.2, 0.4))) +
+ # guides(fill = "none", color = guide_legend(reverse = TRUE)) +
+  guides(fill = "none") +
+  labs(x = "Log Absolute Deviation", y = "Reference Class", color = "") +
+  theme(legend.position = "top")
+
+
+
+
+ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = pct_goal)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(labels = scales::percent) +
+    labs(title = "S1. % of Participants within each Accuracy Bin",
+        x = "Accuracy Level",
+        y = "Percentage of Participants",
+        fill = "Reference Class") +
+    theme_minimal() 
+
+ggplot(data = s2_agg1, aes(x = accuracy_level, fill = pct_goal)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Accuracy Levels by Reference Class",
+       x = "Accuracy Level",
+       y = "Percentage of Participants",
+       fill = "Reference Class") +
+  theme_minimal()
+
+ggplot(data = s2_agg1, aes(x = accuracy_level, fill = pct_goal)) +
+geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+scale_y_continuous(labels = scales::percent) +
+facet_wrap(~refClass) +
+labs(title = "Accuracy Levels by Reference Class",
+      x = "Accuracy Level",
+      y = "Percentage of Participants",
+      fill = "Reference Class") +
+theme_minimal()
+
+
+```
+
+
+### Rounding
+
+
+
+```{r}
+
+ggplot(s2_agg1, aes(y = refClass, x = log_abs_error, color = rounded)) +
+  geom_density_ridges(aes(fill = rounded), alpha = 0.2, scale = 0.5,
+                      jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
+                      position = position_raincloud(width = 0.05, height = 0.1,
+                                                    ygap = 0.05)) +
+  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  #scale_y_discrete(expand = expansion(mult = c(0.2, 0.4))) +
+ # guides(fill = "none", color = guide_legend(reverse = TRUE)) +
+  guides(fill = "none") +
+  labs(x = "Log Absolute Deviation", y = "Reference Class", color = "") +
+  theme(legend.position = "top")
+
+
+ggplot(data = s2_agg1, aes(x = accuracy_level, fill = rounded)) +
+geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+scale_y_continuous(labels = scales::percent) +
+facet_wrap(~refClass) +
+labs(title = "Accuracy Levels by Reference Class",
+      x = "Accuracy Level",
+      y = "Percentage of Participants",
+      fill = "Reference Class") +
+theme_minimal()
+
+```
+
+
+
+
+
+### Tables
+
+
+
+
+### Distance plots
+```{r}
+#| label: tbl-s2-agg
+#| tbl-cap: "Study 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
+
+
+s2_agg1 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) 
+
+s2_agg4 %>% ggplot(aes(x=refClass,y=mean_log_abs_error,fill=refClass)) + 
+  stat_summary(fun=mean, geom="bar") +
+  stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
+  geom_jitter(alpha = 0.2, width = 0.2, height = 0) 
+            
+
+s2_agg4 |> 
+  ggplot(aes(x = mean_log_abs_error,fill = refClass)) +
+  geom_density(alpha = 0.7) 
+
+
+
+```

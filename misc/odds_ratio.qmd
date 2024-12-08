@@ -22,9 +22,9 @@ s2_long <- readRDS(here::here("data/s2_processed.rds")) |>
 
 s1_agg <- s1 |> 
     filter(appliance !="Total kWh") |> 
-    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc) |> 
     summarise(total_kWh = sum(value),orig_kWh=sum(family), 
-                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
                 n_change = sum(value!=family),
                 state_p_dif=mean(state_p_dif),
                 state_f_dif=mean(state_f_dif),
@@ -33,7 +33,8 @@ s1_agg <- s1 |>
     mutate(matched_goal = (pct_change == pct_goal), 
                 error = pct_change - pct_goal,
                 abs_error = abs(error),
-                close_match = abs_error <= 0.03) |>
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
     ungroup() |> # Add ungroup here
         mutate(
             accuracy_level = factor(
@@ -48,6 +49,30 @@ s1_agg <- s1 |>
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
 
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
 
 
 ```
@@ -293,11 +318,374 @@ loo_compare(loo_ordinal, loo_multinomial)
 ```
 
 
+## S1 exact match
 
+```{r}
+
+
+# Assuming s1_agg is your dataframe from Experiment 1, and it's already loaded
+
+
+# Fit a Bayesian logistic regression model
+exact_match_model <- brm(
+  matched_goal ~ refClass + (1|id) + (1|state),
+  data = s1_agg,
+  family = bernoulli(link = "logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.97),
+  prior = c(
+    prior(normal(0, 2), class = "Intercept"),
+    prior(normal(0, 2), class = "b")
+  ),
+  file = paste0(here::here("data/model_cache", 's1_exact_match_model.rds'))
+)
+summary(exact_match_model)
+
+
+exact_match_model_c_add <- brm(
+  matched_goal ~ refClass + calc+ (1|id) + (1|state),
+  data = s1_agg,
+  family = bernoulli(link = "logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.97),
+  prior = c(
+    prior(normal(0, 2), class = "Intercept"),
+    prior(normal(0, 2), class = "b")
+  ),
+  file = paste0(here::here("data/model_cache", 's1_exact_match_model_c_add.rds'))
+)
+summary(exact_match_model_c_add)
+
+
+
+exact_match_model_c_int <- brm(
+  matched_goal ~ refClass * calc+ (1|id) + (1|state),
+  data = s1_agg,
+  family = bernoulli(link = "logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.97),
+  prior = c(
+    prior(normal(0, 2), class = "Intercept"),
+    prior(normal(0, 2), class = "b")
+  ),
+  file = paste0(here::here("data/model_cache", 's1_exact_match_model_c_int.rds'))
+)
+summary(exact_match_model_c_int )
+conditional_effects(exact_match_model_c_int)
+
+
+```
+
+
+## outliers
+
+
+```{r}
+
+
+identify_outliers_group <- function(x) {
+  Q1 <- quantile(x, 0.25, na.rm = TRUE)
+  Q3 <- quantile(x, 0.75, na.rm = TRUE)
+  IQR_value <- Q3 - Q1
+  lower_bound <- Q1 - 3.3 * IQR_value
+  upper_bound <- Q3 + 3.3 * IQR_value
+  return(x < lower_bound | x > upper_bound)
+}
+
+# 2. Apply the Outlier Detection to abs_error and log_abs_error within each group
+s1_agg <- s1_agg %>%
+  group_by(refClass, calc) %>%
+  mutate(
+    outlier_abs_error = identify_outliers_group(abs_error),
+    outlier_log_abs_error = identify_outliers_group(log_abs_error)
+  ) %>%
+  ungroup()
+
+
+#s1_agg |> relocate(outlier_abs_error,.after=abs_error) |> sort(desc(outlier_abs_error)) |> head(5)
+s1_agg |> filter(outlier_abs_error) |> select(id,refClass,calc,abs_error,log_abs_error) |> # keep unique id and refClass pairs
+  distinct(id,refClass)
+
+
+# 3. Summarize the Number and Proportion of Outliers by Group
+outlier_summary_by_group <- s1_agg %>%
+  group_by(refClass, calc) %>%
+  summarise(
+    total_observations = n(),
+    outliers_abs_error = sum(outlier_abs_error),
+    percent_outliers_abs_error = round((outliers_abs_error / total_observations) * 100, 2),
+    outliers_log_abs_error = sum(outlier_log_abs_error),
+    percent_outliers_log_abs_error = round((outliers_log_abs_error / total_observations) * 100, 2)
+  ) %>%
+  ungroup()
+
+# Display the outlier summary by group
+print("Outlier Summary by Reference Class and Calculator Usage:")
+print(outlier_summary_by_group)
+
+s1_agg_no_outliers <- s1_agg %>%
+  filter(!outlier_abs_error & !outlier_log_abs_error)
+
+# Re-run the exact match comparison without outliers
+
+# Create a contingency table of reference class vs. exact match without outliers
+exact_match_table_no_outliers <- s1_agg_no_outliers %>%
+  mutate(exact_match = ifelse(matched_goal, "Exact Match", "No Exact Match")) %>%
+  count(refClass, exact_match) %>%
+  pivot_wider(names_from = exact_match, values_from = n, values_fill = 0)
+
+# Perform Chi-Square Test of Independence without outliers
+chi_square_test_no_outliers <- chisq.test(exact_match_table_no_outliers[, -1])
+
+# Display results
+print("Chi-Square Test Results (Without Outliers):")
+print(chi_square_test_no_outliers)
+
+
+
+# Optionally, re-run logistic regression without outliers
+logistic_model_no_outliers <- glm(matched_goal ~ refClass, data = s1_agg_no_outliers, family = binomial)
+summary(logistic_model_no_outliers)
+
+# Calculate Odds Ratios
+odds_ratios_no_outliers <- exp(coef(logistic_model_no_outliers))
+print("Odds Ratios (Without Outliers):")
+print(odds_ratios_no_outliers)
+
+# Calculate 95% Confidence Intervals for Odds Ratios without outliers
+conf_intervals_no_outliers <- exp(confint(logistic_model_no_outliers))
+print("95% Confidence Intervals for Odds Ratios (Without Outliers):")
+print(conf_intervals_no_outliers)
+
+
+s1_clean <- s1_agg %>%
+  # Remove trials that are outliers in abs_error or log_abs_error
+  #filter(!(outlier_abs_error | outlier_log_abs_error))
+  # remove any id that has any outlier_abs_error
+  filter(!(id %in% (s1_agg |> filter(outlier_abs_error) |> select(id) |> distinct() |> pull(id))))
+
+length(unique(s1_agg$id)) 
+length(unique(s1_clean$id))
+  
+
+
+
+
+# 2. Summary of Cleaned Data
+cleaned_summary <- s1_clean %>%
+  group_by(refClass, calc) %>%
+  summarise(
+    total_observations = n(),
+    exact_matches = sum(matched_goal),
+    percent_exact = round((exact_matches / total_observations) * 100, 2),
+    mean_abs_error = mean(abs_error, na.rm = TRUE),
+    mean_log_abs_error = mean(log_abs_error, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+# Display the cleaned data summary
+print("Cleaned Data Summary by Reference Class and Calculator Usage:")
+print(cleaned_summary)
+
+
+ordinal_model_s1_clean_calc <- brm(
+    accuracy_level ~ refClass +calc + (1|id) + (1|state),
+    data = s1_clean,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 2000,
+    save_pars = save_pars(all = TRUE),
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal_clean_calc_3.3.rds')) 
+)
+
+summary(ordinal_model_s1_clean_calc)
+
+ordinal_model_s1_clean_calc_int <- brm(
+    accuracy_level ~ refClass * calc + (1|id) + (1|state),
+    data = s1_clean,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 2000,
+    save_pars = save_pars(all = TRUE),
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal_clean_calc_int.rds')) 
+)
+
+summary(ordinal_model_s1_clean_calc_int)
+conditional_effects(ordinal_model_s1_clean_calc_int)
+
+
+
+
+
+# logistic regression on exact match with clean data (frequentist)
+logistic_model_clean <- glm(matched_goal ~ refClass, data = s1_clean, family = binomial)
+summary(logistic_model_clean)
+
+# logistic regression on exact match with clean data (frequentist) - mixed effects
+logistic_model_clean_mixed <- glmer(matched_goal ~ refClass + (1|id) + (1|state), data = s1_clean, family = binomial)
+summary(logistic_model_clean_mixed)
+
+# logistic regression on exact match with clean data (frequentist) - mixed effects
+logistic_model_clean_mixed <- glmer(matched_goal ~ refClass+calc + (1|id) , data = s1_clean, family = binomial)
+summary(logistic_model_clean_mixed)
+
+
+
+# logistic regression on exact match with clean data (bayesian)
+logistic_model_clean_bayes <- brm(
+  matched_goal ~ refClass + (1|id) + (1|state),
+  data = s1_clean,
+  family = bernoulli(link = "logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.97),
+  prior = c(
+    prior(normal(0, 2), class = "Intercept"),
+    prior(normal(0, 2), class = "b")
+  ),
+  file = paste0(here::here("data/model_cache", 's1_exact_match_model_clean.rds'))
+)
+summary(logistic_model_clean_bayes)
+conditional_effects(logistic_model_clean_bayes)
+
+
+
+```
+
+
+
+
+## outlier from avg. 
+
+```{r}
+
+group_stats <- s1_agg |>
+  group_by(refClass, calc) |>
+  summarise(
+    group_mean_abs_error = mean(abs_error, na.rm = TRUE),
+    group_sd_abs_error = sd(abs_error, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Calculate participant-level average abs_error
+participant_stats <- s1_agg |>
+  group_by(id, refClass, calc) |>
+  summarise(
+    avg_abs_error = mean(abs_error, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Join group stats with participant stats
+participant_stats <- participant_stats |>
+  left_join(group_stats, by = c("refClass", "calc"))
+
+# Identify participants to exclude based on the 2.5 SD threshold
+participants_to_exclude <- participant_stats |>
+  mutate(
+    exclusion_threshold = group_mean_abs_error + 2.5 * group_sd_abs_error,
+    exclude = avg_abs_error > exclusion_threshold
+  ) |>
+  filter(exclude)
+
+
+
+ordinal_model_s1_clean_calc <- brm(
+    accuracy_level ~ refClass +calc + (1|id) + (1|state),
+    data = s1_clean,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 2000,
+    save_pars = save_pars(all = TRUE),
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal_clean_calc_3.3.rds')) 
+)
+
+s1_agg_filtered <- s1_agg |>
+  filter(!(id %in% participants_to_exclude$id))
+
+
+length(unique(s1_agg$id)) 
+length(unique(s1_agg_filtered$id))
+  
+ordinal_model_s1_clean_calc <- brm(
+    accuracy_level ~ refClass +calc + (1|id) + (1|state),
+    data = s1_agg_filtered,
+    family = cumulative("logit"),
+    cores = 4,
+    iter = 2000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_ordinal_grpclean_calc_2.5.rds')) 
+)
+
+summary(ordinal_model_s1_clean_calc)
+conditional_effects(ordinal_model_s1_clean_calc)
+
+mixed_model_abs_error <- lmer(log_abs_error ~ refClass + calc+ (1|id) + (1|state), data = s1_agg_filtered)
+summary(mixed_model_abs_error)
+# with p value
+library(lmerTest)
+mixed_model_abs_error <- lmer(log_abs_error ~ refClass + calc+ (1|id) + (1|state), data = s1_agg_filtered)
+summary(mixed_model_abs_error)
+
+
+
+```
+
+
+
+
+
+### clearn log error
+```{r}
+
+s1_clean |> 
+  ggplot(aes(x = abs_error)) +
+  geom_density(fill = "skyblue", alpha = 0.7) +
+  facet_wrap(~ refClass, scales = "free") +ggtitle("Error density by reference class")
+
+# plot density of log-transformed data
+s1_clean |> 
+  ggplot(aes(x = log_abs_error)) +
+  geom_density(fill = "skyblue", alpha = 0.7) +
+  facet_wrap(~ refClass, scales = "free") + ggtitle("Log-transformed error density by reference class")
+
+
+# mixed effects regression on abs_error (frequentist)
+mixed_model_abs_error <- lmer(abs_error ~ refClass + (1|id) + (1|state), data = s1_clean)
+summary(mixed_model_abs_error)
+
+mixed_model_abs_error <- lmer(abs_error ~ refClass*calc + (1|id) + (1|state), data = s1_clean)
+summary(mixed_model_abs_error)
+
+```
 
 
 
 # S2
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -465,7 +853,110 @@ odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of a
 
 
 
+# Create a new data frame with the predictor values
+# new_data <- expand.grid(
+#   refClass = c("kWh", "Percentage", "USD"),
+#   id = unique(s2_agg1$id)[1],      # Take first id
+#   state = unique(s2_agg1$state)[1], # Take first state,
+#   rounded = unique(s2_agg1$rounded)[1], # Take first rounded
+#   pct_goal = unique(s2_agg1$pct_goal)[1] # Take first pct_goal
+# )
 
+# or_table <- data.frame(exp(fixef(ordinal_model_s2_logit)))
+# or_table |>
+#   rownames_to_column(var = "Term") |>
+#   filter(!stringr::str_detect(Term, "Intercept")) |>
+#   as_flextable() |>
+#   set_header_labels(values = list(
+#     OR = "Odds Ratio",
+#     `2.5 %` = "Lower 95% CI",
+#     `97.5 %` = "Upper 95% CI"
+#   )) |>
+#   flextable::add_footer_lines(values = "Note: Odds ratios derived from the ordinal logistic regression model.") |> 
+#   align(align = 'center', part = 'all') |>
+#   fontsize(size = 10, part = "all")
 
 
 ```
+
+
+
+
+
+
+
+# Interaction s2
+
+```{r}
+
+
+ordinal_model_s2_logit_int2 <- brm(
+  accuracy_level ~ refClass +(rounded*pct_goal) + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 2000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 3), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 3), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_int2.rds')) # Cache for efficiency
+)
+summary(ordinal_model_s2_logit_int2)
+
+conditional_effects(ordinal_model_s2_logit_int2)
+
+
+
+ordinal_model_s2_logit_int3 <- brm(
+  accuracy_level ~ refClass * rounded*pct_goal + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 3000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 3), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 3), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_int3.rds')) # Cache for efficiency
+)
+summary(ordinal_model_s2_logit_int3)
+
+conditional_effects(ordinal_model_s2_logit_int3)
+
+
+
+ordinal_model_s2_logit_c1rf_int3<- brm(
+  accuracy_level ~ refClass * rounded*pct_goal + (1|id)+ (1|state) + (1|calc),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 3000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 3), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 3), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_c1rf_int3.rds')) # Cache for efficiency
+)
+summary(ordinal_model_s2_logit_c1rf_int3)
+
+conditional_effects(ordinal_model_s2_logit_c1rf_int3)
+
+
+
+
+
+ordinal_model_s2_logit_c1add_int3<- brm(
+  accuracy_level ~ (refClass * rounded*pct_goal) + calc + (1|id)+ (1|state),
+  data = s2_agg1,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 3000,
+  control = list(adapt_delta = 0.97), # Recommended for ordinal models
+  prior = c(prior(normal(0, 3), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 3), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_logit_c1add_int3.rds')) # Cache for efficiency
+)
+summary(ordinal_model_s2_logit_c1add_int3)
+
+conditional_effects(ordinal_model_s2_logit_c1add_int3)
+
+```
+

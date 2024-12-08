@@ -18,9 +18,9 @@ s2_long <- readRDS(here::here("data/s2_processed.rds")) |>
 
 s1_agg <- s1 |> 
     filter(appliance !="Total kWh") |> 
-    group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc) |> 
     summarise(total_kWh = sum(value),orig_kWh=sum(family), 
-                pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
                 n_change = sum(value!=family),
                 state_p_dif=mean(state_p_dif),
                 state_f_dif=mean(state_f_dif),
@@ -29,7 +29,8 @@ s1_agg <- s1 |>
     mutate(matched_goal = (pct_change == pct_goal), 
                 error = pct_change - pct_goal,
                 abs_error = abs(error),
-                close_match = abs_error <= 0.03) |>
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
     ungroup() |> # Add ungroup here
         mutate(
             accuracy_level = factor(
@@ -45,6 +46,84 @@ s1_agg <- s1 |>
         ) |> relocate(accuracy_level, .after= "pct_change")
 
 
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+
+
+s2_agg1 <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(
+    matched_goal = (pct_change == pct),
+    close_match = abs(pct_change - pct) <= 0.02,
+                error = pct_change - pct,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007)) |> 
+      ungroup() |> 
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+  
 ```
 
 
@@ -329,3 +408,98 @@ pp_check(mixture_model_s1, type = "dens_overlay_grouped", group="refClass", ndra
 
 pp_check(mixture_model_s1, type = "dens_overlay_grouped", group="refClass", ndraws=100) 
 ```
+
+
+
+
+# S2
+
+
+```{r}
+
+
+log_error_model_s2_c1 <- brm(
+  log_abs_error ~ refClass*calc + (1|id) + (1|state),
+  data = s2_agg1,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 2000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s2_c1.rds')) 
+)
+
+summary(log_error_model_s2_c1)
+conditional_effects(log_error_model_s2_c1)
+
+
+log_error_model_s2_c1rf <- brm(
+  log_abs_error ~ refClass + (1|id) + (1|state) + (1|calc),
+  data = s2_agg1,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 2000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s2_c1rf.rds')) 
+)
+
+summary(log_error_model_s2_c1rf)
+
+
+log_error_model_s2_cAdd_int3 <- brm(
+  log_abs_error ~ (refClass*rounded*pct_goal)+calc + (1|id) + (1|state),
+  data = s2_agg1,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 3000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s2_cAdd_int3.rds')) 
+)
+
+summary(log_error_model_s2_cAdd_int3)
+conditional_effects(log_error_model_s2_cAdd_int3)
+
+
+
+
+
+log_error_model_s2_c1rf_int3 <- brm(
+  log_abs_error ~ refClass*rounded*pct_goal + (1|id) + (1|state) + (1|calc),
+  data = s2_agg1,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 3000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s2_c1rf_int3.rds')) 
+)
+
+summary(log_error_model_s2_c1rf_int3)
+
+conditional_effects(log_error_model_s2_c1rf_int3)
+
+
+
+
+log_error_model_s2_c1rf_add3 <- brm(
+  log_abs_error ~ refClass+rounded+pct_goal + (1|id) + (1|state) + (1|calc),
+  data = s2_agg1,
+  family = gaussian(link = "identity"),
+  prior = c(prior(normal(0, 3), class = "b"),
+            prior(cauchy(0, 1), class = "sd")),
+  iter = 3000, warmup = 1000, chains = 4, cores = 4, 
+  file = paste0(here::here("data/model_cache",'log_error_model_s2_c1rf_add3.rds')) 
+)
+
+summary(log_error_model_s2_c1rf_add3)
+conditional_effects(log_error_model_s2_c1rf_add3)
+
+
+```
+
+
+
+```{r}
+
+
+
+```
+

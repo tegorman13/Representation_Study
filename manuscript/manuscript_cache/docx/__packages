@@ -19,6 +19,8 @@ knitr
 kableExtra
 ggh4x
 patchwork
+ggridges
+ggstance
 Matrix
 lme4
 flextable
