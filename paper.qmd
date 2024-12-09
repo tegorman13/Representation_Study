@@ -29,7 +29,7 @@ repo-actions: false
   </a>
 
   <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/manuscript/output/manuscript.docx">
-  <iconify-icon inline="" icon="fa6-solid:file-arrow-down"></iconify-icon> &ensp;docx <small>(download)</small>
+  <i class="fa-solid fa-file-word"></i>&ensp;docx <small>(download)</small>
   </a>
   
   
