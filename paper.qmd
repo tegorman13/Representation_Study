@@ -28,7 +28,7 @@ repo-actions: false
   <i class="fa-solid fa-file-arrow-down"></i>&ensp;PDF <small>(download)</small>
   </a>
 
-  <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/Manuscript/output/Manuscript.docx">
+  <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/manuscript/output/manuscript.docx">
   <iconify-icon inline="" icon="fa6-solid:file-arrow-down"></iconify-icon> &ensp;docx <small>(download)</small>
   </a>
   
