@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.35">
+<meta name="generator" content="quarto-1.7.2">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-11-20">
+<meta name="dcterms.date" content="2024-12-08">
 
 <title>Analysis – Representation Study</title>
 <style>
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-383d4a065b21370043bc4709e21900a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07c16812f08c4a1591d6ec4fc46327fa.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f0d64b0355f40f485f10dc0027316eca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f5b7860a723b218349f74a396be16f4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -263,30 +263,9 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../misc/outlier.html" class="sidebar-item-text sidebar-link"><i class="bi bi-graph-down" role="img">
+  <a href="../misc/outlier.qmd" class="sidebar-item-text sidebar-link"><i class="bi bi-graph-down" role="img">
 </i> 
  <span class="menu-text">Outliers</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../misc/indiv.html" class="sidebar-item-text sidebar-link"><i class="bi bi-bar-chart-steps" role="img">
-</i> 
- <span class="menu-text">Response Patterns</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../misc/discrep.html" class="sidebar-item-text sidebar-link"><i class="bi bi-columns-gap" role="img">
-</i> 
- <span class="menu-text">Discrep_Patterns</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../misc/ordinal.html" class="sidebar-item-text sidebar-link"><i class="bi bi-grid-3x2-gap-fill" role="img">
-</i> 
- <span class="menu-text">Ordinal Models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -368,7 +347,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 20, 2024</p>
+      <p class="date">December 8, 2024</p>
     </div>
   </div>
   
@@ -386,29 +365,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-analysis">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1732082714673" data-listing-reading-time-sort="19" data-listing-word-count-sort="3686">
-<a href="../nb/overview.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="overview_files/figure-html/unnamed-chunk-7-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Effect of Reference Class on Planning to Conserve
-</h5>
-<div class="card-text listing-description">
-
-<details class="code-fold"><summary>Display code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>,<span class="va">tibble</span>,<span class="va">brms</span>,<span class="va">rstan</span>,<span class="va">bayestestR</span>,<span class="va">emmeans</span>,<span class="va">tidybayes</span>,<span class="va">modelsummary</span>,</span>
-<span>               <span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">knitr</span>,<span class="va">kableExtra</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span>…<span class="va"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="fl"></span><span class="op"></span><span class="cn"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="cn"></span><span class="op"></span><span class="co"></span></span><span><span class="op"></span></span><span><span class="op"></span></span></code></pre></div></details>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Thomas E. Gorman
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1732082713968" data-listing-reading-time-sort="6" data-listing-word-count-sort="1184">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1732082713968" data-listing-reading-time-sort="6" data-listing-word-count-sort="1184">
 <a href="../nb/results.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="results_files/figure-html/fig-s1-mg1-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -425,6 +382,29 @@ Results
 <div class="card-attribution card-text-small start">
 <div class="listing-author">
 Thomas E. Gorman
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1732218026839" data-listing-reading-time-sort="30" data-listing-word-count-sort="5942">
+<a href="../nb/overview.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img src="overview_files/figure-html/unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Results Overview
+</h5>
+<div class="card-text listing-description">
+
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu">p_load</span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">stringr</span>,<span class="va">here</span>,<span class="va">tibble</span>,<span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">knitr</span>,<span class="va">kableExtra</span>,<span class="va">ggh4x</span>,<span class="va">patchwork</span>,<span class="va">lme4</span>,<span class="va">flextable</span>,<span class="va">pander</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">options</span><span class="op">(</span>digits<span class="op">=</span><span class="fl">2</span>, scipen<span class="op">=</span><span class="fl">999</span>, dplyr.summarise.inform<span class="op">=</span><span class="cn">…</span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="va"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="fu"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="fu"></span><span class="op"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="st"></span><span class="op"></span><span class="st"></span></span><span><span class="op"></span></span><span></span><span></span><span><span class="va"></span><span class="op"></span><span class="va"></span></span><span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span></span><span><span class="va"></span><span class="op"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="fu"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="va"></span><span class="op"></span><span class="op"></span><span class="op"></span></span><span><span class="op"></span><span class="kw"></span><span class="op"></span></span><span><span class="kw"></span><span class="op"></span><span class="cn"></span><span class="op"></span><span class="co"></span></span><span><span class="op"></span></span><span><span class="op"></span></span></code></pre></div>
+</div>
+<div class="card-attribution card-text-small start">
+<div class="listing-author">
+
 </div>
 </div>
 </div>
@@ -455,7 +435,7 @@ Study 1 Analysis
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1732078800000" data-listing-file-modified-sort="1732090482488" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="33" data-listing-word-count-sort="6591">
+<div class="g-col-1" data-index="3" data-listing-date-sort="1733634000000" data-listing-file-modified-sort="1732090482488" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="33" data-listing-word-count-sort="6591">
 <a href="../nb/study2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="study2_files/figure-html/unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -471,7 +451,7 @@ Study 2 Analysis
 
 </div>
 <div class="listing-date">
-Nov 20, 2024
+Dec 8, 2024
 </div>
 </div>
 </div>

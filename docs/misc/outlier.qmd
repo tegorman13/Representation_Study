@@ -284,11 +284,39 @@ conditional_effects(ordinal_model_s2_logit)
 
 
 
+prob_exact <- posterior_preds[, , "Exact match"]
+prob_minor <- posterior_preds[, , "0.01-2% error"]
+prob_moderate <- posterior_preds[, , "2.01-15% error"]
+prob_major <- posterior_preds[, , "Over 15% error"]
+
+# Compute mean probabilities across all posterior samples
+s2_agg_filtered <- s2_agg_filtered %>%
+  mutate(
+    prob_exact = colMeans(prob_exact),
+    prob_minor = colMeans(prob_minor),
+    prob_moderate = colMeans(prob_moderate),
+    prob_major = colMeans(prob_major)
+  )
+
+emm_refClass_manual <- s2_agg_filtered %>%
+  group_by(refClass) %>%
+  summarise(
+    mean_prob_exact = mean(prob_exact),
+    mean_prob_minor = mean(prob_minor),
+    mean_prob_moderate = mean(prob_moderate),
+    mean_prob_major = mean(prob_major)
+  )
+
+print(emm_refClass_manual)
 
 
-
-
-
+ggplot(emm_refClass_manual, aes(x = refClass)) +
+  geom_bar(aes(y = mean_prob_exact), stat = "identity", fill = "steelblue") +
+  geom_errorbar(aes(ymin = mean_prob_exact - 0.05, ymax = mean_prob_exact + 0.05), width = 0.2) +
+  labs(title = "Estimated Marginal Means for Reference Class",
+       x = "Reference Class",
+       y = "Probability of Exact Match") +
+  theme_minimal()
 ```
 
 
