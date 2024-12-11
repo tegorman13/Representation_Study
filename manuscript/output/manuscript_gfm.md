@@ -159,7 +159,8 @@ given), or USD (\$656)
 Additional data collected included:
 
 - **Energy Literacy Quiz**: An 8-item questionnaire assessing
-  participants’ knowledge of energy consumption and conversion.
+  participants’ knowledge of energy consumption and conversion (DeWaters
+  & Powers, 2011).
 - **Calculator Usage Tracking**: Questions determined whether
   participants used a calculator, paper/pen, or other methods to
   complete the tasks.
@@ -561,6 +562,66 @@ of reduction goal. A larger % of participants in the Exact Match, or
 
 </div>
 
+``` r
+s1_els_log_error <- brm(
+    log_abs_error ~ els + (1|id) + (1|state),
+    data = s1_agg,
+    family = gaussian(),
+    cores = 4,
+    iter = 2000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_els_log_error.rds')) 
+)
+
+# summary(s1_els_log_error)
+# conditional_effects(s1_els_log_error)
+
+
+# Create the conditional effects plot
+conditional_effects_plot <- conditional_effects(s1_els_log_error)
+
+# Extract the data for plotting
+plot_data <- conditional_effects_plot[[1]]
+
+# Create the plot
+ggplot(plot_data, aes(x = els, y = estimate__)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha = 0.2) +
+  labs(
+    x = "Energy Literacy Score",
+    y = "Log Absolute Error",
+    title = "Conditional Effect of Energy Literacy on Log Absolute Error"
+  ) +
+  theme_minimal()
+```
+
+<div id="fig-s1-els">
+
+<img src="manuscript_files/figure-commonmark/fig-s1-els-1.png"
+id="fig-s1-els" />
+
+Figure 5
+
+</div>
+
+To further investigate individual factors that may influence planning
+accuracy, we examined the relationship between participants’ energy
+literacy scores and their performance on the task. Energy literacy was
+assessed using an 8-item questionnaire adapted from (DeWaters & Powers,
+2011), which covers topics such as energy units, appliance energy
+consumption, and sources of electricity. A Bayesian linear regression
+model was fit with log-transformed absolute error as the outcome
+variable and energy literacy score as the predictor, controlling for
+random effects of participant and state: log_abs_error ~ els + (1\|id) +
+(1\|state). Results indicated a significant negative relationship
+between energy literacy and log absolute error (Estimate = -2.35, 95%
+CI: -2.88 to -1.81), suggesting that participants with higher energy
+literacy scores tended to have smaller deviations from the target
+reduction goal, and thus more accurate plans overall
+(<a href="#fig-s1-els" class="quarto-xref">Figure 5</a>).
+
 ## Experiment 1: Discussion
 
 Experiment 1 examined how different numerical representations of energy
@@ -723,7 +784,7 @@ s2_ld + s2_ldc
 
 ![](manuscript_files/figure-commonmark/fig-s2-log-dist-1.png)
 
-Figure 5: Study 1: Distribution of log absolute error by reference
+Figure 6: Study 1: Distribution of log absolute error by reference
 class.
 
 </div>
@@ -797,7 +858,7 @@ ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = refClass))
 <img src="manuscript_files/figure-commonmark/fig-s2-plot-1.png"
 id="fig-s2-plot" />
 
-Figure 6
+Figure 7
 
 </div>
 
@@ -833,7 +894,7 @@ ggplot(prop_combo_s2_full, aes(x = accuracy_level, y = Probability, fill = refCl
 
 ![](manuscript_files/figure-commonmark/fig-s2-plot2-1.png)
 
-Figure 7: Study 2: Proportion of participants in each accuracy level,
+Figure 8: Study 2: Proportion of participants in each accuracy level,
 colored by reference class, and seprated in facets based on the levels
 of reduction goal, and rounding. A larger % of participants in the Exact
 Match, or 0.01-2% error bins indicates better performance.
@@ -965,9 +1026,68 @@ pp_check(ordinal_model_s2_logit, type = "bars_grouped", group="refClass", fatten
 <img src="manuscript_files/figure-commonmark/fig-s2-ppd-1.png"
 id="fig-s2-ppd" />
 
-Figure 8
+Figure 9
 
 </div>
+
+``` r
+s2_els_log_error <- brm(
+    log_abs_error ~ els + (1|id) + (1|state),
+    data = s2_agg1,
+    family = gaussian(),
+    cores = 4,
+    iter = 3000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s2_els_log_error.rds')) 
+)
+#summary(s2_els_log_error)
+
+conditional_effects_plot <- conditional_effects(s2_els_log_error)
+plot_data <- conditional_effects_plot[[1]]
+
+ggplot(plot_data, aes(x = els, y = estimate__)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha = 0.2) +
+  labs(
+    x = "Energy Literacy Score",
+    y = "Log Absolute Error",
+    title = "Conditional Effect of Energy Literacy on Log Absolute Error"
+  ) +
+  theme_minimal()
+```
+
+<div id="fig-s2-els">
+
+<img src="manuscript_files/figure-commonmark/fig-s2-els-1.png"
+id="fig-s2-els" />
+
+Figure 10
+
+</div>
+
+As in Experiment 1, we further investigated the role of individual
+differences in energy literacy in predicting planning accuracy. A
+Bayesian linear regression model, analogous to the one used in
+Experiment 1 (log_abs_error ~ els + (1\|id) + (1\|state)), revealed a
+significant negative relationship between energy literacy scores and
+log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to
+-2.52). This finding indicates that participants with higher energy
+literacy tended to produce more accurate plans, exhibiting smaller
+deviations from the target reduction goals. The conditional effect plot
+(<a href="#fig-s2-els" class="quarto-xref">Figure 10</a>) visually
+confirms this relationship, showing a clear decreasing trend in log
+absolute error as energy literacy increases. These results are
+consistent with the findings from Experiment 1 and further support the
+notion that a solid understanding of energy concepts may be crucial for
+individuals’ ability to effectively engage in energy conservation
+planning. Furthermore, these findings highlight the potential value of
+targeted educational interventions aimed at improving consumers’ energy
+literacy to enhance the effectiveness of communications promoting
+sustainable energy behaviors.
+
+## Experiment 2: Discussion
 
 ### Individual Differences
 
@@ -994,7 +1114,7 @@ s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |>
 
 ![](manuscript_files/figure-commonmark/fig-s2-indv-1.png)
 
-Figure 9: Study 2: Individual performance in the energy planning task,
+Figure 11: Study 2: Individual performance in the energy planning task,
 colored by reference class. The dashed line represents the target
 reduction goal. Participants are shown along the y axis, those who fall
 above or below the dashed line have not met the target goal. The x-axis
@@ -1023,7 +1143,7 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
 
 ![](manuscript_files/figure-commonmark/fig-s2-indv2-1.png)
 
-Figure 10: Study 2: Respones patterns for a subset of individiual
+Figure 12: Study 2: Respones patterns for a subset of individiual
 participants. Black points are participant responses, red points are the
 state average, and blue points are the family average. The x-axis
 represents the appliance category, and the y-axis represents the energy
@@ -1035,7 +1155,7 @@ usage in kWh.
 
 ![](manuscript_files/figure-commonmark/fig-s2-indv2-2.png)
 
-Figure 11: Study 2: Respones patterns for a subset of individiual
+Figure 13: Study 2: Respones patterns for a subset of individiual
 participants. Black points are participant responses, red points are the
 state average, and blue points are the family average. The x-axis
 represents the appliance category, and the y-axis represents the energy
@@ -1047,6 +1167,8 @@ usage in kWh.
 
 Karjalainen 2011 - people prefer information about price (Karjalainen,
 2011)
+
+
 
 # References
 

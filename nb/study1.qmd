@@ -73,6 +73,43 @@ s1 <- s1 |>
   relocate(refClass,state1,state2,calc, .after = id) 
 
 
+# Energy Literacy Score (ELS)
+
+els <- s1 |> select(id,id2,calc,refClass,state1,state2, ELS01:ELS08) 
+
+els2 <- els |> 
+  pivot_longer(cols = ELS01:ELS08, names_to = "question", values_to = "response") |> 
+  mutate(response = as.numeric(response)) |>
+  mutate(question = case_when(
+    question == "ELS01" ~ "Electrical energy units (kWh)",
+    question == "ELS02" ~ "Energy consumed and appliance power rating",
+    question == "ELS03" ~ "Incandescent lightbulb conversion",
+    question == "ELS04" ~ "Reason to buy energy star appliances",
+    question == "ELS05" ~ "Which appliances uses the most energy",
+    question == "ELS06" ~ "Which appliance uses the most electricity",
+    question == "ELS07" ~ "Which source provides most electricity in the US",
+    question == "ELS08" ~ "Problem with electric cars",
+    TRUE ~ NA_character_
+  )) |> 
+  mutate(correct = case_when(
+    question == "Electrical energy units (kWh)" & response == 2 ~ "Correct",
+    question == "Energy consumed and appliance power rating" & response == 3 ~ "Correct",
+    question == "Incandescent lightbulb conversion" & response == 3 ~ "Correct",
+    question == "Reason to buy energy star appliances" & response == 3 ~ "Correct",
+    question == "Which appliances uses the most energy" & response == 3 ~ "Correct",
+    question == "Which appliance uses the most electricity" & response == 2 ~ "Correct",
+    question == "Which source provides most electricity in the US" & response == 3 ~ "Correct",
+    question == "Problem with electric cars" & response == 1 ~ "Correct",
+    TRUE ~ "Incorrect"
+  ))
+
+els_id <- els2 |> group_by(id,id2,state1,state2,refClass) |> 
+    summarize(els=mean(correct=="Correct"), .groups="drop") 
+
+
+
+
+
 s1 <- s1 |> rename(edu=DEM04) |>
   mutate(edu = factor(case_when(
     edu == 1 ~ "Some schooling, but no diploma or degree",
@@ -125,6 +162,9 @@ dAll <- s1 %>%
 # states <- c(CAL = "California", MASS = "Massachusetts", COL = "Colorado", TEX = "Texas")
 
 
+
+
+
 parse_action_plan <- function(df) {
   
   action_plan_cols <- df %>% 
@@ -142,7 +182,7 @@ parse_action_plan <- function(df) {
       names_to = c("modality", "state", "item_num"),
       names_pattern = "^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$",
       values_to = "value"
-    ) |> select(id,state1,state2,refClass,calc,edu,modality,state,item_num,value,id2,Duration__in_seconds_) 
+    ) |> select(id,id2,state1,state2,refClass,calc,edu,modality,state,item_num,value,Duration__in_seconds_) 
   
   df_long <- df_long |> 
   mutate(
@@ -199,6 +239,14 @@ s1 <- s1 |>
   mutate(value=as.numeric(value))
 
 
+#s1$change==s1_old$change
+#s1$change==s1_new$change
+#head(s1_new |> filter(appliance=="Cooling",block==1,plan=="plan1"),n=16)
+
+# join with els_id, by id,id2,state1,state2,refClass
+s1 <- s1 |> left_join(els_id, by=c("id","id2","state1","state2","refClass")) |> relocate(els,.after=appliance)
+
+
 #saveRDS(s1, here::here("data/s1_processed.rds"))
 
 ```
@@ -211,25 +259,64 @@ s1 <- readRDS(here::here("data/s1_processed.rds"))
 
 
 s1_agg <- s1 |> 
-  filter(appliance !="Total kWh") |> 
-  group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
-  summarise(total_kWh = sum(value),orig_kWh=sum(family), 
-            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
-            n_change = sum(value!=family),
-            state_p_dif=mean(state_p_dif),
-            state_f_dif=mean(state_f_dif),
-            n_less_avg = sum(less_avg),
-            duration=first(Duration__in_seconds_)) |> 
-  mutate(matched_goal = (pct_change == pct_goal), 
-             error = pct_change - pct_goal,
-            abs_error = abs(error),
-            close_match = abs_error <= 0.02)
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc,els) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc,els) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
 
 # s1_agg |> filter(matched_goal==FALSE, abs_error<.02) |> pull(abs_error)
 
 
-s1_agg4 <- s1_agg |> group_by(id,refClass) |> 
-  summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
+# s1_agg4 <- s1_agg |> group_by(id,refClass,els) |> 
+#   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 
 
 s1_agg2 <- s1_agg |> group_by(id,refClass,state) |> 
   summarise(mg=sum(matched_goal),n=n(), pct=mg/n) 

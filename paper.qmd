@@ -38,4 +38,3 @@ repo-actions: false
 <iframe src="/manuscript/output/manuscript.html" frameborder="0" style="overflow:hidden;height:75%;width:95%;border:2px solid #ccc;" height="75%" width="95%" name="manuscript"></iframe>
 ```
 
-

@@ -1,4 +1,19 @@
 
+## Energy Literacy Questions
+
+| **ENERGY LITERACY SURVEY** |  |  |
+| Dewaters and Powers 2011. Assesses participant<br>knowledge of energy names, use, and sources |  |  |
+| The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units called ... | ELS01 | 1 = "Kilowatt (kW)"<br>2 = "Kilowatt-hours (kWh)"<br>3 = "British Thermal Units (BTU)"<br>4 = "Volts (V)"<br>5 = "Horsepower (HP)" |
+
+| Question | Variable | Values |
+|--------------------------|--------------------------|---------------------|
+| The amount of ENERGY consumed by an electrical appliance is equal to the power rating of the appliance (watts or kilowatts) ... | ELS02 | 1 = "Multiplied by the cost of electricity"<br>2 = "Added to the cost of electricity"<br>3 = "Multiplied by the time it's used"<br>4 = "Divided by the time it's used"<br>5 = "Added to the time it's used" |
+| When you turn on an incandescent light bulb, which of the following energy conversion takes place? | ELS03 | 1 = "Electrical energy to radiant energy (light)"<br>2 = "Chemical energy to radiant energy (light)"<br>3 = "Electrical energy to radiant energy (light) and thermal energy (heat)"<br>4 = "Chemical energy to radiant energy (light) and thermal energy (heat)"<br>5 = "Electrical energy to radiant energy (light) and mechanical energy" |
+| The best reason to buy an ENERGY STAR® appliance is ... | ELS04 | 1 = "ENERGY STAR appliances are usually bigger"<br>2 = "ENERGY STAR appliances cost more"<br>3 = "ENERGY STAR appliances use less energy"<br>4 = "ENERGY STAR appliances are more modern looking"<br>5 = "ENERGY STAR appliances cost less" |
+| Which uses the MOST ENERGY in the average American home in one year? | ELS05 | 1 = "Refrigerating food and beverages"<br>2 = "Washing and drying clothing"<br>3 = "Heating and cooling rooms"<br>4 = "Heating and cooling water"<br>5 = "Lighting the home" |
+| Which of the following items uses the MOST ELECTRICITY in the average home in one year? | ELS06 | 1 = "Lights"<br>2 = "Refrigerator"<br>3 = "Telephone"<br>4 = "Television"<br>5 = "Computer" |
+| Which of the following sources provides most of the ELECTRICITY in the United States? | ELS07 | 1 = "Nuclear power"<br>2 = "Burning petroleum"<br>3 = "Burning coal"<br>4 = "Solar energy"<br>5 = "Water (hydro) power" |
+| Some people think that if we run out of fossil fuels we can just switch over to electric cars. What is wrong with this idea? | ELS08 | 1 = "Most electricity is currently produced from fossil fuels (coal, oil, natural gas)"<br>2 = "Switching to electric cars will make unemployment rates go up"<br>3 = "It has been proven that it is impossible to build electric cars in great quantities"<br>4 = "You can't use electricity to operate a car"<br>5 = "There is nothing wrong with this idea" |
 
 
 ```{r}

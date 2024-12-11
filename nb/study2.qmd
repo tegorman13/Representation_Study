@@ -81,6 +81,43 @@ s2 <- s2 |> rename(edu=DEM04) |>
     edu == 7 ~ "Choose not to answer",
     TRUE ~ NA_character_
   ))) |> relocate(edu, .after = id) 
+
+
+
+els <- s2 |> select(id,calc,refClass,state1,state2, ELS01:ELS08) 
+
+
+els2 <- els |> 
+  pivot_longer(cols = ELS01:ELS08, names_to = "question", values_to = "response") |> 
+  # Convert response to numeric to avoid label issues
+  mutate(response = as.numeric(response)) |>
+  mutate(question = case_when(
+    question == "ELS01" ~ "Electrical energy units (kWh)",
+    question == "ELS02" ~ "Energy consumed and appliance power rating",
+    question == "ELS03" ~ "Incandescent lightbulb conversion",
+    question == "ELS04" ~ "Reason to buy energy star appliances",
+    question == "ELS05" ~ "Which appliances uses the most energy",
+    question == "ELS06" ~ "Which appliance uses the most electricity",
+    question == "ELS07" ~ "Which source provides most electricity in the US",
+    question == "ELS08" ~ "Problem with electric cars",
+    TRUE ~ NA_character_
+  )) |> 
+  mutate(correct = case_when(
+    question == "Electrical energy units (kWh)" & response == 2 ~ "Correct",
+    question == "Energy consumed and appliance power rating" & response == 3 ~ "Correct",
+    question == "Incandescent lightbulb conversion" & response == 3 ~ "Correct",
+    question == "Reason to buy energy star appliances" & response == 3 ~ "Correct",
+    question == "Which appliances uses the most energy" & response == 3 ~ "Correct",
+    question == "Which appliance uses the most electricity" & response == 2 ~ "Correct",
+    question == "Which source provides most electricity in the US" & response == 3 ~ "Correct",
+    question == "Problem with electric cars" & response == 1 ~ "Correct",
+    TRUE ~ "Incorrect"
+  ))
+
+els_id <- els2 |> group_by(id,calc,refClass) |> 
+    summarize(els=mean(correct=="Correct"), .groups="drop") 
+
+
 ```
 
 
@@ -162,8 +199,17 @@ s2_long <- s2_long |>
 # s2 |> filter(id=="s2_208") |> select(starts_with("T"))
 # s2_long |> filter_all(any_vars(is.na(.)))
 
-#write.csv(s2_long,"data/study_2_tg.csv")
-#saveRDS(s2_long, here::here("data/s2_processed.rds"))
+
+
+# join with els
+s2_long <- s2_long |> left_join(els_id,by=c("id","refClass","calc")) |> 
+  mutate(els=ifelse(is.na(els),0,els)) |> 
+  relocate(els,.after=edu)
+
+
+
+# write.csv(s2_long,"data/study_2_tg.csv")
+# saveRDS(s2_long, here::here("data/s2_processed.rds"))
 
 
 

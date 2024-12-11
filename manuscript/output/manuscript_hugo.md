@@ -119,7 +119,7 @@ alt="Figure 1: Example trial in the energy planning task. Participants are show
 
 Additional data collected included:
 
--   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion.
+-   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion (DeWaters & Powers, 2011).
 -   **Calculator Usage Tracking**: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.
 -   **Demographic Survey**: Collected information on gender, age, income, education, employment status, and state of residence.
 -   **Environmental Attitudes Survey**: Assessed participants' pro-environmental attitudes and perceived importance of energy conservation.
@@ -178,6 +178,8 @@ Table 3: **Experiment 1**: Odds ratios for group comparisons. Odds ratios great
 
 As shown in <a href="#tbl-s1-reg" class="quarto-xref">Table 2</a>, the reference class coefficients are positive for both the Percentage (Estimate = 1.3, 95% CI: 0.01 to 2.66, pd = 0.98) and USD (Estimate = 2.8, 95% CI: 1.52 to 4.04, pd = 1.00) conditions, relative to the kWh baseline. This indicates that, compared to the kWh condition, participants in both the Percentage and USD conditions were more likely to produce plans that fell into higher error categories. Moreover, the odds ratios (see Table 3) suggest that the USD condition led to a notably higher likelihood of large errors compared to the kWh baseline (OR = 15.7), while the Percentage condition also demonstrated increased odds (OR = 3.7) but was somewhat less detrimental to accuracy than USD. These results align with our descriptive findings and further clarify that framing the target reductions in absolute kWh units may facilitate significantly more accurate planning. Posterior predictive checks showed that the ordinal model provided a reasonable fit to the observed data (see **?@fig-s1-ppd**).
 
+To further investigate individual factors that may influence planning accuracy, we examined the relationship between participants' energy literacy scores and their performance on the task. Energy literacy was assessed using an 8-item questionnaire adapted from (DeWaters & Powers, 2011), which covers topics such as energy units, appliance energy consumption, and sources of electricity. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1\|id) + (1\|state). Results indicated a significant negative relationship between energy literacy and log absolute error (Estimate = -2.35, 95% CI: -2.88 to -1.81), suggesting that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (**?@fig-s1-els**).
+
 ## Experiment 1: Discussion
 
 Experiment 1 examined how different numerical representations of energy reduction goals influenced participants' planning accuracy. In line with our hypothesis that absolute units would yield better accuracy, the kWh condition supported significantly more precise energy reduction plans than did either the Percentage or USD conditions. Although the Percentage format was detrimental to accuracy relative to kWh, it was the USD condition that consistently produced the poorest outcomes, suggesting that monetary terms, while intuitive in everyday contexts, may not serve as effective reference classes for planning appliance-specific reductions in energy use.
@@ -233,28 +235,18 @@ Table 5: **Experiment 2.** Ordinal Regression Model Results.
 Table 6: **Experiment 2.** Odds ratios for group comparisons.
 </div>
 
-We again employed Bayesian ordinal logistic regression to model the
-probability of participants falling into each accuracy category as a
-function of reference class, rounding, and goal level (<a href="#tbl-s2-ord" class="quarto-xref">Table 6</a> and
-<a href="#tbl-s2-reg" class="quarto-xref">Table 5</a>). Results indicated that the kWh condition served as a baseline
-for higher accuracy. Compared to kWh, the USD reference class increased
-the odds of falling into lower-accuracy bins (Odds Ratio = 8.80, 95% CI:
-1.37 to 28.42). The Percentage condition showed a similar trend, though
-the credible intervals were more uncertain. Notably, the "Rounded"
-condition showed an advantage: rounded usage information reduced the
-likelihood of errors (OR = 0.53, 95% CI: 0.36 to 0.73). Moreover, when
-the goal was more challenging (15% vs. 10%), accuracy generally declined
-(OR = 0.66, 95% CI: 0.45 to 0.91). Thus, while rounding facilitated more
-accurate responses, the more difficult goal reduced overall accuracy.
-Crucially, the kWh condition's advantage persisted across these
-additional manipulations, reinforcing the conclusion from Experiment 1
-that absolute units support better accuracy in energy reduction
-planning.
+We again employed Bayesian ordinal logistic regression to model the probability of participants falling into each accuracy category as a function of reference class, rounding, and goal level (<a href="#tbl-s2-ord" class="quarto-xref">Table 6</a> and <a href="#tbl-s2-reg" class="quarto-xref">Table 5</a>). Results indicated that the kWh condition served as a baseline for higher accuracy. Compared to kWh, the USD reference class increased the odds of falling into lower-accuracy bins (Odds Ratio = 8.80, 95% CI: 1.37 to 28.42). The Percentage condition showed a similar trend, though the credible intervals were more uncertain. Notably, the "Rounded" condition showed an advantage: rounded usage information reduced the likelihood of errors (OR = 0.53, 95% CI: 0.36 to 0.73). Moreover, when the goal was more challenging (15% vs. 10%), accuracy generally declined (OR = 0.66, 95% CI: 0.45 to 0.91). Thus, while rounding facilitated more accurate responses, the more difficult goal reduced overall accuracy. Crucially, the kWh condition's advantage persisted across these additional manipulations, reinforcing the conclusion from Experiment 1 that absolute units support better accuracy in energy reduction planning.
+
+As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1\|id) + (1\|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (**?@fig-s2-els**) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases. These results are consistent with the findings from Experiment 1 and further support the notion that a solid understanding of energy concepts may be crucial for individuals' ability to effectively engage in energy conservation planning. Furthermore, these findings highlight the potential value of targeted educational interventions aimed at improving consumers' energy literacy to enhance the effectiveness of communications promoting sustainable energy behaviors.
+
+## Experiment 2: Discussion
 
 ### Individual Differences
 
 # General Discusion
 
 Karjalainen 2011 - people prefer information about price (Karjalainen, 2011)
+
+
 
 # References

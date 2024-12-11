@@ -22,10 +22,12 @@
     "listing": "/index.html",
     "items": [
       "/nb/analysis.html",
+      "/nb/s2_survey.html",
       "/background/initial_slides.html",
       "/background/study_info.html",
       "/nb/results.html",
       "/nb/overview.html",
+      "/nb/s1_survey.html",
       "/background/study2_info.html",
       "/nb/study1.html",
       "/background/study1_info.html",

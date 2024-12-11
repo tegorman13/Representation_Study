@@ -1,0 +1,571 @@
+
+
+```{r}
+library(pacman)
+pacman::p_load(dplyr,purrr,tidyr,here,haven,tibble,
+               ggplot2,gt,ggh4x,lme4,flextable,kableExtra,brms,emmeans,tidybayes)
+
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
+theme_set(theme_nice())
+```
+
+
+
+
+
+
+
+
+```{r}
+
+s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
+  mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
+
+
+s1_agg <- s1 |> 
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc,els) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc,els) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+
+
+
+
+```
+
+
+```{r}
+
+
+# Scatter plots with regression lines
+ggplot(s1_agg4, aes(x = els, y = mean_abs_error)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +  # Add a linear regression line with standard error
+  labs(title = "ELS Score vs. Mean Absolute Error",
+       x = "ELS Score",
+       y = "Mean Absolute Error") +
+  theme_bw()
+
+ggplot(s1_agg4, aes(x = els, y = mean_log_abs_error)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(title = "ELS Score vs. Mean Log Absolute Error",
+       x = "ELS Score",
+       y = "Mean Log Absolute Error") +
+  theme_bw()
+
+ggplot(s1_agg4, aes(x = accuracy_level, y = els, fill = accuracy_level)) +
+  geom_boxplot() +
+  labs(title = "ELS Score by Accuracy Level",
+       x = "Accuracy Level",
+       y = "ELS Score") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(s1_agg4, aes(x = calc, y = els, fill = calc)) +
+          geom_boxplot() +
+          labs(title = "ELS Score by Calculator Use",
+               x = "Calculator Use",
+               y = "ELS Score") +
+          theme_bw()
+
+unique(s1_agg4$accuracy_level)
+
+s1_agg4 |> group_by(accuracy_level) |> summarize(n=n())
+s1_agg |> group_by(accuracy_level) |> summarize(n=n())
+
+
+
+# Calculate correlations
+cor.test(s1_agg4$els, s1_agg4$mean_abs_error)
+cor.test(s1_agg4$els, s1_agg4$mean_log_abs_error)
+
+# ANOVA
+anova_result <- aov(els ~ accuracy_level, data = s1_agg4)
+summary(anova_result)
+
+# Tukey's HSD post-hoc test
+TukeyHSD(anova_result)
+
+# ordinal regression
+polr_model <- MASS::polr(accuracy_level ~ els + refClass + calc, data = s1_agg4)
+summary(polr_model)
+emmeans::emmeans(polr_model, pairwise ~ els)
+
+
+library(ordinal)    
+library(parameters) 
+
+m_equal <- clm(accuracy_level ~ els, 
+    data = s1_agg, 
+    link="probit")
+
+
+parameters::model_parameters(m_equal) |> 
+  insight::print_html()
+summary(m_equal)
+# formula: accuracy_level ~ els
+# data:    s1_agg
+
+#  link   threshold nobs logLik   AIC     niter max.grad cond.H 
+#  probit flexible  1008 -1213.66 2435.32 8(0)  4.05e-11 6.0e+01
+
+# Coefficients:
+#     Estimate Std. Error z value            Pr(>|z|)    
+# els   -1.957      0.133   -14.7 <0.0000000000000002 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+# Threshold coefficients:
+#                               Estimate Std. Error z value
+# Exact match|0.01-2% error       -2.052      0.099  -20.72
+# 0.01-2% error|2.01-15% error    -1.574      0.093  -16.92
+# 2.01-15% error|Over 15% error   -0.350      0.083   -4.21
+
+mean2=coef(m_equal)["els"]
+Thresholds <- coef(m_equal)[1:3]
+
+
+
+
+polr_model_ref_interaction <- MASS::polr(accuracy_level ~ els * refClass + calc, data = s1_agg4)
+summary(polr_model_ref_interaction)
+# Example for refClass = USD, calc = No Calculator
+new_data <- expand.grid(els = seq(min(s1_agg4$els), max(s1_agg4$els), length.out = 100),
+                        refClass = "USD",
+                        calc = "No Calculator")
+
+predicted_probs <- predict(polr_model_ref_interaction, newdata = new_data, type = "probs")
+
+# Combine with new_data for plotting
+predicted_probs_df <- cbind(new_data, predicted_probs)
+
+# Reshape to long format for ggplot
+predicted_probs_long <- tidyr::pivot_longer(predicted_probs_df, 
+                                            cols = `Exact match`:`Over 15% error`,
+                                            names_to = "accuracy_level",
+                                            values_to = "probability")
+
+# Plot
+ggplot(predicted_probs_long, aes(x = els, y = probability, color = accuracy_level)) +
+  geom_line(linewidth=1.5) +
+  labs(title = "Predicted Probabilities of Accuracy Levels by ELS",
+       subtitle = "Reference Class = USD, No Calculator",
+       x = "ELS Score",
+       y = "Probability") +
+  theme_bw()
+
+
+library(lme4)
+mixed_model <- lmer(log_abs_error ~ els + (1 | id), data = s1_agg)
+emmeans_model <- emmeans::emmeans(mixed_model, pairwise ~ els)
+summary(emmeans_model)
+
+
+
+
+```
+
+
+
+```{r}
+
+
+s1_els_log_error <- brm(
+    log_abs_error ~ els + (1|id) + (1|state),
+    data = s1_agg,
+    family = gaussian(),
+    cores = 4,
+    iter = 2000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_els_log_error.rds')) 
+)
+
+summary(s1_els_log_error)
+# Regression Coefficients:
+#           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept    -1.65      0.23    -2.12    -1.18 1.00      921     1465
+# els          -2.35      0.27    -2.88    -1.81 1.00      753      997
+
+
+
+conditional_effects(s1_els_log_error)
+
+
+# Create the conditional effects plot
+conditional_effects_plot <- conditional_effects(s1_els_log_error)
+
+# Extract the data for plotting
+plot_data <- conditional_effects_plot[[1]]
+
+# Create the plot
+ggplot(plot_data, aes(x = els, y = estimate__)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha = 0.2) +
+  labs(
+    x = "Energy Literacy Score",
+    y = "Log Absolute Error",
+    title = "Conditional Effect of Energy Literacy on Log Absolute Error"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+
+# Initial exploration from raw data
+
+## Survey Questions and Energy Literacy Survey
+
+Table 1: Survey Questions and Energy Literacy Survey
+
+| Question | Variable | Values |
+|----------|----------|--------|
+| "Did you use a calculator?" Used a calculator | MATH01 | 1 = Selected <br> Missing = Not selected |
+| Used a paper/pen | MATH02 | 1 = Selected <br> Missing = Not selected |
+| Used something else | MATH03 | 1 = Selected <br> Missing = Not selected |
+| Used something else text entry | MATH04 | 1 = Selected <br> Missing = Not selected |
+| ENERGY LITERACY SURVEY |  |  |
+| Dewaters and Powers 2011. Assesses participant knowledge of energy names, use, and sources <br> Question about electrical energy units (kWh) | ELS01 | 1 = "Kilowatt (kW)" <br> 2 = "Kilowatt-hours (kWh)" <br> 3 = "British Thermal Units (BTU)" <br> 4 = "Volts (V)" <br> 5 = "Horsepower (HP)" |
+| Question about energy consumed and appliance power rating | ELS02 | 1 = "Multiplied by the cost of electricity" <br> 2 = "Added to the cost of electricity" <br> 3 = "Multiplied by the time it's used" <br> 4 = "Divided by the time it's used" <br> 5 = "Added to the time it's used" |
+| Question about incandescent lightbulb conversion | ELS03 | 1 = "Electrical energy to radiant energy (light)" <br> 2 = "Chemical energy to radiant energy (light)" <br> 3 = "Electrical energy to radiant energy (light) and thermal energy (heat)" <br> 4 = "Chemical energy to radiant energy (light) and thermal energy (heat)" <br> 5 = "Electrical energy to radiant energy (light) and mechanical energy" |
+| Question about reason to buy energy star appliances | ELS04 | 1 = "ENERGY STAR appliances are usually bigger" <br> 2 = "ENERGY STAR appliances cost more" <br> 3 = "ENERGY STAR appliances use less energy" <br> 4 = "ENERGY STAR appliances are more modern looking" <br> 5 = "ENERGY STAR appliances cost less" |
+| Question about which appliances uses the most energy | ELS05 | 1 = "Refrigerating food and beverages" <br> 2 = "Washing and drying clothing" <br> 3 = "Heating and cooling rooms" <br> 4 = "Heating and cooling water" <br> 5 = "Lighting the home" |
+| Question about which appliance uses the most electricity | ELS06 | 1 = "Lights" <br> 2 = "Refrigerator" <br> 3 = "Telephone" <br> 4 = "Television" <br> 5 = "Computer" |
+| Question about which source provides most electricity in the US | ELS07 | 1 = "Nuclear power" <br> 2 = "Burning petroleum" <br> 3 = "Burning coal" <br> 4 = "Solar energy" <br> 5 = "Water (hydro) power" |
+| Question about the problem with electric cars | ELS08 | 1 = "Most electricity is currently produced from fossil fuels (coal, oil, natural gas)" <br> 2 = "Switching to electric cars will make unemployment rates go up" <br> 3 = "It has been proven that it is impossible to build electric cars in great quantities" <br> 4 = "You can't use electricity to operate a car" <br> 5 = "There is nothing wrong with this idea" |
+
+
+### Correct answers to the questions in the DeWaters & Powers (2011) energy literacy survey:
+
+	1.	ELS01 - Electrical energy units (kWh):
+	•	Correct Answer: 2 = Kilowatt-hours (kWh)
+	2.	ELS02 - Energy consumed and appliance power rating:
+	•	Correct Answer: 3 = Multiplied by the time it’s used
+	3.	ELS03 - Incandescent lightbulb conversion:
+	•	Correct Answer: 3 = Electrical energy to radiant energy (light) and thermal energy (heat)
+	4.	ELS04 - Reason to buy ENERGY STAR appliances:
+	•	Correct Answer: 3 = ENERGY STAR appliances use less energy
+	5.	ELS05 - Which appliances use the most energy:
+	•	Correct Answer: 3 = Heating and cooling rooms
+	6.	ELS06 - Which appliance uses the most electricity:
+	•	Correct Answer: 2 = Refrigerator
+	7.	ELS07 - Which source provides most electricity in the US:
+	•	Correct Answer: 3 = Burning coal (Note: While this was accurate for the period of the study, energy sources may have shifted since then.)
+	8.	ELS08 - Problem with electric cars:
+	•	Correct Answer: 1 = Most electricity is currently produced from fossil fuels (coal, oil, natural gas)
+
+
+
+```{r}
+# Dewaters and Powers 2011. Assesses participants knowledge of energy names, use, and sources
+# - DeWaters, J. E., & Powers, S. E. (2011). Energy literacy of secondary students in New York State (USA): A measure of knowledge, affect, and behavior. Energy Policy, 39(3), 1699–1710. https://doi.org/10.1016/j.enpol.2010.12.049
+
+s1 <- haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))
+s1 <- s1 |> 
+  mutate(
+    state1 = case_when(
+      Colorado == 1 ~ "Colorado",
+      Massachusetts == 1 ~ "Massachusetts",
+      California == 1 ~ "California",
+      Texas == 1 ~ "Texas",
+      TRUE ~ NA_character_
+    ),
+    state2 = case_when(
+      Colorado == 2 ~ "Colorado",
+      Massachusetts == 2 ~ "Massachusetts",
+      California == 2 ~ "California",
+      Texas == 2 ~ "Texas",
+      TRUE ~ NA_character_
+    )) |> 
+  mutate(refClass = case_when(
+  ReferenceClass == 1 ~ "USD",
+  ReferenceClass == 2 ~ "kWh",
+  ReferenceClass == 3 ~ "Percentage"
+)) |> 
+  rename(calc=MATH01) |>  # replace NA's in calc with 0's
+  rename(id2=ResponseId) |>
+  mutate(id=row_number()) |> relocate(id) |> 
+  mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
+  relocate(refClass,state1,state2,calc, .after = id) 
+
+
+els <- s1 |> select(id,id2,calc,refClass,state1,state2, ELS01:ELS08) 
+
+
+els2 <- els |> 
+  pivot_longer(cols = ELS01:ELS08, names_to = "question", values_to = "response") |> 
+  # Convert response to numeric to avoid label issues
+  mutate(response = as.numeric(response)) |>
+  mutate(question = case_when(
+    question == "ELS01" ~ "Electrical energy units (kWh)",
+    question == "ELS02" ~ "Energy consumed and appliance power rating",
+    question == "ELS03" ~ "Incandescent lightbulb conversion",
+    question == "ELS04" ~ "Reason to buy energy star appliances",
+    question == "ELS05" ~ "Which appliances uses the most energy",
+    question == "ELS06" ~ "Which appliance uses the most electricity",
+    question == "ELS07" ~ "Which source provides most electricity in the US",
+    question == "ELS08" ~ "Problem with electric cars",
+    TRUE ~ NA_character_
+  )) |> 
+  mutate(correct = case_when(
+    question == "Electrical energy units (kWh)" & response == 2 ~ "Correct",
+    question == "Energy consumed and appliance power rating" & response == 3 ~ "Correct",
+    question == "Incandescent lightbulb conversion" & response == 3 ~ "Correct",
+    question == "Reason to buy energy star appliances" & response == 3 ~ "Correct",
+    question == "Which appliances uses the most energy" & response == 3 ~ "Correct",
+    question == "Which appliance uses the most electricity" & response == 2 ~ "Correct",
+    question == "Which source provides most electricity in the US" & response == 3 ~ "Correct",
+    question == "Problem with electric cars" & response == 1 ~ "Correct",
+    TRUE ~ "Incorrect"
+  ))
+
+els_id <- els2 |> group_by(id,id2,state1,state2,refClass) |> 
+    summarize(els=mean(correct=="Correct"), .groups="drop") 
+
+
+# plot distribution fo answers to each els question. Separate questions by facets, color by correct/incorrect, make facets go in same order as questions
+els2 |> 
+  ggplot(aes(x=response, fill=correct)) +
+  geom_bar(position="dodge", stat="count") +
+  facet_wrap(~question, scales="free_y", ncol=2) +
+  scale_fill_manual(values=c("Correct"="green","Incorrect"="red")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title="Energy Literacy Survey", x="Response", y="Count") +
+  theme(legend.position = "none")
+
+ggplot(els2, aes(x = as.factor(response), fill = correct)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~question, ncol = 2, scales = "free_x") + # Facet by question, 2 columns, free x-axis scales
+  scale_fill_manual(values = c("Correct" = "#00ba38", "Incorrect" = "#f8766d")) + # Custom colors
+  labs(
+    title = "Distribution of Answers to Energy Literacy Survey Questions",
+    subtitle = "DeWaters & Powers (2011)",
+    x = "Response Option",
+    y = "Number of Respondents",
+    fill = "Correctness"
+  ) +
+  theme_bw() + # Use a clean theme
+  theme(
+    strip.text = element_text(size = 10, face = "bold"), # Adjust facet label appearance
+    axis.text.x = element_text(size = 8, angle = 45, hjust = 1), # Rotate x-axis labels for readability
+    axis.text.y = element_text(size = 8),
+    axis.title = element_text(size = 10),
+    plot.title = element_text(size = 12, face = "bold"),
+    plot.subtitle = element_text(size = 10),
+    legend.position = "bottom", # Move legend to the bottom
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 9)
+  )
+
+
+# score per id
+els2 |> 
+  group_by(id) |> 
+  summarise(score=sum(correct=="Correct")/n(), .groups="drop") |> 
+  ggplot(aes(x=score)) +
+  geom_histogram(binwidth=.1, fill="blue", color="black") +
+  labs(title="Energy Literacy Survey Score", x="Score", y="Count") +
+  theme_minimal()
+
+# score per id, color by ReferenceClass
+els2 |> 
+  group_by(id, refClass) |> 
+  summarise(score=sum(correct=="Correct")/n(), .groups="drop") |> 
+  ggplot(aes(x=score, fill=refClass)) +
+  geom_histogram(binwidth=.1, color="black") +
+  labs(title="Energy Literacy Survey Score", x="Score", y="Count") +
+  theme_minimal()
+
+# compare refClass averages, stat_halfeye
+els2 |> 
+  group_by(id,refClass) |> 
+  summarise(score=sum(correct=="Correct")/n(), .groups="drop") |> 
+  ggplot(aes(x=refClass, y=score, col=refClass)) +
+  stat_summary(fun.data = "mean_cl_boot", geom = "pointrange") +
+    labs(title="Energy Literacy Survey Score", x="Reference Class", y="Score") 
+
+
+els2 |>
+  group_by(refClass, question) |>
+  summarize(mean_correct = mean(correct == "Correct", na.rm = TRUE)) |>
+  ggplot(aes(x = question, y = mean_correct, fill = refClass)) +
+  geom_col(position = "dodge") +
+  labs(title = "Mean Correctness by Reference Class and Question",
+       x = "Question",
+       y = "Proportion Correct",
+       fill = "Reference Class") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+
+```
+
+
+
+r$> els_id
+# A tibble: 252 × 6
+      id id2               state1   state2 refClass     els
+   <int> <chr>             <chr>    <chr>  <chr>      <dbl>
+ 1     1 R_2QMsYuHS385pTj1 Colorado Texas  Percentage 0.125
+ 2     2 R_2tzIyZavpl1RZBY Colorado Texas  Percentage 0.75 
+ 3     3 R_3Gm1Y4QzSlyrEWo Colorado Texas  Percentage 0.75 
+ 4     4 R_Djh2q728ibyNWjD Colorado Texas  Percentage 0.875
+ 5     5 R_3fAXNbIZ7kFieSu Colorado Texas  Percentage 0.125
+ 6     6 R_1JECzl10KgckJXg Colorado Texas  Percentage 0.375
+ 7     7 R_C2IQAZim25sij4d Colorado Texas  Percentage 0.25 
+ 8     8 R_5bbi3tpMOhuGBIR Colorado Texas  Percentage 0.75 
+ 9     9 R_2BsVSAOpehXW9Cr Colorado Texas  Percentage 0.25 
+10    10 R_325F8wRln52w1QN Colorado Texas  Percentage 0.625
+
+
+head(s1_new |> filter(appliance=="Cooling",block==1,plan=="plan1"),n=16)
+# A tibble: 16 × 22
+# Groups:   id [16]
+      id id2           state1 state2 refClass calc  edu   modality state Duration__in_seconds_ appliance   els family state_avg plan  value block pct_goal change state_p_dif state_f_dif less_avg
+   <int> <chr>         <chr>  <chr>  <chr>    <chr> <fct> <chr>    <chr>                 <dbl> <chr>     <dbl>  <dbl> <dbl+lbl> <fct> <dbl> <dbl>    <dbl>  <dbl>       <dbl>       <dbl> <lgl>   
+ 1     1 R_2QMsYuHS38… Color… Texas  Percent… Used… Grad… P        COL                    1008 Cooling   0.125    697  498      plan1   600     1     0.15    -97         102         199 FALSE   
+ 2     2 R_2tzIyZavpl… Color… Texas  Percent… Used… Coll… P        COL                    1126 Cooling   0.75     697  498      plan1   500     1     0.15   -197           2         199 FALSE   
+ 3     3 R_3Gm1Y4QzSl… Color… Texas  Percent… Used… Coll… P        COL                     870 Cooling   0.75     697  498      plan1   592     1     0.15   -105          94         199 FALSE   
+ 4     4 R_Djh2q728ib… Color… Texas  Percent… Used… Coll… P        COL                    2763 Cooling   0.875    697  498      plan1   400     1     0.15   -297         -98         199 TRUE    
+ 5     5 R_3fAXNbIZ7k… Color… Texas  Percent… No C… Grad… P        COL                     920 Cooling   0.125    697  498      plan1   320     1     0.15   -377        -178         199 TRUE    
+ 6     6 R_1JECzl10Kg… Color… Texas  Percent… No C… Grad… P        COL                     878 Cooling   0.375    697  498      plan1   550     1     0.15   -147          52         199 FALSE   
+ 7     7 R_C2IQAZim25… Color… Texas  Percent… Used… Grad… P        COL                    2680 Cooling   0.25     697  498      plan1   500     1     0.15   -197           2         199 FALSE   
+ 8     8 R_5bbi3tpMOh… Color… Texas  Percent… Used… Some… P        COL                    1628 Cooling   0.75     697  498      plan1   500     1     0.15   -197           2         199 FALSE   
+ 9     9 R_2BsVSAOpeh… Color… Texas  Percent… Used… Grad… P        COL                     724 Cooling   0.25     697  498      plan1   650     1     0.15    -47         152         199 FALSE   
+10    10 R_325F8wRln5… Color… Texas  Percent… Used… Some… P        COL                     913 Cooling   0.625    697  498      plan1   593     1     0.15   -104          95         199 FALSE   
+
+
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(corrplot)
+
+# Create a wide dataframe where each column is a question, and the values are 1 (Correct) or 0 (Incorrect)
+els_wide <- els2 |>
+  mutate(correct_binary = ifelse(correct == "Correct", 1, 0)) |>
+  # mutate number correct for each sbj, then filter out those with less than 5, 
+    group_by(id) |>
+    mutate(n_correct = sum(correct_binary)) |>
+    filter(n_correct >= 2) |>
+    ungroup() |>
+  pivot_wider(id_cols = c(id), names_from = question, values_from = correct_binary) |>
+  select(-id) # Remove the ID column for correlation analysis
+
+# Calculate the correlation matrix
+cor_matrix <- cor(els_wide, use = "pairwise.complete.obs") # Handle missing values
+
+# Visualize the correlation matrix using corrplot
+corrplot(cor_matrix, 
+         method = "color",  # Use colored squares to represent correlations
+         type = "upper",    # Show only the upper triangle
+         tl.col = "black",  # Color of text labels
+         tl.srt = 45,       # Rotate text labels for better readability
+         addCoef.col = "black", # Add correlation coefficients to the plot
+         number.cex = 0.7,   # Adjust the size of the correlation coefficients
+         diag = FALSE       # Exclude the diagonal (which is always 1)
+)
+
+els2 |>
+  group_by(refClass, question) |>
+  summarize(mean_correct = mean(correct == "Correct", na.rm = TRUE)) |>
+  ggplot(aes(x = question, y = mean_correct, fill = refClass)) +
+  geom_col(position = "dodge") +
+  labs(title = "Mean Correctness by Reference Class and Question",
+       x = "Question",
+       y = "Proportion Correct",
+       fill = "Reference Class") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+els2 |>
+  group_by(calc, question) |>
+  summarize(mean_correct = mean(correct == "Correct", na.rm = TRUE)) |>
+  ggplot(aes(x = question, y = mean_correct, fill = calc)) +
+  geom_col(position = "dodge") +
+  labs(title = "Mean Correctness by Calculator Use",
+       x = "Question",
+       y = "Proportion Correct",
+       fill = "Calculator Use") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+library(factoextra)
+
+# Perform PCA
+pca_result <- prcomp(els_wide, scale. = TRUE)
+
+# Visualize the results
+fviz_pca_var(pca_result, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+
+
+
+
+```
+
+

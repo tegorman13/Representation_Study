@@ -126,7 +126,7 @@ For each family scenario, the participants were shown a table containing the fam
 
 Additional data collected included:
 
--   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion.
+-   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion [ @dewatersEnergyLiteracySecondary2011].
 -   **Calculator Usage Tracking**: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.
 -   **Demographic Survey**: Collected information on gender, age, income, education, employment status, and state of residence.
 -   **Environmental Attitudes Survey**: Assessed participants' pro-environmental attitudes and perceived importance of energy conservation.
@@ -480,6 +480,49 @@ pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) 
 ```
 
 
+
+```{r}
+#| label: fig-s1-els
+
+s1_els_log_error <- brm(
+    log_abs_error ~ els + (1|id) + (1|state),
+    data = s1_agg,
+    family = gaussian(),
+    cores = 4,
+    iter = 2000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s1_els_log_error.rds')) 
+)
+
+# summary(s1_els_log_error)
+# conditional_effects(s1_els_log_error)
+
+
+# Create the conditional effects plot
+conditional_effects_plot <- conditional_effects(s1_els_log_error)
+
+# Extract the data for plotting
+plot_data <- conditional_effects_plot[[1]]
+
+# Create the plot
+ggplot(plot_data, aes(x = els, y = estimate__)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha = 0.2) +
+  labs(
+    x = "Energy Literacy Score",
+    y = "Log Absolute Error",
+    title = "Conditional Effect of Energy Literacy on Log Absolute Error"
+  ) +
+  theme_minimal()
+```
+
+
+To further investigate individual factors that may influence planning accuracy, we examined the relationship between participants' energy literacy scores and their performance on the task. Energy literacy was assessed using an 8-item questionnaire adapted from [@dewatersEnergyLiteracySecondary2011], which covers topics such as energy units, appliance energy consumption, and sources of electricity. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1|id) + (1|state). Results indicated a significant negative relationship between energy literacy and log absolute error (Estimate = -2.35, 95% CI: -2.88 to -1.81), suggesting that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (@fig-s1-els). 
+
+
+
 ## Experiment 1: Discussion
 
 Experiment 1 examined how different numerical representations of energy reduction goals influenced participants’ planning accuracy. In line with our hypothesis that absolute units would yield better accuracy, the kWh condition supported significantly more precise energy reduction plans than did either the Percentage or USD conditions. Although the Percentage format was detrimental to accuracy relative to kWh, it was the USD condition that consistently produced the poorest outcomes, suggesting that monetary terms, while intuitive in everyday contexts, may not serve as effective reference classes for planning appliance-specific reductions in energy use.
@@ -807,23 +850,7 @@ as.data.frame(fixef(ordinal_model_s2_logit)[,-2])|> as.data.frame() %>%
 :::
 
 
-We again employed Bayesian ordinal logistic regression to model the
-probability of participants falling into each accuracy category as a
-function of reference class, rounding, and goal level (@tbl-s2-ord and
-@tbl-s2-reg). Results indicated that the kWh condition served as a baseline
-for higher accuracy. Compared to kWh, the USD reference class increased
-the odds of falling into lower-accuracy bins (Odds Ratio = 8.80, 95% CI:
-1.37 to 28.42). The Percentage condition showed a similar trend, though
-the credible intervals were more uncertain. Notably, the “Rounded”
-condition showed an advantage: rounded usage information reduced the
-likelihood of errors (OR = 0.53, 95% CI: 0.36 to 0.73). Moreover, when
-the goal was more challenging (15% vs. 10%), accuracy generally declined
-(OR = 0.66, 95% CI: 0.45 to 0.91). Thus, while rounding facilitated more
-accurate responses, the more difficult goal reduced overall accuracy.
-Crucially, the kWh condition’s advantage persisted across these
-additional manipulations, reinforcing the conclusion from Experiment 1
-that absolute units support better accuracy in energy reduction
-planning.
+We again employed Bayesian ordinal logistic regression to model the probability of participants falling into each accuracy category as a function of reference class, rounding, and goal level (@tbl-s2-ord and @tbl-s2-reg). Results indicated that the kWh condition served as a baseline for higher accuracy. Compared to kWh, the USD reference class increased the odds of falling into lower-accuracy bins (Odds Ratio = 8.80, 95% CI: 1.37 to 28.42). The Percentage condition showed a similar trend, though the credible intervals were more uncertain. Notably, the “Rounded” condition showed an advantage: rounded usage information reduced the likelihood of errors (OR = 0.53, 95% CI: 0.36 to 0.73). Moreover, when the goal was more challenging (15% vs. 10%), accuracy generally declined (OR = 0.66, 95% CI: 0.45 to 0.91). Thus, while rounding facilitated more accurate responses, the more difficult goal reduced overall accuracy. Crucially, the kWh condition’s advantage persisted across these additional manipulations, reinforcing the conclusion from Experiment 1 that absolute units support better accuracy in energy reduction planning.
 
 
 
@@ -843,6 +870,48 @@ pp_check(ordinal_model_s2_logit, type = "bars_grouped", group="refClass", fatten
     axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
+
+```{r}
+#| label: fig-s2-els
+
+s2_els_log_error <- brm(
+    log_abs_error ~ els + (1|id) + (1|state),
+    data = s2_agg1,
+    family = gaussian(),
+    cores = 4,
+    iter = 3000,
+    control = list(adapt_delta = 0.97), 
+    prior = c(prior(normal(0, 3), class = "Intercept"), 
+                prior(normal(0, 3), class = "b")), 
+    file = paste0(here::here("data/model_cache",'s2_els_log_error.rds')) 
+)
+#summary(s2_els_log_error)
+
+conditional_effects_plot <- conditional_effects(s2_els_log_error)
+plot_data <- conditional_effects_plot[[1]]
+
+ggplot(plot_data, aes(x = els, y = estimate__)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha = 0.2) +
+  labs(
+    x = "Energy Literacy Score",
+    y = "Log Absolute Error",
+    title = "Conditional Effect of Energy Literacy on Log Absolute Error"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (@fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
+
+## Experiment 2: Discussion
+
+
+
+
 
 
 ### Individual Differences
