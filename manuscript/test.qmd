@@ -104,6 +104,9 @@ abstract: |
 ---
 
 
+This study aims to examine how the format of energy information impacts individuals’ ability to develop precise energy reduction plans. By manipulating the reference class (kWh, %, USD) and assessing planning accuracy, we seek to determine which format facilitates better comprehension and decision-making.Across two experiments, the kWh format generally led to better accuracy, while the USD format consistently led to the worst performance. These findings highlight the importance of effective information presentation to promote energy conservation, and may contribute to the development of more effective energy communication strategies that can enhance conservation efforts.
+
+
 
 
 # Introduction
@@ -118,7 +121,8 @@ abstract: |
 
 - @canfieldPerceptionsElectricityuseCommunications2017 found that tables were more effective than graphs for conveying specific electricity usage data, likely because tables facilitate straightforward point reading. However, they also noted that individuals with lower energy literacy had reduced comprehension across all formats.
 - @canfieldPerceptionsElectricityuseCommunications2017's findings on preferences for historical use information and the impact of neighbor comparisons
-- The concept of cognitive fit posits that performance improves when the information presentation format aligns with the task requirements [@vesseyCognitiveFitTheoryBased1991]
+
+
 - alignment can reduce cognitive load and enhance accuracy in planning [@shahBarLineGraph2011]
 - Reimer et al. (2015) provide  context on how numerical formats affect risk perception, the reference class problem, and the benefits of natural frequencies.
 
@@ -131,6 +135,54 @@ The way numerical information is presented can significantly affect how individu
 Furthermore, research suggests that natural frequencies and absolute numbers are generally easier for individuals to understand compared to percentages or probabilities [@gigerenzerHowImproveBayesian1995 @hoffrageCommunicatingStatisticalInformation2000]. In the context of energy conservation, using absolute units may facilitate more accurate planning and decision-making by aligning with intuitive cognitive processing.
 
 Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. Addressing this gap is crucial for developing effective interventions that promote energy conservation behaviors.
+
+
+
+
+@abrahamseReviewInterventionStudies2005
+
+@attariEnablingEnergyConservation2015
+
+@dewatersEnergyLiteracySecondary2011
+
+@gigerenzerSimpleToolsUnderstanding2003
+
+@larrickMPGIllusion2008
+
+@blaschBoundedlyRationalConsumers2019
+
+@fischerFeedbackHouseholdElectricity2008
+
+@schwartzWhatPeopleConsumption2015
+
+@vongrabeUsingInstanceBasedLearning2020
+
+@gigerenzerHowImproveBayesian1995
+
+@attariPublicPerceptionsEnergy2010
+
+@herrmannDoesDataVisualization2018
+
+@vandenbroekHeuristicsEnergyJudgement2019
+
+@herberzKiloWhatDefault2020
+
+@marghetisSimpleInterventionsCan2019
+
+@lagomarsinoNeedChargeRight2022
+
+@hahnelMentalAccountingMechanisms2020
+
+@delgadoOpportunitiesGreaterEnergy2018
+
+@schleyCognitiveAccessibilityJudgments2015
+
+@langeWorkEnvironmentalProtection2021
+
+@tiedeNumeracyNumericAttention2022
+
+
+
 
 ### Hypotheses
 

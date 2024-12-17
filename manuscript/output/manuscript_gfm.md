@@ -1089,81 +1089,14 @@ sustainable energy behaviors.
 
 ## Experiment 2: Discussion
 
-### Individual Differences
-
-``` r
-s2_agg1 |> group_by(id,refClass,calc,pct_goal,pct_change) |> 
-    filter(plan=="plan1",rounded=="Rounded") |> 
-    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
-    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |>
-  ungroup() |> 
-  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
-  filter(mean_abs_error <= 0.50) |>
-  mutate(id=reorder(id,pct_change)) |> 
-  ggplot(aes(y=id,x=mean_pct_change,col=refClass)) + 
-  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
-  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
-  ggh4x::facet_nested_wrap(~pct_goal,axes="all",scales="free",ncol=2)  + 
-  labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
-  theme(axis.text.y=element_text(face = "plain", size = rel(0.7))) + 
-    scale_x_continuous(breaks = seq(0, 0.5, by = 0.05),
-                    labels = scales::percent_format(accuracy = 1))
-```
-
-<div id="fig-s2-indv">
-
-![](manuscript_files/figure-commonmark/fig-s2-indv-1.png)
-
-Figure 11: Study 2: Individual performance in the energy planning task,
-colored by reference class. The dashed line represents the target
-reduction goal. Participants are shown along the y axis, those who fall
-above or below the dashed line have not met the target goal. The x-axis
-represents the percent change in energy usage from the prior year.
-
-</div>
-
-``` r
-s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
-  filter(appliance!="TOTAL",state=="California") |> 
-  ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
-  geom_point(aes(y=state_avg),color="red") +
-  geom_point(aes(y=family),color="blue") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+Experiment 2 expanded on the findings of Experiment 1 by introducing additional manipulations of goal difficulty (10% vs. 15% reduction) and numerical presentation (rounded vs. exact numbers). The results largely corroborated and extended those of Experiment 1, providing further evidence for the advantages of presenting energy reduction goals in absolute units (kWh).
 
 
-s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
-  filter(appliance!="TOTAL",state=="California") |> 
-  ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
-  geom_point(aes(y=state_avg),color="red") +
-  geom_point(aes(y=family),color="blue") +
-  facet_wrap(~id) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-<div id="fig-s2-indv2-1">
-
-![](manuscript_files/figure-commonmark/fig-s2-indv2-1.png)
-
-Figure 12: Study 2: Respones patterns for a subset of individiual
-participants. Black points are participant responses, red points are the
-state average, and blue points are the family average. The x-axis
-represents the appliance category, and the y-axis represents the energy
-usage in kWh.
-
-</div>
-
-<div id="fig-s2-indv2-2">
-
-![](manuscript_files/figure-commonmark/fig-s2-indv2-2.png)
-
-Figure 13: Study 2: Respones patterns for a subset of individiual
-participants. Black points are participant responses, red points are the
-state average, and blue points are the family average. The x-axis
-represents the appliance category, and the y-axis represents the energy
-usage in kWh.
-
-</div>
 
 # General Discusion
+
+Across two experiments, we consistently found that presenting energy reduction goals in absolute units (kWh) led to more accurate planning compared to percentage-based or monetary representations. This advantage persisted across variations in goal difficulty and numerical presentation, suggesting a robust effect of reference class on planning accuracy.
+
 
 Karjalainen 2011 - people prefer information about price (Karjalainen,
 2011)

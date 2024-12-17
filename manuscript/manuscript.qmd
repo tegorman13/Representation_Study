@@ -59,7 +59,7 @@ format-links:
     - gfm
 date: 2024-12-07
 abstract: |
-    This study aims to examine how the format of energy information impacts individuals’ ability to develop precise energy reduction plans. By manipulating the reference class (kWh, %, USD) and assessing planning accuracy, we seek to determine which format facilitates better comprehension and decision-making.Across two experiments, the kWh format generally led to better accuracy, while the USD format consistently led to the worst performance. These findings highlight the importance of effective information presentation to promote energy conservation, and may contribute to the development of more effective energy communication strategies that can enhance conservation efforts.
+    Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
 ---
 
 
@@ -75,10 +75,10 @@ abstract: |
 
 
 
-Energy poverty continues to be a pervasive issue in the United States @memmottSociodemographicDisparitiesEnergy2021. This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans @reimerNumericCommunicationRisk2015. Prior research by @canfieldPerceptionsElectricityuseCommunications2017 demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs. 
+Energy poverty continues to be a pervasive issue in the United States [@memmottSociodemographicDisparitiesEnergy2021]. This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans @reimerNumericCommunicationRisk2015. Prior research by @canfieldPerceptionsElectricityuseCommunications2017 demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs. 
 
 
-The way numerical information is presented can significantly affect how individuals process and use that information [@reimerNumericCommunicationRisk2015] . The reference class problem highlights that numbers without clear reference points can lead to misinterpretation, as the meaning of a statistic depends on the category or class it refers to [@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. Presenting energy information in absolute units (e.g., kWh) provides a clear reference class, potentially enhancing comprehension.
+The way numerical information is presented can significantly affect how individuals process and use that information [@reimerNumericCommunicationRisk2015]. The reference class problem highlights that numbers without clear reference points can lead to misinterpretation, as the meaning of a statistic depends on the category or class it refers to [@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. Presenting energy information in absolute units (e.g., kWh) provides a clear reference class, potentially enhancing comprehension.
 
 
 The concept of cognitive fit posits that performance improves when the information presentation format aligns with the task requirements [@vesseyCognitiveFitTheoryBased1991], and that such an alignment can reduce cognitive load and enhance accuracy in planning [@shahBarLineGraph2011]. For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading [@canfieldPerceptionsElectricityuseCommunications2017]. However, the effectiveness of the format varies with the type of information and individual differences, such as energy literacy, which significantly impacts comprehension and conservation intent. Moreover, the unit in which numerical information is presented influences how decision-makers evaluate and choose between options, with default units increasing value sensitivity [@herberzKiloWhatDefault2020]. In the context of energy, presenting information in terms of multiple translations can increase preference for options aligned with activated objectives, such as pro-environmental values [@ungemachTranslatedAttributesChoice2018]. Furthermore, mental accounting mechanisms, where individuals create mental budgets linking specific consumption acts to specific payments, significantly impact energy decisions and behaviors [@hahnelMentalAccountingMechanisms2020]. 
@@ -268,7 +268,7 @@ Study 1: Summary of planning accuracy by reference class. The table shows perfor
 
 :::
 
-@tbl-s1-agg that participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than percentages or USD.
+@tbl-s1-agg that participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when percentages or USD.
 
 
 As shown in @tbl-s1-agg, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations. 
@@ -525,7 +525,7 @@ To further investigate individual factors that may influence planning accuracy, 
 
 ## Experiment 1: Discussion
 
-Experiment 1 examined how different numerical representations of energy reduction goals influenced participants’ planning accuracy. In line with our hypothesis that absolute units would yield better accuracy, the kWh condition supported significantly more precise energy reduction plans than did either the Percentage or USD conditions. Although the Percentage format was detrimental to accuracy relative to kWh, it was the USD condition that consistently produced the poorest outcomes, suggesting that monetary terms, while intuitive in everyday contexts, may not serve as effective reference classes for planning appliance-specific reductions in energy use.
+Experiment 1 examined how different numerical representations of energy reduction goals affected participants’ planning accuracy. In line with our hypothesis that absolute units would yield better accuracy, the kWh condition supported significantly more precise energy reduction plans than did either the Percentage or USD conditions. Although the Percentage format was detrimental to accuracy relative to kWh, it was the USD condition that consistently produced the poorest outcomes, suggesting that monetary terms, while intuitive in everyday contexts, may not serve as effective reference classes for planning appliance-specific reductions in energy use.
 
 Experiment 2 will extend these findings by examining whether additional variables, such as the difficulty of the reduction goal or the rounding of numerical values, further interact with reference class conditions, thereby providing a more comprehensive understanding of how to optimize energy information presentation for improved planning accuracy.
 
@@ -535,9 +535,9 @@ Experiment 2 will extend these findings by examining whether additional variable
 
 ## Methods
 
-The experimental procedures in study 2 are quite similar to those in study 1, but we also included a rounding manipulation (rounded vs. not rounded), and a manipulation of the goal (10% reduction vs. 15% rediction). We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.
+The experimental procedures in Experiment 2 are quite similar to those in Experiment 1. Experiment 2 employed a 2 (task goal: 10% vs. 15% reduction) x 2 (last year's usage: exact vs. rounded) within-subjects design, with a between-subjects manipulation of the reference class (USD vs. Percentage vs. kWh).. We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.
 
-Note that reference class remains a between-subjects variable, while percent goal, rounding, and state are within-subjects variables. In study 2, the new design is a 4 state temperature (2 warm vs. 2 cold states) X 2 task goal (10% vs. 15%) X 2 last year’s usage for the family and the state average (exact vs. rounded numbers) within X 3 task reference class (USD vs. Percentage vs. kWh) between.
+
 
 ## Results
 
@@ -905,11 +905,11 @@ ggplot(plot_data, aes(x = els, y = estimate__)) +
 
 
 
-As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (@fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
+As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy scores tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (@fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
 
 ## Experiment 2: Discussion
 
-
+Experiment 2 expanded on the findings of Experiment 1 by introducing additional manipulations of goal difficulty (10% vs. 15% reduction) and numerical presentation (rounded vs. exact numbers). The results largely corroborated and extended those of Experiment 1, providing further evidence for the advantages of presenting energy reduction goals in absolute units (kWh).
 
 
 
@@ -977,7 +977,13 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
 
 # General Discusion
 
+Across two experiments, we consistently found that presenting energy reduction goals in absolute units (kWh) led to more accurate planning compared to percentage-based or monetary representations. This advantage persisted across variations in goal difficulty and numerical presentation, suggesting a robust effect of reference class on planning accuracy.
+
+
 Karjalainen 2011 - people prefer information about price [@karjalainenConsumerPreferencesFeedback2011]
+
+Mention @blaschBoundedlyRationalConsumers2019 - better long-term appliance selection with information presented in monetary terms. 
+
 
 {{< pagebreak >}}
 

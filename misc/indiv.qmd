@@ -695,5 +695,15 @@ ggplot(s2_long, aes(x = appliance, y = value, color = factor(cluster))) +
   facet_wrap(~cluster) +
   labs(title = "Clusters of Planning Strategies")
 
+
+# Model the relationship between calculator use, reference class, and absolute error
+model_calc <- lm(log_abs_error ~ calc * refClass, data = s2_long)
+summary(model_calc)
+
+# Visualize the relationship
+ggplot(s2_long, aes(x = refClass, y = log(abs_error), fill = calc)) +
+  geom_boxplot() +
+  labs(title = "Planning Accuracy by Calculator Use and Reference Class")
+
 ```
 
