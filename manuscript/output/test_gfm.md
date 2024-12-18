@@ -3,6 +3,17 @@ Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
 2024-12-03
 
+This study aims to examine how the format of energy information impacts
+individuals’ ability to develop precise energy reduction plans. By
+manipulating the reference class (kWh, %, USD) and assessing planning
+accuracy, we seek to determine which format facilitates better
+comprehension and decision-making.Across two experiments, the kWh format
+generally led to better accuracy, while the USD format consistently led
+to the worst performance. These findings highlight the importance of
+effective information presentation to promote energy conservation, and
+may contribute to the development of more effective energy communication
+strategies that can enhance conservation efforts.
+
 # Introduction
 
 - highlight the significant contribution of residential energy
