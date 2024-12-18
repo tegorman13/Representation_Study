@@ -50,19 +50,58 @@ s2_long <- readRDS(here::here("data/s2_processed.rds")) |>
 
 
 
+
 s1_agg <- s1 |> 
-  filter(appliance !="Total kWh") |> 
-  group_by(id,refClass,state,block,plan,calc,edu,pct_goal) |> 
-  summarise(total_kWh = sum(value),orig_kWh=sum(family), 
-            pct_change = round((orig_kWh-total_kWh)/orig_kWh,3), 
-            n_change = sum(value!=family),
-            state_p_dif=mean(state_p_dif),
-            state_f_dif=mean(state_f_dif),
-            n_less_avg = sum(less_avg),
-            duration=first(Duration__in_seconds_)) |> 
-  mutate(matched_goal = (pct_change == pct_goal), 
-             error = pct_change - pct_goal,
-            abs_error = abs(error))
+    filter(appliance !="Total kWh") |> 
+    group_by(id,refClass,state,block,plan,edu,pct_goal,calc) |> 
+    summarise(total_kWh = sum(value),orig_kWh=sum(family), 
+                pct_change = abs(round((orig_kWh-total_kWh)/orig_kWh,3)), 
+                n_change = sum(value!=family),
+                state_p_dif=mean(state_p_dif),
+                state_f_dif=mean(state_f_dif),
+                n_less_avg = sum(less_avg),
+                duration=first(Duration__in_seconds_)) |> 
+    mutate(matched_goal = (pct_change == pct_goal), 
+                error = pct_change - pct_goal,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007), 
+                close_match = abs_error <= 0.02) |>
+    ungroup() |> # Add ungroup here
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-5% error", "Over 5% error"),
+                ordered = TRUE
+            )
+        ) |> relocate(accuracy_level, .after= "pct_change")
+
+
+
+s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.05 ~ "0.01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", ".01-5% error", "Over 5% error"),
+            ordered = TRUE
+        ))
 ```
 
 
@@ -512,7 +551,7 @@ s2_long |>
 ```{r}
 
 # Assuming you have a data frame 's2_long' with energy literacy scores ('els')
-# and a data frame 's2_agg1' with planning data
+# and a data frame 's2_agg' with planning data
 
 # Calculate the deviation of each participant's plan from the state average and family usage
 s2_long <- s2_long |>
@@ -520,7 +559,7 @@ s2_long <- s2_long |>
          dev_family = abs(value - family))
 
 # Merge energy literacy scores
-s2_long <- merge(s2_long, s2_agg1[, c("id", "els")], by = "id")
+s2_long <- merge(s2_long, s2_agg[, c("id", "els")], by = "id")
 
 # Model the relationship between energy literacy and deviations
 model_dev_state <- lm(dev_state ~ els * appliance, data = s2_long)
@@ -548,9 +587,11 @@ ggplot(s2_long, aes(x = els, y = dev_family, color = appliance)) +
 
 
 ```{r}
-s2_agg1 <- s2_long |> 
+
+
+s2_agg <- s2_long |> 
   filter(appliance != "TOTAL") |> 
-  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded,els) |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
   summarise(
     total_kWh = sum(value),
     orig_kWh = sum(family),
@@ -569,16 +610,15 @@ s2_agg1 <- s2_long |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match","0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         )
 
-s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |> 
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
     summarise(
     mg=sum(matched_goal),
@@ -593,11 +633,10 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ ".01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", "01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
 ```
@@ -607,7 +646,7 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |>
 ```{r}
 
 # Example: Use k-means clustering on participant-level mean accuracy measures
-participant_summary <- s2_agg1 %>%
+participant_summary <- s2_agg %>%
   group_by(id) %>%
   summarize(mean_log_error = mean(log_abs_error),
             mean_els = mean(els),
@@ -634,7 +673,7 @@ ggplot(participant_summary, aes(x = mean_els, y = mean_log_error, color = cluste
 ```{r}
 #| eval: false
 # Assuming you have a data frame 's2_long' with energy literacy scores ('els')
-# and a data frame 's2_agg1' with planning data
+# and a data frame 's2_agg' with planning data
 
 # Calculate the deviation of each participant's plan from the state average and family usage
 s2_long <- s2_long |>
@@ -642,7 +681,7 @@ s2_long <- s2_long |>
          dev_family = abs(value - family))
 
 # Merge energy literacy scores
-s2_long <- s2_long |> left_join(s2_agg1, by = c("id", "refClass", "calc", "state", "pct", "pct_goal", "plan", "rounded", "els"))
+s2_long <- s2_long |> left_join(s2_agg, by = c("id", "refClass", "calc", "state", "pct", "pct_goal", "plan", "rounded", "els"))
 
 # Model the relationship between energy literacy and deviations
 model_dev_state <- lm(dev_state ~ els * appliance, data = s2_long)

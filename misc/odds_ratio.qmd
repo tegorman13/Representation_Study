@@ -13,10 +13,12 @@ theme_set(theme_nice())
 
 s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 
@@ -40,11 +42,10 @@ s1_agg <- s1 |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match", "0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
@@ -66,11 +67,10 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ "0.01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", ".01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
 
@@ -693,7 +693,8 @@ summary(mixed_model_abs_error)
 #| label: tbl-s2-agg
 #| tbl-cap: "Study 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
 
-s2_agg1 <- s2_long |> 
+
+s2_agg <- s2_long |> 
   filter(appliance != "TOTAL") |> 
   group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
   summarise(
@@ -703,37 +704,46 @@ s2_agg1 <- s2_long |>
     state_dif = mean(state_dif),
     .groups = "drop"
   ) |>
-  mutate(matched_goal = (pct_change == pct),
+  mutate(
+    matched_goal = (pct_change == pct),
+    close_match = abs(pct_change - pct) <= 0.02,
                 error = pct_change - pct,
-                abs_error = abs(error)) |> 
-      ungroup() |> # Add ungroup here
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007)) |> 
+      ungroup() |> 
         mutate(
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match","0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         )
 
-s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
-    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ ".01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", "01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
-  
 
 # overall pct of subjects who matched their goal
 s2_agg4 |> group_by(refClass) |>
@@ -755,7 +765,7 @@ s2_agg4 |> group_by(refClass) |>
 
 ordinal_model_s2_logit <- brm(
   accuracy_level ~ refClass +rounded+pct_goal + (1|id)+ (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = cumulative("logit"),
   cores = 4,
   iter = 2000,
@@ -770,7 +780,7 @@ summary(ordinal_model_s2_logit)
 
 
 pred_summary_s2 <- ordinal_model_s2_logit %>%
-  epred_draws(newdata = s2_agg1, re_formula = NA,ndraws=200) %>%
+  epred_draws(newdata = s2_agg, re_formula = NA,ndraws=200) %>%
   group_by("Reference Class"=refClass, rounded, "% Goal"=pct_goal, Category=.category) %>%
   summarise(
     mean_prob = mean(.epred),
@@ -784,10 +794,10 @@ pred_summary_s2 <- ordinal_model_s2_logit %>%
 # Create a new data frame with the predictor values
 new_data <- expand.grid(
   refClass = c("kWh", "Percentage", "USD"),
-  id = unique(s2_agg1$id)[1],      # Take first id
-  state = unique(s2_agg1$state)[1], # Take first state,
-  rounded = unique(s2_agg1$rounded)[1], # Take first rounded
-  pct_goal = unique(s2_agg1$pct_goal)[1] # Take first pct_goal
+  id = unique(s2_agg$id)[1],      # Take first id
+  state = unique(s2_agg$state)[1], # Take first state,
+  rounded = unique(s2_agg$rounded)[1], # Take first rounded
+  pct_goal = unique(s2_agg$pct_goal)[1] # Take first pct_goal
 )
 
 
@@ -856,10 +866,10 @@ odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of a
 # Create a new data frame with the predictor values
 # new_data <- expand.grid(
 #   refClass = c("kWh", "Percentage", "USD"),
-#   id = unique(s2_agg1$id)[1],      # Take first id
-#   state = unique(s2_agg1$state)[1], # Take first state,
-#   rounded = unique(s2_agg1$rounded)[1], # Take first rounded
-#   pct_goal = unique(s2_agg1$pct_goal)[1] # Take first pct_goal
+#   id = unique(s2_agg$id)[1],      # Take first id
+#   state = unique(s2_agg$state)[1], # Take first state,
+#   rounded = unique(s2_agg$rounded)[1], # Take first rounded
+#   pct_goal = unique(s2_agg$pct_goal)[1] # Take first pct_goal
 # )
 
 # or_table <- data.frame(exp(fixef(ordinal_model_s2_logit)))
@@ -892,7 +902,7 @@ odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of a
 
 ordinal_model_s2_logit_int2 <- brm(
   accuracy_level ~ refClass +(rounded*pct_goal) + (1|id)+ (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = cumulative("logit"),
   cores = 4,
   iter = 2000,
@@ -909,7 +919,7 @@ conditional_effects(ordinal_model_s2_logit_int2)
 
 ordinal_model_s2_logit_int3 <- brm(
   accuracy_level ~ refClass * rounded*pct_goal + (1|id)+ (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = cumulative("logit"),
   cores = 4,
   iter = 3000,
@@ -926,7 +936,7 @@ conditional_effects(ordinal_model_s2_logit_int3)
 
 ordinal_model_s2_logit_c1rf_int3<- brm(
   accuracy_level ~ refClass * rounded*pct_goal + (1|id)+ (1|state) + (1|calc),
-  data = s2_agg1,
+  data = s2_agg,
   family = cumulative("logit"),
   cores = 4,
   iter = 3000,
@@ -945,7 +955,7 @@ conditional_effects(ordinal_model_s2_logit_c1rf_int3)
 
 ordinal_model_s2_logit_c1add_int3<- brm(
   accuracy_level ~ (refClass * rounded*pct_goal) + calc + (1|id)+ (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = cumulative("logit"),
   cores = 4,
   iter = 3000,
@@ -958,5 +968,658 @@ summary(ordinal_model_s2_logit_c1add_int3)
 
 conditional_effects(ordinal_model_s2_logit_c1add_int3)
 
+fixef(ordinal_model_s2_logit_c1add_int3)
+
+
+
+library(marginaleffects)
+library(tinytable)
+
+ame <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3, 
+  variables = "refClass"
+)
+print(ame)
+
+
+ame_by_rounded <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  by = c("rounded", "accuracy_level")
+)
+print(ame_by_rounded)
+
+
+ame_by_rounded_pct_goal <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  by = c("rounded", "pct_goal", "accuracy_level")
+)
+print(ame_by_rounded_pct_goal)
+
+
+conditional_slopes <- slopes(
+    ordinal_model_s2_logit_c1add_int3,
+    variables = "refClass",
+    newdata = datagrid(
+        rounded = c('Not Rounded', 'Rounded'),
+        pct_goal = c("10%", "15%")
+    )
+)
+conditional_slopes |> head(n=25)
+
+plot_slopes(
+    ordinal_model_s2_logit_c1add_int3,
+    variables = "refClass",
+    condition = c("rounded", "pct_goal")
+)
+
+
+
+avg_slopes(
+    ordinal_model_s2_logit_c1add_int3,
+    variables = "refClass",
+    hypothesis = "b1 - b2 = 0"  # Compare effects for Rounded vs Not Rounded
+)
+#  Estimate   2.5 % 97.5 %
+#    0.0569 -0.0528  0.159
+
+# Term: b1-b2=0
+# Type:  response 
+# Columns: term, estimate, conf.low, conf.high 
+avg_slopes(
+    ordinal_model_s2_logit_c1add_int3,
+    variables = "refClass",
+    hypothesis = "b1 - b3 = 0"  # Compare effects for Rounded vs Not Rounded
+)
+#  Estimate  2.5 % 97.5 %
+#   -0.0742 -0.192 0.0264
+
+# Term: b1-b3=0
+# Type:  response 
+# Columns: term, estimate, conf.low, conf.high 
+
+
+avg_slopes(
+ordinal_model_s2_logit_c1add_int3,
+variables = "refClass",
+by = c("rounded", "pct_goal"),
+hypothesis = "(b1 - b2) - (b3 - b4) = 0"
+)
+#               Term Estimate   2.5 % 97.5 %
+#  (b1-b2)-(b3-b4)=0   0.0201 -0.0797 0.0985
+
+# Type:  response 
+# Columns: term, estimate, conf.low, conf.high 
+
+
+# Example: Pairwise comparison of AMEs for refClass
+pairwise_comparisons <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  hypothesis = "pairwise"
+)
+print(pairwise_comparisons)
+#                                                                    Term Estimate    2.5 %    97.5 %
+#  (Exact match, Percentage - kWh) - (Exact match, USD - kWh)                0.0575 -0.04893  0.170520
+#  (Exact match, Percentage - kWh) - (0.01-2% error, Percentage - kWh)      -0.0738 -0.18531  0.028426
+#  (Exact match, Percentage - kWh) - (0.01-2% error, USD - kWh)             -0.0618 -0.18001  0.051139
+#  (Exact match, Percentage - kWh) - (2.01-15% error, Percentage - kWh)     -0.1011 -0.25716  0.035666
+#  (Exact match, Percentage - kWh) - (2.01-15% error, USD - kWh)            -0.1122 -0.26659  0.023111
+#  (Exact match, Percentage - kWh) - (Over 15% error, Percentage - kWh)     -0.1485 -0.34326  0.061167
+#  (Exact match, Percentage - kWh) - (Over 15% error, USD - kWh)            -0.2098 -0.38566 -0.025617
+#  (Exact match, USD - kWh) - (0.01-2% error, Percentage - kWh)             -0.1321 -0.25511 -0.019752
+#  (Exact match, USD - kWh) - (0.01-2% error, USD - kWh)                    -0.1202 -0.23245 -0.018717
+#  (Exact match, USD - kWh) - (2.01-15% error, Percentage - kWh)            -0.1615 -0.31554 -0.024206
+#  (Exact match, USD - kWh) - (2.01-15% error, USD - kWh)                   -0.1707 -0.33209 -0.029627
+#  (Exact match, USD - kWh) - (Over 15% error, Percentage - kWh)            -0.2082 -0.38108 -0.025534
+#  (Exact match, USD - kWh) - (Over 15% error, USD - kWh)                   -0.2690 -0.47833 -0.045882
+#  (0.01-2% error, Percentage - kWh) - (0.01-2% error, USD - kWh)            0.0108 -0.00632  0.037468
+#  (0.01-2% error, Percentage - kWh) - (2.01-15% error, Percentage - kWh)   -0.0274 -0.07868  0.010135
+#  (0.01-2% error, Percentage - kWh) - (2.01-15% error, USD - kWh)          -0.0381 -0.08937 -0.000373
+#  (0.01-2% error, Percentage - kWh) - (Over 15% error, Percentage - kWh)   -0.0728 -0.16873  0.032944
+#  (0.01-2% error, Percentage - kWh) - (Over 15% error, USD - kWh)          -0.1357 -0.22795 -0.024503
+#  (0.01-2% error, USD - kWh) - (2.01-15% error, Percentage - kWh)          -0.0399 -0.09148 -0.002582
+#  (0.01-2% error, USD - kWh) - (2.01-15% error, USD - kWh)                 -0.0495 -0.10824 -0.007293
+#  (0.01-2% error, USD - kWh) - (Over 15% error, Percentage - kWh)          -0.0858 -0.17018  0.012997
+#  (0.01-2% error, USD - kWh) - (Over 15% error, USD - kWh)                 -0.1463 -0.25832 -0.026034
+#  (2.01-15% error, Percentage - kWh) - (2.01-15% error, USD - kWh)         -0.0080 -0.03343  0.004371
+#  (2.01-15% error, Percentage - kWh) - (Over 15% error, Percentage - kWh)  -0.0420 -0.11437  0.024139
+#  (2.01-15% error, Percentage - kWh) - (Over 15% error, USD - kWh)         -0.1032 -0.19343 -0.015885
+#  (2.01-15% error, USD - kWh) - (Over 15% error, Percentage - kWh)         -0.0326 -0.11179  0.042446
+#  (2.01-15% error, USD - kWh) - (Over 15% error, USD - kWh)                -0.0932 -0.17727 -0.012488
+#  (Over 15% error, Percentage - kWh) - (Over 15% error, USD - kWh)         -0.0599 -0.18057  0.053139
+
+
+emms_ref <- emmeans(ordinal_model_s2_logit_c1add_int3, ~ refClass, type = "link")
+contrast_ref <- contrast(emms_ref, "trt.vs.ctrl", ref = "kWh") 
+odds_ratios <- summary(contrast_ref, type = "response") # back-transform to odds
+odds_ratios
+#  contrast         odds.ratio lower.HPD upper.HPD
+#  Percentage / kWh        2.9      0.25      10.3
+#  USD / kWh               7.0      0.64      26.7
+
+# Results are averaged over the levels of: rounded, pct_goal, calc 
+# Point estimate displayed: median 
+# Results are back-transformed from the log odds ratio scale 
+# HPD interval probability: 0.95 
+
+comparisons <- hypothesis(
+  ordinal_model_s2_logit_c1add_int3,
+  hypothesis = c(
+    "refClassPercentage - refClassUSD = 0",
+    "refClassPercentage = 0",
+    "refClassUSD = 0"
+  ),
+  class = "b"
+)
+
+pairs(emmeans(ordinal_model_s2_logit_c1add_int3, ~ refClass | rounded * pct_goal))
+
 ```
+
+
+
+
+
+```{markdown}
+
+I need to generate and summarize publication quality group comparisons. Interpret the output from these initial analyses, and explain how I would report the effect of refClass in a manuscript, or if follow up analyses are necessary before we can confirm how best to report the effect. Also check the R code currently being used to ensure there are no mistakes. I mainly care about reporting the effect of refClass, but just don't want to make any mistakes in interpretation due to interactions. If additional analyses are necessary, provide R code for them. Also comment on if I should also assess group differences using odds ratios, and show R code to do this. 
+
+pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,modelsummary,ggplot2,gt,knitr,kableExtra,ggh4x,patchwork,lme4,flextable,pander)
+library(marginaleffects)
+library(tinytable)
+options(digits=2, scipen=999, dplyr.summarise.inform=FALSE)
+
+s2_agg <- s2_long |> 
+  filter(appliance != "TOTAL") |> 
+  group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
+  summarise(
+    total_kWh = sum(value),
+    orig_kWh = sum(family),
+    pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
+    state_dif = mean(state_dif),
+    .groups = "drop"
+  ) |>
+  mutate(
+    matched_goal = (pct_change == pct),
+    close_match = abs(pct_change - pct) <= 0.02,
+                error = pct_change - pct,
+                abs_error = abs(error),
+                log_abs_error=log(abs(error)+.007)) |> 
+      ungroup() |> 
+        mutate(
+            accuracy_level = factor(
+                case_when(
+                    abs_error == 0.00 ~ "Exact match",
+                    abs_error <= 0.02 ~ "0.01-2% error",
+                    abs_error <= 0.15 ~ "2.01-15% error",
+                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                ), 
+                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                ordered = TRUE
+            )
+        )
+
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
+    n_accuracy=first(n_accuracy)) |> 
+    mutate(accuracy_level = factor(
+            case_when(
+                mean_abs_error < 0.02 ~ "Exact match",
+                mean_abs_error <= 0.02 ~ "0.01-2% error",
+                mean_abs_error <= 0.15 ~ "2.01-15% error",
+                TRUE ~ "Over 15% error"  # Capture all remaining cases
+            ), 
+            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            ordered = TRUE
+        ))
+
+ordinal_model_s2_logit_c1add_int3<- brm(
+      accuracy_level ~ (refClass * rounded*pct_goal) + calc + (1|id)+ (1|state),
+      data = s2_agg,
+      family = cumulative("logit"),
+      cores = 4,
+      iter = 3000,
+      control = list(adapt_delta = 0.97), # Recommended for ordinal models
+      prior = c(prior(normal(0, 3), class = "Intercept"),  # Priors for thresholds
+                prior(normal(0, 3), class = "b")), # Priors for predictors
+      file = paste0(here::here("data/model_cache",'s2_logit_c1add_int3.rds')) # Cache for efficiency
+    )
+    summary(ordinal_model_s2_logit_c1add_int3)
+ Family: cumulative 
+  Links: mu = logit; disc = identity 
+Formula: accuracy_level ~ (refClass * rounded * pct_goal) + calc + (1 | id) + (1 | state) 
+   Data: s2_agg (Number of observations: 784) 
+  Draws: 4 chains, each with iter = 3000; warmup = 1500; thin = 1;
+         total post-warmup draws = 6000
+
+Multilevel Hyperparameters:
+~id (Number of levels: 196) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     4.41      0.37     3.73     5.18 1.00     1382     2871
+
+~state (Number of levels: 4) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.53      0.47     0.06     1.80 1.00     1046      864
+
+Regression Coefficients:
+                                              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept[1]                                     -1.80      0.80    -3.38    -0.27 1.00      814     1644
+Intercept[2]                                     -0.26      0.79    -1.81     1.30 1.00      831     1824
+Intercept[3]                                      3.59      0.80     2.03     5.17 1.00      854     1713
+refClassPercentage                                1.15      0.91    -0.68     2.89 1.00      620     1179
+refClassUSD                                       1.68      0.95    -0.19     3.55 1.00      725     1126
+roundedRounded                                   -1.13      0.74    -2.60     0.30 1.00      763     1402
+pct_goal15%                                      -0.89      0.74    -2.39     0.54 1.00      764     1342
+calcNoCalculator                                  3.83      0.87     2.20     5.53 1.00      722     1685
+refClassPercentage:roundedRounded                -0.35      0.99    -2.28     1.55 1.00      874     1723
+refClassUSD:roundedRounded                        0.28      1.02    -1.74     2.24 1.00     1006     1762
+refClassPercentage:pct_goal15%                   -0.10      0.98    -2.04     1.82 1.00      874     1755
+refClassUSD:pct_goal15%                          -0.05      1.01    -2.02     1.91 1.00      994     1906
+roundedRounded:pct_goal15%                        0.54      1.37    -2.07     3.26 1.00      698     1244
+refClassPercentage:roundedRounded:pct_goal15%     0.60      1.83    -3.02     4.16 1.00      805     1526
+refClassUSD:roundedRounded:pct_goal15%            0.62      1.88    -3.04     4.32 1.00      897     1565
+
+Further Distributional Parameters:
+     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+disc     1.00      0.00     1.00     1.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+ame <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3, 
+  variables = "refClass"
+)
+print(ame)
+          Group         Contrast Estimate    2.5 %   97.5 %
+ Exact match    Percentage - kWh -0.08116 -0.19571  0.03058
+ Exact match    USD - kWh        -0.14031 -0.25760 -0.02405
+ 0.01-2% error  Percentage - kWh -0.00626 -0.02044  0.00544
+ 0.01-2% error  USD - kWh        -0.01792 -0.03998 -0.00195
+ 2.01-15% error Percentage - kWh  0.02066 -0.00691  0.06562
+ 2.01-15% error USD - kWh         0.03031  0.00110  0.07913
+ Over 15% error Percentage - kWh  0.06622 -0.03016  0.15240
+ Over 15% error USD - kWh         0.12808  0.02140  0.22340
+
+ame_by_rounded <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  by = c("rounded", "accuracy_level")
+)
+print(ame_by_rounded)
+
+          Group     Term         Contrast     rounded Estimate     2.5 %    97.5 %
+ Exact match    refClass Percentage - kWh Not Rounded -0.07940 -0.194010  0.031746
+ Exact match    refClass USD - kWh        Not Rounded -0.11370 -0.231058  0.000454
+ 0.01-2% error  refClass Percentage - kWh Not Rounded -0.00865 -0.026939  0.006926
+ 0.01-2% error  refClass USD - kWh        Not Rounded -0.01731 -0.043440  0.000510
+ 2.01-15% error refClass Percentage - kWh Not Rounded  0.01113 -0.008613  0.055578
+ 2.01-15% error refClass USD - kWh        Not Rounded  0.01403 -0.007740  0.060557
+ Over 15% error refClass Percentage - kWh Not Rounded  0.07524 -0.033826  0.173807
+ Over 15% error refClass USD - kWh        Not Rounded  0.11672 -0.000602  0.219258
+ Exact match    refClass Percentage - kWh Rounded     -0.08331 -0.208087  0.038742
+ Exact match    refClass USD - kWh        Rounded     -0.16720 -0.295255 -0.040737
+ 0.01-2% error  refClass Percentage - kWh Rounded     -0.00371 -0.018239  0.008463
+ 0.01-2% error  refClass USD - kWh        Rounded     -0.01848 -0.041158 -0.001891
+ 2.01-15% error refClass Percentage - kWh Rounded      0.02904 -0.010886  0.083676
+ 2.01-15% error refClass USD - kWh        Rounded      0.04645  0.005512  0.101707
+ Over 15% error refClass Percentage - kWh Rounded      0.05785 -0.033218  0.141438
+ Over 15% error refClass USD - kWh        Rounded      0.13897  0.034533  0.238851
+
+Type:  response 
+Columns: term, group, contrast, rounded, estimate, conf.low, conf.high 
+
+ame_by_rounded_pct_goal <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  by = c("rounded", "pct_goal", "accuracy_level")
+)
+
+ame_by_rounded_pct_goal |> head(n=25)
+
+          Group     Term         Contrast     rounded pct_goal  Estimate    2.5 %  97.5 %
+ Exact match    refClass Percentage - kWh Not Rounded      10% -0.079963 -0.21508 0.04389
+ Exact match    refClass USD - kWh        Not Rounded      10% -0.108881 -0.25134 0.01174
+ 0.01-2% error  refClass Percentage - kWh Not Rounded      10% -0.015302 -0.04340 0.01369
+ 0.01-2% error  refClass USD - kWh        Not Rounded      10% -0.026016 -0.06555 0.00249
+ 2.01-15% error refClass Percentage - kWh Not Rounded      10%  0.010750 -0.01803 0.07339
+ 2.01-15% error refClass USD - kWh        Not Rounded      10%  0.009697 -0.02100 0.07535
+ Over 15% error refClass Percentage - kWh Not Rounded      10%  0.082534 -0.05128 0.20363
+ Over 15% error refClass USD - kWh        Not Rounded      10%  0.124906 -0.01467 0.25374
+ Exact match    refClass Percentage - kWh Not Rounded      15% -0.075152 -0.20930 0.05528
+ Exact match    refClass USD - kWh        Not Rounded      15% -0.116988 -0.25518 0.02221
+ 0.01-2% error  refClass Percentage - kWh Not Rounded      15% -0.001370 -0.02112 0.00972
+ 0.01-2% error  refClass USD - kWh        Not Rounded      15% -0.007259 -0.03795 0.00572
+ 2.01-15% error refClass Percentage - kWh Not Rounded      15%  0.008287 -0.01072 0.05789
+ 2.01-15% error refClass USD - kWh        Not Rounded      15%  0.014535 -0.00597 0.07078
+ Over 15% error refClass Percentage - kWh Not Rounded      15%  0.067139 -0.05214 0.18279
+ Over 15% error refClass USD - kWh        Not Rounded      15%  0.109662 -0.02264 0.22915
+ Exact match    refClass Percentage - kWh Rounded          10% -0.059312 -0.19493 0.07424
+ Exact match    refClass USD - kWh        Rounded          10% -0.139822 -0.28116 0.00435
+ 0.01-2% error  refClass Percentage - kWh Rounded          10% -0.000549 -0.01753 0.01077
+ 0.01-2% error  refClass USD - kWh        Rounded          10% -0.010150 -0.03797 0.00555
+ 2.01-15% error refClass Percentage - kWh Rounded          10%  0.008692 -0.01282 0.05727
+ 2.01-15% error refClass USD - kWh        Rounded          10%  0.020893 -0.00579 0.07696
+ Over 15% error refClass Percentage - kWh Rounded          10%  0.049498 -0.06487 0.15795
+ Over 15% error refClass USD - kWh        Rounded          10%  0.127970 -0.00412 0.24646
+ Exact match    refClass Percentage - kWh Rounded          15% -0.109285 -0.26855 0.04866
+
+
+
+conditional_slopes <- slopes(
+    ordinal_model_s2_logit_c1add_int3,
+    variables = "refClass",
+    newdata = datagrid(
+        rounded = c('Not Rounded', 'Rounded'),
+        pct_goal = c("10%", "15%")
+    )
+)conditional_slopes |> head(n=25)
+
+          Group         Contrast     rounded pct_goal Estimate   2.5 %    97.5 %
+ Exact match    Percentage - kWh Not Rounded      10% -0.00105 -0.0183  0.001659
+ Exact match    Percentage - kWh Not Rounded      15% -0.00219 -0.0281  0.006496
+ Exact match    Percentage - kWh Rounded          10% -0.00215 -0.0317  0.014072
+ Exact match    Percentage - kWh Rounded          15% -0.00486 -0.0806  0.005323
+ Exact match    USD - kWh        Not Rounded      10% -0.00134 -0.0200  0.000222
+ Exact match    USD - kWh        Not Rounded      15% -0.00307 -0.0343  0.001715
+ Exact match    USD - kWh        Rounded          10% -0.00443 -0.0436  0.000191
+ Exact match    USD - kWh        Rounded          15% -0.00712 -0.0949 -0.000324
+ 0.01-2% error  Percentage - kWh Not Rounded      10% -0.00377 -0.0568  0.005781
+ 0.01-2% error  Percentage - kWh Not Rounded      15% -0.00778 -0.0800  0.021370
+ 0.01-2% error  Percentage - kWh Rounded          10% -0.00781 -0.0853  0.041417
+ 0.01-2% error  Percentage - kWh Rounded          15% -0.01713 -0.1707  0.016385
+ 0.01-2% error  USD - kWh        Not Rounded      10% -0.00482 -0.0621  0.000790
+ 0.01-2% error  USD - kWh        Not Rounded      15% -0.01099 -0.0970  0.005264
+ 0.01-2% error  USD - kWh        Rounded          10% -0.01575 -0.1193  0.000636
+ 0.01-2% error  USD - kWh        Rounded          15% -0.02477 -0.2094 -0.001266
+ 2.01-15% error Percentage - kWh Not Rounded      10% -0.12837 -0.4516  0.111235
+ 2.01-15% error Percentage - kWh Not Rounded      15% -0.15816 -0.4870  0.134962
+ 2.01-15% error Percentage - kWh Rounded          10% -0.12110 -0.4636  0.173061
+ 2.01-15% error Percentage - kWh Rounded          15% -0.18818 -0.5295  0.145839
+ 2.01-15% error USD - kWh        Not Rounded      10% -0.17215 -0.5106  0.023655
+ 2.01-15% error USD - kWh        Not Rounded      15% -0.23948 -0.5514  0.057446
+ 2.01-15% error USD - kWh        Rounded          10% -0.29650 -0.5931  0.028064
+ 2.01-15% error USD - kWh        Rounded          15% -0.36699 -0.6595  0.027229
+ Over 15% error Percentage - kWh Not Rounded      10%  0.13661 -0.1219  0.497865
+
+Term: refClass
+Type:  response 
+Columns: rowid, term, group, contrast, estimate, conf.low, conf.high, rounded, pct_goal, predicted_lo, predicted_hi, predicted, tmp_idx, refClass, calc, id, state, accuracy_level 
+
+avg_slopes(
+        ordinal_model_s2_logit_c1add_int3,
+        variables = "refClass",
+        hypothesis = "b1 - b2 = 0"  # Compare effects for Rounded vs Not Rounded
+    )
+ 
+ Estimate   2.5 % 97.5 %
+   0.0575 -0.0489  0.171
+
+Term: b1-b2=0
+Type:  response 
+Columns: term, estimate, conf.low, conf.high 
+
+avg_slopes(
+        ordinal_model_s2_logit_c1add_int3,
+        variables = "refClass",
+        hypothesis = "b1 - b3 = 0"  # Compare effects for Rounded vs Not Rounded
+    )
+
+ Estimate  2.5 % 97.5 %
+  -0.0738 -0.185 0.0284
+
+Term: b1-b3=0
+
+pairwise_comparisons <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  hypothesis = "pairwise"
+)
+print(pairwise_comparisons)
+
+
+
+
+```
+
+
+
+------
+
+"We employed a Bayesian ordinal logistic regression to evaluate the influence of reference information format (kWh, Percentage, USD) on the accuracy of planned energy savings, adjusting for the effects of goal rounding (Not Rounded, Rounded) and savings goal magnitude (10%, 15%). Furthermore, we incorporated random intercepts for participant (id) and state to account for potential clustering within these groups. Although preliminary analyses suggested that providing energy savings information in USD or percentage formats might alter the likelihood of achieving higher accuracy levels relative to kWh, these findings were not consistently supported when examining average marginal effects. Specifically, the average marginal effects analysis revealed that the USD format, compared to kWh, was associated with a decreased probability of an exact match (AME = -0.14, 95% CI [-0.26, -0.02]) and an increased probability of errors exceeding 15% (AME = 0.13, 95% CI [0.02, 0.22]). The percentage format exhibited less pronounced effects on accuracy compared to kWh. Moreover, the impact of reference information format appeared to be moderated by whether the savings goal was rounded and the magnitude of the goal. For instance, in scenarios where the goal was not rounded, the USD format was associated with an increased likelihood of errors over 15% to a greater extent than when the goal was rounded (AME = 0.12, 95% CI [0.00, 0.22] for not rounded vs. AME = 0.14, 95% CI [0.03, 0.24] for rounded). These results suggest that the effectiveness of different information formats in promoting accurate energy-saving plans may depend on the context in which the information is presented, such as the specificity and magnitude of the savings target. Nevertheless, it is important to interpret these findings with caution, as the 95% credible intervals indicate uncertainty regarding the magnitude and, in some cases, the direction of these effects."
+
+---------
+
+https://chatgpt.com/c/67613771-d628-8006-8af9-f57e6dedb71f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{markdown}
+
+simpler_model <- brm(
+  accuracy_level ~ refClass + rounded + pct_goal + calc + 
+    refClass:rounded + refClass:pct_goal + rounded:pct_goal + 
+    (1|id) + (1|state),
+  data = s2_agg,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 3000,
+  control = list(adapt_delta = 0.97),
+  prior = c(
+    prior(normal(0, 3), class = "Intercept"),
+    prior(normal(0, 3), class = "b")
+  )
+)
+<!-- summary(simpler_model)
+Family: cumulative 
+  Links: mu = logit; disc = identity 
+Formula: accuracy_level ~ refClass + rounded + pct_goal + calc + refClass:rounded + refClass:pct_goal + rounded:pct_goal + (1 | id) + (1 | state) 
+   Data: s2_agg (Number of observations: 784) 
+  Draws: 4 chains, each with iter = 3000; warmup = 1500; thin = 1;
+         total post-warmup draws = 6000
+
+Multilevel Hyperparameters:
+~id (Number of levels: 196) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     4.39      0.39     3.69     5.22 1.00     1498     2518
+
+~state (Number of levels: 4) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.52      0.42     0.05     1.66 1.00     1774     1902
+
+Regression Coefficients:
+                                  Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept[1]                         -1.78      0.78    -3.31    -0.25 1.00     1339     2219
+Intercept[2]                         -0.25      0.77    -1.72     1.29 1.00     1309     2201
+Intercept[3]                          3.60      0.79     2.10     5.18 1.00     1320     2089
+refClassPercentage                    1.01      0.86    -0.62     2.68 1.01     1010     1856
+refClassUSD                           1.59      0.88    -0.10     3.30 1.00     1207     2133
+roundedRounded                       -1.22      0.68    -2.55     0.10 1.00     1253     2330
+pct_goal15%                          -0.99      0.67    -2.33     0.35 1.00     1176     1954
+calcNoCalculator                      3.85      0.86     2.20     5.57 1.00     1210     2203
+refClassPercentage:roundedRounded    -0.07      0.45    -0.95     0.82 1.00     5545     4279
+refClassUSD:roundedRounded            0.56      0.47    -0.36     1.46 1.00     5550     4506
+refClassPercentage:pct_goal15%        0.19      0.44    -0.67     1.06 1.00     5959     4719
+refClassUSD:pct_goal15%               0.23      0.46    -0.66     1.12 1.00     5876     4387
+roundedRounded:pct_goal15%            0.78      1.18    -1.51     3.08 1.00     1019     1790 -->
+
+ame <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3, 
+  variables = "refClass"
+)
+print(ame)
+          Group         Contrast Estimate    2.5 %   97.5 %
+ Exact match    Percentage - kWh -0.07753 -0.20193  0.03311
+ Exact match    USD - kWh        -0.13708 -0.26083 -0.02975
+ 0.01-2% error  Percentage - kWh -0.00573 -0.02137  0.00450
+ 0.01-2% error  USD - kWh        -0.01786 -0.04062 -0.00192
+ 2.01-15% error Percentage - kWh  0.01551 -0.00586  0.06359
+ 2.01-15% error USD - kWh         0.02335 -0.00131  0.07491
+ Over 15% error Percentage - kWh  0.06779 -0.03259  0.16329
+ Over 15% error USD - kWh         0.13137  0.02931  0.23141
+
+ame_by_rounded <- avg_slopes(
+  ordinal_model_s2_logit_c1add_int3,
+  variables = "refClass",
+  by = c("rounded", "accuracy_level")
+)
+print(ame_by_rounded)
+
+         Group     Term         Contrast     rounded Estimate    2.5 %    97.5 %
+ Exact match    refClass Percentage - kWh Not Rounded -0.07630 -0.19556  0.030459
+ Exact match    refClass USD - kWh        Not Rounded -0.11168 -0.23341 -0.006969
+ 0.01-2% error  refClass Percentage - kWh Not Rounded -0.00793 -0.02715  0.006268
+ 0.01-2% error  refClass USD - kWh        Not Rounded -0.01665 -0.04273  0.000822
+ 2.01-15% error refClass Percentage - kWh Not Rounded  0.00835 -0.00729  0.053450
+ 2.01-15% error refClass USD - kWh        Not Rounded  0.00946 -0.00905  0.057332
+ Over 15% error refClass Percentage - kWh Not Rounded  0.07577 -0.03431  0.179538
+ Over 15% error refClass USD - kWh        Not Rounded  0.11889  0.00627  0.227794
+ Exact match    refClass Percentage - kWh Rounded     -0.07895 -0.21691  0.044418
+ Exact match    refClass USD - kWh        Rounded     -0.16185 -0.29451 -0.043900
+ 0.01-2% error  refClass Percentage - kWh Rounded     -0.00357 -0.01917  0.007500
+ 0.01-2% error  refClass USD - kWh        Rounded     -0.01860 -0.04165 -0.002423
+ 2.01-15% error refClass Percentage - kWh Rounded      0.02233 -0.00958  0.079639
+ 2.01-15% error refClass USD - kWh        Rounded      0.03701  0.00192  0.094659
+ Over 15% error refClass Percentage - kWh Rounded      0.06070 -0.03794  0.153891
+ Over 15% error refClass USD - kWh        Rounded      0.14428  0.04291  0.244697
+
+
+```
+
+
+
+
+
+
+
+# pre exc
+----
+
+"Reference class format significantly affected response accuracy. Compared to kWh format, USD format was associated with reduced probability of exact matches (AME = -13.7%, 95% CI: [-26.0%, -2.3%]) and increased probability of large errors exceeding 15% (AME = 12.6%, 95% CI: [2.3%, 22.1%]). Similar but non-significant trends were observed for percentage format."
+
+
+------
+
+"On average, across all conditions, the use of the USD format was associated with a statistically significant decrease in the probability of achieving an 'Exact match' in planning accuracy compared to the kWh format (AME = -0.137, 95% CI: [-0.260, -0.023]). The use of the Percentage format also decreased the likelihood of an exact match when compared to kWh (AME = -0.082, 95% CI: [-0.205, 0.030]. However, this was not statistically significant at an alpha of .05."
+
+Reporting (Conditional AMEs by rounded):
+"The effect of refClass varied by whether plan values were rounded. When plan values were rounded, the use of the USD format was associated with a larger decrease in the probability of an 'Exact match' compared to kWh (AME = -0.164, 95% CI: [-0.297, -0.039]) than when plan values were not rounded (AME = -0.111, 95% CI: [-0.234, 0.002]). A similar, but not statistically significant, pattern was observed for the Percentage format."
+
+Reporting (Conditional AMEs by rounded and pct_goal):
+"Further analysis revealed that the effect of refClass was also moderated by the target savings goal (pct_goal). For example, when plans were not rounded and the savings goal was 10%, the use of the USD format had a negligible effect on the probability of an 'Exact match' compared to kWh (AME = -0.001, 95% CI: [-0.018, 0.002]). However, when plans were rounded and the goal was 15%, the USD format was associated with a larger, though still not statistically significant, decrease in the probability of an exact match (AME = -0.005, 95% CI: [-0.078, 0.006]). These findings highlight the complex interplay between information format, rounding, and savings goals in influencing planning accuracy."
+
+-------
+
+"The effect of the reference class on accuracy level was not uniform; rather, it varied depending on whether participants received rounded values and the degree of the goal (i.e., 10% vs. 15%). For instance, when controlling for rounding and goal percentage, switching from kWh to USD was associated with an increased probability of being in higher error categories, whereas switching from kWh to a Percentage reference class showed a smaller and less consistent effect. However, these trends were contingent on the interaction terms, with some intervals overlapping zero, indicating uncertainty in the magnitude of the effects. Consequently, we conducted follow-up analyses of predicted probabilities and conditional slopes across experimental conditions (e.g., illustrating how the reference class altered the likelihood of exact or minimal error matching). These follow-up analyses, presented in Table X and Figure Y, clarify the direction and statistical strength of the observed interactions, providing a more nuanced understanding of how the reference class influences planning accuracy under varying informational contexts."
+
+
+
+------
+
+Key Observations
+
+Directional Effects: Notice that for the "Exact Match" category, the Percentage and USD formats have negative average effects, suggesting they may decrease the probability of participants exactly matching the goal compared to the kWh format. For the "Over 15% error" category the signs are reversed, where Percentage and USD may increase the probability of very inaccurate plans.
+
+Magnitude: The magnitude of these effects is larger for USD compared to Percentage, suggesting that this format may have a larger effect on accuracy.
+
+Category Differences: The average marginal effect of the refClass changes depending on the accuracy_level category you examine, indicating a complex relationship.
+
+
+
+Start with the AMEs (but with a warning):
+
+Begin with ame to give your reader an overall sense of the general direction of the effect.
+
+Report the table using an output that is aligned with the journal.
+
+For example, "The average marginal effect of presenting the goal as a percentage versus presenting as a kWh was -0.08 for "Exact Match", suggesting that, across all conditions, presenting as a percentage may decrease the probability of a participant exactly matching their goal relative to when the goal was presented in kWh. Presenting the goal as USD had a similar, but larger effect, with an average probability difference of -0.14 for "Exact Match". However, the direction of these effects was reversed for "Over 15% Error", suggesting that USD and Percentage formats may increase the likelihood of inaccurate plans".
+
+Crucially, acknowledge the limitations: Explicitly state that these are average effects and that the interactions mean the effect of refClass isn't constant. Explain that you will follow up with a more detailed conditional analysis to better describe the relationships.
+
+Move to Conditional Marginal Effects (with ame_by_rounded):
+
+Use ame_by_rounded to show how the effect of refClass varies depending on the rounding and the accuracy level, using an approach similar to the AMEs.
+
+For example: "These average marginal effects of the different refClass levels, by rounding are shown in Table X. Presenting the goals as percentages or USDs, relative to presenting the goal as kWh, tends to reduce the likelihood of an exact match, with both conditions reducing probability of matching the goal in non-rounded settings by about -0.08 and -0.11, respectively, and by -0.08 and -0.16 in rounded settings. However, when participants made errors of more than 15% the likelihood of being in this condition increased for both Percentage and USD conditions. This effect also appears slightly higher in the rounded conditions."
+
+You can present this using a table (if space permits) or by highlighting a few key patterns, particularly focusing on whether rounding impacts the effects of reference class.
+
+Address the Three-Way Interaction (using ame_by_rounded_pct_goal):
+
+Now, show how the refClass differs as a function of both rounded and pct_goal variables, by describing key differences and patterns.
+
+Again, report the results in a table and/or in the text.
+
+Present Conditional Slopes (and perhaps some strategic plotting):
+
+If tables begin to become unwieldy due to a large number of conditions, then consider using plots. For example, using the plots produced using code like plot_slopes(ordinal_model_s2_logit_c1add_int3, variables = "refClass", condition = c("rounded","pct_goal"), transform = "response") can be an excellent way to visualize complex patterns that might otherwise be difficult to grasp from a table. Use plots judiciously to emphasize key takeaways, and refer to specific patterns in your discussion.
+
+
+Reporting in Text
+
+Here's an example of how you could integrate your findings into a manuscript:
+
+"First, we examined the average marginal effects of presenting energy information using different formats (i.e. refClass), averaged across all other conditions. The results, shown in Table X, suggest that presenting a goal using percentages or USDs tend to decrease the likelihood of an exactly matching a goal compared to presenting the goal in kWh. However, these effects were reversed in cases where errors were above 15%, where presenting a goal as a percentage or USD increased the average likelihood of a severe error. Given the presence of a three way interaction, we next examined how the effect of refClass varies across different conditions of rounded and pct_goal. The average marginal effects of refClass, shown in Table X, demonstrated that rounding did not dramatically impact the observed patterns of likelihood of exact matches versus severe errors. Presenting goals as USD tended to have a more negative (or positive in the case of severe errors) effect. We next turned to a visualization of conditional marginal effects (Figure X). This revealed more nuanced patterns of interaction, where [Describe key takeaways from the plot – e.g., how effects change as a function of rounded and pct_goal]. Therefore, while, on average, percentage and USD may reduce the accuracy of plans compared to presenting in kWh, the effect is complex, and depends on context."
+
+---------
+
+
+	•	USD format significantly decreases the odds of an Exact match when rounded = Rounded (Estimate = -0.164, 95% CI: -0.297, -0.039), but the effect is smaller and less clear when rounded = Not Rounded (Estimate = -0.111, CI includes 0).
+	•	USD format also significantly increases the odds of Over 15% errors when rounded = Rounded (Estimate = 0.138, 95% CI: 0.035, 0.233).
+
+
+  	“The effect of refClass (Percentage and USD) on accuracy level outcomes depends on rounding condition (rounded) and goal percentage (pct_goal). In general, the USD format significantly decreases the likelihood of achieving an Exact match and increases the likelihood of large errors (Over 15%) when rounding is applied. Specifically, when rounding is present and the goal percentage is high (15%), the USD format increases the odds of Over 15% errors by approximately 42% (95% CI: 5.5%, 75.5%). The effects of the Percentage format are smaller and often not statistically significant across conditions.”
+
+
+
+Table Summary
+
+Condition	Contrast	Accuracy Level	Estimate	95% CI	Significance
+Rounded, 15% Goal	USD vs KWh	Over 15% error	0.420	(0.055, 0.755)	Significant increase in large errors
+Rounded	USD vs KWh	Exact match	-0.164	(-0.297, -0.039)	Significant decrease in exact match
+Not Rounded	USD vs KWh	Exact match	-0.111	(-0.234, 0.002)	Non-significant decrease
+Rounded	Percentage vs KWh	All levels	Small (varies)	CIs include zero	Minimal and non-significant effects
+
+
+
+
+
+
 

@@ -9,10 +9,12 @@ theme_set(theme_nice())
 
 s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 
@@ -36,11 +38,10 @@ s1_agg <- s1 |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match", "0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
@@ -62,16 +63,15 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ "0.01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", ".01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
 
 
-s2_agg1 <- s2_long |> 
+s2_agg <- s2_long |> 
   filter(appliance != "TOTAL") |> 
   group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
   summarise(
@@ -92,16 +92,15 @@ s2_agg1 <- s2_long |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match","0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         )
 
-s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
     summarise(
     mg=sum(matched_goal),
@@ -116,11 +115,10 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ ".01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", "01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
   
@@ -420,7 +418,7 @@ pp_check(mixture_model_s1, type = "dens_overlay_grouped", group="refClass", ndra
 
 log_error_model_s2_c1 <- brm(
   log_abs_error ~ refClass*calc + (1|id) + (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = gaussian(link = "identity"),
   prior = c(prior(normal(0, 3), class = "b"),
             prior(cauchy(0, 1), class = "sd")),
@@ -434,7 +432,7 @@ conditional_effects(log_error_model_s2_c1)
 
 log_error_model_s2_c1rf <- brm(
   log_abs_error ~ refClass + (1|id) + (1|state) + (1|calc),
-  data = s2_agg1,
+  data = s2_agg,
   family = gaussian(link = "identity"),
   prior = c(prior(normal(0, 3), class = "b"),
             prior(cauchy(0, 1), class = "sd")),
@@ -447,7 +445,7 @@ summary(log_error_model_s2_c1rf)
 
 log_error_model_s2_cAdd_int3 <- brm(
   log_abs_error ~ (refClass*rounded*pct_goal)+calc + (1|id) + (1|state),
-  data = s2_agg1,
+  data = s2_agg,
   family = gaussian(link = "identity"),
   prior = c(prior(normal(0, 3), class = "b"),
             prior(cauchy(0, 1), class = "sd")),
@@ -464,7 +462,7 @@ conditional_effects(log_error_model_s2_cAdd_int3)
 
 log_error_model_s2_c1rf_int3 <- brm(
   log_abs_error ~ refClass*rounded*pct_goal + (1|id) + (1|state) + (1|calc),
-  data = s2_agg1,
+  data = s2_agg,
   family = gaussian(link = "identity"),
   prior = c(prior(normal(0, 3), class = "b"),
             prior(cauchy(0, 1), class = "sd")),
@@ -481,7 +479,7 @@ conditional_effects(log_error_model_s2_c1rf_int3)
 
 log_error_model_s2_c1rf_add3 <- brm(
   log_abs_error ~ refClass+rounded+pct_goal + (1|id) + (1|state) + (1|calc),
-  data = s2_agg1,
+  data = s2_agg,
   family = gaussian(link = "identity"),
   prior = c(prior(normal(0, 3), class = "b"),
             prior(cauchy(0, 1), class = "sd")),

@@ -22,6 +22,18 @@ theme_set(theme_nice())
 s1 <- readRDS(here::here("data/s1_processed.rds"))
 s2_long <- readRDS(here::here("data/s2_processed.rds"))
 
+
+# s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
+#   filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+#   filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
+#   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+# s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
+#   filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+#   filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
+#   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
+
 ```
 
 

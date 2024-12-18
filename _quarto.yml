@@ -8,7 +8,7 @@ project:
     - "*.md"
     - "!_*" # ignore any file that starts with a _
     - "!manuscript/"
-    - "!misc/*"
+    - "!misc/"
     
   resources:
     - "manuscript/output"

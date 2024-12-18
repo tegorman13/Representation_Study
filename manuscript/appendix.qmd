@@ -29,11 +29,14 @@ theme_set(theme_nice())
 
 s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
   filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
+  filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
+
 
 
 
@@ -57,11 +60,10 @@ s1_agg <- s1 |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match", "0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
@@ -83,16 +85,14 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ "0.01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", ".01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
 
-
-s2_agg1 <- s2_long |> 
+s2_agg <- s2_long |> 
   filter(appliance != "TOTAL") |> 
   group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded) |> 
   summarise(
@@ -102,37 +102,44 @@ s2_agg1 <- s2_long |>
     state_dif = mean(state_dif),
     .groups = "drop"
   ) |>
-  mutate(matched_goal = (pct_change == pct),
+  mutate(
+    matched_goal = (pct_change == pct),
+    close_match = abs(pct_change - pct) <= 0.02,
                 error = pct_change - pct,
                 abs_error = abs(error),
                 log_abs_error=log(abs(error)+.007)) |> 
-      ungroup() |> # Add ungroup here
+      ungroup() |> 
         mutate(
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match","0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         )
 
-s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc) |> 
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
-    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),
-    mean_abs_error=mean(abs_error),mean_log_abs_error=mean(log_abs_error),
+    summarise(
+    mg=sum(matched_goal),
+    mgc=sum(close_match),
+    n=n(), 
+    pct=mg/n,
+    pct_close=mgc/n,
+    mean_pct_change=mean(pct_change),
+    mean_abs_error=mean(abs_error),
+    mean_log_abs_error=mean(log_abs_error),
     n_accuracy=first(n_accuracy)) |> 
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ ".01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", "01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
   
@@ -173,6 +180,261 @@ s1_agg4 |> ggplot(aes(x = mean_pct_change, fill = refClass)) +
 
 
 ## Study2
+
+
+
+```{r}
+ordinal_model_s2_logit <- brm(
+  accuracy_level ~ refClass + calc+pct_goal+rounded + (1|id)+ (1|state),
+  data = s2_agg,
+  family = cumulative("logit"),
+  cores = 4,
+  iter = 3000,
+  control = list(adapt_delta = 0.99), # Recommended for ordinal models
+  prior = c(prior(normal(0, 2), class = "Intercept"),  # Priors for thresholds
+            prior(normal(0, 2), class = "b")), # Priors for predictors
+  file = paste0(here::here("data/model_cache",'s2_acc3_add.rds')) # Cache for efficiency
+)
+```
+
+
+# diagnostics
+```{r}
+plot(ordinal_model_s2_logit, condition = "refClass")
+```
+
+
+### Tables
+
+```{r}
+#| label: tbl-s2-prop
+#| tbl-cap: "Study 2: The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions."
+
+
+
+# observed_props_s2 <- s2_agg |>
+#   group_by(id,refClass, accuracy_level,calc) |>
+#   summarise(n = n()) |>
+#   group_by(refClass) |>
+#   mutate(prop = n/sum(n)) |>
+#   group_by(refClass,accuracy_level) |>
+#   summarise(n = sum(n), prop = sum(prop)) |>
+#   mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" ), pct_grp=paste0(round(prop*100,1), "%")) |> ungroup()
+# 
+
+
+
+# compute percentage of subjects per accuracy level per group
+observed_props_s2 <- s2_agg |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" ), pct_grp=paste0(round(prop*100,1), "%")) |> ungroup()
+
+observed_props_s2 |> 
+  mutate(n_total=sum(n)/3) |> 
+  group_by(accuracy_level) |>
+  mutate(ns=sum(n)/4) |> 
+  mutate(Total = paste0(round(ns/n_total*100,1), "%")) |>
+  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp, "Combined Groups %" =Total) |>
+  pivot_wider(
+    names_from = 'Reference Class',
+    values_from = c('% in Group')
+  ) |> relocate("Combined Groups %" , .after=last_col()) |> 
+  kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+
+```
+
+
+```{r}
+#| label: tbl-s2-prop
+#| tbl-cap: "Study 2: The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions."
+
+
+# compute percentage of subjects per accuracy level per group
+observed_props_s2 <- s2_agg |>
+  group_by(refClass, accuracy_level) |>
+  summarise(n = n()) |>
+  group_by(refClass) |>
+  mutate(prop = n/sum(n)) |>
+  mutate(n_prop=paste0(n," (",round(prop*100,1),"%)" ), pct_grp=paste0(round(prop*100,1), "%")) |> ungroup()
+
+observed_props_s2 |> 
+  mutate(n_total=sum(n)/3) |> 
+  group_by(accuracy_level) |>
+  mutate(ns=sum(n)/4) |> 
+  mutate(Total = paste0(round(ns/n_total*100,1), "%")) |>
+  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp, "Combined Groups %" =Total) |>
+  pivot_wider(
+    names_from = 'Reference Class',
+    values_from = c('% in Group')
+  ) |> relocate("Combined Groups %" , .after=last_col()) |> 
+  kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+
+```
+
+@tbl-s2-prop shows that, once again, participants in the kWh condition achieved closer alignment with the target goals (44% exact matches), followed by Percentage (27%) and USD (18%). These percentages are consistent with the patterns observed in Study 1, reinforcing the conclusion that providing goals in kWh supports better accuracy.
+
+
+
+```{r}
+#| label: fig-s1-plot
+#| fig-cap: "Study 1: Proportion of participants in each accuracy level, colored by reference class. A larger % of participants in the Exact Match bin indicates better performance."
+
+# prop_acc_s1 <- s1_agg %>%
+#     group_by(refClass, accuracy_level) %>%
+#     summarise(count = n()) %>%
+#     group_by(accuracy_level) |>
+#     mutate(Probability = count / sum(count)) %>%
+#     ungroup()
+
+
+# ggplot(prop_acc_s1, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+#     geom_bar(stat = "identity", position = position_dodge()) +
+#   scale_y_continuous(labels = scales::percent) +
+#     labs(title = "S1. % of Participants within each Accuracy Bin",
+#         x = "Accuracy Level",
+#         y = "Percentage of Participants",
+#         fill = "Reference Class") +
+#     theme_minimal() 
+
+ggplot(data = s1_agg, aes(x = refClass, fill = accuracy_level)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Accuracy Levels by Reference Class",
+       x = "Reference Class Condition",
+       y = "Percentage of Participants",
+       fill = "Accuracy Level") +
+  theme_minimal()
+
+```
+
+
+```{r}
+#| label: fig-s2-plot2
+#| fig-cap: "Experiment 2. Proportion of participants in each accuracy level, colored by reference class, and seprated in facets based on the levels of reduction goal, and rounding.  A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance."
+#| fig.width: 11
+#| fig.height: 9
+
+ggplot(data = s2_agg, aes(x = refClass, fill = accuracy_level)) +
+  geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~rounded+pct_goal) +
+  labs(title = "Accuracy Levels by Reference Class",
+       x = "Reference Class Condition",
+       y = "Percentage of Participants",
+       fill = "Accuracy Level") +
+  theme_minimal()
+
+```
+
+
+
+
+
+
+```{r}
+#| label: fig-s2-plot
+#| tbl-cap: "Study 2: Proportion of participants in each accuracy level, colored by reference class. A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance."
+
+
+# % of entire sample 
+prop_combo_s2 <- s2_agg %>%
+    group_by(refClass, accuracy_level,pct_goal) %>%
+    summarise(count = n()) %>%
+    group_by(refClass) %>%
+    mutate(Probability = count / sum(count)) %>%
+    ungroup()
+
+
+ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = refClass)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(labels = scales::percent) +
+    labs(title = "S1. % of Participants within each Accuracy Bin",
+        x = "Accuracy Level",
+        y = "Percentage of Participants",
+        fill = "Reference Class") +
+    theme_minimal() 
+
+
+# ggplot(data = s2_agg, aes(x = refClass, fill = accuracy_level)) +
+#   geom_bar(position = "dodge", aes(y = (..count..)/sum(..count..))) +
+#   scale_y_continuous(labels = scales::percent) +
+#   labs(title = "Accuracy Levels by Reference Class",
+#        x = "Reference Class Condition",
+#        y = "Percentage of Participants",
+#        fill = "Accuracy Level") +
+#   theme_minimal()
+
+
+```
+
+
+
+
+### Model Tables
+
+```{r}
+
+
+marginaleffects_by_pct <- avg_slopes(
+      ordinal_model_s2_logit,
+      variables = "refClass",
+      by = c("pct_goal", "accuracy_level")
+    )
+    print(marginaleffects_by_pct)
+    
+ #         Group     Term         Contrast pct_goal  Estimate    2.5 %  97.5 %
+ # Exact match   refClass Percentage - kWh      10% -0.073089 -0.19345  0.0421
+ # Exact match   refClass USD - kWh             10% -0.150377 -0.26763 -0.0324
+ # 0.01-5% error refClass Percentage - kWh      10%  0.000166 -0.01468  0.0223
+ # 0.01-5% error refClass USD - kWh             10% -0.018067 -0.05721  0.0100
+ # Over 5% error refClass Percentage - kWh      10%  0.073590 -0.04623  0.1885
+ # Over 5% error refClass USD - kWh             10%  0.171389  0.03806  0.2953
+ # Exact match   refClass Percentage - kWh      15% -0.076254 -0.19838  0.0448
+ # Exact match   refClass USD - kWh             15% -0.158520 -0.28022 -0.0346
+ # 0.01-5% error refClass Percentage - kWh      15%  0.003111 -0.00833  0.0299
+ # 0.01-5% error refClass USD - kWh             15% -0.007757 -0.04633  0.0197
+ # Over 5% error refClass Percentage - kWh      15%  0.071884 -0.04499  0.1843
+ # Over 5% error refClass USD - kWh             15%  0.168805  0.03638  0.2940
+    
+    
+avg_predictions(ordinal_model_s2_logit, newdata = datagrid(id=unique,refClass=unique),by="refClass")
+
+ #         Group   refClass Estimate 2.5 % 97.5 %
+ # Exact match   kWh           0.420 0.336  0.513
+ # Exact match   Percentage    0.340 0.266  0.427
+ # Exact match   USD           0.254 0.179  0.347
+ # 0.01-5% error kWh           0.209 0.173  0.244
+ # 0.01-5% error Percentage    0.213 0.182  0.247
+ # 0.01-5% error USD           0.199 0.160  0.233
+ # Over 5% error kWh           0.368 0.291  0.457
+ # Over 5% error Percentage    0.444 0.360  0.532
+ # Over 5% error USD           0.544 0.446  0.648    
+ #    
+
+ame2 <- avg_slopes(
+  ordinal_model_s2_logit, 
+  variables = "refClass"
+)
+ame2 |>  kable(escape=FALSE,booktabs=TRUE,align=c("l"))
+
+ #         Group         Contrast  Estimate   2.5 %   97.5 %
+ # Exact match   Percentage - kWh -0.072820 -0.1920  0.04245
+ # Exact match   USD - kWh        -0.150425 -0.2668 -0.03252
+ # 0.01-5% error Percentage - kWh  0.000449 -0.0127  0.02116
+ # 0.01-5% error USD - kWh        -0.015279 -0.0524  0.00957
+ # Over 5% error Percentage - kWh  0.072572 -0.0453  0.18601
+ # Over 5% error USD - kWh         0.168592  0.0373  0.29260
+```
+
+
+```{r}
+
+me <- conditional_effects(ordinal_model_s2_logit, effects = "refClass",categorical=TRUE)
+plot(me, points = TRUE)
+```
 
 
 
@@ -265,6 +527,59 @@ theme_minimal()
 
 
 
+### Individual Differences
+
+As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy scores tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (@fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
+
+```{r}
+#| label: fig-s2-indv
+#| fig-cap: "Study 2: Individual performance in the energy planning task, colored by reference class. The dashed line represents the target reduction goal. Participants are shown along the y axis, those who fall above or below the dashed line have not met the target goal.  The x-axis represents the percent change in energy usage from the prior year."
+#| fig-width: 11
+#| fig-height: 9
+
+s2_agg |> group_by(id,refClass,calc,pct_goal,pct_change) |> 
+    filter(plan=="plan1",rounded=="Rounded") |> 
+    mutate(n_accuracy = n_distinct(accuracy_level)) |> 
+    summarise(mg=sum(matched_goal),n=n(), pct=mg/n,mean_pct_change=mean(pct_change),mean_abs_error=mean(abs_error),n_accuracy=first(n_accuracy)) |>
+  ungroup() |> 
+  mutate(goal_pct = as.numeric(stringr::str_remove(pct_goal,"%"))/100) |>
+  filter(mean_abs_error <= 0.50) |>
+  mutate(id=reorder(id,pct_change)) |> 
+  ggplot(aes(y=id,x=mean_pct_change,col=refClass)) + 
+  geom_point(size=1,alpha=0.6,position = position_jitter(w=0, h=0.17)) +
+  geom_vline(aes(xintercept=goal_pct),linetype="dashed",alpha=.5) +
+  ggh4x::facet_nested_wrap(~pct_goal,axes="all",scales="free",ncol=2)  + 
+  labs(y="Participant Id", x="Percent Change", title="Individual Performance") +
+  theme(axis.text.y=element_text(face = "plain", size = rel(0.7))) + 
+    scale_x_continuous(breaks = seq(0, 0.5, by = 0.05),
+                    labels = scales::percent_format(accuracy = 1))
+
+
+
+```
+
+```{r}
+#| label: fig-s2-indv2
+#| fig-cap: "Study 2: Respones patterns for a subset of individiual participants. Black points are participant responses, red points are the state average, and blue points are the family average. The x-axis represents the appliance category, and the y-axis represents the energy usage in kWh."
+#| fig.width: 11
+#| fig.height: 10
+
+s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
+  filter(appliance!="TOTAL",state=="California") |> 
+  ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
+  geom_point(aes(y=state_avg),color="red") +
+  geom_point(aes(y=family),color="blue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |> 
+  filter(appliance!="TOTAL",state=="California") |> 
+  ggplot(aes(x=appliance,y=value)) + geom_point(aes(shape=plan)) +
+  geom_point(aes(y=state_avg),color="red") +
+  geom_point(aes(y=family),color="blue") +
+  facet_wrap(~id) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 
 ### Tables
@@ -297,3 +612,12 @@ s2_agg4 |>
 
 
 ```
+
+
+
+Additional data collected included:
+
+-   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion [ @dewatersEnergyLiteracySecondary2011].
+-   **Calculator Usage Tracking**: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.
+-   **Demographic Survey**: Collected information on gender, age, income, education, employment status, and state of residence.
+-   **Environmental Attitudes Survey**: Assessed participants' pro-environmental attitudes and perceived importance of energy conservation.

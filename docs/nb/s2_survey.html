@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.7.2">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-12-11">
+<meta name="dcterms.date" content="2024-12-18">
 <title>s2_survey – Representation Study</title>
 <style>
 code{white-space: pre-wrap;}
@@ -306,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 11, 2024</p>
+      <p class="date">December 18, 2024</p>
     </div>
   </div>
   
@@ -329,7 +329,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/s2_grp_outlier_ids.rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>refClass <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">refClass</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"kWh"</span>,<span class="st">"Percentage"</span>,<span class="st">"USD"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">s2_agg1</span> <span class="op">&lt;-</span> <span class="va">s2_long</span> <span class="op">|&gt;</span> </span>
+<span></span>
+<span><span class="va">s2_agg</span> <span class="op">&lt;-</span> <span class="va">s2_long</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">appliance</span> <span class="op">!=</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span>,<span class="va">calc</span>, <span class="va">state</span>,<span class="va">pct</span>,<span class="va">pct_goal</span>,<span class="va">plan</span>,<span class="va">rounded</span>,<span class="va">els</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -350,16 +351,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>            accuracy_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
 <span>                <span class="fu">case_when</span><span class="op">(</span></span>
 <span>                    <span class="va">abs_error</span> <span class="op">==</span> <span class="fl">0.00</span> <span class="op">~</span> <span class="st">"Exact match"</span>,</span>
-<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"0.01-2% error"</span>,</span>
-<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.15</span> <span class="op">~</span> <span class="st">"2.01-15% error"</span>,</span>
-<span>                    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 15% error"</span>  <span class="co"># Capture all remaining cases</span></span>
+<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.05</span> <span class="op">~</span> <span class="st">"0.01-5% error"</span>,</span>
+<span>                    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 5% error"</span>  <span class="co"># Capture all remaining cases</span></span>
 <span>                <span class="op">)</span>, </span>
-<span>                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">"0.01-2% error"</span>, <span class="st">"2.01-15% error"</span>, <span class="st">"Over 15% error"</span><span class="op">)</span>,</span>
+<span>                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>,<span class="st">"0.01-5% error"</span>, <span class="st">"Over 5% error"</span><span class="op">)</span>,</span>
 <span>                ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>            <span class="op">)</span></span>
 <span>        <span class="op">)</span></span>
 <span></span>
-<span><span class="va">s2_agg4</span> <span class="op">&lt;-</span> <span class="va">s2_agg1</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span>,<span class="va">calc</span>,<span class="va">els</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">s2_agg4</span> <span class="op">&lt;-</span> <span class="va">s2_agg</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span>,<span class="va">calc</span>,<span class="va">els</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>n_accuracy <span class="op">=</span> <span class="fu">n_distinct</span><span class="op">(</span><span class="va">accuracy_level</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu">summarise</span><span class="op">(</span></span>
 <span>    mg<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">matched_goal</span><span class="op">)</span>,</span>
@@ -374,19 +374,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    <span class="fu">mutate</span><span class="op">(</span>accuracy_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
 <span>            <span class="fu">case_when</span><span class="op">(</span></span>
 <span>                <span class="va">mean_abs_error</span> <span class="op">&lt;</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"Exact match"</span>,</span>
-<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"0.01-2% error"</span>,</span>
-<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.15</span> <span class="op">~</span> <span class="st">"2.01-15% error"</span>,</span>
-<span>                <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 15% error"</span>  <span class="co"># Capture all remaining cases</span></span>
+<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.05</span> <span class="op">~</span> <span class="st">".01-5% error"</span>,</span>
+<span>                <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 5% error"</span>  <span class="co"># Capture all remaining cases</span></span>
 <span>            <span class="op">)</span>, </span>
-<span>            levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">"0.01-2% error"</span>, <span class="st">"2.01-15% error"</span>, <span class="st">"Over 15% error"</span><span class="op">)</span>,</span>
+<span>            levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">".01-5% error"</span>, <span class="st">"Over 5% error"</span><span class="op">)</span>,</span>
 <span>            ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>        <span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">s2_agg4</span><span class="op">$</span><span class="va">accuracy_level</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] Over 15% error 2.01-15% error Exact match   
-Levels: Exact match &lt; 0.01-2% error &lt; 2.01-15% error &lt; Over 15% error</code></pre>
+<pre><code>[1] Over 5% error Exact match   .01-5% error 
+Levels: Exact match &lt; .01-5% error &lt; Over 5% error</code></pre>
 </div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_agg4</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">accuracy_level</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">summarize</span><span class="op">(</span>n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -394,18 +393,17 @@ Levels: Exact match &lt; 0.01-2% error &lt; 2.01-15% error &lt; Over 15% error</
   accuracy_level     n
   &lt;ord&gt;          &lt;int&gt;
 1 Exact match       67
-2 2.01-15% error    71
-3 Over 15% error    52</code></pre>
+2 .01-5% error      20
+3 Over 5% error    103</code></pre>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_agg1</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">accuracy_level</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">summarize</span><span class="op">(</span>n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_agg</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">accuracy_level</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">summarize</span><span class="op">(</span>n<span class="op">=</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 2
+<pre><code># A tibble: 3 × 2
   accuracy_level     n
   &lt;ord&gt;          &lt;int&gt;
 1 Exact match      237
-2 0.01-2% error     81
-3 2.01-15% error   239
-4 Over 15% error   203</code></pre>
+2 0.01-5% error    143
+3 Over 5% error    380</code></pre>
 </div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Calculate correlations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">s2_agg4</span><span class="op">$</span><span class="va">els</span>, <span class="va">s2_agg4</span><span class="op">$</span><span class="va">mean_abs_error</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -414,13 +412,13 @@ Levels: Exact match &lt; 0.01-2% error &lt; 2.01-15% error &lt; Over 15% error</
     Pearson's product-moment correlation
 
 data:  s2_agg4$els and s2_agg4$mean_abs_error
-t = -8, df = 188, p-value = 0.00000000000003
+t = -8.225, df = 188, p-value = 3.154e-14
 alternative hypothesis: true correlation is not equal to 0
 95 percent confidence interval:
- -0.61 -0.40
+ -0.6119546 -0.4014587
 sample estimates:
-  cor 
--0.51 </code></pre>
+       cor 
+-0.5144138 </code></pre>
 </div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">s2_agg4</span><span class="op">$</span><span class="va">els</span>, <span class="va">s2_agg4</span><span class="op">$</span><span class="va">mean_log_abs_error</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -428,35 +426,35 @@ sample estimates:
     Pearson's product-moment correlation
 
 data:  s2_agg4$els and s2_agg4$mean_log_abs_error
-t = -9, df = 188, p-value &lt;0.0000000000000002
+t = -9.3953, df = 188, p-value &lt; 2.2e-16
 alternative hypothesis: true correlation is not equal to 0
 95 percent confidence interval:
- -0.65 -0.46
+ -0.6549082 -0.4599057
 sample estimates:
-  cor 
--0.57 </code></pre>
+       cor 
+-0.5652525 </code></pre>
 </div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">s2_agg1</span><span class="op">$</span><span class="va">els</span>, <span class="va">s2_agg1</span><span class="op">$</span><span class="va">log_abs_error</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">s2_agg</span><span class="op">$</span><span class="va">els</span>, <span class="va">s2_agg</span><span class="op">$</span><span class="va">log_abs_error</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Pearson's product-moment correlation
 
-data:  s2_agg1$els and s2_agg1$log_abs_error
-t = -17, df = 758, p-value &lt;0.0000000000000002
+data:  s2_agg$els and s2_agg$log_abs_error
+t = -16.783, df = 758, p-value &lt; 2.2e-16
 alternative hypothesis: true correlation is not equal to 0
 95 percent confidence interval:
- -0.57 -0.47
+ -0.5704918 -0.4666503
 sample estimates:
-  cor 
--0.52 </code></pre>
+       cor 
+-0.5204929 </code></pre>
 </div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ANOVA</span></span>
 <span><span class="va">anova_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">els</span> <span class="op">~</span> <span class="va">accuracy_level</span>, data <span class="op">=</span> <span class="va">s2_agg4</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">anova_result</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                Df Sum Sq Mean Sq F value            Pr(&gt;F)    
-accuracy_level   2   3.56   1.781    36.5 0.000000000000042 ***
-Residuals      187   9.13   0.049                              
+<pre><code>                Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+accuracy_level   2  3.523  1.7615   35.91 6.34e-14 ***
+Residuals      187  9.173  0.0491                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -469,10 +467,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 Fit: aov(formula = els ~ accuracy_level, data = s2_agg4)
 
 $accuracy_level
-                               diff   lwr    upr p adj
-2.01-15% error-Exact match    -0.14 -0.23 -0.051     0
-Over 15% error-Exact match    -0.35 -0.45 -0.252     0
-Over 15% error-2.01-15% error -0.21 -0.30 -0.113     0</code></pre>
+                                   diff        lwr        upr     p adj
+.01-5% error-Exact match    0.001958955 -0.1313713  0.1352892 0.9993359
+Over 5% error-Exact match  -0.272859006 -0.3549867 -0.1907313 0.0000000
+Over 5% error-.01-5% error -0.274817961 -0.4026796 -0.1469563 0.0000027</code></pre>
 </div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ordinal regression</span></span>
 <span><span class="va">polr_model</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span><span class="va">accuracy_level</span> <span class="op">~</span> <span class="va">els</span> <span class="op">+</span> <span class="va">refClass</span> <span class="op">+</span> <span class="va">calc</span>, data <span class="op">=</span> <span class="va">s2_agg4</span><span class="op">)</span></span>
@@ -483,26 +481,25 @@ MASS::polr(formula = accuracy_level ~ els + refClass + calc,
     data = s2_agg4)
 
 Coefficients:
-                    Value Std. Error t value
-els                -4.255      0.645  -6.594
-refClassPercentage  0.200      0.350   0.571
-refClassUSD         0.497      0.362   1.374
-calcNo Calculator   1.425      0.387   3.681
+                     Value Std. Error t value
+els                -5.0774     0.8365  -6.070
+refClassPercentage  0.5433     0.3847   1.412
+refClassUSD         1.2268     0.4236   2.896
+calcNo Calculator   1.3590     0.4911   2.768
 
 Intercepts:
-                              Value Std. Error t value
-Exact match|0.01-2% error     -3.02  0.53      -5.75  
-0.01-2% error|2.01-15% error  -3.02  0.53      -5.75  
-2.01-15% error|Over 15% error -0.82  0.47      -1.76  
+                           Value   Std. Error t value
+Exact match|.01-5% error   -3.3218  0.6369    -5.2156
+.01-5% error|Over 5% error -2.6967  0.6217    -4.3373
 
-Residual Deviance: 340.73 
-AIC: 354.73 </code></pre>
+Residual Deviance: 279.9442 
+AIC: 291.9442 </code></pre>
 </div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">emmeans</span><span class="fu">::</span><span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">polr_model</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">els</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$emmeans
-  els emmean    SE  df asymp.LCL asymp.UCL
- 0.62    0.6 0.195 Inf     0.218      0.98
+   els emmean    SE  df asymp.LCL asymp.UCL
+ 0.619   1.14 0.256 Inf     0.634      1.64
 
 Results are averaged over the levels of: refClass, calc 
 Confidence level used: 0.95 
@@ -517,30 +514,30 @@ Results are averaged over the levels of: refClass, calc </code></pre>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/">parameters</a></span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">m_equal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ordinal/man/clm.html">clm</a></span><span class="op">(</span><span class="va">accuracy_level</span> <span class="op">~</span> <span class="va">els</span>, </span>
-<span>    data <span class="op">=</span> <span class="va">s2_agg1</span>, </span>
+<span>    data <span class="op">=</span> <span class="va">s2_agg</span>, </span>
 <span>    link<span class="op">=</span><span class="st">"probit"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html">model_parameters</a></span><span class="op">(</span><span class="va">m_equal</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html">print_html</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="vnjamdyvuf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vnjamdyvuf table {
+<div id="rnvgeukgiq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rnvgeukgiq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vnjamdyvuf thead, #vnjamdyvuf tbody, #vnjamdyvuf tfoot, #vnjamdyvuf tr, #vnjamdyvuf td, #vnjamdyvuf th {
+#rnvgeukgiq thead, #rnvgeukgiq tbody, #rnvgeukgiq tfoot, #rnvgeukgiq tr, #rnvgeukgiq td, #rnvgeukgiq th {
   border-style: none;
 }
 
-#vnjamdyvuf p {
+#rnvgeukgiq p {
   margin: 0;
   padding: 0;
 }
 
-#vnjamdyvuf .gt_table {
+#rnvgeukgiq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -566,12 +563,12 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_caption {
+#rnvgeukgiq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vnjamdyvuf .gt_title {
+#rnvgeukgiq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -583,7 +580,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-bottom-width: 0;
 }
 
-#vnjamdyvuf .gt_subtitle {
+#rnvgeukgiq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -595,7 +592,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-top-width: 0;
 }
 
-#vnjamdyvuf .gt_heading {
+#rnvgeukgiq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -607,13 +604,13 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_bottom_border {
+#rnvgeukgiq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_col_headings {
+#rnvgeukgiq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -628,7 +625,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_col_heading {
+#rnvgeukgiq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -648,7 +645,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   overflow-x: hidden;
 }
 
-#vnjamdyvuf .gt_column_spanner_outer {
+#rnvgeukgiq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -660,15 +657,15 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 4px;
 }
 
-#vnjamdyvuf .gt_column_spanner_outer:first-child {
+#rnvgeukgiq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vnjamdyvuf .gt_column_spanner_outer:last-child {
+#rnvgeukgiq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vnjamdyvuf .gt_column_spanner {
+#rnvgeukgiq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -680,11 +677,11 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   width: 100%;
 }
 
-#vnjamdyvuf .gt_spanner_row {
+#rnvgeukgiq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vnjamdyvuf .gt_group_heading {
+#rnvgeukgiq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -710,7 +707,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   text-align: left;
 }
 
-#vnjamdyvuf .gt_empty_group_heading {
+#rnvgeukgiq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -725,15 +722,15 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   vertical-align: middle;
 }
 
-#vnjamdyvuf .gt_from_md > :first-child {
+#rnvgeukgiq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vnjamdyvuf .gt_from_md > :last-child {
+#rnvgeukgiq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vnjamdyvuf .gt_row {
+#rnvgeukgiq .gt_row {
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
@@ -752,7 +749,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   overflow-x: hidden;
 }
 
-#vnjamdyvuf .gt_stub {
+#rnvgeukgiq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -765,7 +762,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 5px;
 }
 
-#vnjamdyvuf .gt_stub_row_group {
+#rnvgeukgiq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -779,15 +776,15 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   vertical-align: top;
 }
 
-#vnjamdyvuf .gt_row_group_first td {
+#rnvgeukgiq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vnjamdyvuf .gt_row_group_first th {
+#rnvgeukgiq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vnjamdyvuf .gt_summary_row {
+#rnvgeukgiq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -797,16 +794,16 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 5px;
 }
 
-#vnjamdyvuf .gt_first_summary_row {
+#rnvgeukgiq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_first_summary_row.thick {
+#rnvgeukgiq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vnjamdyvuf .gt_last_summary_row {
+#rnvgeukgiq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -816,7 +813,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_grand_summary_row {
+#rnvgeukgiq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -826,7 +823,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 5px;
 }
 
-#vnjamdyvuf .gt_first_grand_summary_row {
+#rnvgeukgiq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -836,7 +833,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_last_grand_summary_row_top {
+#rnvgeukgiq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -846,11 +843,11 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_striped {
+#rnvgeukgiq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vnjamdyvuf .gt_table_body {
+#rnvgeukgiq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -859,7 +856,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_footnotes {
+#rnvgeukgiq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -873,7 +870,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_footnote {
+#rnvgeukgiq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -882,7 +879,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 5px;
 }
 
-#vnjamdyvuf .gt_sourcenotes {
+#rnvgeukgiq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -896,7 +893,7 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vnjamdyvuf .gt_sourcenote {
+#rnvgeukgiq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -904,72 +901,72 @@ Results are averaged over the levels of: refClass, calc </code></pre>
   padding-right: 5px;
 }
 
-#vnjamdyvuf .gt_left {
+#rnvgeukgiq .gt_left {
   text-align: left;
 }
 
-#vnjamdyvuf .gt_center {
+#rnvgeukgiq .gt_center {
   text-align: center;
 }
 
-#vnjamdyvuf .gt_right {
+#rnvgeukgiq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vnjamdyvuf .gt_font_normal {
+#rnvgeukgiq .gt_font_normal {
   font-weight: normal;
 }
 
-#vnjamdyvuf .gt_font_bold {
+#rnvgeukgiq .gt_font_bold {
   font-weight: bold;
 }
 
-#vnjamdyvuf .gt_font_italic {
+#rnvgeukgiq .gt_font_italic {
   font-style: italic;
 }
 
-#vnjamdyvuf .gt_super {
+#rnvgeukgiq .gt_super {
   font-size: 65%;
 }
 
-#vnjamdyvuf .gt_footnote_marks {
+#rnvgeukgiq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vnjamdyvuf .gt_asterisk {
+#rnvgeukgiq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vnjamdyvuf .gt_indent_1 {
+#rnvgeukgiq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vnjamdyvuf .gt_indent_2 {
+#rnvgeukgiq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vnjamdyvuf .gt_indent_3 {
+#rnvgeukgiq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vnjamdyvuf .gt_indent_4 {
+#rnvgeukgiq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vnjamdyvuf .gt_indent_5 {
+#rnvgeukgiq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vnjamdyvuf .katex-display {
+#rnvgeukgiq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vnjamdyvuf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rnvgeukgiq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -992,38 +989,30 @@ Results are averaged over the levels of: refClass, calc </code></pre>
 <td colspan="6" id="Intercept " class="gt_group_heading" data-quarto-table-cell-role="th" style="font-style: oblique" scope="colgroup">Intercept</td>
 </tr>
 <tr class="gt_row_group_first even">
-<td class="gt_row gt_left" headers="Intercept   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">Exact match|0 01-2% error</td>
-<td class="gt_row gt_center" headers="Intercept   Coefficient">-2.05</td>
-<td class="gt_row gt_center" headers="Intercept   SE">0.13</td>
-<td class="gt_row gt_center" headers="Intercept   95% CI">(-2.29, -1.80)</td>
-<td class="gt_row gt_center" headers="Intercept   z">-16.31</td>
+<td class="gt_row gt_left" headers="Intercept   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">Exact match|0 01-5% error</td>
+<td class="gt_row gt_center" headers="Intercept   Coefficient">-2.14</td>
+<td class="gt_row gt_center" headers="Intercept   SE">0.14</td>
+<td class="gt_row gt_center" headers="Intercept   95% CI">(-2.42, -1.86)</td>
+<td class="gt_row gt_center" headers="Intercept   z">-14.87</td>
 <td class="gt_row gt_center" headers="Intercept   p">&lt; .001</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Intercept   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">0 01-2% error|2 01-15% error</td>
-<td class="gt_row gt_center" headers="Intercept   Coefficient">-1.72</td>
-<td class="gt_row gt_center" headers="Intercept   SE">0.12</td>
-<td class="gt_row gt_center" headers="Intercept   95% CI">(-1.96, -1.48)</td>
-<td class="gt_row gt_center" headers="Intercept   z">-14.07</td>
+<td class="gt_row gt_left" headers="Intercept   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">0 01-5% error|Over 5% error</td>
+<td class="gt_row gt_center" headers="Intercept   Coefficient">-1.56</td>
+<td class="gt_row gt_center" headers="Intercept   SE">0.14</td>
+<td class="gt_row gt_center" headers="Intercept   95% CI">(-1.83, -1.29)</td>
+<td class="gt_row gt_center" headers="Intercept   z">-11.35</td>
 <td class="gt_row gt_center" headers="Intercept   p">&lt; .001</td>
 </tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Intercept   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">2 01-15% error|Over 15% error</td>
-<td class="gt_row gt_center" headers="Intercept   Coefficient">-0.72</td>
-<td class="gt_row gt_center" headers="Intercept   SE">0.11</td>
-<td class="gt_row gt_center" headers="Intercept   95% CI">(-0.94, -0.50)</td>
-<td class="gt_row gt_center" headers="Intercept   z">-6.50</td>
-<td class="gt_row gt_center" headers="Intercept   p">&lt; .001</td>
-</tr>
-<tr class="gt_group_heading_row odd">
+<tr class="gt_group_heading_row even">
 <td colspan="6" id="Location Parameters " class="gt_group_heading" data-quarto-table-cell-role="th" style="font-style: oblique" scope="colgroup">Location Parameters</td>
 </tr>
-<tr class="gt_row_group_first even">
+<tr class="gt_row_group_first odd">
 <td class="gt_row gt_left" headers="Location Parameters   Parameter" style="border-right-width: 1px; border-right-style: solid; border-right-color: #d3d3d3">els</td>
-<td class="gt_row gt_center" headers="Location Parameters   Coefficient">-2.34</td>
-<td class="gt_row gt_center" headers="Location Parameters   SE">0.17</td>
-<td class="gt_row gt_center" headers="Location Parameters   95% CI">(-2.67, -2.00)</td>
-<td class="gt_row gt_center" headers="Location Parameters   z">-13.68</td>
+<td class="gt_row gt_center" headers="Location Parameters   Coefficient">-2.47</td>
+<td class="gt_row gt_center" headers="Location Parameters   SE">0.20</td>
+<td class="gt_row gt_center" headers="Location Parameters   95% CI">(-2.85, -2.08)</td>
+<td class="gt_row gt_center" headers="Location Parameters   z">-12.50</td>
 <td class="gt_row gt_center" headers="Location Parameters   p">&lt; .001</td>
 </tr>
 </tbody>
@@ -1036,34 +1025,33 @@ Results are averaged over the levels of: refClass, calc </code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_equal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>formula: accuracy_level ~ els
-data:    s2_agg1
+data:    s2_agg
 
  link   threshold nobs logLik  AIC     niter max.grad cond.H 
- probit flexible  760  -902.93 1813.85 5(1)  1.29e-13 1.2e+02
+ probit flexible  760  -689.77 1385.54 7(0)  2.34e-07 8.0e+01
 
 Coefficients:
-    Estimate Std. Error z value            Pr(&gt;|z|)    
-els   -2.336      0.171   -13.7 &lt;0.0000000000000002 ***
+    Estimate Std. Error z value Pr(&gt;|z|)    
+els  -2.4656     0.1972   -12.5   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Threshold coefficients:
-                              Estimate Std. Error z value
-Exact match|0.01-2% error       -2.048      0.126   -16.3
-0.01-2% error|2.01-15% error    -1.719      0.122   -14.1
-2.01-15% error|Over 15% error   -0.720      0.111    -6.5</code></pre>
+                            Estimate Std. Error z value
+Exact match|0.01-5% error    -2.1401     0.1440  -14.87
+0.01-5% error|Over 5% error  -1.5628     0.1377  -11.35</code></pre>
 </div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fit a mixed-effects model with accuracy level as the outcome</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span></span>
-<span><span class="va">mixed_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">abs_error</span> <span class="op">~</span> <span class="va">els</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">s2_agg1</span><span class="op">)</span></span>
+<span><span class="va">mixed_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">abs_error</span> <span class="op">~</span> <span class="va">els</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">s2_agg</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Post-hoc pairwise comparisons</span></span>
 <span><span class="va">emmeans_model</span> <span class="op">&lt;-</span> <span class="fu">emmeans</span><span class="op">(</span><span class="va">mixed_model</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">els</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">emmeans_model</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$emmeans
-  els emmean     SE  df lower.CL upper.CL
- 0.62  0.127 0.0107 188    0.106    0.148
+   els emmean     SE  df lower.CL upper.CL
+ 0.619  0.127 0.0107 188    0.106    0.148
 
 Degrees-of-freedom method: kenward-roger 
 Confidence level used: 0.95 
@@ -1126,33 +1114,32 @@ Degrees-of-freedom method: kenward-roger </code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">polr_model_ref_interaction</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span><span class="va">accuracy_level</span> <span class="op">~</span> <span class="va">els</span> <span class="op">*</span> <span class="va">refClass</span> <span class="op">+</span> <span class="va">calc</span>, data <span class="op">=</span> <span class="va">s2_agg1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">polr_model_ref_interaction</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span><span class="va">accuracy_level</span> <span class="op">~</span> <span class="va">els</span> <span class="op">*</span> <span class="va">refClass</span> <span class="op">+</span> <span class="va">calc</span>, data <span class="op">=</span> <span class="va">s2_agg</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">polr_model_ref_interaction</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 MASS::polr(formula = accuracy_level ~ els * refClass + calc, 
-    data = s2_agg1)
+    data = s2_agg)
 
 Coefficients:
-                        Value Std. Error t value
-els                    -4.884      0.573   -8.52
-refClassPercentage     -0.683      0.476   -1.44
-refClassUSD            -0.597      0.512   -1.16
-calcNo Calculator       1.525      0.191    7.99
-els:refClassPercentage  1.477      0.692    2.14
-els:refClassUSD         1.852      0.763    2.43
+                         Value Std. Error t value
+els                    -4.9591     0.6587 -7.5283
+refClassPercentage     -0.9335     0.5739 -1.6267
+refClassUSD             0.5100     0.7030  0.7254
+calcNo Calculator       1.6258     0.2414  6.7351
+els:refClassPercentage  1.9618     0.8068  2.4315
+els:refClassUSD         0.6844     0.9903  0.6911
 
 Intercepts:
-                              Value Std. Error t value
-Exact match|0.01-2% error     -3.61  0.41      -8.82  
-0.01-2% error|2.01-15% error  -3.02  0.41      -7.46  
-2.01-15% error|Over 15% error -1.19  0.39      -3.04  
+                            Value   Std. Error t value
+Exact match|0.01-5% error   -3.5502  0.4770    -7.4420
+0.01-5% error|Over 5% error -2.4941  0.4680    -5.3298
 
-Residual Deviance: 1720.60 
-AIC: 1738.60 </code></pre>
+Residual Deviance: 1289.588 
+AIC: 1305.588 </code></pre>
 </div>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Example for refClass = USD, calc = No Calculator</span></span>
-<span><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>els <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">s2_agg1</span><span class="op">$</span><span class="va">els</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">s2_agg1</span><span class="op">$</span><span class="va">els</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
+<span><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>els <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">s2_agg</span><span class="op">$</span><span class="va">els</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">s2_agg</span><span class="op">$</span><span class="va">els</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>,</span>
 <span>                        refClass <span class="op">=</span> <span class="st">"USD"</span>,</span>
 <span>                        calc <span class="op">=</span> <span class="st">"No Calculator"</span><span class="op">)</span></span>
 <span></span>
@@ -1163,7 +1150,7 @@ AIC: 1738.60 </code></pre>
 <span></span>
 <span><span class="co"># Reshape to long format for ggplot</span></span>
 <span><span class="va">predicted_probs_long</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="va">predicted_probs_df</span>, </span>
-<span>                                            cols <span class="op">=</span> <span class="va">`Exact match`</span><span class="op">:</span><span class="va">`Over 15% error`</span>,</span>
+<span>                                            cols <span class="op">=</span> <span class="va">`Exact match`</span><span class="op">:</span><span class="va">`Over 5% error`</span>,</span>
 <span>                                            names_to <span class="op">=</span> <span class="st">"accuracy_level"</span>,</span>
 <span>                                            values_to <span class="op">=</span> <span class="st">"probability"</span><span class="op">)</span></span>
 <span></span>
@@ -1181,11 +1168,26 @@ AIC: 1738.60 </code></pre>
 </figure>
 </div>
 </div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_agg</span> <span class="op">&lt;-</span> <span class="va">s2_agg</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>els_quartile <span class="op">=</span> <span class="fu">ntile</span><span class="op">(</span><span class="va">els</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot distribution of log_abs_error by ELS quartile and reference class</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">s2_agg</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">els_quartile</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">log_abs_error</span>, fill <span class="op">=</span> <span class="va">refClass</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_boxplot</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span>, outlier.shape <span class="op">=</span> <span class="cn">NA</span>, position <span class="op">=</span> <span class="fu">position_dodge</span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Energy Literacy Quartile"</span>, y <span class="op">=</span> <span class="st">"Log Absolute Error"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Distribution of Planning Accuracy by Energy Literacy Quartile and Reference Class"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-2-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="s2_survey_files/figure-html/unnamed-chunk-2-6.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_els_log_error</span> <span class="op">&lt;-</span> <span class="fu">brm</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_els_log_error</span> <span class="op">&lt;-</span> <span class="fu">brm</span><span class="op">(</span></span>
 <span>    <span class="va">log_abs_error</span> <span class="op">~</span> <span class="va">els</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">state</span><span class="op">)</span>,</span>
-<span>    data <span class="op">=</span> <span class="va">s2_agg1</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">s2_agg</span>,</span>
 <span>    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    cores <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>    iter <span class="op">=</span> <span class="fl">3000</span>,</span>
@@ -1226,21 +1228,24 @@ Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Regression Coefficients:</span></span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Regression Coefficients:</span></span>
 <span><span class="co">#           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS</span></span>
-<span><span class="co"># Intercept    -1.65      0.23    -2.12    -1.18 1.00      921     1465</span></span>
-<span><span class="co"># els          -2.35      0.27    -2.88    -1.81 1.00      753      997</span></span>
+<span><span class="co"># Intercept    -1.10      0.27    -1.62    -0.56 1.00      975     1675</span></span>
+<span><span class="co"># els          -3.21      0.35    -3.89    -2.52 1.00      837     1508</span></span>
 <span></span>
 <span></span>
+<span><span class="co"># library(performance)</span></span>
+<span><span class="co">#r2(s2_els_log_error)</span></span>
+<span> <span class="co"># Conditional R2: 0.800 (95% CI [0.782, 0.815])</span></span>
+<span> <span class="co">#  Marginal R2: 0.270 (95% CI [0.186, 0.350])</span></span>
 <span></span>
-<span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">s2_els_log_error</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="s2_survey_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Create the conditional effects plot</span></span>
+<span> <span class="co">#icc(s2_els_log_error)</span></span>
+<span><span class="co"># Intraclass Correlation Coefficient</span></span>
+<span>  <span class="co"># Adjusted ICC: 0.734</span></span>
+<span>  <span class="co"># Unadjusted ICC: 0.541</span></span>
+<span><span class="co">#check_model(s2_els_log_error)</span></span>
+<span></span>
+<span><span class="co"># Create the conditional effects plot</span></span>
 <span><span class="va">conditional_effects_plot</span> <span class="op">&lt;-</span> <span class="fu">conditional_effects</span><span class="op">(</span><span class="va">s2_els_log_error</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract the data for plotting</span></span>
@@ -1258,10 +1263,245 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="s2_survey_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></a></p>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="s2_survey_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s2_els_log_error_full_add</span> <span class="op">&lt;-</span> <span class="fu">brm</span><span class="op">(</span></span>
+<span>    <span class="va">log_abs_error</span> <span class="op">~</span> <span class="va">els</span><span class="op">+</span><span class="va">refClass</span><span class="op">+</span><span class="va">calc</span><span class="op">+</span><span class="va">rounded</span><span class="op">+</span><span class="va">pct_goal</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">s2_agg</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    cores <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    iter <span class="op">=</span> <span class="fl">4000</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.97</span><span class="op">)</span>, </span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"Intercept"</span><span class="op">)</span>, </span>
+<span>                <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/model_cache"</span>,<span class="st">'s2_els_log_error_full_add.rds'</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">s2_els_log_error_full_add</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: log_abs_error ~ els + refClass + calc + rounded + pct_goal + (1 | id) + (1 | state) 
+   Data: s2_agg1 (Number of observations: 760) 
+  Draws: 4 chains, each with iter = 4000; warmup = 2000; thin = 1;
+         total post-warmup draws = 8000
+
+Multilevel Hyperparameters:
+~id (Number of levels: 190) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     1.09      0.06     0.98     1.22 1.00     1903     2880
+
+~state (Number of levels: 4) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.19      0.16     0.03     0.63 1.00     2328     3081
+
+Regression Coefficients:
+                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept             -1.50      0.29    -2.06    -0.92 1.00     1484     2867
+els                   -2.89      0.32    -3.52    -2.27 1.00     1326     2542
+refClassPercentage     0.09      0.20    -0.30     0.49 1.00     1413     2369
+refClassUSD            0.40      0.21    -0.01     0.82 1.01     1349     2682
+calcNoCalculator       1.10      0.21     0.68     1.52 1.00     1673     2348
+roundedRounded        -0.14      0.05    -0.24    -0.04 1.00    11633     5466
+pct_goal15%           -0.16      0.05    -0.26    -0.06 1.00    12641     5441
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.71      0.02     0.67     0.75 1.00     6065     5774
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#check_model(s2_els_log_error_full_add)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="va">s2_els_acc_full_add</span> <span class="op">&lt;-</span> <span class="fu">brm</span><span class="op">(</span></span>
+<span>    <span class="va">accuracy_level</span> <span class="op">~</span> <span class="va">els</span><span class="op">+</span><span class="va">refClass</span><span class="op">+</span><span class="va">calc</span><span class="op">+</span><span class="va">rounded</span><span class="op">+</span><span class="va">pct_goal</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">s2_agg</span>,</span>
+<span>    cores <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu">cumulative</span><span class="op">(</span><span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.97</span><span class="op">)</span>, </span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"Intercept"</span><span class="op">)</span>,  <span class="co"># Priors for thresholds</span></span>
+<span>            <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, <span class="co"># Priors for predictors</span></span>
+<span>    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/model_cache"</span>,<span class="st">'s2_els_acc_error_full_add.rds'</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">s2_els_acc_full_add</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: cumulative 
+  Links: mu = logit; disc = identity 
+Formula: accuracy_level ~ els + refClass + calc + rounded + pct_goal + (1 | id) + (1 | state) 
+   Data: s2_agg1 (Number of observations: 760) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~id (Number of levels: 190) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     3.27      0.29     2.75     3.86 1.01     1041     1959
+
+~state (Number of levels: 4) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.46      0.37     0.05     1.49 1.00      850     1155
+
+Regression Coefficients:
+                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept[1]          -5.67      0.84    -7.31    -4.01 1.00     1039     1978
+Intercept[2]          -4.22      0.83    -5.84    -2.59 1.00     1032     2049
+Intercept[3]          -0.50      0.80    -2.04     1.08 1.00      964     1707
+els                   -6.38      0.95    -8.29    -4.59 1.00      972     1605
+refClassPercentage     0.55      0.58    -0.57     1.66 1.00      950     1652
+refClassUSD            1.07      0.62    -0.13     2.31 1.00      844     1563
+calcNoCalculator       3.18      0.67     1.90     4.55 1.01      872     1585
+roundedRounded        -0.65      0.18    -0.99    -0.31 1.00     5287     3387
+pct_goal15%           -0.43      0.17    -0.76    -0.08 1.00     6491     3227
+
+Further Distributional Parameters:
+     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+disc     1.00      0.00     1.00     1.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Regression Coefficients:</span></span>
+<span><span class="co">#                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS</span></span>
+<span><span class="co"># Intercept[1]          -5.67      0.84    -7.31    -4.01 1.00     1039     1978</span></span>
+<span><span class="co"># Intercept[2]          -4.22      0.83    -5.84    -2.59 1.00     1032     2049</span></span>
+<span><span class="co"># Intercept[3]          -0.50      0.80    -2.04     1.08 1.00      964     1707</span></span>
+<span><span class="co"># els                   -6.38      0.95    -8.29    -4.59 1.00      972     1605</span></span>
+<span><span class="co"># refClassPercentage     0.55      0.58    -0.57     1.66 1.00      950     1652</span></span>
+<span><span class="co"># refClassUSD            1.07      0.62    -0.13     2.31 1.00      844     1563</span></span>
+<span><span class="co"># calcNoCalculator       3.18      0.67     1.90     4.55 1.01      872     1585</span></span>
+<span><span class="co"># roundedRounded        -0.65      0.18    -0.99    -0.31 1.00     5287     3387</span></span>
+<span><span class="co"># pct_goal15%           -0.43      0.17    -0.76    -0.08 1.00     6491     3227</span></span>
+<span></span>
+<span><span class="co">#check_model(s2_els_acc_full_add)</span></span>
+<span></span>
+<span><span class="va">s2_els_acc_full_int1</span> <span class="op">&lt;-</span> <span class="fu">brm</span><span class="op">(</span></span>
+<span>    <span class="va">accuracy_level</span> <span class="op">~</span> <span class="op">(</span><span class="va">els</span><span class="op">*</span><span class="va">refClass</span><span class="op">)</span><span class="op">+</span><span class="op">(</span><span class="va">rounded</span><span class="op">*</span><span class="va">pct_goal</span><span class="op">)</span><span class="op">+</span><span class="va">calc</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">s2_agg</span>,</span>
+<span>    cores <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu">cumulative</span><span class="op">(</span><span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.97</span><span class="op">)</span>, </span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"Intercept"</span><span class="op">)</span>,  <span class="co"># Priors for thresholds</span></span>
+<span>            <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, <span class="co"># Priors for predictors</span></span>
+<span>    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/model_cache"</span>,<span class="st">'s2_els_acc_full_int1.rds'</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">s2_els_acc_full_int1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: cumulative 
+  Links: mu = logit; disc = identity 
+Formula: accuracy_level ~ (els * refClass) + (rounded * pct_goal) + calc + (1 | id) + (1 | state) 
+   Data: s2_agg1 (Number of observations: 760) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~id (Number of levels: 190) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     3.31      0.30     2.77     3.94 1.00     1215     2269
+
+~state (Number of levels: 4) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.46      0.38     0.04     1.48 1.00     1180     1381
+
+Regression Coefficients:
+                           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+Intercept[1]                  -5.64      0.92    -7.48    -3.82 1.00     1119
+Intercept[2]                  -4.19      0.91    -6.00    -2.36 1.00     1084
+Intercept[3]                  -0.45      0.90    -2.23     1.31 1.00     1074
+els                           -6.13      1.10    -8.30    -3.95 1.00     1140
+refClassPercentage             0.97      0.96    -0.87     2.90 1.00     1139
+refClassUSD                    1.08      1.02    -0.90     3.11 1.01     1066
+roundedRounded                -0.88      0.48    -1.83     0.02 1.00      795
+pct_goal15%                   -0.66      0.48    -1.60     0.24 1.01      809
+calcNoCalculator               3.18      0.68     1.86     4.55 1.00      956
+els:refClassPercentage        -0.66      1.32    -3.36     1.89 1.00     1270
+els:refClassUSD               -0.10      1.41    -2.83     2.64 1.00     1650
+roundedRounded:pct_goal15%     0.46      0.90    -1.22     2.20 1.00      737
+                           Tail_ESS
+Intercept[1]                   2097
+Intercept[2]                   2079
+Intercept[3]                   1995
+els                            2308
+refClassPercentage             1717
+refClassUSD                    1943
+roundedRounded                 1583
+pct_goal15%                    1652
+calcNoCalculator               1621
+els:refClassPercentage         1956
+els:refClassUSD                2359
+roundedRounded:pct_goal15%     1534
+
+Further Distributional Parameters:
+     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+disc     1.00      0.00     1.00     1.00   NA       NA       NA
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">s2_els_acc_full_int1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="s2_survey_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="s2_survey_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="s2_survey_files/figure-html/unnamed-chunk-3-4.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="s2_survey_files/figure-html/unnamed-chunk-3-5.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="s2_survey_files/figure-html/unnamed-chunk-3-6.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="s2_survey_files/figure-html/unnamed-chunk-3-7.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-3-8.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="s2_survey_files/figure-html/unnamed-chunk-3-8.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Intercept[1]                  -5.64      0.92    -7.48    -3.82 1.00     1119     2097</span></span>
+<span><span class="co"># Intercept[2]                  -4.19      0.91    -6.00    -2.36 1.00     1084     2079</span></span>
+<span><span class="co"># Intercept[3]                  -0.45      0.90    -2.23     1.31 1.00     1074     1995</span></span>
+<span><span class="co"># els                           -6.13      1.10    -8.30    -3.95 1.00     1140     2308</span></span>
+<span><span class="co"># refClassPercentage             0.97      0.96    -0.87     2.90 1.00     1139     1717</span></span>
+<span><span class="co"># refClassUSD                    1.08      1.02    -0.90     3.11 1.01     1066     1943</span></span>
+<span><span class="co"># roundedRounded                -0.88      0.48    -1.83     0.02 1.00      795     1583</span></span>
+<span><span class="co"># pct_goal15%                   -0.66      0.48    -1.60     0.24 1.01      809     1652</span></span>
+<span><span class="co"># calcNoCalculator               3.18      0.68     1.86     4.55 1.00      956     1621</span></span>
+<span><span class="co"># els:refClassPercentage        -0.66      1.32    -3.36     1.89 1.00     1270     1956</span></span>
+<span><span class="co"># els:refClassUSD               -0.10      1.41    -2.83     2.64 1.00     1650     2359</span></span>
+<span><span class="co"># roundedRounded:pct_goal15%     0.46      0.90    -1.22     2.20 1.00      737     1534</span></span>
+<span></span>
+<span></span>
+<span><span class="co">#check_model(s2_els_acc_full_int1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="original" class="level1"><h1>Original</h1>
 <div class="line-block">
@@ -1318,7 +1558,7 @@ The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units cal
 </tbody>
 </table>
 <div class="cell">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
 <span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">purrr</span>,<span class="va">tidyr</span>,<span class="va">here</span>, <span class="va">haven</span>,<span class="va">tibble</span>,<span class="va">ggplot2</span>,<span class="va">gt</span>,<span class="va">ggh4x</span>,<span class="va">lme4</span>,<span class="va">flextable</span>,<span class="va">ggh4x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fl">2</span>, scipen<span class="op">=</span><span class="fl">999</span>, dplyr.summarise.inform<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -1408,7 +1648,7 @@ The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units cal
 <span>    <span class="fu">summarize</span><span class="op">(</span>els<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">correct</span><span class="op">==</span><span class="st">"Correct"</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">"drop"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">els2</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, fill <span class="op">=</span> <span class="va">correct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">els2</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, fill <span class="op">=</span> <span class="va">correct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_bar</span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">question</span>, ncol <span class="op">=</span> <span class="fl">2</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Facet by question, 2 columns, free x-axis scales</span></span>
 <span>  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Correct"</span> <span class="op">=</span> <span class="st">"#00ba38"</span>, <span class="st">"Incorrect"</span> <span class="op">=</span> <span class="st">"#f8766d"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Custom colors</span></span>
@@ -1433,11 +1673,11 @@ The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units cal
 <span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="s2_survey_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="s2_survey_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compare refClass averages, stat_halfeye</span></span>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compare refClass averages, stat_halfeye</span></span>
 <span><span class="va">els2</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span>,<span class="va">refClass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>score<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">correct</span><span class="op">==</span><span class="st">"Correct"</span><span class="op">)</span><span class="op">/</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1446,11 +1686,11 @@ The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units cal
 <span>    <span class="fu">labs</span><span class="op">(</span>title<span class="op">=</span><span class="st">"Energy Literacy Survey Score"</span>, x<span class="op">=</span><span class="st">"Reference Class"</span>, y<span class="op">=</span><span class="st">"Score"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="s2_survey_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></a></p>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="s2_survey_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">els2</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">els2</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">refClass</span>, <span class="va">question</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarize</span><span class="op">(</span>mean_correct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">correct</span> <span class="op">==</span> <span class="st">"Correct"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">question</span>, y <span class="op">=</span> <span class="va">mean_correct</span>, fill <span class="op">=</span> <span class="va">refClass</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1463,7 +1703,7 @@ The amount of ELECTRICAL ENERGY<br>(ELECTRICITY) we use is measured in units cal
 <span>  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="s2_survey_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid figure-img" width="672"></a></p>
+<figure class="figure"><p><a href="s2_survey_files/figure-html/unnamed-chunk-5-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="s2_survey_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>

@@ -27,3 +27,5 @@ flextable
 pander
 wesanderson
 glue
+marginaleffects
+ggtext

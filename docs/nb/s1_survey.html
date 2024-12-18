@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.7.2">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-12-11">
+<meta name="dcterms.date" content="2024-12-18">
 <title>s1_survey – Representation Study</title>
 <style>
 code{white-space: pre-wrap;}
@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 11, 2024</p>
+      <p class="date">December 18, 2024</p>
     </div>
   </div>
   
@@ -363,11 +363,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>            accuracy_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
 <span>                <span class="fu">case_when</span><span class="op">(</span></span>
 <span>                    <span class="va">abs_error</span> <span class="op">==</span> <span class="fl">0.00</span> <span class="op">~</span> <span class="st">"Exact match"</span>,</span>
-<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"0.01-2% error"</span>,</span>
-<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.15</span> <span class="op">~</span> <span class="st">"2.01-15% error"</span>,</span>
-<span>                    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 15% error"</span>  <span class="co"># Capture all remaining cases</span></span>
+<span>                    <span class="va">abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.05</span> <span class="op">~</span> <span class="st">"0.01-5% error"</span>,</span>
+<span>                    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 5% error"</span>  <span class="co"># Capture all remaining cases</span></span>
 <span>                <span class="op">)</span>, </span>
-<span>                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">"0.01-2% error"</span>, <span class="st">"2.01-15% error"</span>, <span class="st">"Over 15% error"</span><span class="op">)</span>,</span>
+<span>                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">"0.01-5% error"</span>, <span class="st">"Over 5% error"</span><span class="op">)</span>,</span>
 <span>                ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>            <span class="op">)</span></span>
 <span>        <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">accuracy_level</span>, .after<span class="op">=</span> <span class="st">"pct_change"</span><span class="op">)</span></span>
@@ -389,11 +388,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    <span class="fu">mutate</span><span class="op">(</span>accuracy_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
 <span>            <span class="fu">case_when</span><span class="op">(</span></span>
 <span>                <span class="va">mean_abs_error</span> <span class="op">&lt;</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"Exact match"</span>,</span>
-<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.02</span> <span class="op">~</span> <span class="st">"0.01-2% error"</span>,</span>
-<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.15</span> <span class="op">~</span> <span class="st">"2.01-15% error"</span>,</span>
-<span>                <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 15% error"</span>  <span class="co"># Capture all remaining cases</span></span>
+<span>                <span class="va">mean_abs_error</span> <span class="op">&lt;=</span> <span class="fl">0.05</span> <span class="op">~</span> <span class="st">"0.01-5% error"</span>,</span>
+<span>                <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Over 5% error"</span>  <span class="co"># Capture all remaining cases</span></span>
 <span>            <span class="op">)</span>, </span>
-<span>            levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">"0.01-2% error"</span>, <span class="st">"2.01-15% error"</span>, <span class="st">"Over 15% error"</span><span class="op">)</span>,</span>
+<span>            levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Exact match"</span>, <span class="st">".01-5% error"</span>, <span class="st">"Over 5% error"</span><span class="op">)</span>,</span>
 <span>            ordered <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>        <span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

@@ -17,7 +17,8 @@ s2_long <- readRDS(here::here("data/s2_processed.rds")) |>
   filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
-s2_agg1 <- s2_long |> 
+
+s2_agg <- s2_long |> 
   filter(appliance != "TOTAL") |> 
   group_by(id,refClass,calc, state,pct,pct_goal,plan,rounded,els) |> 
   summarise(
@@ -38,16 +39,15 @@ s2_agg1 <- s2_long |>
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
-                    abs_error <= 0.02 ~ "0.01-2% error",
-                    abs_error <= 0.15 ~ "2.01-15% error",
-                    TRUE ~ "Over 15% error"  # Capture all remaining cases
+                    abs_error <= 0.05 ~ "0.01-5% error",
+                    TRUE ~ "Over 5% error"  # Capture all remaining cases
                 ), 
-                levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+                levels = c("Exact match","0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         )
 
-s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |> 
+s2_agg4 <- s2_agg |> group_by(id,refClass,calc,els) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
     summarise(
     mg=sum(matched_goal),
@@ -62,14 +62,12 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |>
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
-                mean_abs_error <= 0.02 ~ "0.01-2% error",
-                mean_abs_error <= 0.15 ~ "2.01-15% error",
-                TRUE ~ "Over 15% error"  # Capture all remaining cases
+                mean_abs_error <= 0.05 ~ ".01-5% error",
+                TRUE ~ "Over 5% error"  # Capture all remaining cases
             ), 
-            levels = c("Exact match", "0.01-2% error", "2.01-15% error", "Over 15% error"),
+            levels = c("Exact match", ".01-5% error", "Over 5% error"),
             ordered = TRUE
         ))
-
 
 ```
 
@@ -79,14 +77,14 @@ s2_agg4 <- s2_agg1 |> group_by(id,refClass,calc,els) |>
 unique(s2_agg4$accuracy_level)
 
 s2_agg4 |> group_by(accuracy_level) |> summarize(n=n())
-s2_agg1 |> group_by(accuracy_level) |> summarize(n=n())
+s2_agg |> group_by(accuracy_level) |> summarize(n=n())
 
 
 
 # Calculate correlations
 cor.test(s2_agg4$els, s2_agg4$mean_abs_error)
 cor.test(s2_agg4$els, s2_agg4$mean_log_abs_error)
-cor.test(s2_agg1$els, s2_agg1$log_abs_error)
+cor.test(s2_agg$els, s2_agg$log_abs_error)
 
 
 # ANOVA
@@ -106,7 +104,7 @@ library(ordinal)
 library(parameters) 
 
 m_equal <- clm(accuracy_level ~ els, 
-    data = s2_agg1, 
+    data = s2_agg, 
     link="probit")
 
 
@@ -117,7 +115,7 @@ summary(m_equal)
 
 # Fit a mixed-effects model with accuracy level as the outcome
 library(lme4)
-mixed_model <- lmer(abs_error ~ els + (1 | id), data = s2_agg1)
+mixed_model <- lmer(abs_error ~ els + (1 | id), data = s2_agg)
 
 # Post-hoc pairwise comparisons
 emmeans_model <- emmeans(mixed_model, pairwise ~ els)
@@ -159,11 +157,11 @@ ggplot(s2_agg4, aes(x = calc, y = els, fill = calc)) +
 
 
 
-polr_model_ref_interaction <- MASS::polr(accuracy_level ~ els * refClass + calc, data = s2_agg1)
+polr_model_ref_interaction <- MASS::polr(accuracy_level ~ els * refClass + calc, data = s2_agg)
 summary(polr_model_ref_interaction)
 
 # Example for refClass = USD, calc = No Calculator
-new_data <- expand.grid(els = seq(min(s2_agg1$els), max(s2_agg1$els), length.out = 100),
+new_data <- expand.grid(els = seq(min(s2_agg$els), max(s2_agg$els), length.out = 100),
                         refClass = "USD",
                         calc = "No Calculator")
 
@@ -174,7 +172,7 @@ predicted_probs_df <- cbind(new_data, predicted_probs)
 
 # Reshape to long format for ggplot
 predicted_probs_long <- tidyr::pivot_longer(predicted_probs_df, 
-                                            cols = `Exact match`:`Over 15% error`,
+                                            cols = `Exact match`:`Over 5% error`,
                                             names_to = "accuracy_level",
                                             values_to = "probability")
 
@@ -189,7 +187,7 @@ ggplot(predicted_probs_long, aes(x = els, y = probability, color = accuracy_leve
 
 
 
-s2_agg <- s2_agg1 %>%
+s2_agg <- s2_agg %>%
   mutate(els_quartile = ntile(els, 4))
 
 # Plot distribution of log_abs_error by ELS quartile and reference class
@@ -209,7 +207,7 @@ ggplot(s2_agg, aes(x = factor(els_quartile), y = log_abs_error, fill = refClass)
 
 s2_els_log_error <- brm(
     log_abs_error ~ els + (1|id) + (1|state),
-    data = s2_agg1,
+    data = s2_agg,
     family = gaussian(),
     cores = 4,
     iter = 3000,
@@ -258,7 +256,7 @@ ggplot(plot_data, aes(x = els, y = estimate__)) +
 
 s2_els_log_error_full_add <- brm(
     log_abs_error ~ els+refClass+calc+rounded+pct_goal + (1|id) + (1|state),
-    data = s2_agg1,
+    data = s2_agg,
     family = gaussian(),
     cores = 4,
     iter = 4000,
@@ -269,13 +267,13 @@ s2_els_log_error_full_add <- brm(
 )
 summary(s2_els_log_error_full_add)
 
-check_model(s2_els_log_error_full_add)
+#check_model(s2_els_log_error_full_add)
 
 
 
 s2_els_acc_full_add <- brm(
     accuracy_level ~ els+refClass+calc+rounded+pct_goal + (1|id) + (1|state),
-    data = s2_agg1,
+    data = s2_agg,
     cores = 4,
     family = cumulative("logit"),
     control = list(adapt_delta = 0.97), 
@@ -300,7 +298,7 @@ summary(s2_els_acc_full_add)
 
 s2_els_acc_full_int1 <- brm(
     accuracy_level ~ (els*refClass)+(rounded*pct_goal)+calc + (1|id) + (1|state),
-    data = s2_agg1,
+    data = s2_agg,
     cores = 4,
     family = cumulative("logit"),
     control = list(adapt_delta = 0.97), 

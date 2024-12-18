@@ -72,3 +72,28 @@ misc/indiv_files/figure-html/**
 
 
 manuscript/.quarto/** 
+
+misc/*
+misc/**/*.qmd
+nb/*
+
+manuscript/test*
+*test_*
+docs/manuscript/test*
+docs/manuscript/output/test*
+docs/misc/**
+docs/misc/odds_ratio.qmd
+docs/misc/discrep.qmd
+docs/misc/indiv.qmd
+docs/misc/log_error.qmd
+docs/misc/odds_ratio.qmd
+
+
+misc/discrep.qmd
+misc/discrep.qmd
+misc/indiv.qmd
+misc/log_error.qmd
+misc/odds_ratio.qmd
+misc/ordinal.qmd
+nb/s1_survey.qmd
+nb/s2_survey.qmd
