@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.2">
+<meta name="generator" content="quarto-1.7.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-12-18">
+<meta name="dcterms.date" content="2025-01-04">
 <title>s1_survey – Representation Study</title>
 <style>
 code{white-space: pre-wrap;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07c16812f08c4a1591d6ec4fc46327fa.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ff4371ef257df69894857e99c6ad0d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-f5b7860a723b218349f74a396be16f4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 18, 2024</p>
+      <p class="date">January 4, 2025</p>
     </div>
   </div>
   
@@ -1408,14 +1408,20 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span>  <span class="va">ReferenceClass</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"kWh"</span>,</span>
 <span>  <span class="va">ReferenceClass</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"Percentage"</span></span>
 <span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">rename</span><span class="op">(</span>calc<span class="op">=</span><span class="va">MATH01</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co"># replace NA's in calc with 0's</span></span>
-<span>  <span class="fu">rename</span><span class="op">(</span>id2<span class="op">=</span><span class="va">ResponseId</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>id<span class="op">=</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">rename</span><span class="op">(</span>calc<span class="op">=</span><span class="va">MATH01</span>, </span>
+<span>         id2<span class="op">=</span><span class="va">ResponseId</span>,</span>
+<span>         gender<span class="op">=</span><span class="va">DEM01</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>id<span class="op">=</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">gender</span>, </span>
+<span>                        levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Not specified"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>calc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">calc</span><span class="op">)</span>,<span class="fl">0</span>,<span class="va">calc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">calc</span>, .after <span class="op">=</span> <span class="va">id</span><span class="op">)</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">calc</span>,<span class="va">gender</span>, .after <span class="op">=</span> <span class="va">id</span><span class="op">)</span> </span>
 <span></span>
 <span></span>
 <span><span class="va">els</span> <span class="op">&lt;-</span> <span class="va">s1</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">id</span>,<span class="va">id2</span>,<span class="va">calc</span>,<span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>, <span class="va">ELS01</span><span class="op">:</span><span class="va">ELS08</span><span class="op">)</span> </span>
+<span></span>
 <span></span>
 <span></span>
 <span><span class="va">els2</span> <span class="op">&lt;-</span> <span class="va">els</span> <span class="op">|&gt;</span> </span>

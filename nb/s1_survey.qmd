@@ -335,14 +335,20 @@ s1 <- s1 |>
   ReferenceClass == 2 ~ "kWh",
   ReferenceClass == 3 ~ "Percentage"
 )) |> 
-  rename(calc=MATH01) |>  # replace NA's in calc with 0's
-  rename(id2=ResponseId) |>
-  mutate(id=row_number()) |> relocate(id) |> 
+  rename(calc=MATH01, 
+         id2=ResponseId,
+         gender=DEM01) |>
+  mutate(id=row_number()) |> 
+  relocate(id) |> 
+  mutate(gender = factor(gender, 
+                        levels = c(1,2,3),
+                        labels = c("Male", "Female", "Not specified"))) |> 
   mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
-  relocate(refClass,state1,state2,calc, .after = id) 
+  relocate(refClass,state1,state2,calc,gender, .after = id) 
 
 
 els <- s1 |> select(id,id2,calc,refClass,state1,state2, ELS01:ELS08) 
+
 
 
 els2 <- els |> 

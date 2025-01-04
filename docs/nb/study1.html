@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.2">
+<meta name="generator" content="quarto-1.7.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta name="dcterms.date" content="2024-12-11">
+<meta name="dcterms.date" content="2025-01-04">
 <title>Study 1 Analysis – Representation Study</title>
 <style>
 code{white-space: pre-wrap;}
@@ -67,7 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07c16812f08c4a1591d6ec4fc46327fa.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ff4371ef257df69894857e99c6ad0d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-e03c50e8c3f1bd3b7c2308255287fc28.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 11, 2024</p>
+      <p class="date">January 4, 2025</p>
     </div>
   </div>
   
@@ -326,7 +326,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># s1 &lt;- haven::read_sav(here::here("data/data_qualtrics/Frequency &amp; Probability - 9-23-18_October 6, 2024_20.39.sav")) # length(unique(s1$ResponseId)) = 588</span></span>
 <span><span class="co"># qd &lt;- unique(s1$ResponseId)</span></span>
 <span></span>
-<span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_spss.html">read_sav</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/Frequency &amp; Probability Study 1 - 3-24-19.sav"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_spss.html">read_sav</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/Frequency &amp; Probability Study 1 - 3-24-19.sav"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">IPAddress</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#gd &lt;- unique(s1$ResponseId)</span></span>
 <span><span class="co"># gd %in% qd</span></span>
@@ -353,15 +353,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="va">ReferenceClass</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"kWh"</span>,</span>
 <span>  <span class="va">ReferenceClass</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"Percentage"</span></span>
 <span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">rename</span><span class="op">(</span>calc<span class="op">=</span><span class="va">MATH01</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="co"># replace NA's in calc with 0's</span></span>
-<span>  <span class="fu">rename</span><span class="op">(</span>id2<span class="op">=</span><span class="va">ResponseId</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>id<span class="op">=</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">rename</span><span class="op">(</span>calc<span class="op">=</span><span class="va">MATH01</span>, </span>
+<span>         id2<span class="op">=</span><span class="va">ResponseId</span>,</span>
+<span>         gender<span class="op">=</span><span class="va">DEM01</span>,</span>
+<span>         byear<span class="op">=</span><span class="va">DEM02</span>,</span>
+<span>         edu<span class="op">=</span><span class="va">DEM04</span>,</span>
+<span>         duration<span class="op">=</span><span class="va">Duration__in_seconds_</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>id<span class="op">=</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">RecordedDate</span>, <span class="st">"%Y"</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="va">byear</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>edu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu">case_when</span><span class="op">(</span></span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Some schooling, but no diploma or degree"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"Highschool diploma or GED"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"Some college"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">~</span> <span class="st">"College degree"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">5</span> <span class="op">~</span> <span class="st">"Some graduate school"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">~</span> <span class="st">"Graduate degree"</span>,</span>
+<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">7</span> <span class="op">~</span> <span class="st">"Choose not to answer"</span>,</span>
+<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">gender</span>, </span>
+<span>                        levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Not specified"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>calc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">calc</span><span class="op">)</span>,<span class="fl">0</span>,<span class="va">calc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">calc</span>, .after <span class="op">=</span> <span class="va">id</span><span class="op">)</span> </span>
+<span>  <span class="fu">relocate</span><span class="op">(</span><span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">calc</span>,<span class="va">gender</span>,<span class="va">byear</span>,<span class="va">age</span>,<span class="va">RecordedDate</span>,<span class="va">edu</span>, .after <span class="op">=</span> <span class="va">id</span><span class="op">)</span> </span>
+<span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Energy Literacy Score (ELS)</span></span>
-<span></span>
 <span><span class="va">els</span> <span class="op">&lt;-</span> <span class="va">s1</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">id</span>,<span class="va">id2</span>,<span class="va">calc</span>,<span class="va">refClass</span>,<span class="va">state1</span>,<span class="va">state2</span>, <span class="va">ELS01</span><span class="op">:</span><span class="va">ELS08</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">els2</span> <span class="op">&lt;-</span> <span class="va">els</span> <span class="op">|&gt;</span> </span>
@@ -394,21 +413,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    <span class="fu">summarize</span><span class="op">(</span>els<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">correct</span><span class="op">==</span><span class="st">"Correct"</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">"drop"</span><span class="op">)</span> </span>
 <span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="va">s1</span> <span class="op">|&gt;</span> <span class="fu">rename</span><span class="op">(</span>edu<span class="op">=</span><span class="va">DEM04</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>edu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu">case_when</span><span class="op">(</span></span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"Some schooling, but no diploma or degree"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">~</span> <span class="st">"Highschool diploma or GED"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">3</span> <span class="op">~</span> <span class="st">"Some college"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">~</span> <span class="st">"College degree"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">5</span> <span class="op">~</span> <span class="st">"Some graduate school"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">~</span> <span class="st">"Graduate degree"</span>,</span>
-<span>    <span class="va">edu</span> <span class="op">==</span> <span class="fl">7</span> <span class="op">~</span> <span class="st">"Choose not to answer"</span>,</span>
-<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
-<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">edu</span>, .after <span class="op">=</span> <span class="va">id</span><span class="op">)</span> </span>
-<span></span>
 <span><span class="co"># colnames(s1)</span></span>
 <span><span class="co"># colnames(s1)[1000:1500]</span></span>
 <span><span class="co"># colnames(s1)[1500:1843]</span></span>
@@ -417,11 +421,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co"># s12 &lt;- s1 |&gt; select(id,state1,state2,refClass,calc,edu,starts_with("A")) |&gt; </span></span>
 <span><span class="co">#   select(-starts_with("AIND"))</span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
-<span> </span>
-<span> </span>
 <span><span class="co"># </span></span>
 <span><span class="co"># t &lt;- s12 |&gt; filter(state1=="Texas") |&gt; </span></span>
 <span><span class="co">#   # select only columns that contain "TEX" in the name</span></span>
@@ -449,9 +448,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co"># states &lt;- c(CAL = "California", MASS = "Massachusetts", COL = "Colorado", TEX = "Texas")</span></span>
 <span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
 <span><span class="va">parse_action_plan</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">action_plan_cols</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
@@ -469,7 +465,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>      names_to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"modality"</span>, <span class="st">"state"</span>, <span class="st">"item_num"</span><span class="op">)</span>,</span>
 <span>      names_pattern <span class="op">=</span> <span class="st">"^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$"</span>,</span>
 <span>      values_to <span class="op">=</span> <span class="st">"value"</span></span>
-<span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">id</span>,<span class="va">id2</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">refClass</span>,<span class="va">calc</span>,<span class="va">edu</span>,<span class="va">modality</span>,<span class="va">state</span>,<span class="va">item_num</span>,<span class="va">value</span>,<span class="va">Duration__in_seconds_</span><span class="op">)</span> </span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">id</span>,<span class="va">id2</span>,<span class="va">state1</span>,<span class="va">state2</span>,<span class="va">refClass</span>,<span class="va">calc</span>,<span class="va">age</span>,<span class="va">gender</span>,<span class="va">edu</span>,<span class="va">modality</span>,<span class="va">state</span>,<span class="va">item_num</span>,<span class="va">value</span>,<span class="va">duration</span><span class="op">)</span> </span>
 <span>  </span>
 <span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="va">df_long</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
@@ -533,8 +529,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co"># join with els_id, by id,id2,state1,state2,refClass</span></span>
 <span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="va">s1</span> <span class="op">|&gt;</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">els_id</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id"</span>,<span class="st">"id2"</span>,<span class="st">"state1"</span>,<span class="st">"state2"</span>,<span class="st">"refClass"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">relocate</span><span class="op">(</span><span class="va">els</span>,.after<span class="op">=</span><span class="va">appliance</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="co">#saveRDS(s1, here::here("data/s1_processed.rds"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">s1</span>, <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/s1_processed.rds"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"data/s1_processed.rds"</span><span class="op">)</span><span class="op">)</span></span>

@@ -39,7 +39,7 @@ theme_set(theme_nice())
 # s1 <- haven::read_sav(here::here("data/data_qualtrics/Frequency & Probability - 9-23-18_October 6, 2024_20.39.sav")) # length(unique(s1$ResponseId)) = 588
 # qd <- unique(s1$ResponseId)
 
-s1 <- haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav"))
+s1 <- haven::read_sav(here::here("data/Frequency & Probability Study 1 - 3-24-19.sav")) |> select(-IPAddress)
 
 #gd <- unique(s1$ResponseId)
 # gd %in% qd
@@ -66,15 +66,34 @@ s1 <- s1 |>
   ReferenceClass == 2 ~ "kWh",
   ReferenceClass == 3 ~ "Percentage"
 )) |> 
-  rename(calc=MATH01) |>  # replace NA's in calc with 0's
-  rename(id2=ResponseId) |>
-  mutate(id=row_number()) |> relocate(id) |> 
+  rename(calc=MATH01, 
+         id2=ResponseId,
+         gender=DEM01,
+         byear=DEM02,
+         edu=DEM04,
+         duration=Duration__in_seconds_) |>
+  mutate(id=row_number(),
+  age=as.numeric(format(RecordedDate, "%Y")) - byear) |> 
+    mutate(edu = factor(case_when(
+    edu == 1 ~ "Some schooling, but no diploma or degree",
+    edu == 2 ~ "Highschool diploma or GED",
+    edu == 3 ~ "Some college",
+    edu == 4 ~ "College degree",
+    edu == 5 ~ "Some graduate school",
+    edu == 6 ~ "Graduate degree",
+    edu == 7 ~ "Choose not to answer",
+    TRUE ~ NA_character_
+  ))) |>
+  relocate(id) |> 
+  mutate(gender = factor(gender, 
+                        levels = c(1,2,3),
+                        labels = c("Male", "Female", "Not specified"))) |> 
   mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
-  relocate(refClass,state1,state2,calc, .after = id) 
+  relocate(refClass,state1,state2,calc,gender,byear,age,RecordedDate,edu, .after = id) 
+
 
 
 # Energy Literacy Score (ELS)
-
 els <- s1 |> select(id,id2,calc,refClass,state1,state2, ELS01:ELS08) 
 
 els2 <- els |> 
@@ -107,21 +126,6 @@ els_id <- els2 |> group_by(id,id2,state1,state2,refClass) |>
     summarize(els=mean(correct=="Correct"), .groups="drop") 
 
 
-
-
-
-s1 <- s1 |> rename(edu=DEM04) |>
-  mutate(edu = factor(case_when(
-    edu == 1 ~ "Some schooling, but no diploma or degree",
-    edu == 2 ~ "Highschool diploma or GED",
-    edu == 3 ~ "Some college",
-    edu == 4 ~ "College degree",
-    edu == 5 ~ "Some graduate school",
-    edu == 6 ~ "Graduate degree",
-    edu == 7 ~ "Choose not to answer",
-    TRUE ~ NA_character_
-  ))) |> relocate(edu, .after = id) 
-
 # colnames(s1)
 # colnames(s1)[1000:1500]
 # colnames(s1)[1500:1843]
@@ -130,11 +134,6 @@ s1 <- s1 |> rename(edu=DEM04) |>
 # s12 <- s1 |> select(id,state1,state2,refClass,calc,edu,starts_with("A")) |> 
 #   select(-starts_with("AIND"))
 
-
-
-
- 
- 
 # 
 # t <- s12 |> filter(state1=="Texas") |> 
 #   # select only columns that contain "TEX" in the name
@@ -162,9 +161,6 @@ dAll <- s1 %>%
 # states <- c(CAL = "California", MASS = "Massachusetts", COL = "Colorado", TEX = "Texas")
 
 
-
-
-
 parse_action_plan <- function(df) {
   
   action_plan_cols <- df %>% 
@@ -182,7 +178,7 @@ parse_action_plan <- function(df) {
       names_to = c("modality", "state", "item_num"),
       names_pattern = "^([ADP])\\d+(CAL|MASS|COL|TEX)(\\d+)$",
       values_to = "value"
-    ) |> select(id,id2,state1,state2,refClass,calc,edu,modality,state,item_num,value,Duration__in_seconds_) 
+    ) |> select(id,id2,state1,state2,refClass,calc,age,gender,edu,modality,state,item_num,value,duration) 
   
   df_long <- df_long |> 
   mutate(
@@ -246,8 +242,7 @@ s1 <- s1 |>
 # join with els_id, by id,id2,state1,state2,refClass
 s1 <- s1 |> left_join(els_id, by=c("id","id2","state1","state2","refClass")) |> relocate(els,.after=appliance)
 
-
-#saveRDS(s1, here::here("data/s1_processed.rds"))
+saveRDS(s1, here::here("data/s1_processed.rds"))
 
 ```
 

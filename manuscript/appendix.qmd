@@ -164,7 +164,7 @@ s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |>
 
 
 ```{r}
-
+#| eval: false
 # widen by appliance, with separate row for value, family, and stage_avg
 
 s2 <- s2_long #|> select(-family,-state_avg,-edu,-change,-state_dif) |> pivot_wider(names_from = appliance, values_from = c(value)) 
@@ -186,7 +186,6 @@ s2s <- s2_long |> select(-family,-state_avg,-edu,-change,-value) |> pivot_wider(
 
 # clustering planning strategies - kmeans 
 
-    ‘
 s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) 
 s2s_clust <- s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) %>% .$cluster |> as.factor() 
 s2s <- cbind(s2s,c=s2s_clust)
