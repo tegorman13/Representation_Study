@@ -65,12 +65,12 @@ s2 <- s2 |>
   REFERENCECLASS == 2 ~ "kWh",
   REFERENCECLASS == 3 ~ "Percentage"
 )) |> 
-  rename(calc=MATH01) |>  # replace NA's in calc with 0's
-  mutate(calc=factor(ifelse(is.na(calc),0,calc))) |> 
-  mutate(calc = if_else(calc == 0, "No Calculator", "Calculator")) |> 
-  relocate(refClass,state1,state2,calc, .after = id) 
-
-s2 <- s2 |> rename(edu=DEM04) |>
+  rename(calc=MATH01, 
+         gender=DEM01,
+         byear=DEM02,
+         edu=DEM04) |> 
+  mutate(duration=as.numeric(difftime(lubridate::as_datetime(EndDate), lubridate::as_datetime(StartDate), units = "secs")),
+  age=as.numeric(format(StartDate, "%Y")) - byear) |> 
   mutate(edu = factor(case_when(
     edu == '1' ~ "Some schooling, but no diploma or degree",
     edu == 2 ~ "Highschool diploma or GED",
@@ -80,7 +80,14 @@ s2 <- s2 |> rename(edu=DEM04) |>
     edu == 6 ~ "Graduate degree",
     edu == 7 ~ "Choose not to answer",
     TRUE ~ NA_character_
-  ))) |> relocate(edu, .after = id) 
+  ))) |> 
+  mutate(gender = factor(gender, 
+                      levels = c(1,2,3),
+                      labels = c("Male", "Female", "Not specified"))) |> 
+  mutate(calc=factor(ifelse(is.na(calc),0,calc))) |>  # replace NA's in calc with 0's
+  mutate(calc = if_else(calc == 0, "No Calculator", "Calculator")) |> 
+  relocate(refClass,state1,state2,calc,gender,age,byear,edu,duration, .after = id) 
+
 
 
 
@@ -124,7 +131,7 @@ els_id <- els2 |> group_by(id,calc,refClass) |>
 ```{r}
 #| eval: false
 
-s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, calc, edu,ACFAMILY1:TOTALAPTWO1) |> 
+s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, calc,age,gender,edu,duration,ACFAMILY1:TOTALAPTWO1) |> 
   mutate( 
     block = 1,
     state=state1,
@@ -134,7 +141,7 @@ s2_b1 <- s2 |> select(id,state1,refClass,TENPERCENT,ROUNDED, calc, edu,ACFAMILY1
   ) |> relocate(id,block,refClass,pct_goal,rounded,state)  |> 
   select(-TENPERCENT,-ROUNDED, -state1)
 
-s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED, calc,edu,ACFAMILY2:TOTALAPTWO2) |> 
+s2_b2 <- s2 |> select(id,state2,refClass,TENPERCENT,ROUNDED,calc,age,gender,edu,duration,ACFAMILY2:TOTALAPTWO2) |> 
   mutate( 
     block = 2,
     state=state2,
