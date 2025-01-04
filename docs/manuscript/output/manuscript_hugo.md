@@ -1,60 +1,5 @@
 ---
 title: 'Planning to Save Energy: How Information Format Affects Accuracy'
-aliases:
-  - /manuscript.html
-format:
-  wordcount-html:
-    wordcount-banner: true
-    theme:
-      - zephyr
-      - ../assets/custom.scss
-    toc: true
-    shift-heading-level-by: 1
-    title-block-banner: '#000D51'
-    include-in-header:
-      - text: |
-          <style type="text/css">
-          h2.hide {
-              display: none;
-          }
-          </style>
-  html:
-    echo: true
-    code-fold: show
-    output-file: manuscript-code.html
-  hugo-md:
-    include: false
-    echo: false
-    html-math-method: mathjax
-    output-file: manuscript_hugo.md
-    suppress-bibliography: true
-  gfm:
-    echo: true
-    output-file: manuscript_gfm.md
-    suppress-bibliography: true
-  hikmah-manuscript-pdf:
-    output-file: rep_study.pdf
-    mainfont: Linux Libertine O
-    mainfontoptions:
-      - Numbers=Proportional
-      - Numbers=OldStyle
-    mathfont: Libertinus Math
-    knitr:
-      opts_chunk:
-        dev: cairo_pdf
-  docx: default
-format-links:
-  - text: HTML
-    href: manuscript.html
-    icon: file-minus
-  - text: HTML (with code)
-    href: manuscript-code.html
-    icon: file-plus
-  - format: hikmah-manuscript-pdf
-    text: PDF version
-    icon: file-pdf
-  - docx
-  - gfm
 date: 2024-12-07T00:00:00.000Z
 abstract: >
   Effective communication of energy consumption information is crucial for
@@ -76,15 +21,16 @@ abstract: >
 ---
 
 
+
+# Current draft of: Planning to Save Energy: How Information Format Affects Accuracy
+
+# Abstract
+
+Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
+
 # Introduction
 
--   highlight the significant contribution of residential energy consumption to carbon emissions and the potential for substantial reductions. Make point about urgency of climate change? (IPCC (2014) and EIA (2012) ).
-
--   Electricity bills are a primary source of energy-use information for consumers and offer a promising avenue for enhancing communication about energy consumption (Fischer, 2008)
-
-### Literature Review
-
-Energy poverty continues to be a pervasive issue in the United States (Memmott et al., 2021). This challenge partly arises from difficulties in converting information across numerical formats, impeding the development of precise energy reduction plans Reimer et al. (2015). Prior research by Canfield et al. (2017) demonstrated that presenting energy information in tabular formats enhances comprehension relative to graphs. Nevertheless, persistent difficulties remain in conveying energy data in formats that foster accurate consumer judgments and planning, as consumers often lack intuitive benchmarks for interpreting abstract units such as kilowatt-hours (Attari et al., 2010).
+Electricity bills are a frequent touchpoint for consumers seeking to understand their energy usage, yet effectively turning that billing data into practical steps can be demanding. Among low-income households, these challenges contribute to disproportionate rates of energy insecurity (Memmott et al., 2021). At the same time, previous research shows that the clarity and format of energy-use information play a pivotal role in whether individuals adopt meaningful conservation behaviors (Attari et al., 2010; Canfield et al., 2017; Fischer, 2008). The interplay of these factors indicates that how energy data is presented can substantially shape not only how people interpret their consumption but also the degree to which they modify their habits to save energy.
 
 The way numerical information is presented can significantly affect how individuals process and use that information (Reimer et al., 2015). The reference class problem highlights that numbers without clear reference points can lead to misinterpretation, as the meaning of a statistic depends on the category or class it refers to (Gigerenzer & Edwards, 2003; Reimer et al., 2015). Presenting energy information in absolute units (e.g., kWh) provides a clear reference class, potentially enhancing comprehension. Indeed, the manner in which energy information is presented has been shown to significantly influence both comprehension and subsequent behavior (Canfield et al., 2017). For example, the use of tables has been found to facilitate point-reading, essential for understanding specific energy values, while graphs may be more useful in tasks requiring more complex information interpretation (Canfield et al., 2017).
 
@@ -92,7 +38,9 @@ The concept of cognitive fit posits that performance improves when the informati
 
 Evidence from research on energy consumption feedback, normative comparisons, and eco-feedback platforms suggests that comprehensible and contextually meaningful data presentations can improve users' ability to plan reductions, especially when these formats are integrated into daily routines (Canfield et al., 2017; Fischer, 2008; Kim et al., 2022; Schwartz et al., 2015). Furthermore, temporal and monetary frames have been shown to alter decision quality, with monthly costs or absolute consumption levels often encouraging more energy-efficient intentions than abstract annual or percentage-based metrics (Gill et al., 2022; Larrick & Soll, 2008). In this context, tailoring reference classes to align with intuitive cognitive processes can help bridge the gap between aggregate reduction goals and targeted, appliance-specific conservation strategies.
 
-Furthermore, research suggests that natural frequencies and absolute numbers are generally easier for individuals to understand compared to percentages or probabilities Hoffrage et al. (2000). In the context of energy conservation, using absolute units may facilitate more accurate planning and decision-making by aligning with intuitive cognitive processing.
+Furthermore, research suggests that natural frequencies and absolute numbers are generally easier for individuals to understand compared to percentages or probabilities Hoffrage et al. (2000). In the context of energy conservation, using absolute units may facilitate more accurate planning and decision-making by aligning with intuitive cognitive processing. However, it's important to note that even intuitive formats can pose challenges. Weber et al. (2018) found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. This suggests that merely changing the information format may not be sufficient; understanding how consumers process and utilize this information is crucial.
+
+Although prior research shows that energy-use information must be intelligible and action-oriented (Attari et al., 2010; Canfield et al., 2017), many consumers still have difficulty converting broad guidance ("use less energy") into targeted appliance-level plans. As highlighted by Abrahamse et al. (2005), information alone, without concrete guidance on how to distribute reductions across appliances or times of use, may fail to encourage meaningful change. Moreover, a meta-analysis by Nemati & Penn (2020) revealed that interventions featuring frequent, household-level feedback, particularly when combined with social norm information and monetary incentives, are significantly more effective in driving conservation. Similar findings emerge in contexts beyond electricity. For instance, Tonke (2024) reports that offering residents a short but actionable list of water-saving strategies---rather than a generic call to conserve---led to a measurable decrease in residential water consumption. These results suggest that equipping consumers with procedure-focused instructions can complement abstract energy-saving goals.
 
 Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers' ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy.
 
@@ -264,6 +212,59 @@ Karjalainen 2011 - people prefer information about price (Karjalainen, 2011)
 
 Mention Blasch et al. (2019) - better long-term appliance selection with information presented in monetary terms.
 
-
 
 # References
+
+Abrahamse, W., Steg, L., Vlek, C., & Rothengatter, T. (2005). A review of intervention studies aimed at household energy conservation. *Journal of Environmental Psychology*, *25*(3), 273--291. <https://doi.org/10.1016/j.jenvp.2005.08.002>
+
+Attari, S. Z., DeKay, M. L., Davidson, C. I., & Bruine De Bruin, W. (2010). Public perceptions of energy consumption and savings. *Proceedings of the National Academy of Sciences*, *107*(37), 16054--16059. <https://doi.org/10.1073/pnas.1001509107>
+
+Blasch, J., Filippini, M., & Kumar, N. (2019). Boundedly rational consumers, energy and investment literacy, and the display of information on household appliances. *Resource and Energy Economics*, *56*, 39--58. <https://doi.org/10.1016/j.reseneeco.2017.06.001>
+
+Bürkner, P.-C. (2017). Brms: An R Package for Bayesian Multilevel Models Using Stan. *Journal of Statistical Software*, *80*, 1--28. <https://doi.org/10.18637/jss.v080.i01>
+
+Canfield, C., Bruine De Bruin, W., & Wong-Parodi, G. (2017). Perceptions of electricity-use communications: Effects of information, format, and individual differences. *Journal of Risk Research*, *20*(9), 1132--1153. <https://doi.org/10.1080/13669877.2015.1121909>
+
+DeWaters, J. E., & Powers, S. E. (2011). Energy literacy of secondary students in New York State (USA): A measure of knowledge, affect, and behavior. *Energy Policy*, *39*(3), 1699--1710. <https://doi.org/10.1016/j.enpol.2010.12.049>
+
+Fischer, C. (2008). Feedback on household electricity consumption: A tool for saving energy? *Energy Efficiency*, *1*(1), 79--104. <https://doi.org/10.1007/s12053-008-9009-7>
+
+Gigerenzer, G., & Edwards, A. (2003). Simple tools for understanding risks: From innumeracy to insight. *BMJ*, *327*(7417), 741--744. <https://doi.org/10.1136/bmj.327.7417.741>
+
+Gigerenzer, G., & Hoffrage, U. (1995). How to improve Bayesian reasoning without instruction: Frequency formats. *Psychological Review*, *102*(4), 684--704. <https://doi.org/10.1037/0033-295X.102.4.684>
+
+Gill, C. A., Atlas, S. A., Hardisty, D. J., & Scott, S. P. (2022). Consumer matching costs to context: Status quo bias, temporal framing, and household energy decisions. *Journal of Consumer Behaviour*, *21*(5), 1018--1027. <https://doi.org/10.1002/cb.2051>
+
+Hahnel, U. J. J., Chatelain, G., Conte, B., Piana, V., & Brosch, T. (2020). Mental accounting mechanisms in energy decision-making and behaviour. *Nature Energy*, *5*(12), 952--958. <https://doi.org/10.1038/s41560-020-00704-6>
+
+Herberz, M., Brosch, T., & Hahnel, U. J. J. (2020). Kilo what? Default units increase value sensitivity in joint evaluations of energy efficiency. *Judgment and Decision Making*, *15*(6), 972--988. <https://doi.org/10.1017/S1930297500008172>
+
+Hoffrage, U., Lindsey, S., Hertwig, R., & Gigerenzer, G. (2000). Communicating Statistical Information. *Science*, *290*(5500), 2261--2262. <https://doi.org/10.1126/science.290.5500.2261>
+
+Karjalainen, S. (2011). Consumer preferences for feedback on household electricity consumption. *Energy and Buildings*, *43*(2-3), 458--467. <https://doi.org/10.1016/j.enbuild.2010.10.010>
+
+Kim, H., Ham, S., Promann, M., Devarapalli, H., Bihani, G., Ringenberg, T., Kwarteng, V., Bilionis, I., Braun, J. E., Rayz, J. T., Raymond, L., Reimer, T., & Karava, P. (2022). MySmartE -- An eco-feedback and gaming platform to promote energy conserving thermostat-adjustment behaviors in multi-unit residential buildings. *Building and Environment*, *221*, 109252. <https://doi.org/10.1016/j.buildenv.2022.109252>
+
+Larrick, R. P., & Soll, J. B. (2008). The MPG Illusion. *Science*, *320*(5883), 1593--1594. <https://doi.org/10.1126/science.1154983>
+
+Memmott, T., Carley, S., Graff, M., & Konisky, D. M. (2021). Sociodemographic disparities in energy insecurity among low-income households before and during the COVID-19 pandemic. *Nature Energy*, *6*(2), 186--193. <https://doi.org/10.1038/s41560-020-00763-9>
+
+Nemati, M., & Penn, J. (2020). The impact of information-based interventions on conservation behavior: A meta-analysis. *Resource and Energy Economics*, *62*, 101201. <https://doi.org/10.1016/j.reseneeco.2020.101201>
+
+Reimer, T., Jones, C., & Skubisz, C. (2015). Numeric Communication of Risk. In *The SAGE handbook of risk communication* (pp. 167--179).
+
+Schwartz, T., Stevens, G., Jakobi, T., Denef, S., Ramirez, L., Wulf, V., & Randall, D. (2015). What People Do with Consumption Feedback: A Long-Term Living Lab Study of a Home Energy Management System. *Interacting with Computers*, *27*(6), 551--576. <https://doi.org/10.1093/iwc/iwu009>
+
+Shah, P., & Freedman, E. G. (2011). Bar and Line Graph Comprehension: An Interaction of Top-Down and Bottom-Up Processes. *Topics in Cognitive Science*, *3*(3), 560--578. <https://doi.org/10.1111/j.1756-8765.2009.01066.x>
+
+Team, R. C. (2020). *R: A Language and Environment for Statistical Computing*. R: A Language and Environment for Statistical Computing.
+
+Tonke, S. (2024). Providing procedural knowledge: A field experiment to encourage resource conservation in Namibia. *Journal of Development Economics*, *166*, 103202. <https://doi.org/10.1016/j.jdeveco.2023.103202>
+
+Ungemach, C., Camilleri, A. R., Johnson, E. J., Larrick, R. P., & Weber, E. U. (2018). Translated Attributes as Choice Architecture: Aligning Objectives and Choices Through Decision Signposts. *Management Science*, *64*(5), 2445--2459. <https://doi.org/10.1287/mnsc.2016.2703>
+
+Vessey, I. (1991). Cognitive Fit: A Theory-Based Analysis of the Graphs Versus Tables Literature. *Decision Sciences*, *22*(2), 219--240. <https://doi.org/10.1111/j.1540-5915.1991.tb00344.x>
+
+Weber, P., Binder, K., & Krauss, S. (2018). Why Can Only 24% Solve Bayesian Reasoning Problems in Natural Frequencies: Frequency Phobia in Spite of Probability Blindness. *Frontiers in Psychology*, *9*, 1833. <https://doi.org/10.3389/fpsyg.2018.01833>
+
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., ... Yutani, H. (2019). Welcome to the Tidyverse. *Journal of Open Source Software*, *4*(43), 1686. <https://doi.org/10.21105/joss.01686>

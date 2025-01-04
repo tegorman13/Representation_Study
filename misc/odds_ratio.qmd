@@ -899,7 +899,6 @@ odds_ratio_summary_s2 |> pander::pandoc.table(caption="Study 2: Odds ratios of a
 
 ```{r}
 
-
 ordinal_model_s2_logit_int2 <- brm(
   accuracy_level ~ refClass +(rounded*pct_goal) + (1|id)+ (1|state),
   data = s2_agg,

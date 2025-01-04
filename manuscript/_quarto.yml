@@ -15,7 +15,7 @@ execute:
   include: true
   freeze: auto
   cache: true
-  echo: false
+  #echo: false
 
 
 

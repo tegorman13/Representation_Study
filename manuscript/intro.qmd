@@ -1,5 +1,3 @@
-
-
 # Planning to Save Energy: How Information Format Affects Accuracy
 
 ## Abstract
@@ -8,39 +6,30 @@ Effective communication of energy consumption information is crucial for promoti
 
 ## Introduction
 
-
-The need to promote sustainable household energy consumption has become increasingly urgent as the demand for energy continues to rise, placing both financial and environmental burdens on individuals and society (DeWaters & Powers, 2011, Memmott et al., 2021).  Interventions aimed at changing households’ energy behaviors have often focused on providing information, but research suggests that simply offering more or different content is not always sufficient (Abrahamse et al., 2005; Fischer, 2008). Instead, it may be necessary to consider the way that energy information is presented, as the chosen format could influence whether individuals can effectively use it to plan for energy reductions (Canfield et al., 2017; Herrmann et al., 2018).
+The need to promote sustainable household energy consumption has become increasingly urgent as the demand for energy continues to rise, placing both financial and environmental burdens on individuals and society (DeWaters & Powers, 2011, Memmott et al., 2021). Interventions aimed at changing households’ energy behaviors have often focused on providing information, but research suggests that simply offering more or different content is not always sufficient (Abrahamse et al., 2005; Fischer, 2008). Instead, it may be necessary to consider the way that energy information is presented, as the chosen format could influence whether individuals can effectively use it to plan for energy reductions (Canfield et al., 2017; Herrmann et al., 2018).
 
 Research in numerical cognition demonstrates that format significantly affects how individuals process information. Presenting numerical values without clear reference points can lead to misinterpretations (Gigerenzer & Edwards, 2003; Reimer et al., 2015). While seemingly straightforward, formats like percentages often require additional mental processing, making comparisons less intuitive. Conversely, absolute units, such as kilowatt-hours (kWh), offer a concrete reference point for energy consumption. Providing information in absolute units may better align with natural cognitive tendencies to think in concrete frequencies or units (Hoffrage et al., 2000), reducing cognitive load and increasing planning precision.
-
 
 **Procedural Knowledge and Action Planning**
 
 Another related challenge is bridging the gap between general awareness and the specific steps needed to reduce energy use. Even individuals who wish to save energy may struggle to translate high-level goals into detailed action plans, a process requiring what can be viewed as procedural knowledge: the skills to develop and implement effective strategies (Abrahamse et al., 2005; Attari & Rajagopal, 2015; von Grabe, 2020). To create meaningful conservation efforts, individuals must be able to use the provided data—presented in certain units or formats—to identify where to focus, assess trade-offs, and devise actionable steps. Format matters in this context because it can facilitate or hinder the calculations and estimations needed to allocate time, money, and effort toward efficient energy use (Canfield et al., 2017; Herberz et al., 2020; Schwartz et al., 2015).
 
-
-
-
-
 ### Hypotheses
 
-Building on prior work on how numerical formats influence understanding and action (Canfield et al., 2017; Gigerenzer & Hoffrage, 1995; Reimer et al., 2015), the present study examines how the choice of representing energy data—specifically in kWh, percentages, or USD—affects the accuracy of people’s energy reduction plans. We focus on whether certain formats make it easier to identify targeted actions and thereby improve planning precision.  We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.
-
-
-
+Building on prior work on how numerical formats influence understanding and action (Canfield et al., 2017; Gigerenzer & Hoffrage, 1995; Reimer et al., 2015), the present study examines how the choice of representing energy data—specifically in kWh, percentages, or USD—affects the accuracy of people’s energy reduction plans. We focus on whether certain formats make it easier to identify targeted actions and thereby improve planning precision. We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.
 
 ## Methods
 
 ### Participants
 
-We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were initially recruited, but data from 17 participants were corrupted due to experimenter error, leaving a final sample of 235 participants. Most participants (76%) reported using a calculator to complete the task. 
+We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were initially recruited, but data from 17 participants were corrupted due to experimenter error, leaving a final sample of 235 participants. Most participants (76%) reported using a calculator to complete the task.
 
-### Materials and Design 
+### Materials and Design
 
-The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states, with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. We obtain average utility use from each state by CITE SOURCE FOR STATE AVGS? 
+The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states, with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. We obtain average utility use from each state by CITE SOURCE FOR STATE AVGS?
 
 ### Procedure
 
-Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories:  heating, cooling, water heating, refrigerator, and and other appliances (e.g., TV, lighting).
+Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and and other appliances (e.g., TV, lighting).
 
-For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. 
+For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.

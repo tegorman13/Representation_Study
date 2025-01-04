@@ -148,6 +148,81 @@ s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |>
 
 
 
+# A tibble: 4,560 × 17
+# Groups:   id, block [380]
+   id     block refClass appliance pct_goal rounded state    calc       edu                         els   pct family state_avg plan  value change state_dif
+   <chr>  <dbl> <fct>    <chr>     <chr>    <chr>   <chr>    <chr>      <fct>                     <dbl> <dbl>  <dbl>     <dbl> <fct> <dbl>  <dbl>     <dbl>
+ 1 s2_100     1 kWh      AC        10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1   1000       498 plan1   500   -500         2
+ 2 s2_100     1 kWh      AC        10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1   1000       498 plan2   300   -700      -198
+ 3 s2_100     1 kWh      HEAT      10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1  18000     16411 plan1 15000  -3000     -1411
+ 4 s2_100     1 kWh      HEAT      10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1  18000     16411 plan2 12000  -6000     -4411
+ 5 s2_100     1 kWh      WATER     10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1  12000      5832 plan1  6000  -6000       168
+ 6 s2_100     1 kWh      WATER     10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1  12000      5832 plan2  2000 -10000     -3832
+ 7 s2_100     1 kWh      REFRIG    10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1   1000      1142 plan1  2000   1000       858
+ 8 s2_100     1 kWh      REFRIG    10%      Rounded Colorado Calculator Highschool diploma or GED 0.875   0.1   1000      1142 plan2   500   -500      -642
+
+
+
+```{r}
+
+# widen by appliance, with separate row for value, family, and stage_avg
+
+s2 <- s2_long #|> select(-family,-state_avg,-edu,-change,-state_dif) |> pivot_wider(names_from = appliance, values_from = c(value)) 
+s2s <- s2_long |> select(-family,-state_avg,-edu,-change,-value) |> pivot_wider(names_from = appliance, values_from = c(state_dif)) |> select(id,block,refClass,pct,plan,AC:OTHER)
+# s2s
+#    id     block refClass     pct plan     AC   HEAT WATER REFRIG OTHER
+#    <chr>  <dbl> <fct>      <dbl> <fct> <dbl>  <dbl> <dbl>  <dbl> <dbl>
+#  1 s2_100     1 kWh         0.1  plan1     2  -1411   168    858   348
+#  2 s2_100     1 kWh         0.1  plan2  -198  -4411 -3832   -642 -6152
+#  3 s2_100     2 kWh         0.15 plan1  1324     19  -139    320  -424
+#  4 s2_100     2 kWh         0.15 plan2   324   -981 -1139   -318 -1424
+#  5 s2_101     1 kWh         0.1  plan1   102   -411  2168   -142   398
+#  6 s2_101     1 kWh         0.1  plan2   502  -1411   168   -142  1348
+#  7 s2_101     2 kWh         0.15 plan1   751    901  -396    682 -1883
+#  8 s2_101     2 kWh         0.15 plan2  2251    401   104    682 -1383
+#  9 s2_102     1 Percentage  0.1  plan1   958 -12954 -5354    200 -5417
+# 10 s2_102     1 Percentage  0.1  plan2   890 -15435 -4956   8544  3225
+
+
+# clustering planning strategies - kmeans 
+
+    ‘
+s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) 
+s2s_clust <- s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) %>% .$cluster |> as.factor() 
+s2s <- cbind(s2s,c=s2s_clust)
+
+s2s |>    group_by(c) |>
+  summarise(ac=mean(AC),heat=mean(HEAT),water=mean(WATER),refrig=mean(REFRIG),other=mean(OTHER)) |>
+  pivot_longer(cols = c(ac:other), names_to = "Appliance", values_to = "Mean") |>
+  ggplot(aes(x=Appliance,y=Mean,col=c)) + 
+  geom_point() + 
+  facet_wrap(~c) +
+  theme_minimal() 
+
+
+
+s2s <- s2_long |> select(-family,-state_avg,-edu,-change,-state_dif) |> pivot_wider(names_from = appliance, values_from = c(value))  |> select(id,block,refClass,pct,plan,AC:OTHER)
+
+
+s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) 
+
+s2s_clust <- s2s |>  ungroup() |> select(-id,-block,-refClass,-pct,-plan) |> scale(center = TRUE, scale = TRUE) |> kmeans(centers = 3) %>% .$cluster |> as.factor() 
+
+s2s <- cbind(s2s,c=s2s_clust) |> left_join(s2, join_by(id,refClass,block,plan,pct))
+s2s |>  group_by(c) |>
+  summarise(ac=mean(AC),heat=mean(HEAT),water=mean(WATER),refrig=mean(REFRIG),other=mean(OTHER)) |>
+  pivot_longer(cols = c(ac:other), names_to = "Appliance", values_to = "Mean") |>
+  ggplot(aes(x=Appliance,y=Mean,col=c)) + 
+  geom_point() + 
+  geom_point(aes(y=state_avg),color="black") +
+  facet_wrap(~c) +
+  theme_minimal() 
+
+s2 |> group_by(appliance,family,state,state_avg) |> select(appliance,family_prior_yr=family,state,state_avg)
+```
+
+
+
 ## Study 1
 
 
