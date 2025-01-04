@@ -1,5 +1,62 @@
 ---
 title: 'Planning to Save Energy: How Information Format Affects Accuracy'
+aliases:
+  - /manuscript.html
+format:
+  wordcount-html:
+    wordcount-banner: true
+    echo: false
+    theme:
+      - zephyr
+      - ../assets/custom.scss
+    toc: true
+    shift-heading-level-by: 1
+    title-block-banner: '#000D51'
+    include-in-header:
+      - text: |
+          <style type="text/css">
+          h2.hide {
+              display: none;
+          }
+          </style>
+  html:
+    echo: true
+    code-fold: show
+    output-file: manuscript-code.html
+  hugo-md:
+    include: false
+    echo: false
+    html-math-method: mathjax
+    output-file: manuscript_hugo.md
+    suppress-bibliography: false
+  gfm:
+    echo: true
+    output-file: manuscript_gfm.md
+    suppress-bibliography: true
+  hikmah-manuscript-pdf:
+    output-file: rep_study.pdf
+    echo: false
+    mainfont: Linux Libertine O
+    mainfontoptions:
+      - Numbers=Proportional
+      - Numbers=OldStyle
+    mathfont: Libertinus Math
+    knitr:
+      opts_chunk:
+        dev: cairo_pdf
+  docx: default
+format-links:
+  - text: HTML
+    href: manuscript.html
+    icon: file-minus
+  - text: HTML (with code)
+    href: manuscript-code.html
+    icon: file-plus
+  - format: hikmah-manuscript-pdf
+    text: PDF version
+    icon: file-pdf
+  - docx
+  - gfm
 date: 2024-12-07T00:00:00.000Z
 abstract: >
   Effective communication of energy consumption information is crucial for
@@ -21,14 +78,9 @@ abstract: >
 ---
 
 
-
-# Current draft of: Planning to Save Energy: How Information Format Affects Accuracy
-
-# Abstract
-
-Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
-
 # Introduction
+
+### Literature Review
 
 Electricity bills are a frequent touchpoint for consumers seeking to understand their energy usage, yet effectively turning that billing data into practical steps can be demanding. Among low-income households, these challenges contribute to disproportionate rates of energy insecurity (Memmott et al., 2021). At the same time, previous research shows that the clarity and format of energy-use information play a pivotal role in whether individuals adopt meaningful conservation behaviors (Attari et al., 2010; Canfield et al., 2017; Fischer, 2008). The interplay of these factors indicates that how energy data is presented can substantially shape not only how people interpret their consumption but also the degree to which they modify their habits to save energy.
 
@@ -66,7 +118,7 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 
 Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and and other appliances (e.g., TV, lighting).
 
-For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see <a href="#fig-task" class="quarto-xref">Figure 1</a>). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
+For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see <a href="#fig-task" class="quarto-xref">Figure 1</a>). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
 
 <img src="./assets/images/Smith_10R_Wells_15E.png" id="fig-task"
 alt="Figure 1: Example trial in the energy planning task. Participants are shown the prior year electricity use of a household, and are tasked with creating a plan for the next year that will meet the energy reduction goal. Study 1 manipulates the format of the reduction goal to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656)" />
@@ -141,7 +193,7 @@ Experiment 2 will extend these findings by examining whether additional variable
 
 ## Methods
 
-The experimental procedures in Experiment 2 are quite similar to those in Experiment 1. Experiment 2 employed a 2 (task goal: 10% vs. 15% reduction) x 2 (last year's usage: exact vs. rounded) within-subjects design, with a between-subjects manipulation of the reference class (USD vs. Percentage vs. kWh).. We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.
+The experimental procedures in Experiment 2 are quite similar to those in Experiment 1. Experiment 2 employed a 2 (task goal: 10% vs. 15% reduction) x 2 (last year's usage: exact vs. rounded) within-subjects design, with a between-subjects manipulation of the reference class (USD vs. Percentage vs. kWh). We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.
 
 ## Results
 
@@ -190,7 +242,7 @@ We also found that using rounded numbers modestly improved accuracy (b = -0.53, 
 
 **?@fig-s2-ame** shows the marginal effects of refClass on each level of accuracy_level. These results reveal that switching from kWh to Percentage decreased the probability of an "Exact match" by an average of 7.0 percentage points (95% CI: -19.2, 4.2) and increased the probability of "Over 5% error" by 6.9 percentage points (95% CI: -4.5, 18.6). Similarly, switching from kWh to USD decreased the probability of an "Exact match" by 15 percentage points (95% CI: -26.7, -3.3) and increased the probability of "Over 5% error" by 16.5 percentage points (95% CI: 3.7, 29.3).
 
-We once again examained the effect of energy literacy on planning accuracy. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1\|id) + (1\|state). This revealed a significant negative relationship between energy literacy and log absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52), indicating that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (**?@fig-s2-els**).
+We once again examined the effect of energy literacy on planning accuracy. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1\|id) + (1\|state). This revealed a significant negative relationship between energy literacy and log absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52), indicating that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (**?@fig-s2-els**).
 
 ## Experiment 2: Discussion
 
@@ -202,7 +254,7 @@ The finding that the more challenging 15% reduction goal was associated with a s
 
 The large and significant effect of calculator use, consistent across both experiments, underscores the crucial role of tools that individuals are likely to employ in real-world settings. Finally, the consistent relationship between energy literacy and accuracy, observed across both experiments, highlights the potential value of educational interventions aimed at improving consumers' understanding of energy concepts.
 
-# General Discusion
+# General Discussion
 
 Across two experiments, we consistently found that presenting energy reduction goals in absolute units (kWh) led to more accurate planning compared to percentage-based or monetary representations. This advantage persisted across variations in goal difficulty and numerical presentation, suggesting a robust effect of reference class on planning accuracy.
 
@@ -212,6 +264,7 @@ Karjalainen 2011 - people prefer information about price (Karjalainen, 2011)
 
 Mention Blasch et al. (2019) - better long-term appliance selection with information presented in monetary terms.
 
+
 
 # References
 

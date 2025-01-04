@@ -28,13 +28,13 @@ walk(c("fun_plot"), ~ source(here::here(paste0("scripts/", .x, ".R"))))
 theme_set(theme_nice())
 
 s1 <- readRDS(here::here("data/s1_processed.rds")) |> 
-  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |> 
-  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |>
+  filter(!(id %in% readRDS(here::here("data/s1_discrep_ids.rds")))) |>  # n=17
+  filter(!(id %in% readRDS(here::here("data/s1_grp_outlier_ids.rds")))) |> # n=6
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 s2_long <- readRDS(here::here("data/s2_processed.rds")) |> 
-  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> 
-  filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |>
+  filter(!(id %in% readRDS(here::here("data/s2_discrep_ids.rds")))) |> # n=10
+  filter(!(id %in% readRDS(here::here("data/s2_grp_outlier_ids.rds"))) ) |> # n=6
   mutate(refClass = factor(refClass, levels=c("kWh","Percentage","USD")))
 
 
@@ -49,7 +49,7 @@ s1_agg <- s1 |>
                 state_p_dif=mean(state_p_dif),
                 state_f_dif=mean(state_f_dif),
                 n_less_avg = sum(less_avg),
-                duration=first(Duration__in_seconds_)) |> 
+                duration=first(duration)) |> 
     mutate(matched_goal = (pct_change == pct_goal), 
                 error = pct_change - pct_goal,
                 abs_error = abs(error),
@@ -100,8 +100,7 @@ s2_agg <- s2_long |>
     orig_kWh = sum(family),
     pct_change = round((orig_kWh - total_kWh) / orig_kWh, 3),
     state_dif = mean(state_dif),
-    .groups = "drop"
-  ) |>
+    duration=first(duration),.groups = "drop") |> 
   mutate(
     matched_goal = (pct_change == pct),
     close_match = abs(pct_change - pct) <= 0.02,
@@ -219,6 +218,69 @@ s2s |>  group_by(c) |>
 
 s2 |> group_by(appliance,family,state,state_avg) |> select(appliance,family_prior_yr=family,state,state_avg)
 ```
+
+
+
+# Demographics S1
+
+```{r}
+
+n_exclusion <-readRDS(here::here("data/s1_grp_outlier_ids.rds")) |> length() # 6
+
+average_age <- s1 |> ungroup() |> 
+  summarise(average_age = mean(age, na.rm = TRUE), sd_age = sd(age, na.rm = TRUE)) 
+
+#   average_age sd_age
+#         <dbl>  <dbl>
+# 1        34.3   10.2
+
+gender_counts <- s1 |> 
+  group_by(id,gender) |>
+  slice(1) |>
+  ungroup() |> group_by(gender) |> 
+  summarise(count = n()) |>
+  ungroup()
+
+#   gender        count
+#   <fct>         <int>
+# 1 Male            136
+# 2 Female           92
+# 3 Not specified     1
+
+```
+
+
+
+# Demographics S2
+
+```{r}
+
+n_exclusion <-readRDS(here::here("data/s2_grp_outlier_ids.rds")) |> length() # 6
+
+average_age <- s2_long |> ungroup() |> 
+  summarise(average_age = mean(age, na.rm = TRUE), sd_age = sd(age, na.rm = TRUE))
+  # average_age sd_age
+  #       <dbl>  <dbl>
+  #        35.5   9.47
+
+gender_counts <- s2_long |> 
+  group_by(id,gender) |> 
+  slice(1) |>
+  ungroup() |> group_by(gender) |>
+  summarise(count = n()) |>
+  ungroup()
+#   gender count
+#   <fct>  <int>
+# 1 Male     102
+# 2 Female    88
+
+
+```
+
+
+
+
+
 
 
 

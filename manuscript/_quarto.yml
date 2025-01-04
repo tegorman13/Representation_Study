@@ -71,6 +71,7 @@ affiliations:
 
 format: 
   html: 
+    echo: true
     wordcount-banner: true
     theme: 
       - zephyr

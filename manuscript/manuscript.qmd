@@ -36,6 +36,7 @@ format:
         suppress-bibliography: true
     hikmah-manuscript-pdf:
         output-file: rep_study.pdf
+        echo: false
         mainfont: "Linux Libertine O"
         mainfontoptions:
         - "Numbers=Proportional"
@@ -178,7 +179,7 @@ s1_agg <- s1 |>
                 state_p_dif=mean(state_p_dif),
                 state_f_dif=mean(state_f_dif),
                 n_less_avg = sum(less_avg),
-                duration=first(Duration__in_seconds_)) |> 
+                duration=first(duration)) |> 
     mutate(matched_goal = (pct_change == pct_goal), 
                 error = pct_change - pct_goal,
                 abs_error = abs(error),
