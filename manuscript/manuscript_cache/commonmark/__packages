@@ -12,7 +12,6 @@ rstan
 bayestestR
 emmeans
 tidybayes
-modelsummary
 ggplot2
 gt
 knitr
@@ -25,7 +24,7 @@ Matrix
 lme4
 flextable
 pander
+marginaleffects
 wesanderson
 glue
-marginaleffects
 ggtext

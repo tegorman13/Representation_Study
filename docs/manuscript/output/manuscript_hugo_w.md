@@ -1,82 +1,9 @@
----
-title: 'Planning to Save Energy: How Information Format Affects Accuracy'
-aliases:
-  - /manuscript.html
-format:
-  wordcount-html:
-    wordcount-banner: true
-    echo: false
-    theme:
-      - zephyr
-      - ../assets/custom.scss
-    toc: true
-    shift-heading-level-by: 1
-    title-block-banner: '#000D51'
-    include-in-header:
-      - text: |
-          <style type="text/css">
-          h2.hide {
-              display: none;
-          }
-          </style>
-  html:
-    echo: true
-    code-fold: show
-    output-file: manuscript-code.html
-  hugo-md:
-    include: false
-    echo: false
-    html-math-method: mathjax
-    output-file: manuscript_hugo.md
-    suppress-bibliography: false
-  gfm:
-    echo: true
-    output-file: manuscript_gfm.md
-    suppress-bibliography: true
-  hikmah-manuscript-pdf:
-    output-file: rep_study.pdf
-    echo: false
-    mainfont: Linux Libertine O
-    mainfontoptions:
-      - Numbers=Proportional
-      - Numbers=OldStyle
-    mathfont: Libertinus Math
-    knitr:
-      opts_chunk:
-        dev: cairo_pdf
-  docx: default
-format-links:
-  - text: HTML
-    href: manuscript.html
-    icon: file-minus
-  - text: HTML (with code)
-    href: manuscript-code.html
-    icon: file-plus
-  - format: hikmah-manuscript-pdf
-    text: PDF version
-    icon: file-pdf
-  - docx
-  - gfm
-date: 2024-12-07T00:00:00.000Z
-abstract: >
-  Effective communication of energy consumption information is crucial for
-  promoting residential energy conservation. This study investigates how
-  different numerical representations of energy reduction goals influence
-  consumers' ability to create accurate conservation plans. Across two
-  experiments, we examined the impact of presenting energy information in
-  kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy.
-  Participants completed a simulated household planning task in which they
-  allocated energy usage across multiple appliances, with the goal presented in
-  either kilowatt-hours (kWh), percentages, or monetary costs. Results across
-  both experiments showed that presenting reduction goals in absolute units
-  (kWh) led to significantly greater accuracy compared to percentage-based or
-  monetary formats. Furthermore, we found that higher energy literacy was
-  associated with more accurate planning. These findings demonstrate that
-  absolute units (kWh) are more effective for communicating energy-saving goals,
-  and highlight the potential value of educational interventions to improve
-  consumer energy literacy.
----
 
+# Planning to Save Energy: How Information Format Affects Accuracy
+
+## Abstract
+
+Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
 
 # Introduction
 
@@ -94,7 +21,7 @@ Despite existing studies on energy-use communication and format effects, limited
 
 # Experiment 1
 
-See <a href="#fig-task" class="quarto-xref">Figure 1</a> for an example of a planning trial as it was seen by participants.
+See Figure 1</a> for an example of a planning trial as it was seen by participants.
 
 ## Methods
 
@@ -110,7 +37,7 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 
 Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. These goals were implementing by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting).
 
-For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see <a href="#fig-task" class="quarto-xref">Figure 1</a>). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
+For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see Figure 1</a>). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
 
 kWh Condition: The target reduction is presented as an absolute number of kilowatt-hours (e.g., "Reduce total energy use by 5965 kWh").
 
@@ -118,7 +45,6 @@ Percentage Condition: The target reduction is presented as a percentage of the f
 
 USD Condition: The target reduction is presented as a monetary value, equivalent to the cost of a 15% reduction in energy use (e.g., "Reduce total energy costs by \$656").
 
-<img src="./assets/images/Smith_10R_Wells_15E.png" id="fig-task"
 alt="Figure 1: Example energy planning task trial. Participants saw a table with a family’s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656)" />
 
 Additional data collected included:
@@ -132,7 +58,6 @@ Additional data collected included:
 
 All preprocessing and analyses were carried out in R (Team, 2020) and the tidyverse package (Wickham et al., 2019). Mixed Bayesian regressions were fit using the brms package (Bürkner, 2017), with participants and family scenario (states) set as random effects.
 
-<div id="tbl-s1-agg">
 
 | Reference Class | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
 |:---------|:--------|:-------------|:-----------------|:---------|:-----------|
@@ -143,9 +68,9 @@ All preprocessing and analyses were carried out in R (Team, 2020) and the tidyve
 Table 1: Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal
 </div>
 
-<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> that participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when percentages or USD.
+Table 1</a> that participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when percentages or USD.
 
-As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table 1</a>, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations.
+As shown in Table 1</a>, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations.
 
 We next categorized responses into three accuracy levels (exact match \[0% error\], minor deviations \[0.01--5%\], and large deviations \[\>5%\]) for our primary statistical modeling. Using Bayesian ordinal regression, we modeled the ordered accuracy outcome as a function of the reference class condition, while controlling for random variation across participants and family scenarios:
 
@@ -166,8 +91,7 @@ This approach allowed us to estimate thresholds (intercepts) and regression coef
 | calcUsedCalculator | -3.30    | -4.80    | -1.92    | 1.00 |
 
 Table 2: **Experiment 1**: Ordinal Regression results. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.
-</div>
-<div id="tbl-s1-ord">
+
 
 | Comparison        | odds_ratio | ci_lower | ci_upper |
 |:------------------|:-----------|:---------|:---------|
@@ -175,9 +99,9 @@ Table 2: **Experiment 1**: Ordinal Regression results. Ordinal regression resul
 | USD vs kWh        | 22.9       | 6.1      | 90       |
 
 Table 3: **Experiment 1**: Odds ratios for group comparisons. Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition.
-</div>
 
-As shown in <a href="#tbl-s1-reg" class="quarto-xref">Table 2</a>, the reference class coefficients are positive for both the Percentage (Estimate = 1.3, 95% CI: 0.01 to 2.66, pd = 0.98) and USD (Estimate = 2.8, 95% CI: 1.52 to 4.04, pd = 1.00) conditions, relative to the kWh baseline. This indicates that, compared to the kWh condition, participants in both the Percentage and USD conditions were more likely to produce plans that fell into higher error categories. Moreover, the odds ratios (see Table 3) suggest that the USD condition led to a notably higher likelihood of large errors compared to the kWh baseline (OR = 15.7), while the Percentage condition also demonstrated increased odds (OR = 3.7) but was somewhat less detrimental to accuracy than USD. These results align with our descriptive findings and further clarify that framing the target reductions in absolute kWh units may facilitate significantly more accurate planning. Posterior predictive checks showed that the ordinal model provided a reasonable fit to the observed data (see **?@fig-s1-ppd**).
+
+As shown in Table 2</a>, the reference class coefficients are positive for both the Percentage (Estimate = 1.3, 95% CI: 0.01 to 2.66, pd = 0.98) and USD (Estimate = 2.8, 95% CI: 1.52 to 4.04, pd = 1.00) conditions, relative to the kWh baseline. This indicates that, compared to the kWh condition, participants in both the Percentage and USD conditions were more likely to produce plans that fell into higher error categories. Moreover, the odds ratios (see Table 3) suggest that the USD condition led to a notably higher likelihood of large errors compared to the kWh baseline (OR = 15.7), while the Percentage condition also demonstrated increased odds (OR = 3.7) but was somewhat less detrimental to accuracy than USD. These results align with our descriptive findings and further clarify that framing the target reductions in absolute kWh units may facilitate significantly more accurate planning. Posterior predictive checks showed that the ordinal model provided a reasonable fit to the observed data (see **?@fig-s1-ppd**).
 
 To further investigate individual factors that may influence planning accuracy, we examined the relationship between participants' energy literacy scores and their performance on the task. Energy literacy was assessed using an 8-item questionnaire adapted from (DeWaters & Powers, 2011), which covers topics such as energy units, appliance energy consumption, and sources of electricity. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1\|id) + (1\|state). Results indicated a significant negative relationship between energy literacy and log absolute error (Estimate = -2.35, 95% CI: -2.88 to -1.81), suggesting that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (**?@fig-s1-els**).
 
@@ -195,7 +119,7 @@ The experimental procedures in Experiment 2 are quite similar to those in Experi
 
 ## Results
 
-<div id="tbl-s2-agg">
+
 
 | Reference Class | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
 |:-----------|:---------------|:-------------------|:----------|:-------------|
@@ -204,8 +128,7 @@ The experimental procedures in Experiment 2 are quite similar to those in Experi
 | USD | 0.20 | 0.29 | 0.10 | -2.4 |
 
 Table 4: Experiment 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal
-</div>
-<div id="tbl-s2-reg">
+
 
 | Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
 |:-------------------|:---------|:---------|:---------|:-----|
@@ -218,8 +141,7 @@ Table 4: Experiment 2: Summary of planning accuracy by reference class. The tab
 | roundedRounded     | -0.53    | -0.96    | -0.11    | 0.99 |
 
 Table 5: **Experiment 2.** Parameter estimates from the ordinal regression model. Positive coefficients for refClass predictors indicate increased likelihood of falling into higher error categories relative to the kWh baseline.
-</div>
-<div id="tbl-s2-ord">
+
 
 | comparison           | odds_ratio | ci_lower | ci_upper |
 |:---------------------|:-----------|:---------|:---------|
@@ -254,19 +176,11 @@ The large and significant effect of calculator use, consistent across both exper
 
 # General Discussion
 
-This study examined how different numerical representations of energy reduction goals influence consumers' ability to create accurate energy conservation plans. Across two experiments, the findings consistently demonstrated that presenting reduction goals in absolute units (kWh) significantly enhanced planning accuracy compared to percentage-based or monetary formats. Furthermore, participants with higher energy literacy exhibited more precise planning across all conditions, underscoring the critical role of domain-specific knowledge in shaping decision-making outcomes.
 
-These results align with the broader literature on numerical cognition, which suggests that the format in which information is presented can profoundly affect comprehension and decision-making (Gigerenzer & Edwards, 2003; Reimer et al., 2015). However, our study extends beyond simple estimations or judgments, demonstrating that the advantages of absolute units persist even in a more complex, multi-step planning task. Moreover, the consistent superiority of kWh over both percentages and USD provides novel insights into the specific challenges of energy-related decision-making. While prior research has suggested that consumers may prefer monetary feedback (Karjalainen, 2011; Nemati & Penn, 2020) or that monetary framing can improve long-term appliance choices (Blasch et al., 2019), our findings indicate that when it comes to allocating specific usage reductions across appliances, absolute units are most effective. This may be because kWh provide a more direct and less ambiguous representation of energy quantities, facilitating the necessary calculations for accurate planning. Nevertheless, it is unclear whether the observed benefits of absolute units (i.e., kWh) are genuinely attributable to their absolute nature, or if other inherent characteristics of these units might be driving the effects.
-Furthermore, the percentage-based reduction targets, while potentially more salient from a goal-setting perspective, also resulted in poorer planning outcomes compared to kWh. Such a finding suggests that reliance on percentages can further complicate calculations by adding unnecessary transformations in the problem-solving process, in line with the "off by 100% bias" found in Fisher & Mormann (2022), where they show that individuals often misunderstand percentage changes greater than 100%. The relative ease in using absolute values to arrive at an accurate plan suggests that these representations of the planning task result in the most accurate planning strategies because the number of steps required to perform the required calculations are simpler.
 
-Moreover, the consistent positive relationship observed between energy literacy and planning accuracy across both experiments underscores the importance of baseline knowledge in effectively navigating energy-related information. Individuals with higher levels of energy literacy demonstrated a greater capacity to formulate accurate conservation plans, irrespective of the information format presented. This finding aligns with previous research highlighting the role of numeracy and domain-specific knowledge in improving judgments related to energy consumption (Attari et al., 2010). It further suggests that interventions aimed at enhancing consumers' fundamental understanding of energy concepts could yield significant benefits in improving the effectiveness of energy conservation efforts.
 
-## Limitations
 
--   Each participant only completed 4 action plans
--   calculator use not controlled.
 
-
 
 # References
 
@@ -287,8 +201,6 @@ DeWaters, J. E., & Powers, S. E. (2011). Energy literacy of secondary students i
 Farghali, M., Osman, A. I., Mohamed, I. M. A., Chen, Z., Chen, L., Ihara, I., Yap, P.-S., & Rooney, D. W. (2023). Strategies to save energy in the context of the energy crisis: A review. *Environmental Chemistry Letters*, *21*(4), 2003--2039. <https://doi.org/10.1007/s10311-023-01591-5>
 
 Fischer, C. (2008). Feedback on household electricity consumption: A tool for saving energy? *Energy Efficiency*, *1*(1), 79--104. <https://doi.org/10.1007/s12053-008-9009-7>
-
-Fisher, M., & Mormann, M. (2022). The Off by 100% Bias: The Effects of Percentage Changes Greater than 100% on Magnitude Judgments and Consumer Choice. *Journal of Consumer Research*, *49*(4), 561--573. <https://doi.org/10.1093/jcr/ucac006>
 
 Gigerenzer, G., & Edwards, A. (2003). Simple tools for understanding risks: From innumeracy to insight. *BMJ*, *327*(7417), 741--744. <https://doi.org/10.1136/bmj.327.7417.741>
 

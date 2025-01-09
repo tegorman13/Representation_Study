@@ -67,31 +67,20 @@ abstract: |
 
 # Introduction
 
-
-
 ### Literature Review
 
 
-Electricity bills are a frequent touchpoint for consumers seeking to understand their energy usage, yet effectively turning that billing data into practical steps can be demanding. Among low-income households, these challenges contribute to disproportionate rates of energy insecurity [@memmottSociodemographicDisparitiesEnergy2021]. At the same time, previous research shows that the clarity and format of energy-use information play a pivotal role in whether individuals adopt meaningful conservation behaviors [@fischerFeedbackHouseholdElectricity2008; @attariPublicPerceptionsEnergy2010; @canfieldPerceptionsElectricityuseCommunications2017]. The interplay of these factors indicates that how energy data is presented can substantially shape not only how people interpret their consumption but also the degree to which they modify their habits to save energy.
+Energy costs often impose a significant burden on low-income households, leading to "energy insecurity," where basic energy needs cannot be met (Bednar & Reames, 2020). Frequently measured as the energy burden—the percentage of income spent on energy bills—this burden can be disproportionately high for vulnerable families, necessitating difficult trade-offs with essentials such as food or medicine [@bednarRecognitionResponseEnergy2020; @memmottSociodemographicDisparitiesEnergy2021]. Energy insecurity has been linked to health risks and unsafe coping strategies, disproportionately impacting racial and ethnic minorities through higher rates of disconnection [@memmottSociodemographicDisparitiesEnergy2021]. While the broader context of climate change, partly driven by residential consumption [@farghaliStrategiesEnergyContext2023], underscores the need for sustainable solutions, the financial strain on vulnerable households remains a pressing concern. Promoting behavior change to reduce energy consumption is crucial. However, the success of such interventions may hinge on how effectively energy information is communicated, with format and presentation context significantly influencing understanding and action [@canfieldPerceptionsElectricityuseCommunications2017; @fischerFeedbackHouseholdElectricity2008].
 
 
-The way numerical information is presented can significantly affect how individuals process and use that information [@reimerNumericCommunicationRisk2015]. The reference class problem highlights that numbers without clear reference points can lead to misinterpretation, as the meaning of a statistic depends on the category or class it refers to [@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. Presenting energy information in absolute units (e.g., kWh) provides a clear reference class, potentially enhancing comprehension. Indeed, the manner in which energy information is presented has been shown to significantly influence both comprehension and subsequent behavior [@canfieldPerceptionsElectricityuseCommunications2017]. For example, the use of tables has been found to facilitate point-reading, essential for understanding specific energy values, while graphs may be more useful in tasks requiring more complex information interpretation [@canfieldPerceptionsElectricityuseCommunications2017]. 
 
-The concept of cognitive fit posits that performance improves when the information presentation format aligns with the task requirements [@vesseyCognitiveFitTheoryBased1991], and that such an alignment can reduce cognitive load and enhance accuracy in planning [@shahBarLineGraph2011]. For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading [@canfieldPerceptionsElectricityuseCommunications2017]. However, the effectiveness of the format varies with the type of information and individual differences, such as energy literacy, which significantly impacts comprehension and conservation intent. Moreover, the unit in which numerical information is presented influences how decision-makers evaluate and choose between options, with default units increasing value sensitivity [@herberzKiloWhatDefault2020]. In the context of energy, presenting information in terms of multiple translations can increase preference for options aligned with activated objectives, such as pro-environmental values [@ungemachTranslatedAttributesChoice2018]. Furthermore, mental accounting mechanisms, where individuals create mental budgets linking specific consumption acts to specific payments, significantly impact energy decisions and behaviors [@hahnelMentalAccountingMechanisms2020]. 
+The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities[@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate. However, it's important to note that even intuitive formats can pose challenges. For instance, @weberWhyCanOnly2018 found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. 
 
-Evidence from research on energy consumption feedback, normative comparisons, and eco-feedback platforms suggests that comprehensible and contextually meaningful data presentations can improve users’ ability to plan reductions, especially when these formats are integrated into daily routines [@canfieldPerceptionsElectricityuseCommunications2017; @fischerFeedbackHouseholdElectricity2008; @kimMySmartEEcofeedbackGaming2022; @schwartzWhatPeopleConsumption2015]. Furthermore, temporal and monetary frames have been shown to alter decision quality, with monthly costs or absolute consumption levels often encouraging more energy-efficient intentions than abstract annual or percentage-based metrics [@gillConsumerMatchingCosts2022; @larrickMPGIllusion2008]. In this context, tailoring reference classes to align with intuitive cognitive processes can help bridge the gap between aggregate reduction goals and targeted, appliance-specific conservation strategies.
+The choice of units and the format in which information is presented have also been shown to exert a significant influence on decision-making specifically within the context of energy consumption and planning.  For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading  @canfieldPerceptionsElectricityuseCommunications2017. Furthermore, the framing of energy costs, such as displaying monthly rather than daily or yearly expenses, can significantly affect consumers' choices [@gillConsumerMatchingCosts2022]. Consequently, the selection of an appropriate information format is crucial for effectively supporting energy-related decisions. Therefore, similar to natural frequencies, kWh provide a direct measure of energy use, a characteristic that could simplify calculations and facilitate comparisons, potentially helping consumers better understand and compare the energy consumption of different appliances or activities.  Conversely, prior research has suggested that consumers have a preference for receiving energy feedback in terms of monetary values over scientific units [@karjalainenConsumerPreferencesFeedback2011; @nematiImpactInformationbasedInterventions2020], as well as better long-term appliance selection with information presented in monetary terms [@blaschBoundedlyRationalConsumers2019]. However, it remains uncertain how these reported benefits might generalize to the more complex domain of household energy planning, where usage patterns can be multifaceted and subject to a variety of contextual influences.
 
-Furthermore, research suggests that natural frequencies and absolute numbers are generally easier for individuals to understand compared to percentages or probabilities [@gigerenzerHowImproveBayesian1995 @hoffrageCommunicatingStatisticalInformation2000]. In the context of energy conservation, using absolute units may facilitate more accurate planning and decision-making by aligning with intuitive cognitive processing. However, it's important to note that even intuitive formats can pose challenges. @weberWhyCanOnly2018 found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. This suggests that merely changing the information format may not be sufficient; understanding how consumers process and utilize this information is crucial.
+Although many individuals express a desire to conserve energy, research consistently shows that abstract goals (e.g., “reduce overall usage by 15%”) often fail to translate into effective behavior change unless accompanied by specific, actionable steps [@abrahamseReviewInterventionStudies2005; @nematiImpactInformationbasedInterventions2020]. For instance, @abrahamseReviewInterventionStudies2005 demonstrated that merely providing general information about energy savings rarely alters consumption patterns unless consumers also receive concrete instructions or tailored feedback. Similarly, @tonkeProvidingProceduralKnowledge2024 reported that sending households brief but precise text messages outlining how to reduce water use (e.g., limiting irrigation times, adjusting washing machine settings) yielded meaningful decreases in consumption, underscoring the importance of procedural knowledge—namely, knowing how to operationalize a goal rather than simply why it is desirable. In the context of energy conservation, this implies that interventions should not only highlight potential reductions (such as a 15% target) but also guide residents in allocating those reductions across specific appliances or behaviors [@attariPublicPerceptionsEnergy2010]. Additionally, meta-analytic findings suggest that people respond more robustly to household-level feedback that situates their usage within a personalized framework, thereby reducing the cognitive burden of figuring out next steps [@nematiImpactInformationbasedInterventions2020]. 
 
-Although prior research shows that energy-use information must be intelligible and action-oriented [@canfieldPerceptionsElectricityuseCommunications2017; @attariPublicPerceptionsEnergy2010], many consumers still have difficulty converting broad guidance (“use less energy”) into targeted appliance-level plans. As highlighted by @abrahamseReviewInterventionStudies2005, information alone, without concrete guidance on how to distribute reductions across appliances or times of use, may fail to encourage meaningful change. Moreover, a meta-analysis by @nematiImpactInformationbasedInterventions2020 revealed that interventions featuring frequent, household-level feedback, particularly when combined with social norm information and monetary incentives, are significantly more effective in driving conservation. Similar findings emerge in contexts beyond electricity. For instance, @tonkeProvidingProceduralKnowledge2024 reports that offering residents a short but actionable list of water-saving strategies—rather than a generic call to conserve—led to a measurable decrease in residential water consumption. These results suggest that equipping consumers with procedure-focused instructions can complement abstract energy-saving goals. 
-
-Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy.
-
-### Hypotheses
-
-Building on these findings and informed by prior work showing that frequencies (like absolute units in kWh) are easier to comprehend and facilitate more precise decision-making compared to percentages, our study also utilizes a tabular format, but manipulates whether participants must consider energy information presented as absolute units (kWh), percentages (%), or monetary costs (USD). We hypothesize that presenting information in absolute units (kWh) will lead to more accurate household energy conservation planning.
-
-
+Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers' ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy.Based on the literature reviewed, we hypothesize that: 1) Presenting energy reduction goals in absolute units (kWh) will lead to greater planning accuracy compared to percentage-based or monetary formats, as absolute units provide a more direct and less ambiguous representation of energy quantities. 2) Higher energy literacy will be associated with more accurate planning, as individuals with greater energy knowledge may be better equipped to process and utilize the provided information, regardless of format. We also examine the potential of several exploratory variables, such as goal difficulty and the rounding of numerical values, to further elucidate the factors that influence planning accuracy.
 
 
 
@@ -113,22 +102,23 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 
 ### Procedure
 
-Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories:  heating, cooling, water heating, refrigerator, and and other appliances (e.g., TV, lighting).
+Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. These goals were implementing by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting).
 
-For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see @fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. 
+For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see @fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. 
 
-![Example trial in the energy planning task. Participants are shown the prior year electricity use of a household, and are tasked with creating a plan for the next year that will meet the energy reduction goal. Study 1 manipulates the format of the reduction goal to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656)](/assets/images/Smith_10R_Wells_15E.png){#fig-task}
+kWh Condition: The target reduction is presented as an absolute number of kilowatt-hours (e.g., "Reduce total energy use by 5965 kWh").
+
+Percentage Condition: The target reduction is presented as a percentage of the family's total previous year's usage (e.g., "Reduce total energy use by 15%").
+
+USD Condition: The target reduction is presented as a monetary value, equivalent to the cost of a 15% reduction in energy use (e.g., "Reduce total energy costs by $656").
+
+![Example energy planning task trial. Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656)](/assets/images/Smith_10R_Wells_15E.png){#fig-task}
 
 
 Additional data collected included:
 
 -   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion [ @dewatersEnergyLiteracySecondary2011].
 -   **Calculator Usage Tracking**: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.
-
-
-
-
-
 
 
 ## Results
@@ -179,24 +169,24 @@ s1_agg <- s1 |>
                 state_p_dif=mean(state_p_dif),
                 state_f_dif=mean(state_f_dif),
                 n_less_avg = sum(less_avg),
-                duration=first(duration)) |> 
+                duration=first(duration), .groups = 'drop') |> 
     mutate(matched_goal = (pct_change == pct_goal), 
                 error = pct_change - pct_goal,
                 abs_error = abs(error),
                 log_abs_error=log(abs(error)+.007), 
                 close_match = abs_error <= 0.02) |>
-    ungroup() |> # Add ungroup here
         mutate(
             accuracy_level = factor(
                 case_when(
                     abs_error == 0.00 ~ "Exact match",
                     abs_error <= 0.05 ~ "0.01-5% error",
-                    TRUE ~ "Over 5% error"  # Capture all remaining cases
+                    TRUE ~ "Over 5% error" 
                 ), 
                 levels = c("Exact match", "0.01-5% error", "Over 5% error"),
                 ordered = TRUE
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
+
 
 
 
@@ -210,13 +200,12 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
     pct_close=mgc/n,
     mean_pct_change=mean(pct_change),
     mean_abs_error=mean(abs_error),
-    mean_log_abs_error=mean(log_abs_error),
-    n_accuracy=first(n_accuracy)) |> 
+    mean_log_abs_error=mean(log_abs_error)) |> 
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
                 mean_abs_error <= 0.05 ~ "0.01-5% error",
-                TRUE ~ "Over 5% error"  # Capture all remaining cases
+                TRUE ~ "Over 5% error" 
             ), 
             levels = c("Exact match", ".01-5% error", "Over 5% error"),
             ordered = TRUE
@@ -270,29 +259,29 @@ As shown in @tbl-s1-agg, participants in the kWh condition exactly met the targe
 
 ```{r}
 #| label: fig-s1-log-dist
-#| fig-cap: "Study 1: Distribution of log absolute error by reference class."
+#| fig-cap: "Experiment 1: Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy."
 #| fig-width: 11
 #| fig-height: 8
 
-s1_ld <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, color = refClass)) +
-  geom_density_ridges(aes(fill = refClass), alpha = 0.2, scale = 0.5,
+s1_ld <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, fill = refClass)) +
+  geom_density_ridges(aes(col = refClass), alpha = 0.2, scale = 0.5,
                       jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
                       position = position_raincloud(width = 0.05, height = 0.1,
                                                     ygap = 0.05)) +
-  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  geom_boxploth(width = 0.1, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
   #scale_y_discrete(expand = expansion(mult = c(0.2, 0.4))) +
  # guides(fill = "none", color = guide_legend(reverse = TRUE)) +
-  guides(fill = "none", color = "none") +
+  guides(fill = "none") +
   labs(x = "Log Absolute Deviation", y = "Reference Class", color = "Reference Class") +
   theme(legend.position = "top")
 
 
-s1_ldc <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, color = calc)) +
-  geom_density_ridges(aes(fill = calc), alpha = 0.2, scale = 0.5,
+s1_ldc <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, fill = calc)) +
+  geom_density_ridges(aes(col = calc), alpha = 0.2, scale = 0.5,
                       jittered_points = TRUE, point_alpha = 0.7, point_size = .4,
                       position = position_raincloud(width = 0.05, height = 0.1,
                                                     ygap = 0.05)) +
-  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  geom_boxploth(width = 0.1, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
   scale_color_brewer(palette = "Set1") +
   scale_fill_brewer(palette = "Set1") +
   guides(fill = "none") +
@@ -300,6 +289,7 @@ s1_ldc <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, color = calc)) +
   theme(legend.position = "top")
 
 s1_ld | s1_ldc
+
 
 ```
 
@@ -435,7 +425,7 @@ As shown in @tbl-s1-reg, the reference class coefficients are positive for both 
 
 ```{r}
 #| label: fig-s1-ppd
-#| fig-cap: "Study 1: Proportion of participants in each accuracy level, colored by reference class, and seprated in facets based on the levels of reduction goal.  A larger % of participants in the Exact Match, or 0.01-2% error bins indicates better performance."
+#| fig-cap: "Experiment 1: Posterior predictive check for frequency of trials at each accuracy level, faceted by reference class (kWh, Percentage, USD). Bars show observed, dots show model predicted proportions. Better accuracy is indicated by higher proportions in the 'Exact Match' and '0.01-5% error' categories."
 
 pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) +
   scale_x_continuous("Response Category", breaks = 1:3, 
@@ -533,7 +523,6 @@ s2_agg <- s2_long |>
                 error = pct_change - pct,
                 abs_error = abs(error),
                 log_abs_error=log(abs(error)+.007)) |> 
-      ungroup() |> 
         mutate(
             accuracy_level = factor(
                 case_when(
@@ -556,8 +545,7 @@ s2_agg4 <- s2_agg |> group_by(id,refClass,calc) |>
     pct_close=mgc/n,
     mean_pct_change=mean(pct_change),
     mean_abs_error=mean(abs_error),
-    mean_log_abs_error=mean(log_abs_error),
-    n_accuracy=first(n_accuracy)) |> 
+    mean_log_abs_error=mean(log_abs_error)) |> 
     mutate(accuracy_level = factor(
             case_when(
                 mean_abs_error < 0.02 ~ "Exact match",
@@ -585,9 +573,6 @@ s2_agg4 |> group_by('Reference Class' = refClass) |>
     '% meeting goal (close match)' = mean(pct_close),
     'Abs. Deviation' = median(mean_abs_error),
     'Log Abs. Deviation' = (median(mean_log_abs_error)),
-    # sd = sd(pct),
-    # n = n(),
-    #se=sd(pct)/sqrt(n)
 ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 
@@ -612,30 +597,30 @@ Experiment 2: Summary of planning accuracy by reference class. The table shows p
 
 ```{r}
 #| label: fig-s2-log-dist
-#| fig-cap: "Study 1: Distribution of log absolute error by reference class. Displays the distributions of log absolute deviation from the target reduction goal across the three reference class conditions and is also faceted by calculator usage. Lower values indicate greater accuracy."
+#| fig-cap: "Experiment 2: Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy."
 #| fig-width: 11
 #| fig-height: 8
 
 
-s2_ld <- ggplot(s2_agg, aes(y = refClass, x = log_abs_error, color = refClass)) +
-  geom_density_ridges(aes(fill = refClass), alpha = 0.2, scale = 0.5,
+s2_ld <- ggplot(s2_agg, aes(y = refClass, x = log_abs_error, fill = refClass)) +
+  geom_density_ridges(aes(col = refClass), alpha = 0.2, scale = 0.5,
                       jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
                       position = position_raincloud(width = 0.05, height = 0.1,
                                                     ygap = 0.05)) +
-  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  geom_boxploth(width = 0.1, alpha = 0.3, outlier.shape = NA, show.legend = FALSE) +
   #scale_y_discrete(expand = expansion(mult = c(0.2, 0.4))) +
  # guides(fill = "none", color = guide_legend(reverse = TRUE)) +
-  guides(fill = "none", color = "none") +
+  guides(fill = "none") +
   labs(x = "Log Absolute Deviation", y = "Reference Class", color = "Reference Class") +
   theme(legend.position = "top")
 
 
-s2_ldc <- ggplot(s2_agg, aes(y = refClass, x = log_abs_error, color = calc)) +
-  geom_density_ridges(aes(fill = calc), alpha = 0.2, scale = 0.5,
+s2_ldc <- ggplot(s2_agg, aes(y = refClass, x = log_abs_error, fill = calc)) +
+  geom_density_ridges(aes(col = calc), alpha = 0.2, scale = 0.5,
                       jittered_points = TRUE, point_alpha = 0.7,point_size=.4,
                       position = position_raincloud(width = 0.05, height = 0.1,
                                                     ygap = 0.05)) +
-  geom_boxploth(width = 0.05, alpha = 0.2, outlier.shape = NA, show.legend = FALSE) +
+  geom_boxploth(width = 0.1, alpha = 0.3, outlier.shape = NA, show.legend = FALSE) +
   scale_color_brewer(palette = "Set1") +
   scale_fill_brewer(palette = "Set1") +
   guides(fill = "none") +
@@ -643,6 +628,7 @@ s2_ldc <- ggplot(s2_agg, aes(y = refClass, x = log_abs_error, color = calc)) +
   theme(legend.position = "top")
 
 s2_ld + s2_ldc
+
 ```
 
 
@@ -796,7 +782,7 @@ ggplot(ame2_annotated, aes(x = estimate, y = group, color = contrast, group = co
 
 ```{r}
 #| label: fig-s2-ppd
-#| fig-cap: "Experiment 2. Posterior predictive check of the ordinal probit model, grouped by reference class (Experiment 2). The bars represent the observed proportions of each accuracy level within each reference class. The points represent the model's predicted proportions, with error bars indicating 95% credible intervals."
+#| fig-cap: "Experiment 2. Posterior predictive check of the bayesian regression model, faceted by reference class. The bars represent the observed frequencies of each accuracy level within each reference class. The points represent the model's predicted proportions, with error bars indicating 95% credible intervals."
 
 pp_check(ordinal_model_s2_logit, type = "bars_grouped", group="refClass", fatten = 2,ndraws=400) +
   scale_x_continuous("Response Category", breaks = 1:3, 
@@ -856,7 +842,7 @@ We once again examined the effect of energy literacy on planning accuracy. A Bay
 
 ## Experiment 2: Discussion
 
-Experiment 2 aimed to build upon the findings of Experiment 1, not only by replicating the core manipulation of reference class, but also by incorporating additional variables that might influence planning accuracy. These included goal difficulty and the way that the prior year's usage was presented (rounded or exact). The results largely converged with those of Experiment 1, providing further converging evidence that presenting energy reduction goals in absolute units (kWh) facilitates more accurate planning compared to percentage-based or monetary formats.
+Experiment 2 aimed to build upon the findings of Experiment 1 by replicating the core manipulation of reference class. Additionally, it incorporated variables that might influence planning accuracy. These included goal difficulty and the way that the prior year's usage was presented (rounded or exact). The results largely converged with those of Experiment 1, providing further converging evidence that presenting energy reduction goals in absolute units (kWh) facilitates more accurate planning compared to percentage-based or monetary formats.
 
 Taken together, the results of Experiment 2 provide further support for the hypothesis that presenting energy reduction goals in absolute units (kWh) leads to more accurate planning compared to percentage-based or monetary formats. 
 
@@ -867,15 +853,23 @@ The large and significant effect of calculator use, consistent across both exper
 
 # General Discussion
 
-Across two experiments, we consistently found that presenting energy reduction goals in absolute units (kWh) led to more accurate planning compared to percentage-based or monetary representations. This advantage persisted across variations in goal difficulty and numerical presentation, suggesting a robust effect of reference class on planning accuracy.
+
+This study examined how different numerical representations of energy reduction goals influence consumers’ ability to create accurate energy conservation plans. Across two experiments, the findings consistently demonstrated that presenting reduction goals in absolute units (kWh) significantly enhanced planning accuracy compared to percentage-based or monetary formats. Furthermore, participants with higher energy literacy exhibited more precise planning across all conditions, underscoring the critical role of domain-specific knowledge in shaping decision-making outcomes.
+
+These results align with the broader literature on numerical cognition, which suggests that the format in which information is presented can profoundly affect comprehension and decision-making  [@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. However, our study extends beyond simple estimations or judgments, demonstrating that the advantages of absolute units persist even in a more complex, multi-step planning task. Moreover, the consistent superiority of kWh over both percentages and USD provides novel insights into the specific challenges of energy-related decision-making. While prior research has suggested that consumers may prefer monetary feedback [@karjalainenConsumerPreferencesFeedback2011; @nematiImpactInformationbasedInterventions2020] or that monetary framing can improve long-term appliance choices [@blaschBoundedlyRationalConsumers2019], our findings indicate that when it comes to allocating specific usage reductions across appliances, absolute units are most effective. This may be because kWh provide a more direct and less ambiguous representation of energy quantities, facilitating the necessary calculations for accurate planning. Nevertheless, it is unclear whether the observed benefits of absolute units (i.e., kWh) are genuinely attributable to their absolute nature, or if other inherent characteristics of these units might be driving the effects. 
+Furthermore, the percentage-based reduction targets, while potentially more salient from a goal-setting perspective, also resulted in poorer planning outcomes compared to kWh. Such a finding suggests that reliance on percentages can further complicate calculations by adding unnecessary transformations in the problem-solving process, in line with the "off by 100% bias" found in @fisher100BiasEffects2022, where they show that individuals often misunderstand percentage changes greater than 100%. The relative ease in using absolute values to arrive at an accurate plan suggests that these representations of the planning task result in the most accurate planning strategies because the number of steps required to perform the required calculations are simpler.
+
+Moreover, the consistent positive relationship observed between energy literacy and planning accuracy across both experiments underscores the importance of baseline knowledge in effectively navigating energy-related information. Individuals with higher levels of energy literacy demonstrated a greater capacity to formulate accurate conservation plans, irrespective of the information format presented. This finding aligns with previous research highlighting the role of numeracy and domain-specific knowledge in improving judgments related to energy consumption [@attariPublicPerceptionsEnergy2010]. It further suggests that interventions aimed at enhancing consumers' fundamental understanding of energy concepts could yield significant benefits in improving the effectiveness of energy conservation efforts.
 
 
-It is, however, important to note that while we find a significant benefit of presenting energy information in absolute units, some prior work suggests that consumers may prefer to receive information about costs, rather than absolute units (Karjalainen, 2011), or in some cases, that monetary information may lead to better decision-making (Blasch et al., 2019).
+
+## Limitations
+
+- Each participant only completed 4 action plans
+- calculator use not controlled. 
 
 
-Karjalainen 2011 - people prefer information about price [@karjalainenConsumerPreferencesFeedback2011]
 
-Mention @blaschBoundedlyRationalConsumers2019 - better long-term appliance selection with information presented in monetary terms. 
 
 
 {{< pagebreak >}}
@@ -883,3 +877,4 @@ Mention @blaschBoundedlyRationalConsumers2019 - better long-term appliance selec
 # References
 ::: {#refs}
 :::
+
