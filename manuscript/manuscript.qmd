@@ -2,51 +2,6 @@
 title: "Planning to Save Energy: How Information Format Affects Accuracy"
 aliases:
   - /manuscript.html
-format:
-    wordcount-html: 
-        #output-file: index.html
-        wordcount-banner: true
-        echo: false
-        theme: 
-            - zephyr
-            - ../assets/custom.scss
-        toc: true
-        shift-heading-level-by: 1
-        title-block-banner: "#000D51"
-        include-in-header:
-            - text: |
-                <style type="text/css">
-                h2.hide {
-                    display: none;
-                }
-                </style>
-    html: 
-      echo: true
-      code-fold: show
-      output-file: manuscript-code.html
-    hugo-md:
-        include: false
-        echo: false
-        html-math-method: mathjax
-        output-file: manuscript_hugo.md
-        suppress-bibliography: false
-    gfm:
-        echo: true
-        output-file: manuscript_gfm.md
-        suppress-bibliography: true
-    hikmah-manuscript-pdf:
-        output-file: rep_study.pdf
-        echo: false
-        mainfont: "Linux Libertine O"
-        mainfontoptions:
-        - "Numbers=Proportional"
-        - "Numbers=OldStyle"
-        mathfont: "Libertinus Math"
-        knitr:
-            opts_chunk:
-                dev: "cairo_pdf"
-    #hikmah-manuscript-docx: default
-    docx: default
 format-links:   
     - text: HTML
       href: manuscript.html
@@ -59,19 +14,16 @@ format-links:
       icon: file-pdf
     - docx
     - gfm
-date: 2024-12-07
+date: 2025-01-09
 abstract: |
     Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
 ---
-
 
 # Introduction
 
 ### Literature Review
 
-
 Energy costs often impose a significant burden on low-income households, leading to "energy insecurity," where basic energy needs cannot be met (Bednar & Reames, 2020). Frequently measured as the energy burden—the percentage of income spent on energy bills—this burden can be disproportionately high for vulnerable families, necessitating difficult trade-offs with essentials such as food or medicine [@bednarRecognitionResponseEnergy2020; @memmottSociodemographicDisparitiesEnergy2021]. Energy insecurity has been linked to health risks and unsafe coping strategies, disproportionately impacting racial and ethnic minorities through higher rates of disconnection [@memmottSociodemographicDisparitiesEnergy2021]. While the broader context of climate change, partly driven by residential consumption [@farghaliStrategiesEnergyContext2023], underscores the need for sustainable solutions, the financial strain on vulnerable households remains a pressing concern. Promoting behavior change to reduce energy consumption is crucial. However, the success of such interventions may hinge on how effectively energy information is communicated, with format and presentation context significantly influencing understanding and action [@canfieldPerceptionsElectricityuseCommunications2017; @fischerFeedbackHouseholdElectricity2008].
-
 
 
 The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities[@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate. However, it's important to note that even intuitive formats can pose challenges. For instance, @weberWhyCanOnly2018 found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. 
@@ -92,33 +44,21 @@ See @fig-task for an example of a planning trial as it was seen by participants.
 
 ### Participants
 
-We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were initially recruited, but data from 17 participants were corrupted due to experimenter error, leaving a final sample of 235 participants. Most participants (76%) reported using a calculator to complete the task. 
-
+We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were initially recruited. Data from 17 participants were corrupted due to experimenter error, and six participants were excluded due to deviant performance on the task, resulting in  a final sample of 229 participants (146 males, 92 females, 1 not specified). The average age of participants was 34.3 years (SD = 10.2). Most participants (76%) reported using a calculator to complete the task. 
 
 ### Materials and Design 
 
-The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states, with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. We obtain average utility use from each state by CITE SOURCE FOR STATE AVGS? 
+The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states (i.e., family scenarios), with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. Average utility use data for each state was obtained from the  CITE SOURCE FOR STATE AVGS? Participants also completed an 8-item questionnaire assessing participants' knowledge of energy consumption and conversion [@dewatersEnergyLiteracySecondary2011], and a question indicating whether they used a calculator for the task. 
 
 
 ### Procedure
 
-Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. These goals were implementing by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting).
-
-For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and state averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see @fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. 
-
-kWh Condition: The target reduction is presented as an absolute number of kilowatt-hours (e.g., "Reduce total energy use by 5965 kWh").
-
-Percentage Condition: The target reduction is presented as a percentage of the family's total previous year's usage (e.g., "Reduce total energy use by 15%").
-
-USD Condition: The target reduction is presented as a monetary value, equivalent to the cost of a 15% reduction in energy use (e.g., "Reduce total energy costs by $656").
-
-![Example energy planning task trial. Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656)](/assets/images/Smith_10R_Wells_15E.png){#fig-task}
+Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. These goals were implementing by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting). Participants were informed at the start of the task that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer).For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (see @fig-task). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. 
 
 
-Additional data collected included:
+![Example energy planning task trial. Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656). Participants in the USD condition were provided with the conversion rate between kwH and USD.](/assets/images/Smith_10R_Wells_15E.png){#fig-task}
 
--   **Energy Literacy Quiz**: An 8-item questionnaire assessing participants' knowledge of energy consumption and conversion [ @dewatersEnergyLiteracySecondary2011].
--   **Calculator Usage Tracking**: Questions determined whether participants used a calculator, paper/pen, or other methods to complete the tasks.
+
 
 
 ## Results
@@ -497,7 +437,9 @@ Experiment 2 will extend these findings by examining whether additional variable
 
 ## Methods
 
-The experimental procedures in Experiment 2 are quite similar to those in Experiment 1. Experiment 2 employed a 2 (task goal: 10% vs. 15% reduction) x 2 (last year's usage: exact vs. rounded) within-subjects design, with a between-subjects manipulation of the reference class (USD vs. Percentage vs. kWh). We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, leaving a final sample of 196 participants.
+In Experiment 2, We recruited 206 participants from Amazon Mechanical Turk, but data from from 10 participants were corrupted due to experimenter error, and six excluded due to deviant behavior, leaving a final sample of 190 participants (102 male; 88 female. Average age = 35.5, SD=9.5)
+
+Experiment 2 employed a mixed experimental design with reference class (USD, Percentage, kWh) as a between-subjects factor,  and two within-subjects factors: task goal (10% vs. 15% reduction) and the presentation of last year's usage data (exact vs. rounded numbers). The order of presentation of the goal, rounding, and state conditions was counterbalanced across participants.  As in Experiment 1, each participant completed the energy reduction planning task for two different family-state scenarios. In the “rounded” condition, both the family’s previous year usage and the state averages were rounded to the nearest whole number.
 
 
 
@@ -871,6 +813,13 @@ Moreover, the consistent positive relationship observed between energy literacy 
 
 
 
+
+-----
+
+
+Storage/GoogleDrive-tegorman13@gmail.com/My%20Drive/Purdue/Representation_Study/manuscript/output/appendix.html
+
+Supplementary information and materials can be found online at [this website](https://tegorman13.github.io/Representation_Study/docs/manuscript/output/apendix.html)
 
 {{< pagebreak >}}
 

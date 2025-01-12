@@ -236,9 +236,7 @@ Thank you for helping the Smith family reach their kWh reduction goal.
 
 
 
-markdown
 
-Copy
 ## Results {background-color="#000080" .smaller}
 
 :::::: {.columns}
@@ -392,8 +390,6 @@ Hertwig & Grüne-Yanoff (2017)
 | No         | kWh          | 19 | 0       | 8689.00  | 3436.84 | 2672.27 |
 |            | %            | 14 | 1       | 9131.00  | 3181.12 | 2631.86 |
 |            | $            | 25 | 851.50  | 7802.00  | 4480.55 | 1770.91 |
-
-
 
 
 

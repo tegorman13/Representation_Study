@@ -1,7 +1,7 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
 Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
-2024-12-07
+2025-01-09
 
 # Introduction
 
@@ -28,9 +28,9 @@ action (Canfield et al., 2017; Fischer, 2008).
 The way numerical information is presented can significantly affect how
 individuals process and use that information. Of particular relevance
 are reference class effects, which occur when numerical statements are
-presented without a clear or intuitive basis for comparison, thereby
-hindering the meaningful inference of quantities (Gigerenzer & Edwards,
-2003; Reimer et al., 2015). A substantial body of evidence suggests that
+presented without a clear or intuitive basis for comparison, making it
+difficult to infer meaningful quantities(Gigerenzer & Edwards, 2003;
+Reimer et al., 2015). A substantial body of evidence suggests that
 presenting data in terms of absolute counts or frequencies, as opposed
 to probabilities or percentages, can promote more accurate comprehension
 and facilitate. However, it’s important to note that even intuitive
@@ -118,23 +118,28 @@ of a planning trial as it was seen by participants.
 
 We implemented our task and surveys on Qualtrics, and recruited
 participants through Amazon Mechanical Turk. In Experiment 1, 252
-participants were initially recruited, but data from 17 participants
-were corrupted due to experimenter error, leaving a final sample of 235
-participants. Most participants (76%) reported using a calculator to
-complete the task.
+participants were initially recruited. Data from 17 participants were
+corrupted due to experimenter error, and six participants were excluded
+due to deviant performance on the task, resulting in a final sample of
+229 participants (146 males, 92 females, 1 not specified). The average
+age of participants was 34.3 years (SD = 10.2). Most participants (76%)
+reported using a calculator to complete the task.
 
 ### Materials and Design
 
 The study employed a mixed design with reference class (kWh, percentage,
 USD) as a between-subjects factor and state/family scenario as a
 within-subjects factor. Each participant completed energy reduction
-planning tasks for two different states, with state order
-counterbalanced across participants. The family scenarios featured four
-households in different climate regions: Texas (Smith family) and
-California (Adams family) representing warm climates, and Colorado
-(Wells family) and Massachusetts (Davis family) representing cold
-climates. We obtain average utility use from each state by CITE SOURCE
-FOR STATE AVGS?
+planning tasks for two different states (i.e., family scenarios), with
+state order counterbalanced across participants. The family scenarios
+featured four households in different climate regions: Texas (Smith
+family) and California (Adams family) representing warm climates, and
+Colorado (Wells family) and Massachusetts (Davis family) representing
+cold climates. Average utility use data for each state was obtained from
+the CITE SOURCE FOR STATE AVGS? Participants also completed an 8-item
+questionnaire assessing participants’ knowledge of energy consumption
+and conversion (DeWaters & Powers, 2011), and a question indicating
+whether they used a calculator for the task.
 
 ### Procedure
 
@@ -142,30 +147,23 @@ Participants were provided with energy usage data for two hypothetical
 families and tasked with creating action plans to meet specified energy
 reduction goals. These goals were implementing by allocating usage
 across five appliance categories: heating, cooling, water heating,
-refrigerator, and other appliances (e.g., TV, lighting).
-
-For each family scenario, participants were shown a table containing the
-families utility usage from the prior year, alongside the state averages
-for each appliance category (both prior year usage and state averages
-are always shown in kWh). For each scenario, participants were asked to
-create two possible action plans to achieve the target reduction in
-total household energy usage (see
-<a href="#fig-task" class="quarto-xref">Figure 1</a>). Depending on
-their reference class condition, the target reduction amount presented
-either in kilowatt-hours (kWh), as percentages of total household usage,
-or in U.S. dollars. In all conditions, the target reduction was
-equivalent to a 15% reduction in total household kWh.
-
-kWh Condition: The target reduction is presented as an absolute number
-of kilowatt-hours (e.g., “Reduce total energy use by 5965 kWh”).
-
-Percentage Condition: The target reduction is presented as a percentage
-of the family’s total previous year’s usage (e.g., “Reduce total energy
-use by 15%”).
-
-USD Condition: The target reduction is presented as a monetary value,
-equivalent to the cost of a 15% reduction in energy use (e.g., “Reduce
-total energy costs by \$656”).
+refrigerator, and other appliances (e.g., TV, lighting). Participants
+were informed at the start of the task that they would be presented with
+tables of detailed energy usage data for each family, and that they
+would have to create 2 action plans for each of the families. Each
+action plan goal was implemented by allocating usage across five
+appliance categories: heating, cooling, water heating, refrigerator, and
+other appliances (e.g., TV, lighting, washer/dryer).For each family
+scenario, participants were shown a table containing the families
+utility usage from the prior year, alongside the state averages for each
+appliance category (see
+<a href="#fig-task" class="quarto-xref">Figure 1</a>). For each
+scenario, participants were asked to create two possible action plans to
+achieve the target reduction in total household energy usage . Depending
+on their reference class condition, the target reduction amount
+presented either in kilowatt-hours (kWh), as a percentage of total
+household usage, or in U.S. dollars. In all conditions, the target
+reduction was equivalent to a 15% reduction in total household kWh.
 
 <div id="fig-task">
 
@@ -176,18 +174,10 @@ with a family’s previous year electricity usage (here for the Wells
 family in Colorado) and were asked to allocate energy usage to meet a
 15% reduction goal. The format of the reduction goal was manipulated to
 be either a percentage (15% given as goal reduction), kilowatt hours
-(5965 kWh given), or USD (\$656)
+(5965 kWh given), or USD (\$656). Participants in the USD condition were
+provided with the conversion rate between kwH and USD.
 
 </div>
-
-Additional data collected included:
-
-- **Energy Literacy Quiz**: An 8-item questionnaire assessing
-  participants’ knowledge of energy consumption and conversion (DeWaters
-  & Powers, 2011).
-- **Calculator Usage Tracking**: Questions determined whether
-  participants used a calculator, paper/pen, or other methods to
-  complete the tasks.
 
 ## Results
 
@@ -646,13 +636,22 @@ energy information presentation for improved planning accuracy.
 
 ## Methods
 
-The experimental procedures in Experiment 2 are quite similar to those
-in Experiment 1. Experiment 2 employed a 2 (task goal: 10% vs. 15%
-reduction) x 2 (last year’s usage: exact vs. rounded) within-subjects
-design, with a between-subjects manipulation of the reference class (USD
-vs. Percentage vs. kWh). We recruited 206 participants from Amazon
-Mechanical Turk, but data from from 10 participants were corrupted due
-to experimenter error, leaving a final sample of 196 participants.
+In Experiment 2, We recruited 206 participants from Amazon Mechanical
+Turk, but data from from 10 participants were corrupted due to
+experimenter error, and six excluded due to deviant behavior, leaving a
+final sample of 190 participants (102 male; 88 female. Average age =
+35.5, SD=9.5)
+
+Experiment 2 employed a mixed experimental design with reference class
+(USD, Percentage, kWh) as a between-subjects factor, and two
+within-subjects factors: task goal (10% vs. 15% reduction) and the
+presentation of last year’s usage data (exact vs. rounded numbers). The
+order of presentation of the goal, rounding, and state conditions was
+counterbalanced across participants. As in Experiment 1, each
+participant completed the energy reduction planning task for two
+different family-state scenarios. In the “rounded” condition, both the
+family’s previous year usage and the state averages were rounded to the
+nearest whole number.
 
 ## Results
 
@@ -1054,15 +1053,14 @@ accurate plans overall
 
 ## Experiment 2: Discussion
 
-Experiment 2 aimed to build upon the findings of Experiment 1, not only
-by replicating the core manipulation of reference class, but also by
-incorporating additional variables that might influence planning
-accuracy. These included goal difficulty and the way that the prior
-year’s usage was presented (rounded or exact). The results largely
-converged with those of Experiment 1, providing further converging
-evidence that presenting energy reduction goals in absolute units (kWh)
-facilitates more accurate planning compared to percentage-based or
-monetary formats.
+Experiment 2 aimed to build upon the findings of Experiment 1 by
+replicating the core manipulation of reference class. Additionally, it
+incorporated variables that might influence planning accuracy. These
+included goal difficulty and the way that the prior year’s usage was
+presented (rounded or exact). The results largely converged with those
+of Experiment 1, providing further converging evidence that presenting
+energy reduction goals in absolute units (kWh) facilitates more accurate
+planning compared to percentage-based or monetary formats.
 
 Taken together, the results of Experiment 2 provide further support for
 the hypothesis that presenting energy reduction goals in absolute units
@@ -1146,6 +1144,13 @@ effectiveness of energy conservation efforts.
 
 - Each participant only completed 4 action plans
 - calculator use not controlled.
+
+------------------------------------------------------------------------
+
+Storage/GoogleDrive-tegorman13@gmail.com/My%20Drive/Purdue/Representation_Study/manuscript/output/appendix.html
+
+Supplementary information and materials can be found online at [this
+website](https://tegorman13.github.io/Representation_Study/docs/manuscript/output/apendix.html)
 
 
 

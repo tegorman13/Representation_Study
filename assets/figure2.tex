@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{figure}[h]
+\centering
+\caption{Example energy planning task trials across conditions. Participants were asked to allocate energy usage to meet a 15\% reduction goal. The format of the reduction goal was manipulated to be either kilowatt hours (kWh), a percentage (\%), or U.S. dollars (USD).}
+
+\begin{minipage}{0.48\textwidth}
+\centering
+\subcaption{kWh Condition}
+\label{fig:kwh}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Category} & \textbf{\begin{tabular}[c]{@{}c@{}}Electricity Used\\ Last Year by\\ the Wells Family\\ (kWh)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Average Electricity\\ Used Last Year by\\ Households in\\ Colorado (kWh)\end{tabular}} & \textbf{Action Plan} \\ \midrule
+Cooling (Central A/C) & 697 & 498 &  \\
+Heating the Home & 18,052 & 16,411 &  \\
+Water Heating & 11,667 & 5,832 &  \\
+Refrigerator & 1,370 & 1,142 &  \\
+\begin{tabular}[c]{@{}l@{}}Other (Television,\\ Lighting, Electronics,\\ Washer/Dryer, etc.)\end{tabular} & 7,982 & 6,652 &  \\ \midrule
+Total kWh & 39,768 & 30,535 &  \\ \midrule
+\textbf{Target Reduction} & \multicolumn{3}{c}{\textbf{5,965 kWh}} \\ \bottomrule
+\end{tabular}%
+}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\subcaption{Percentage Condition}
+\label{fig:percent}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Category} & \textbf{\begin{tabular}[c]{@{}c@{}}Electricity Used\\ Last Year by\\ the Wells Family\\ (kWh)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Average Electricity\\ Used Last Year by\\ Households in\\ Colorado (kWh)\end{tabular}} & \textbf{Action Plan} \\ \midrule
+Cooling (Central A/C) & 697 & 498 &  \\
+Heating the Home & 18,052 & 16,411 &  \\
+Water Heating & 11,667 & 5,832 &  \\
+Refrigerator & 1,370 & 1,142 &  \\
+\begin{tabular}[c]{@{}l@{}}Other (Television,\\ Lighting, Electronics,\\ Washer/Dryer, etc.)\end{tabular} & 7,982 & 6,652 &  \\ \midrule
+Total kWh & 39,768 & 30,535 &  \\ \midrule
+\textbf{Target Reduction} & \multicolumn{3}{c}{\textbf{15\%}} \\ \bottomrule
+\end{tabular}%
+}
+\end{minipage}
+
+\bigskip % Add some space between the tables
+
+\begin{minipage}{0.48\textwidth}
+\centering
+\subcaption{USD Condition}
+\label{fig:usd}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Category} & \textbf{\begin{tabular}[c]{@{}c@{}}Electricity Used\\ Last Year by\\ the Wells Family\\ (kWh)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Average Electricity\\ Used Last Year by\\ Households in\\ Colorado (kWh)\end{tabular}} & \textbf{Action Plan} \\ \midrule
+Cooling (Central A/C) & 697 & 498 &  \\
+Heating the Home & 18,052 & 16,411 &  \\
+Water Heating & 11,667 & 5,832 &  \\
+Refrigerator & 1,370 & 1,142 &  \\
+\begin{tabular}[c]{@{}l@{}}Other (Television,\\ Lighting, Electronics,\\ Washer/Dryer, etc.)\end{tabular} & 7,982 & 6,652 &  \\ \midrule
+Total kWh & 39,768 & 30,535 &  \\ \midrule
+\textbf{Target Reduction} & \multicolumn{3}{c}{\textbf{\$656}} \\ \bottomrule
+\end{tabular}%
+}
+\end{minipage}
+\end{figure}
+
+\end{document}

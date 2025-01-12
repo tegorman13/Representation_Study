@@ -1,6 +1,12 @@
 pacman::p_load(ggplot2,wesanderson,glue)
 
 
+library(sysfonts)
+library(showtext)
+
+font_add_google("Manrope", "Manrope")
+showtext_auto()
+
 theme_blank <- theme(
   panel.grid = element_blank(),
   axis.text = element_blank(),

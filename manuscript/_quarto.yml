@@ -4,6 +4,7 @@ project:
   render: 
   - "manuscript.qmd"
   - "test.qmd"
+  - "appendix.qmd"
   - "Manuscript/output/"
   - "Manuscript/Assets/"
   - "Manuscript/Assets/figs/"
@@ -72,6 +73,8 @@ affiliations:
 format: 
   html: 
     echo: true
+    code-fold: show
+    output-file: manuscript-code.html
     wordcount-banner: true
     theme: 
       - zephyr
@@ -87,6 +90,48 @@ format:
                 display: none;
             }
             </style>
+  wordcount-html: 
+    #output-file: index.html
+    wordcount-banner: true
+    echo: false
+    theme: 
+        - zephyr
+        - ../assets/custom.scss
+    toc: true
+    shift-heading-level-by: 1
+    title-block-banner: "#000D51"
+    include-in-header:
+        - text: |
+            <style type="text/css">
+            h2.hide {
+                display: none;
+            }
+            </style>
+  docx: default
+  #hikmah-manuscript-docx: default
+  hugo-md:
+    include: false
+    echo: false
+    html-math-method: mathjax
+    output-file: manuscript_hugo.md
+    suppress-bibliography: false
+  gfm:
+    echo: true
+    output-file: manuscript_gfm.md
+    suppress-bibliography: true
+  hikmah-manuscript-pdf:
+    output-file: rep_study.pdf
+    echo: false
+    mainfont: "Linux Libertine O"
+    mainfontoptions:
+    - "Numbers=Proportional"
+    - "Numbers=OldStyle"
+    mathfont: "Libertinus Math"
+    knitr:
+        opts_chunk:
+            dev: "cairo_pdf"
+
+
 
 
 bibliography: ../assets/rs_bib.bib

@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{figure}[H]
+    \centering
+    \captionsetup{justification=centering}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{USD Condition} & \textbf{kWh Condition} & \textbf{Percentage Condition} \\
+         \midrule
+          \begin{minipage}{0.3\textwidth}
+                \centering
+                 \textit{Reduce by \$1,042} \\
+                \vspace{0.5em}
+                \begin{tabular}{@{}l | c@{}}
+                     \textit{Cooling} & \\
+                     \textit{Heating} & \\
+                     \textit{Water} & \\
+                     \textit{Refrig.} & \\
+                     \textit{Other}  & \\
+                     \textit{Total kWh} &
+                    \end{tabular}
+        \end{minipage}
+           &
+        \begin{minipage}{0.3\textwidth}
+                \centering
+                \textit{Reduce by 5,965 kWh} \\
+                 \vspace{0.5em}
+               \begin{tabular}{@{}l | c@{}}
+                     \textit{Cooling} & \\
+                     \textit{Heating} & \\
+                     \textit{Water} & \\
+                     \textit{Refrig.} & \\
+                     \textit{Other}  & \\
+                      \textit{Total kWh} &
+                    \end{tabular}
+        \end{minipage}
+           &
+        \begin{minipage}{0.3\textwidth}
+                \centering
+                 \textit{Reduce by 15\%} \\
+                 \vspace{0.5em}
+                \begin{tabular}{@{}l | c@{}}
+                     \textit{Cooling} & \\
+                     \textit{Heating} & \\
+                     \textit{Water} & \\
+                     \textit{Refrig.} & \\
+                     \textit{Other}  & \\
+                     \textit{Total kWh} &
+                    \end{tabular}
+        \end{minipage}
+        \\
+        \bottomrule
+    \end{tabular}
+\caption{Example energy planning tasks in different conditions. Participants were presented with different goals (USD, kWh, or percentage), above a table with the appliance categories, where they provided their action plans. }
+    \label{fig:task-conditions}
+\end{figure}
+
+\end{document}

@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry} % Adjust margins if needed
+
+\begin{document}
+
+% Common settings for all tables
+\newcommand{\figwidth}{0.8\textwidth}
+\newcommand{\tablefont}{\sffamily} % Sans-serif font for a cleaner look
+\newcommand{\header}[1]{\textbf{#1}} % Bold column headers
+
+% kWh Condition Figure
+\begin{figure}[h]
+\centering
+\resizebox{\figwidth}{!}{%
+\begin{tabular}{@{}lrr@{}}
+\toprule
+{\tablefont \header{Category}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Electricity Used Last}\\\header{Year by the Wells}\\\header{Family (kWh)}\end{tabular}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Average Electricity}\\\header{Used Last Year by}\\\header{Households in}\\\header{Colorado (kWh)}\end{tabular}} \\ 
+\midrule
+{\tablefont Cooling (Central A/C)} & {\tablefont 697} & {\tablefont 498} \\
+{\tablefont Heating the Home} & {\tablefont 18,052} & {\tablefont 16,411} \\
+{\tablefont Water Heating} & {\tablefont 11,667} & {\tablefont 5,832} \\
+{\tablefont Refrigerator} & {\tablefont 1,370} & {\tablefont 1,142} \\
+{\tablefont \begin{tabular}[c]{@{}l@{}}Other (Television, Lighting,\\ Electronics, Washer/Dryer,\\ etc.)\end{tabular}} & {\tablefont 7,982} & {\tablefont 6,652} \\ 
+\midrule
+{\tablefont Total kWh} & {\tablefont 39,768} & {\tablefont 30,535} \\
+\bottomrule
+\end{tabular}%
+}
+\bigskip
+
+\textbf{The Wells family wants to reduce its household electricity use by 5,965 kWh next year.}
+
+Please complete two possible action plans that will help the Wells family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. \textbf{Enter only whole numbers.} Try to provide close estimations. You may use a calculator to complete the task.
+
+Note: The Wells family used 9,233 more kWh than the average household in Colorado last year.
+\end{figure}
+
+% Percentage Condition Figure
+\begin{figure}[h]
+\centering
+\resizebox{\figwidth}{!}{%
+\begin{tabular}{@{}lrr@{}}
+\toprule
+{\tablefont \header{Category}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Electricity Used Last}\\\header{Year by the Wells}\\\header{Family (kWh)}\end{tabular}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Average Electricity}\\\header{Used Last Year by}\\\header{Households in}\\\header{Colorado (kWh)}\end{tabular}} \\ 
+\midrule
+{\tablefont Cooling (Central A/C)} & {\tablefont 697} & {\tablefont 498} \\
+{\tablefont Heating the Home} & {\tablefont 18,052} & {\tablefont 16,411} \\
+{\tablefont Water Heating} & {\tablefont 11,667} & {\tablefont 5,832} \\
+{\tablefont Refrigerator} & {\tablefont 1,370} & {\tablefont 1,142} \\
+{\tablefont \begin{tabular}[c]{@{}l@{}}Other (Television, Lighting,\\ Electronics, Washer/Dryer,\\ etc.)\end{tabular}} & {\tablefont 7,982} & {\tablefont 6,652} \\ 
+\midrule
+{\tablefont Total kWh} & {\tablefont 39,768} & {\tablefont 30,535} \\
+\bottomrule
+\end{tabular}%
+}
+\bigskip
+
+\textbf{The Wells family wants to reduce its household electricity use by 15\% next year.}
+
+Please complete two possible action plans that will help the Wells family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. \textbf{Enter only whole numbers.} Try to provide close estimations. You may use a calculator to complete the task.
+
+Note: The Wells family used 9,233 more kWh than the average household in Colorado last year.
+\end{figure}
+
+% USD Condition Figure
+\begin{figure}[h]
+\centering
+\resizebox{\figwidth}{!}{%
+\begin{tabular}{@{}lrr@{}}
+\toprule
+{\tablefont \header{Category}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Electricity Used Last}\\\header{Year by the Wells}\\\header{Family (kWh)}\end{tabular}} & 
+{\tablefont \begin{tabular}[c]{@{}c@{}}\header{Average Electricity}\\\header{Used Last Year by}\\\header{Households in}\\\header{Colorado (kWh)}\end{tabular}} \\ 
+\midrule
+{\tablefont Cooling (Central A/C)} & {\tablefont 697} & {\tablefont 498} \\
+{\tablefont Heating the Home} & {\tablefont 18,052} & {\tablefont 16,411} \\
+{\tablefont Water Heating} & {\tablefont 11,667} & {\tablefont 5,832} \\
+{\tablefont Refrigerator} & {\tablefont 1,370} & {\tablefont 1,142} \\
+{\tablefont \begin{tabular}[c]{@{}l@{}}Other (Television, Lighting,\\ Electronics, Washer/Dryer,\\ etc.)\end{tabular}} & {\tablefont 7,982} & {\tablefont 6,652} \\ 
+\midrule
+{\tablefont Total kWh} & {\tablefont 39,768} & {\tablefont 30,535} \\
+\bottomrule
+\end{tabular}%
+}
+\bigskip
+
+\textbf{The Wells family wants to reduce its household electricity bill by \$656 next year.}
+
+Please complete two possible action plans that will help the Wells family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. \textbf{Enter only whole numbers.} Try to provide close estimations. You may use a calculator to complete the task.
+
+Note: The Wells family used 9,233 more kWh than the average household in Colorado last year.
+\end{figure}
+
+\end{document}

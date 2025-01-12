@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\begin{document}
+
+\begin{figure}[h]
+\centering
+\caption{Example energy planning task instructions and reduction goal summary. Participants were tasked with creating two action plans to help a hypothetical family reduce their energy consumption. The reduction goal was presented in one of three formats: kilowatt hours (kWh), percentage (\%), or U.S. dollars (USD).}
+\label{fig:summary}
+\begin{minipage}{0.8\textwidth}
+\textbf{Task Instructions:}
+
+"The \[Family Name] family wants to reduce its household electricity use next year. Please complete two possible action plans that will help the \[Family Name] family achieve this goal. Please enter how many kWh should be used next year by each appliance and the total kWh each plan would use. Enter only whole numbers. Try to provide close estimations. You may use a calculator to complete the task."
+\end{minipage}
+
+\bigskip
+
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Family} & \textbf{State} & \textbf{kWh Reduction} & \textbf{\% Reduction} & \textbf{USD Reduction} \\ \midrule
+Adams & California & 3,401 & 15\% & \$510 \\
+Smith & Texas & 4,357 & 15\% & \$479 \\
+Wells & Colorado & 5,965 & 15\% & \$656 \\
+Davis & Massachusetts & 6,944 & 15\% & \$1,042 \\ \bottomrule
+\end{tabular}
+\end{figure}
+
+\end{document}
