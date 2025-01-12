@@ -9,16 +9,15 @@ Barber
 
 Energy costs often impose a significant burden on low-income households,
 leading to “energy insecurity,” where basic energy needs cannot be met
-(Bednar & Reames, 2020). Frequently measured as the energy burden—the
-percentage of income spent on energy bills—this burden can be
-disproportionately high for vulnerable families, necessitating difficult
-trade-offs with essentials such as food or medicine (Bednar & Reames,
-2020; Memmott et al., 2021). Energy insecurity has been linked to health
-risks and unsafe coping strategies, disproportionately impacting racial
-and ethnic minorities through higher rates of disconnection (Memmott et
-al., 2021). While the broader context of climate change, partly driven
-by residential consumption (Farghali et al., 2023), underscores the need
-for sustainable solutions, the financial strain on vulnerable households
+(Bednar & Reames, 2020). This burden can be disproportionately high for
+vulnerable families, necessitating difficult tradeoffs with essentials
+such as food or medicine (Bednar & Reames, 2020; Memmott et al., 2021).
+Energy insecurity has been linked to health risks and unsafe coping
+strategies, disproportionately impacting racial and ethnic minorities
+through higher rates of disconnection (Memmott et al., 2021). While the
+broader context of climate change, partly driven by residential
+consumption (Farghali et al., 2023), underscores the need for
+sustainable solutions, the financial strain on vulnerable households
 remains a pressing concern. Promoting behavior change to reduce energy
 consumption is crucial. However, the success of such interventions may
 hinge on how effectively energy information is communicated, with format
@@ -33,33 +32,33 @@ difficult to infer meaningful quantities(Gigerenzer & Edwards, 2003;
 Reimer et al., 2015). A substantial body of evidence suggests that
 presenting data in terms of absolute counts or frequencies, as opposed
 to probabilities or percentages, can promote more accurate comprehension
-and facilitate. However, it’s important to note that even intuitive
-formats can pose challenges. For instance, Weber et al. (2018) found
-that individuals often struggle with reasoning tasks presented in
-natural frequencies because they inadvertently revert to more complex
-probabilistic thinking.
+and facilitate decision making. However, it’s important to note that
+even intuitive formats can pose challenges. For instance, Weber et al.
+(2018) found that individuals often struggle with reasoning tasks
+presented in natural frequencies because they inadvertently revert to
+more complex probabilistic thinking.
 
 The choice of units and the format in which information is presented
 have also been shown to exert a significant influence on decision-making
 specifically within the context of energy consumption and planning. For
 instance, tables are generally more effective than graphs for conveying
 specific electricity usage data because they facilitate straightforward
-point reading Canfield et al. (2017). Furthermore, the framing of energy
-costs, such as displaying monthly rather than daily or yearly expenses,
-can significantly affect consumers’ choices (Gill et al., 2022).
-Consequently, the selection of an appropriate information format is
-crucial for effectively supporting energy-related decisions. Therefore,
-similar to natural frequencies, kWh provide a direct measure of energy
-use, a characteristic that could simplify calculations and facilitate
-comparisons, potentially helping consumers better understand and compare
-the energy consumption of different appliances or activities.
-Conversely, prior research has suggested that consumers have a
-preference for receiving energy feedback in terms of monetary values
+point reading (Canfield et al., 2017). Furthermore, the framing of
+energy costs, such as displaying monthly rather than daily or yearly
+expenses, can significantly affect consumers’ choices (Gill et al.,
+2022). Consequently, the selection of an appropriate information format
+is crucial for effectively supporting energy-related decisions.
+Therefore, similar to natural frequencies, kWh provide a direct measure
+of energy use - a characteristic that could simplify calculations and
+facilitate comparisons, potentially helping consumers better understand
+and compare the energy consumption of different appliances or
+activities. Conversely, prior research has suggested that consumers have
+a preference for receiving energy feedback in terms of monetary values
 over scientific units (Karjalainen, 2011; Nemati & Penn, 2020), as well
 as better long-term appliance selection with information presented in
 monetary terms (Blasch et al., 2019). However, it remains uncertain how
-these reported benefits might generalize to the more complex domain of
-household energy planning, where usage patterns can be multifaceted and
+these reported benefits might generalize to the more complex task of
+household energy planning, where usage patterns are multifaceted and
 subject to a variety of contextual influences.
 
 Although many individuals express a desire to conserve energy, research
@@ -81,7 +80,7 @@ guide residents in allocating those reductions across specific
 appliances or behaviors (Attari et al., 2010). Additionally,
 meta-analytic findings suggest that people respond more robustly to
 household-level feedback that situates their usage within a personalized
-framework, thereby reducing the cognitive burden of figuring out next
+framework, thereby reducing the cognitive burden of determining next
 steps (Nemati & Penn, 2020).
 
 Despite existing studies on energy-use communication and format effects,
@@ -167,7 +166,7 @@ reduction was equivalent to a 15% reduction in total household kWh.
 
 <div id="fig-task">
 
-![](./assets/images/Smith_10R_Wells_15E.png)
+![](./assets/images/wells10e_pub.png)
 
 Figure 1: Example energy planning task trial. Participants saw a table
 with a family’s previous year electricity usage (here for the Wells
@@ -184,7 +183,7 @@ provided with the conversion rate between kwH and USD.
 ### Data Analysis
 
 All preprocessing and analyses were carried out in R (Team, 2020) and
-the tidyverse package (Wickham et al., 2019). Mixed Bayesian regressions
+the Tidyverse package (Wickham et al., 2019). Mixed Bayesian regressions
 were fit using the brms package (Bürkner, 2017), with participants and
 family scenario (states) set as random effects.
 
@@ -298,12 +297,13 @@ goal
 
 </div>
 
-<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> that participants
-in the kWh condition met the target goal 38% of the time, compared to
-22% for the Percentage condition and 10% for the USD condition.
-Moreover, the kWh reference class exhibited smaller deviations from the
-target reduction, suggesting that participants performed more accurately
-when the goal was framed in kWh rather than when percentages or USD.
+<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> shows that
+participants in the kWh condition met the target goal 38% of the time,
+compared to 22% for the Percentage condition and 10% for the USD
+condition. Moreover, the kWh reference class exhibited smaller
+deviations from the target reduction, suggesting that participants
+performed more accurately when the goal was framed in kWh rather than
+when percentages or USD.
 
 As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table 1</a>,
 participants in the kWh condition exactly met the target reduction goal
@@ -637,10 +637,9 @@ energy information presentation for improved planning accuracy.
 ## Methods
 
 In Experiment 2, We recruited 206 participants from Amazon Mechanical
-Turk, but data from from 10 participants were corrupted due to
-experimenter error, and six excluded due to deviant behavior, leaving a
-final sample of 190 participants (102 male; 88 female. Average age =
-35.5, SD=9.5)
+Turk, but data from 10 participants were corrupted due to experimenter
+error, and six excluded due to deviant behavior, leaving a final sample
+of 190 participants (102 male; 88 female. Average age = 35.5, SD=9.5)
 
 Experiment 2 employed a mixed experimental design with reference class
 (USD, Percentage, kWh) as a between-subjects factor, and two
@@ -1147,10 +1146,8 @@ effectiveness of energy conservation efforts.
 
 ------------------------------------------------------------------------
 
-Storage/GoogleDrive-tegorman13@gmail.com/My%20Drive/Purdue/Representation_Study/manuscript/output/appendix.html
-
 Supplementary information and materials can be found online at [this
-website](https://tegorman13.github.io/Representation_Study/docs/manuscript/output/apendix.html)
+website](https://tegorman13.github.io/Representation_Study/manuscript/output/appendix.html)
 
 
 
