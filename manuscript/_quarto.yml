@@ -107,7 +107,8 @@ format:
                 display: none;
             }
             </style>
-  docx: default
+  docx: 
+    echo: false
   #hikmah-manuscript-docx: default
   hugo-md:
     include: false

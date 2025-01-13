@@ -1,28 +1,28 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
 Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
-2025-01-09
+2025-01-12
 
 # Introduction
 
 ### Literature Review
 
-Energy costs often impose a significant burden on low-income households,
-leading to “energy insecurity,” where basic energy needs cannot be met
-(Bednar & Reames, 2020). This burden can be disproportionately high for
-vulnerable families, necessitating difficult tradeoffs with essentials
-such as food or medicine (Bednar & Reames, 2020; Memmott et al., 2021).
-Energy insecurity has been linked to health risks and unsafe coping
-strategies, disproportionately impacting racial and ethnic minorities
-through higher rates of disconnection (Memmott et al., 2021). While the
-broader context of climate change, partly driven by residential
-consumption (Farghali et al., 2023), underscores the need for
-sustainable solutions, the financial strain on vulnerable households
-remains a pressing concern. Promoting behavior change to reduce energy
-consumption is crucial. However, the success of such interventions may
-hinge on how effectively energy information is communicated, with format
-and presentation context significantly influencing understanding and
-action (Canfield et al., 2017; Fischer, 2008).
+Energy insecurity has emerged as a critical public health concern,
+especially among low-income households, who frequently face difficult
+choices between paying energy bills and meeting other essential needs
+(Bednar & Reames, 2020; Memmott et al., 2021). Such households often
+experience unsafe coping strategies (e.g., foregoing heating during
+winter months), which disproportionately affect racial and ethnic
+minorities and heighten risks of utility disconnection (Memmott et al.,
+2021). Moreover, residential energy use contributes to climate change,
+intensifying the urgency for sustainable solutions (Farghali et al.,
+2023). Promoting behavior change to reduce energy consumption is
+crucial. However, the success of such interventions may hinge on how
+effectively energy information is communicated, with format and
+presentation context significantly influencing understanding and action
+(Canfield et al., 2017; Fischer, 2008). Consequently, a pressing
+challenge lies in designing communication strategies that effectively
+convey energy data and motivate practical conservation decisions
 
 The way numerical information is presented can significantly affect how
 individuals process and use that information. Of particular relevance
@@ -445,7 +445,8 @@ ordinal_model_s1 <- brm(
 
 t1 <- as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[, c(1,2,4,5,6)] |> 
   setNames(c("Parameter", "Estimate", "CI_Lower", "CI_Upper", "pd")) |> 
-  mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> kable(escape=FALSE,booktabs=TRUE,align=c("l"), row.names = FALSE)
+  mutate(Parameter = stringr::str_remove(Parameter, "b_")) |> 
+  kable(escape=FALSE,booktabs=TRUE,align=c("l"), row.names = FALSE)
 
 # Get predicted probabilities
 # pred_summary <- ordinal_model_s1 |>
@@ -463,16 +464,16 @@ t1 <- as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[,
 # as.data.frame(fixef(ordinal_model_s1)[,-2])|> as.data.frame() %>%
 #     rownames_to_column(var = "Parameter") %>%
 #     mutate(across(where(is.numeric), exp)) |>
-#     filter(!stringr::str_detect(Parameter, "Intercept")) |> 
-#     filter(!stringr::str_detect(Parameter, "calc")) |> 
+#     filter(!stringr::str_detect(Parameter, "Intercept")) |>
+#     filter(!stringr::str_detect(Parameter, "calc")) |>
 #     # rename columns to |comparison           | odds_ratio| ci_lower| ci_upper|
 #     rename(Comparison = Parameter, odds_ratio = Estimate, ci_lower = Q2.5, ci_upper = Q97.5) |>
-#     # rename levels to Percentage vs kWh; USD vs kWh; 
+#     # rename levels to Percentage vs kWh; USD vs kWh;
 #     mutate(Comparison = case_when(
 #         str_detect(Comparison, "refClassPercentage") ~ "Percentage vs kWh",
 #         str_detect(Comparison, "refClassUSD") ~ "USD vs kWh",
 #         TRUE ~ Comparison
-#     )) |> kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+#     )) |> kable(escape=FALSE,booktabs=TRUE,align=c("l"))
 ```
 
 <div id="tbl-s1-reg">
@@ -507,15 +508,15 @@ accuracy category compared to the kWh condition.
 
 As shown in <a href="#tbl-s1-reg" class="quarto-xref">Table 3</a>, the
 reference class coefficients are positive for both the Percentage
-(Estimate = 1.3, 95% CI: 0.01 to 2.66, pd = 0.98) and USD (Estimate =
-2.8, 95% CI: 1.52 to 4.04, pd = 1.00) conditions, relative to the kWh
+(Estimate = 1.44, 95% CI: 0.07 to 2.88, pd = 0.98) and USD (Estimate =
+3.13, 95% CI: 1.81 to 4.50, pd = 1.00) conditions, relative to the kWh
 baseline. This indicates that, compared to the kWh condition,
 participants in both the Percentage and USD conditions were more likely
 to produce plans that fell into higher error categories. Moreover, the
 odds ratios (see Table 3) suggest that the USD condition led to a
 notably higher likelihood of large errors compared to the kWh baseline
-(OR = 15.7), while the Percentage condition also demonstrated increased
-odds (OR = 3.7) but was somewhat less detrimental to accuracy than USD.
+(OR = 22.9), while the Percentage condition also demonstrated increased
+odds (OR = 4.2) but was somewhat less detrimental to accuracy than USD.
 These results align with our descriptive findings and further clarify
 that framing the target reductions in absolute kWh units may facilitate
 significantly more accurate planning. Posterior predictive checks showed
@@ -564,7 +565,10 @@ s1_els_log_error <- brm(
 
 # summary(s1_els_log_error)
 # conditional_effects(s1_els_log_error)
-
+# Regression Coefficients:
+#           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+# Intercept    -1.65      0.23    -2.12    -1.18 1.00      921     1465
+# els          -2.35      0.27    -2.88    -1.81 1.00      753      997
 
 # Create the conditional effects plot
 conditional_effects_plot <- conditional_effects(s1_els_log_error)
@@ -1087,62 +1091,58 @@ aimed at improving consumers’ understanding of energy concepts.
 
 This study examined how different numerical representations of energy
 reduction goals influence consumers’ ability to create accurate energy
-conservation plans. Across two experiments, the findings consistently
-demonstrated that presenting reduction goals in absolute units (kWh)
-significantly enhanced planning accuracy compared to percentage-based or
-monetary formats. Furthermore, participants with higher energy literacy
-exhibited more precise planning across all conditions, underscoring the
-critical role of domain-specific knowledge in shaping decision-making
-outcomes.
+conservation plans. Across two experiments, participants in the kWh
+conditions exhibited the smallest errors in allocating energy cuts
+across appliances, a result that consistently held even as scenario
+details varied. These results extend prior observations on the impact of
+numerical format on comprehension and decision-making (Gigerenzer &
+Edwards, 2003; Reimer et al., 2015). but they move beyond simpler
+estimation tasks to show how these benefits persist in a multi-step
+planning context. Notably, individuals with higher energy literacy
+performed better overall, a finding in line with previous work
+emphasizing the importance of domain knowledge for effective resource
+conservation (Attari et al., 2010; Canfield et al., 2017)
 
-These results align with the broader literature on numerical cognition,
-which suggests that the format in which information is presented can
-profoundly affect comprehension and decision-making (Gigerenzer &
-Edwards, 2003; Reimer et al., 2015). However, our study extends beyond
-simple estimations or judgments, demonstrating that the advantages of
-absolute units persist even in a more complex, multi-step planning task.
-Moreover, the consistent superiority of kWh over both percentages and
-USD provides novel insights into the specific challenges of
-energy-related decision-making. While prior research has suggested that
-consumers may prefer monetary feedback (Karjalainen, 2011; Nemati &
-Penn, 2020) or that monetary framing can improve long-term appliance
-choices (Blasch et al., 2019), our findings indicate that when it comes
-to allocating specific usage reductions across appliances, absolute
-units are most effective. This may be because kWh provide a more direct
-and less ambiguous representation of energy quantities, facilitating the
-necessary calculations for accurate planning. Nevertheless, it is
-unclear whether the observed benefits of absolute units (i.e., kWh) are
-genuinely attributable to their absolute nature, or if other inherent
-characteristics of these units might be driving the effects.
-Furthermore, the percentage-based reduction targets, while potentially
-more salient from a goal-setting perspective, also resulted in poorer
-planning outcomes compared to kWh. Such a finding suggests that reliance
-on percentages can further complicate calculations by adding unnecessary
-transformations in the problem-solving process, in line with the “off by
-100% bias” found in Fisher & Mormann (2022), where they show that
-individuals often misunderstand percentage changes greater than 100%.
-The relative ease in using absolute values to arrive at an accurate plan
-suggests that these representations of the planning task result in the
-most accurate planning strategies because the number of steps required
-to perform the required calculations are simpler.
+While prior research has suggested that consumers sometimes prefer
+monetary formats(Karjalainen, 2011; Nemati & Penn, 2020) or that
+monetary framing can improve appliance choices (Blasch et al., 2019),
+our findings tentatively indicate that absolute energy units can
+facilitate the finer-grained calculations needed to plan specific usage
+cuts. This may be because kWh provide a more direct and less ambiguous
+representation of energy quantities, facilitating the necessary
+calculations for accurate planning. Moreover, although percentage-based
+targets might seem appealing from a goal-setting perspective, the
+additional step of converting percentages to tangible appliance
+reductions likely increases the chances for error (Fisher & Mormann,
+2022). Research on consumer heuristics in energy judgments (Van Den
+Broek & Walker, 2019) suggests that individuals gravitate toward
+concrete cues, and the directness of absolute units may align well with
+these heuristics. Similarly, the concept of “default units” (Herberz et
+al., 2020) further highlights how presenting energy data in a
+straightforward, standardized format can guide better consumer
+decisions. Nevertheless, it is unclear whether the observed benefits of
+absolute units (i.e., kWh) are genuinely attributable to their absolute
+nature, or if other inherent characteristics of these units might be
+driving the effects.
 
-Moreover, the consistent positive relationship observed between energy
-literacy and planning accuracy across both experiments underscores the
-importance of baseline knowledge in effectively navigating
-energy-related information. Individuals with higher levels of energy
-literacy demonstrated a greater capacity to formulate accurate
-conservation plans, irrespective of the information format presented.
-This finding aligns with previous research highlighting the role of
-numeracy and domain-specific knowledge in improving judgments related to
-energy consumption (Attari et al., 2010). It further suggests that
-interventions aimed at enhancing consumers’ fundamental understanding of
-energy concepts could yield significant benefits in improving the
-effectiveness of energy conservation efforts.
-
-## Limitations
-
-- Each participant only completed 4 action plans
-- calculator use not controlled.
+A few constraints should be considered. First, each participant only
+completed a limited set of action plans (four total), which may not
+capture the variability of real-world decision processes. Second,
+although we recorded whether participants used calculators, we could not
+control how thoroughly they engaged in mathematical computations, nor
+could we track other external resources they might have consulted.
+Future studies could examine more extensive planning tasks, perhaps over
+multiple sessions, to see how stable these effects remain over time and
+repeated feedback cycles (Fischer, 2008). In addition, investigating
+whether certain household types or income levels respond differently to
+monetary versus absolute energy frames could yield further practical
+guidance for targeting energy-reduction interventions. Finally,
+incorporating more explicit or automated prompts for appliance-specific
+tips (Tonke, 2024) could clarify how best to translate high-level goals
+into tangible actions in diverse contexts. By building on these avenues,
+subsequent work can refine how energy information is formatted and
+delivered, ultimately enhancing both the precision and feasibility of
+conservation planning.
 
 ------------------------------------------------------------------------
 
