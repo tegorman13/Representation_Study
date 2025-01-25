@@ -132,8 +132,8 @@ format:
     toc: true
     toc-location: right
     toc-depth: 3
-    cold-fold: true
-    cold-tools: true
+    code-fold: true
+    code-tools: true
     code-link: true
     code-line-numbers: false
     code-summary: "Display code"

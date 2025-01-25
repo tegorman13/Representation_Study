@@ -1,39 +1,9 @@
----
-title: 'Planning to Save Energy: How Information Format Affects Accuracy'
-aliases:
-  - /manuscript.html
-format-links:
-  - text: HTML
-    href: manuscript.html
-    icon: file-minus
-  - text: HTML (with code)
-    href: manuscript-code.html
-    icon: file-plus
-  - format: hikmah-manuscript-pdf
-    text: PDF version
-    icon: file-pdf
-  - docx
-  - gfm
-date: 2025-01-12T00:00:00.000Z
-abstract: >
-  Effective communication of energy consumption information is crucial for
-  promoting residential energy conservation. This study investigates how
-  different numerical representations of energy reduction goals influence
-  consumers' ability to create accurate conservation plans. Across two
-  experiments, we examined the impact of presenting energy information in
-  kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy.
-  Participants completed a simulated household planning task in which they
-  allocated energy usage across multiple appliances, with the goal presented in
-  either kilowatt-hours (kWh), percentages, or monetary costs. Results across
-  both experiments showed that presenting reduction goals in absolute units
-  (kWh) led to significantly greater accuracy compared to percentage-based or
-  monetary formats. Furthermore, we found that higher energy literacy was
-  associated with more accurate planning. These findings demonstrate that
-  absolute units (kWh) are more effective for communicating energy-saving goals,
-  and highlight the potential value of educational interventions to improve
-  consumer energy literacy.
----
 
+# Planning to Save Energy: How Information Format Affects Accuracy
+
+# Abstract
+
+Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
 
 # Introduction
 
@@ -208,9 +178,6 @@ A few constraints should be considered. First, each participant only completed a
 
 ------------------------------------------------------------------------
 
-Supplementary information and materials can be found online at [this website](https://tegorman13.github.io/Representation_Study/manuscript/output/appendix.html)
-
-
 
 # References
 

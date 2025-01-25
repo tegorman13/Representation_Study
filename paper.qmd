@@ -28,13 +28,13 @@ repo-actions: false
   <i class="fa-solid fa-file-arrow-down"></i>&ensp;PDF <small>(download)</small>
   </a>
 
-  <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/manuscript/output/manuscript.docx">
+  <a class="btn btn-warning btn-sm mb-1" target="_blank" href="/manuscript/output/rs_manuscript_apa.docx">
   <i class="fa-solid fa-file-word"></i>&ensp;docx <small>(download)</small>
   </a>
   
   
 </p>
 
-<iframe src="/manuscript/output/manuscript.html" frameborder="0" style="overflow:hidden;height:75%;width:95%;border:2px solid #ccc;" height="75%" width="95%" name="manuscript"></iframe>
+<iframe src="/manuscript/output/manuscript.html" frameborder=".1" style="overflow:hidden;height:75%;width:95%;border:2px solid #ccc;" height="75%" width="98%" name="manuscript"></iframe>
 ```
 

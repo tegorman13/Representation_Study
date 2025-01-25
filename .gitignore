@@ -59,7 +59,6 @@ _extensions/*
 
 
 /_scratch/*
-
 data/model_cache/*
 
 
@@ -67,8 +66,17 @@ data/model_cache/*
 nb/**/*.png
 
 # ignore all png files in misc, included recursive
-
 misc/indiv_files/figure-html/**
+manuscript/_freeze/** 
+manuscript/_freeze/*
+manuscript/_freeze/manuscript/figure-commonmark/**
+manusript/_freeze/manuscript/** */
+manuscript/appendix_files/*
+manuscript/_extensions/*
+manuscript/manuscript_files/*
+manuscript/output/manuscript_files/figure-commonmark/*
+manuscript/output/manuscript_files/figure-docx/*
+manuscript/output/manuscript_files/figure-pdf/*
 
 
 manuscript/.quarto/** 
@@ -99,3 +107,8 @@ misc/odds_ratio.qmd
 misc/ordinal.qmd
 nb/s1_survey.qmd
 nb/s2_survey.qmd
+
+
+
+
+

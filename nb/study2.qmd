@@ -9,7 +9,6 @@ execute:
 cache: true
 format:
   html: 
-
     grid:
       sidebar-width: 220px
       body-width: 1200px

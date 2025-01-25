@@ -5,8 +5,6 @@ Barber
 
 # Introduction
 
-### Literature Review
-
 Energy insecurity has emerged as a critical public health concern,
 especially among low-income households, who frequently face difficult
 choices between paying energy bills and meeting other essential needs
@@ -16,13 +14,54 @@ winter months), which disproportionately affect racial and ethnic
 minorities and heighten risks of utility disconnection (Memmott et al.,
 2021). Moreover, residential energy use contributes to climate change,
 intensifying the urgency for sustainable solutions (Farghali et al.,
-2023). Promoting behavior change to reduce energy consumption is
-crucial. However, the success of such interventions may hinge on how
-effectively energy information is communicated, with format and
-presentation context significantly influencing understanding and action
-(Canfield et al., 2017; Fischer, 2008). Consequently, a pressing
-challenge lies in designing communication strategies that effectively
-convey energy data and motivate practical conservation decisions
+2023).
+
+Given the relevance of promoting behavior change to reduce energy
+consumption, several strands of research have aimed to identify factors
+that affect energy behaviors and interventions that effectively reduce
+energy consumption. Interventions often focus on X, Y, Z. For example, …
+
+However, the success of such interventions may hinge on how effectively
+energy information is communicated, with format and presentation context
+significantly influencing understanding and action (Canfield et al.,
+2017; Fischer, 2008). Consequently, a pressing challenge lies in
+designing communication strategies that effectively convey energy data
+and motivate practical conservation decisions. We set out to explore if
+consumers are able to develop plans that would help meet certain energy
+consumption goals.
+
+### Representation Formats
+
+Receiving feedback about one’s energy use is an important step in
+identifying potential actions to reduce energy consumption. However, it
+is crucial to understand how consumers use the information that is given
+with their energy bill and whether consumers are able to translate a
+energy saving goal into an action plan.
+
+Building on the study of Canfield et al. (2017), we aimed to test xxx.
+
+Although many individuals express a desire to conserve energy, research
+consistently shows that abstract goals (e.g., “reduce overall usage by
+15%”) often fail to translate into effective behavior change unless
+accompanied by specific, actionable steps (Abrahamse et al., 2005;
+Nemati & Penn, 2020). For instance, Abrahamse et al. (2005) demonstrated
+that merely providing general information about energy savings rarely
+alters consumption patterns unless consumers also receive concrete
+instructions or tailored feedback.
+
+Similarly, Tonke (2024) rreported that sending households brief but
+precise text messages outlining how to reduce water use (e.g., limiting
+irrigation times, adjusting washing machine settings) yielded meaningful
+decreases in consumption, underscoring the importance of procedural
+knowledge—namely, knowing how to operationalize a goal rather than
+simply why it is desirable. In the context of energy conservation, this
+implies that interventions should not only highlight potential
+reductions (such as a 15% target) but also guide residents in allocating
+those reductions across specific appliances or behaviors (Attari et al.,
+2010). Additionally, meta-analytic findings suggest that people respond
+more robustly to household-level feedback that situates their usage
+within a personalized framework, thereby reducing the cognitive burden
+of determining next steps (Nemati & Penn, 2020).
 
 The way numerical information is presented can significantly affect how
 individuals process and use that information. Of particular relevance
@@ -32,7 +71,7 @@ difficult to infer meaningful quantities(Gigerenzer & Edwards, 2003;
 Reimer et al., 2015). A substantial body of evidence suggests that
 presenting data in terms of absolute counts or frequencies, as opposed
 to probabilities or percentages, can promote more accurate comprehension
-and facilitate decision making. However, it’s important to note that
+and facilitate decision making. However, it is important to note that
 even intuitive formats can pose challenges. For instance, Weber et al.
 (2018) found that individuals often struggle with reasoning tasks
 presented in natural frequencies because they inadvertently revert to
@@ -61,27 +100,7 @@ these reported benefits might generalize to the more complex task of
 household energy planning, where usage patterns are multifaceted and
 subject to a variety of contextual influences.
 
-Although many individuals express a desire to conserve energy, research
-consistently shows that abstract goals (e.g., “reduce overall usage by
-15%”) often fail to translate into effective behavior change unless
-accompanied by specific, actionable steps (Abrahamse et al., 2005;
-Nemati & Penn, 2020). For instance, Abrahamse et al. (2005) demonstrated
-that merely providing general information about energy savings rarely
-alters consumption patterns unless consumers also receive concrete
-instructions or tailored feedback. Similarly, Tonke (2024) reported that
-sending households brief but precise text messages outlining how to
-reduce water use (e.g., limiting irrigation times, adjusting washing
-machine settings) yielded meaningful decreases in consumption,
-underscoring the importance of procedural knowledge—namely, knowing how
-to operationalize a goal rather than simply why it is desirable. In the
-context of energy conservation, this implies that interventions should
-not only highlight potential reductions (such as a 15% target) but also
-guide residents in allocating those reductions across specific
-appliances or behaviors (Attari et al., 2010). Additionally,
-meta-analytic findings suggest that people respond more robustly to
-household-level feedback that situates their usage within a personalized
-framework, thereby reducing the cognitive burden of determining next
-steps (Nemati & Penn, 2020).
+### Overview of Current Research
 
 Despite existing studies on energy-use communication and format effects,
 limited research has explored how different numerical representations
@@ -354,6 +373,15 @@ absolute error suggests higher planning accuracy.
 
 </div>
 
+<div id="tbl-s1-prop">
+
+Table 2: Study 1: The table shows the percentage of participants who
+fell into each accuracy level for each reference class condition
+(percentages of kWh, \$, and USD columns reflect within condition
+percentages). The combined group column reflects the percentage of
+participants in each accuracy level when aggregating across across all
+reference class conditions.
+
 ``` r
 # compute percentage of subjects per accuracy level per group
 observed_props_s1 <- s1_agg |>
@@ -376,24 +404,11 @@ observed_props_s1 |>
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
-<div id="tbl-s1-prop">
-
-Table 2: Study 1: The table shows the percentage of participants who
-fell into each accuracy level for each reference class condition
-(percentages of kWh, \$, and USD columns reflect within condition
-percentages). The combined group column reflects the percentage of
-participants in each accuracy level when aggregating across across all
-reference class conditions.
-
-<div class="cell-output-display">
-
 | Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
 |:---------------|:------|:-----------|:------|:------------------|
 | Exact match    | 38.5% | 22.4%      | 10.2% | 23.1%             |
 | 0.01-5% error  | 22.7% | 29.5%      | 25%   | 25.5%             |
 | Over 5% error  | 38.8% | 48.1%      | 64.8% | 51.3%             |
-
-</div>
 
 </div>
 

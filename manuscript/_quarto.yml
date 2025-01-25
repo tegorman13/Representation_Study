@@ -3,7 +3,7 @@ project:
   output-dir: output
   render: 
   - "manuscript.qmd"
-  - "test.qmd"
+  #- "test.qmd"
   - "appendix.qmd"
   - "Manuscript/output/"
   - "Manuscript/Assets/"
@@ -69,7 +69,6 @@ affiliations:
     country: USA
     url: https://www.sdstate.edu/directory/hayden-barber
 
-
 format: 
   html: 
     echo: true
@@ -107,9 +106,19 @@ format:
                 display: none;
             }
             </style>
-  docx: 
+  # docx: 
+  #   echo: false
+  # hikmah-manuscript-docx: 
+  #   output-file: hikmah_manuscript.docx
+  #   echo: false
+  apaquarto-docx: 
+    output-file: rs_manuscript_apa.docx
     echo: false
-  #hikmah-manuscript-docx: default
+    floatsintext: true
+    shorttitle: "How Information Format Affects Accuracy"
+    author-note:
+      disclosures:
+        conflict of interest: The authors have no conflict of interest to declare.
   hugo-md:
     include: false
     echo: false
@@ -118,6 +127,7 @@ format:
     suppress-bibliography: false
   gfm:
     echo: true
+    output: asis
     output-file: manuscript_gfm.md
     suppress-bibliography: true
   hikmah-manuscript-pdf:
@@ -132,7 +142,7 @@ format:
         opts_chunk:
             dev: "cairo_pdf"
 
-
+keywords: ["Information format", "Energy literacy", "Decision-making", "Planning"]
 
 
 bibliography: ../assets/rs_bib.bib
