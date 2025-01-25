@@ -23,6 +23,7 @@ website:
 
 
   page-navigation: true
+  bread-crumbs: false
 
   navbar:
     pinned: true
@@ -125,7 +126,9 @@ format:
   html:
     #theme: zephyr
     date: today
-    css: "assets/style_qt.css"
+    css: 
+      - "assets/style_qt.css"
+      - "assets/custom.scss"
     page-layout: full
     tbl-cap-location: top
     fig-cap-location: bottom
@@ -141,7 +144,7 @@ format:
     code-overflow: scroll
     code-copy: true
     number-depth: 3
-    smooth-scroll: true
+    #smooth-scroll: true
     link-citations: true
     lightbox: true
     # code-block-bg: "#f8f8f8" #"#272822"

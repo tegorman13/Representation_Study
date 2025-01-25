@@ -4,6 +4,7 @@ project:
   render: 
   - "manuscript.qmd"
   #- "test.qmd"
+  #- "test2.qmd"
   - "appendix.qmd"
   - "Manuscript/output/"
   - "Manuscript/Assets/"
@@ -70,10 +71,11 @@ affiliations:
     url: https://www.sdstate.edu/directory/hayden-barber
 
 format: 
-  html: 
+  code_apa-html: 
     echo: true
     code-fold: show
     output-file: manuscript-code.html
+    floatsintext: true
     wordcount-banner: true
     theme: 
       - zephyr
@@ -92,6 +94,7 @@ format:
   wordcount-html: 
     #output-file: index.html
     wordcount-banner: true
+    floatsintext: true
     echo: false
     theme: 
         - zephyr
@@ -130,17 +133,46 @@ format:
     output: asis
     output-file: manuscript_gfm.md
     suppress-bibliography: true
-  hikmah-manuscript-pdf:
-    output-file: rep_study.pdf
+  apaquarto-pdf: 
+    toc: false
     echo: false
-    mainfont: "Linux Libertine O"
-    mainfontoptions:
-    - "Numbers=Proportional"
-    - "Numbers=OldStyle"
-    mathfont: "Libertinus Math"
-    knitr:
-        opts_chunk:
-            dev: "cairo_pdf"
+    output-file: rs_manuscript_apa.pdf
+    floatsintext: true
+    author-note:
+      disclosures:
+        conflict of interest: The authors have no conflict of interest to declare.
+  # hikmah-manuscript-pdf:
+  #   output-file: rep_study.pdf
+  #   echo: false
+  #   mainfont: "Linux Libertine O"
+  #   mainfontoptions:
+  #   - "Numbers=Proportional"
+  #   - "Numbers=OldStyle"
+  #   mathfont: "Libertinus Math"
+  #   knitr:
+  #       opts_chunk:
+  #           dev: "cairo_pdf"
+
+
+  apaquarto-html:
+    #output-file: index.html
+  # wordcount-banner: true
+    output-file: rs_manuscript_apa.html
+    echo: false
+    floatsintext: true
+    theme: 
+        - zephyr
+        - ../assets/custom.scss
+    toc: true
+    shift-heading-level-by: 1
+    title-block-banner: "#000D51"
+    include-in-header:
+        - text: |
+            <style type="text/css">
+            h2.hide {
+                display: none;
+            }
+            </style>
 
 keywords: ["Information format", "Energy literacy", "Decision-making", "Planning"]
 

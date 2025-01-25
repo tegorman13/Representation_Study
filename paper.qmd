@@ -1,8 +1,8 @@
 ---
-title: Representation Project
-subtitle: "Planning to Save Energy: How Information Format Affects Accuracy"
+title: Representation Study
+#subtitle: "Planning to Save Energy: How Information Format Affects Accuracy"
 toc: false
-sidebar: false
+#sidebar: false
 repo-actions: false
 ---
 
@@ -17,7 +17,7 @@ repo-actions: false
   </a>
 
   <a class="btn btn-success btn-sm mb-1" href="/manuscript/output/manuscript-code.html" target="_blank">
-   <i class="fa-solid fa-arrow-up-right-from-square"></i>&ensp;HTML <small>(with code)</small>
+  <i class="fa-solid fa-arrow-up-right-from-square"></i>&ensp;HTML <small>(with code)</small>
   </a>
 
   <a class="btn btn-danger btn-sm mb-1" href="/manuscript/output/rep_study.pdf" target="manuscript">
@@ -35,6 +35,5 @@ repo-actions: false
   
 </p>
 
-<iframe src="/manuscript/output/manuscript.html" frameborder=".1" style="overflow:hidden;height:75%;width:95%;border:2px solid #ccc;" height="75%" width="98%" name="manuscript"></iframe>
+<iframe src="/manuscript/output/manuscript.html" frameborder=".1" style="overflow:hidden;height:75%;width:90%;border:2px solid #ccc;" height="75%" width="98%" name="manuscript"></iframe>
 ```
-

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.5">
+<meta name="generator" content="quarto-1.7.13">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,8 @@
 <meta name="author" content="Torsten Reimer">
 <meta name="author" content="Juan Pablo Loaiza Ramirez">
 <meta name="author" content="Hayden Barber">
-<meta name="dcterms.date" content="2025-01-12">
+<meta name="dcterms.date" content="2025-01-25">
+<meta name="keywords" content="Information format, Energy literacy, Decision-making, Planning">
 
 <title>Planning to Save Energy: How Information Format Affects Accuracy</title>
 <style>
@@ -49,15 +50,15 @@ div.csl-indent {
 
 
 <script src="manuscript_files/libs/clipboard/clipboard.min.js"></script>
-<script src="manuscript_files/libs/quarto-html/quarto.js"></script>
+<script src="manuscript_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="manuscript_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="manuscript_files/libs/quarto-html/popper.min.js"></script>
 <script src="manuscript_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="manuscript_files/libs/quarto-html/anchor.min.js"></script>
 <link href="manuscript_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="manuscript_files/libs/quarto-html/quarto-syntax-highlighting-ff4371ef257df69894857e99c6ad0d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="manuscript_files/libs/quarto-html/quarto-syntax-highlighting-66ab7fd5e73b7f0a764e0d49b3e29ab1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="manuscript_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="manuscript_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="manuscript_files/libs/bootstrap/bootstrap-610c6e11dd21a785536680bb9c0c5641.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="manuscript_files/libs/bootstrap/bootstrap-11fe676eb29b1f6d7774783e9e286cf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>
 
       .quarto-title-block .quarto-title-banner {
@@ -70,8 +71,22 @@ h2.hide {
 }
 </style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -100,6 +115,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="_extensions/wordcount/apa.css">
 </head>
 
 <body>
@@ -178,7 +194,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 12, 2025</p>
+        <p class="date">January 25, 2025</p>
       </div>
     </div>
     
@@ -188,7 +204,14 @@ window.Quarto = {
   <div>
     <div class="abstract">
       <div class="block-title">Abstract</div>
-      <p>Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers’ ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.</p>
+      Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers’ ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy.
+    </div>
+  </div>
+
+  <div>
+    <div class="keywords">
+      <div class="block-title">Keywords</div>
+      <p>Information format, Energy literacy, Decision-making, Planning</p>
     </div>
   </div>
   
@@ -202,6 +225,7 @@ window.Quarto = {
   <li><a href="#experiment-1" id="toc-experiment-1" class="nav-link" data-scroll-target="#experiment-1">Experiment 1</a>
   <ul class="collapse">
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#measures" id="toc-measures" class="nav-link" data-scroll-target="#measures">Measures</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#experiment-1-discussion" id="toc-experiment-1-discussion" class="nav-link" data-scroll-target="#experiment-1-discussion">Experiment 1: Discussion</a></li>
   </ul></li>
@@ -214,7 +238,7 @@ window.Quarto = {
   <li><a href="#general-discussion" id="toc-general-discussion" class="nav-link" data-scroll-target="#general-discussion">General Discussion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="manuscript.html"><i class="bi bi-file-minus"></i>HTML</a></li><li><a href="manuscript-code.html"><i class="bi bi-file-plus"></i>HTML (with code)</a></li><li><a href="rep_study.pdf"><i class="bi bi-file-pdf"></i>PDF version (hikmah-manuscript)</a></li><li><a href="manuscript.docx"><i class="bi bi-file-word"></i>MS Word</a></li><li><a href="manuscript_gfm.md"><i class="bi bi-file-code"></i>Github (GFM)</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="manuscript.html"><i class="bi bi-file-minus"></i>HTML</a></li><li><a href="manuscript-code.html"><i class="bi bi-file-plus"></i>HTML (with code)</a></li><li><a href="rs_manuscript_apa.pdf"><i class="bi bi-file-pdf"></i>PDF version (apaquarto)</a></li><li><a href="rs_manuscript_apa.docx"><i class="bi bi-file-word"></i>docx</a></li><li><a href="manuscript_gfm.md"><i class="bi bi-file-code"></i>Github (GFM)</a></li></ul></div></nav>
 </div>
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -223,53 +247,75 @@ window.Quarto = {
 
 
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<section id="literature-review" class="level4">
-<h4 class="anchored" data-anchor-id="literature-review">Literature Review</h4>
-<p>Energy insecurity has emerged as a critical public health concern, especially among low-income households, who frequently face difficult choices between paying energy bills and meeting other essential needs <span class="citation" data-cites="bednarRecognitionResponseEnergy2020 memmottSociodemographicDisparitiesEnergy2021">(<a href="#ref-bednarRecognitionResponseEnergy2020" role="doc-biblioref">Bednar &amp; Reames, 2020</a>; <a href="#ref-memmottSociodemographicDisparitiesEnergy2021" role="doc-biblioref">Memmott et al., 2021</a>)</span>. Such households often experience unsafe coping strategies (e.g., foregoing heating during winter months), which disproportionately affect racial and ethnic minorities and heighten risks of utility disconnection <span class="citation" data-cites="memmottSociodemographicDisparitiesEnergy2021">(<a href="#ref-memmottSociodemographicDisparitiesEnergy2021" role="doc-biblioref">Memmott et al., 2021</a>)</span>. Moreover, residential energy use contributes to climate change, intensifying the urgency for sustainable solutions <span class="citation" data-cites="farghaliStrategiesEnergyContext2023">(<a href="#ref-farghaliStrategiesEnergyContext2023" role="doc-biblioref">Farghali et al., 2023</a>)</span>. Promoting behavior change to reduce energy consumption is crucial. However, the success of such interventions may hinge on how effectively energy information is communicated, with format and presentation context significantly influencing understanding and action <span class="citation" data-cites="canfieldPerceptionsElectricityuseCommunications2017 fischerFeedbackHouseholdElectricity2008">(<a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">Canfield et al., 2017</a>; <a href="#ref-fischerFeedbackHouseholdElectricity2008" role="doc-biblioref">Fischer, 2008</a>)</span>. Consequently, a pressing challenge lies in designing communication strategies that effectively convey energy data and motivate practical conservation decisions</p>
-<p>The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities<span class="citation" data-cites="gigerenzerSimpleToolsUnderstanding2003 reimerNumericCommunicationRisk2015">(<a href="#ref-gigerenzerSimpleToolsUnderstanding2003" role="doc-biblioref">Gigerenzer &amp; Edwards, 2003</a>; <a href="#ref-reimerNumericCommunicationRisk2015" role="doc-biblioref">Reimer et al., 2015</a>)</span>. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate decision making. However, it’s important to note that even intuitive formats can pose challenges. For instance, <span class="citation" data-cites="weberWhyCanOnly2018">Weber et al. (<a href="#ref-weberWhyCanOnly2018" role="doc-biblioref">2018</a>)</span> found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking.</p>
-<p>The choice of units and the format in which information is presented have also been shown to exert a significant influence on decision-making specifically within the context of energy consumption and planning. For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading <span class="citation" data-cites="canfieldPerceptionsElectricityuseCommunications2017">(<a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">Canfield et al., 2017</a>)</span>. Furthermore, the framing of energy costs, such as displaying monthly rather than daily or yearly expenses, can significantly affect consumers’ choices <span class="citation" data-cites="gillConsumerMatchingCosts2022">(<a href="#ref-gillConsumerMatchingCosts2022" role="doc-biblioref">Gill et al., 2022</a>)</span>. Consequently, the selection of an appropriate information format is crucial for effectively supporting energy-related decisions. Therefore, similar to natural frequencies, kWh provide a direct measure of energy use - a characteristic that could simplify calculations and facilitate comparisons, potentially helping consumers better understand and compare the energy consumption of different appliances or activities. Conversely, prior research has suggested that consumers have a preference for receiving energy feedback in terms of monetary values over scientific units <span class="citation" data-cites="karjalainenConsumerPreferencesFeedback2011 nematiImpactInformationbasedInterventions2020">(<a href="#ref-karjalainenConsumerPreferencesFeedback2011" role="doc-biblioref">Karjalainen, 2011</a>; <a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>, as well as better long-term appliance selection with information presented in monetary terms <span class="citation" data-cites="blaschBoundedlyRationalConsumers2019">(<a href="#ref-blaschBoundedlyRationalConsumers2019" role="doc-biblioref">Blasch et al., 2019</a>)</span>. However, it remains uncertain how these reported benefits might generalize to the more complex task of household energy planning, where usage patterns are multifaceted and subject to a variety of contextual influences.</p>
-<p>Although many individuals express a desire to conserve energy, research consistently shows that abstract goals (e.g., “reduce overall usage by 15%”) often fail to translate into effective behavior change unless accompanied by specific, actionable steps <span class="citation" data-cites="abrahamseReviewInterventionStudies2005 nematiImpactInformationbasedInterventions2020">(<a href="#ref-abrahamseReviewInterventionStudies2005" role="doc-biblioref">Abrahamse et al., 2005</a>; <a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>. For instance, <span class="citation" data-cites="abrahamseReviewInterventionStudies2005">Abrahamse et al. (<a href="#ref-abrahamseReviewInterventionStudies2005" role="doc-biblioref">2005</a>)</span> demonstrated that merely providing general information about energy savings rarely alters consumption patterns unless consumers also receive concrete instructions or tailored feedback. Similarly, <span class="citation" data-cites="tonkeProvidingProceduralKnowledge2024">Tonke (<a href="#ref-tonkeProvidingProceduralKnowledge2024" role="doc-biblioref">2024</a>)</span> reported that sending households brief but precise text messages outlining how to reduce water use (e.g., limiting irrigation times, adjusting washing machine settings) yielded meaningful decreases in consumption, underscoring the importance of procedural knowledge—namely, knowing how to operationalize a goal rather than simply why it is desirable. In the context of energy conservation, this implies that interventions should not only highlight potential reductions (such as a 15% target) but also guide residents in allocating those reductions across specific appliances or behaviors <span class="citation" data-cites="attariPublicPerceptionsEnergy2010">(<a href="#ref-attariPublicPerceptionsEnergy2010" role="doc-biblioref">Attari et al., 2010</a>)</span>. Additionally, meta-analytic findings suggest that people respond more robustly to household-level feedback that situates their usage within a personalized framework, thereby reducing the cognitive burden of determining next steps <span class="citation" data-cites="nematiImpactInformationbasedInterventions2020">(<a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>.</p>
-<p>Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy.Based on the literature reviewed, we hypothesize that: 1) Presenting energy reduction goals in absolute units (kWh) will lead to greater planning accuracy compared to percentage-based or monetary formats, as absolute units provide a more direct and less ambiguous representation of energy quantities. 2) Higher energy literacy will be associated with more accurate planning, as individuals with greater energy knowledge may be better equipped to process and utilize the provided information, regardless of format. We also examine the potential of several exploratory variables, such as goal difficulty and the rounding of numerical values, to further elucidate the factors that influence planning accuracy.</p>
+<h2 data-anchor-id="introduction">Introduction</h2>
+<p>Energy insecurity has emerged as a critical public health concern, especially among low-income households, who frequently face difficult choices between paying energy bills and meeting other essential needs <span class="citation" data-cites="bednarRecognitionResponseEnergy2020 memmottSociodemographicDisparitiesEnergy2021">(<a href="#ref-bednarRecognitionResponseEnergy2020" role="doc-biblioref">Bednar &amp; Reames, 2020</a>; <a href="#ref-memmottSociodemographicDisparitiesEnergy2021" role="doc-biblioref">Memmott et al., 2021</a>)</span>. Such households often experience unsafe coping strategies (e.g., foregoing heating during winter months), which disproportionately affect racial and ethnic minorities and heighten risks of utility disconnection <span class="citation" data-cites="memmottSociodemographicDisparitiesEnergy2021">(<a href="#ref-memmottSociodemographicDisparitiesEnergy2021" role="doc-biblioref">Memmott et al., 2021</a>)</span>. Moreover, residential energy use contributes to climate change, intensifying the urgency for sustainable solutions <span class="citation" data-cites="farghaliStrategiesEnergyContext2023">(<a href="#ref-farghaliStrategiesEnergyContext2023" role="doc-biblioref">Farghali et al., 2023</a>)</span>.</p>
+<p>Given the relevance of promoting behavior change to reduce energy consumption, several strands of research have aimed to identify factors that affect energy behaviors and interventions that effectively reduce energy consumption. Interventions often focus on X, Y, Z. For example, …</p>
+<p>However, the success of such interventions may hinge on how effectively energy information is communicated, with format and presentation context significantly influencing understanding and action <span class="citation" data-cites="canfieldPerceptionsElectricityuseCommunications2017 fischerFeedbackHouseholdElectricity2008">(<a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">Canfield et al., 2017</a>; <a href="#ref-fischerFeedbackHouseholdElectricity2008" role="doc-biblioref">Fischer, 2008</a>)</span>. Consequently, a pressing challenge lies in designing communication strategies that effectively convey energy data and motivate practical conservation decisions. We set out to explore if consumers are able to develop plans that would help meet certain energy consumption goals.</p>
+<section id="representation-formats" class="level4">
+<h4 data-anchor-id="representation-formats">Representation Formats</h4>
+<p>Receiving feedback about one’s energy use is an important step in identifying potential actions to reduce energy consumption. However, it is crucial to understand how consumers use the information that is given with their energy bill and whether consumers are able to translate a energy saving goal into an action plan.</p>
+<p>Building on the study of Canfield et al.&nbsp;(2017), we aimed to test xxx.</p>
+<p>Although many individuals express a desire to conserve energy, research consistently shows that abstract goals (e.g., “reduce overall usage by 15%”) often fail to translate into effective behavior change unless accompanied by specific, actionable steps <span class="citation" data-cites="abrahamseReviewInterventionStudies2005 nematiImpactInformationbasedInterventions2020">(<a href="#ref-abrahamseReviewInterventionStudies2005" role="doc-biblioref">Abrahamse et al., 2005</a>; <a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>. For instance, <span class="citation" data-cites="abrahamseReviewInterventionStudies2005">Abrahamse et al. (<a href="#ref-abrahamseReviewInterventionStudies2005" role="doc-biblioref">2005</a>)</span> demonstrated that merely providing general information about energy savings rarely alters consumption patterns unless consumers also receive concrete instructions or tailored feedback.</p>
+<p>Similarly, <span class="citation" data-cites="tonkeProvidingProceduralKnowledge2024">Tonke (<a href="#ref-tonkeProvidingProceduralKnowledge2024" role="doc-biblioref">2024</a>)</span> rreported that sending households brief but precise text messages outlining how to reduce water use (e.g., limiting irrigation times, adjusting washing machine settings) yielded meaningful decreases in consumption, underscoring the importance of procedural knowledge—namely, knowing how to operationalize a goal rather than simply why it is desirable. In the context of energy conservation, this implies that interventions should not only highlight potential reductions (such as a 15% target) but also guide residents in allocating those reductions across specific appliances or behaviors <span class="citation" data-cites="attariPublicPerceptionsEnergy2010">(<a href="#ref-attariPublicPerceptionsEnergy2010" role="doc-biblioref">Attari et al., 2010</a>)</span>. Additionally, meta-analytic findings suggest that people respond more robustly to household-level feedback that situates their usage within a personalized framework, thereby reducing the cognitive burden of determining next steps <span class="citation" data-cites="nematiImpactInformationbasedInterventions2020">(<a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>.</p>
+<p>The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities<span class="citation" data-cites="gigerenzerSimpleToolsUnderstanding2003 reimerNumericCommunicationRisk2015">(<a href="#ref-gigerenzerSimpleToolsUnderstanding2003" role="doc-biblioref">Gigerenzer &amp; Edwards, 2003</a>; <a href="#ref-reimerNumericCommunicationRisk2015" role="doc-biblioref">Reimer et al., 2015</a>)</span>. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate decision making. However, it is important to note that even intuitive formats can pose challenges. For instance, <span class="citation" data-cites="weberWhyCanOnly2018">Weber et al. (<a href="#ref-weberWhyCanOnly2018" role="doc-biblioref">2018</a>)</span> found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking.</p>
+<p>The choice of units and the format in which information is presented have also been shown to exert a significant influence on decision-making within the context of energy consumption and planning. For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading <span class="citation" data-cites="canfieldPerceptionsElectricityuseCommunications2017">(<a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">Canfield et al., 2017</a>)</span>. Furthermore, the framing of energy costs, such as displaying monthly rather than daily or yearly expenses, can significantly affect consumers’ choices <span class="citation" data-cites="gillConsumerMatchingCosts2022">(<a href="#ref-gillConsumerMatchingCosts2022" role="doc-biblioref">Gill et al., 2022</a>)</span>. Consequently, the selection of an appropriate information format is crucial for effectively supporting energy-related decisions. Therefore, similar to natural frequencies, kWh provide a direct measure of energy use - a characteristic that could simplify calculations and facilitate comparisons, potentially helping consumers better understand and compare the energy consumption of different appliances or activities. Conversely, prior research has suggested that consumers have a preference for receiving energy feedback in terms of monetary values over scientific units <span class="citation" data-cites="karjalainenConsumerPreferencesFeedback2011 nematiImpactInformationbasedInterventions2020">(<a href="#ref-karjalainenConsumerPreferencesFeedback2011" role="doc-biblioref">Karjalainen, 2011</a>; <a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span>, as well as better long-term appliance selection with information presented in monetary terms <span class="citation" data-cites="blaschBoundedlyRationalConsumers2019">(<a href="#ref-blaschBoundedlyRationalConsumers2019" role="doc-biblioref">Blasch et al., 2019</a>)</span>. However, it remains uncertain how these reported benefits might generalize to the more complex task of household energy planning, where usage patterns are multifaceted and subject to a variety of contextual influences.</p>
+</section>
+<section id="overview-of-current-research" class="level4">
+<h4 data-anchor-id="overview-of-current-research">Overview of Current Research</h4>
+<p>Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy. Based on the literature reviewed, we hypothesize that: 1) Presenting energy reduction goals in absolute units (kWh) will lead to greater planning accuracy compared to percentage-based or monetary formats, as absolute units provide a more direct and less ambiguous representation of energy quantities. 2) Higher energy literacy will be associated with more accurate planning, as individuals with greater energy knowledge may be better equipped to process and utilize the provided information, regardless of format. We also examine the potential of several exploratory variables, such as goal difficulty and the rounding of numerical values, to further elucidate the factors that influence planning accuracy.</p>
 </section>
 </section>
 <section id="experiment-1" class="level2">
-<h2 class="anchored" data-anchor-id="experiment-1">Experiment 1</h2>
+<h2 data-anchor-id="experiment-1">Experiment 1</h2>
 <p>See <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a> for an example of a planning trial as it was seen by participants.</p>
 <section id="methods" class="level3">
-<h3 class="anchored" data-anchor-id="methods">Methods</h3>
+<h3 data-anchor-id="methods">Methods</h3>
 <section id="participants" class="level4">
-<h4 class="anchored" data-anchor-id="participants">Participants</h4>
-<p>We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 252 participants were initially recruited. Data from 17 participants were corrupted due to experimenter error, and six participants were excluded due to deviant performance on the task, resulting in a final sample of 229 participants (146 males, 92 females, 1 not specified). The average age of participants was 34.3 years (SD = 10.2). Most participants (76%) reported using a calculator to complete the task.</p>
+<h4 data-anchor-id="participants">Participants</h4>
+<p>We implemented our task and surveys on Qualtrics, and recruited participants through Amazon Mechanical Turk. In Experiment 1, 235 participants were initially recruited. Data from six participants were excluded due to deviant performance on the task, resulting in a final sample of 229 participants (146 males, 92 females, 1 not specified). The average age of participants was 34.3 years (SD = 10.2). Most participants (76%) reported using a calculator to complete the task.</p>
 </section>
 <section id="materials-and-design" class="level4">
-<h4 class="anchored" data-anchor-id="materials-and-design">Materials and Design</h4>
-<p>The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states (i.e., family scenarios), with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. Average utility use data for each state was obtained from the CITE SOURCE FOR STATE AVGS? Participants also completed an 8-item questionnaire assessing participants’ knowledge of energy consumption and conversion <span class="citation" data-cites="dewatersEnergyLiteracySecondary2011">(<a href="#ref-dewatersEnergyLiteracySecondary2011" role="doc-biblioref">DeWaters &amp; Powers, 2011</a>)</span>, and a question indicating whether they used a calculator for the task.</p>
+<h4 data-anchor-id="materials-and-design">Materials and Design</h4>
+<p>The study employed a mixed design with reference class (kWh, percentage, USD) as a between-subjects factor and state/family scenario as a within-subjects factor. Each participant completed energy reduction planning tasks for two different states (i.e., family scenarios), with state order counterbalanced across participants. The family scenarios featured four households in different climate regions: Texas (Smith family) and California (Adams family) representing warm climates, and Colorado (Wells family) and Massachusetts (Davis family) representing cold climates. Average utility use data for each state was obtained from the CITE SOURCE FOR STATE AVGS? Participants also completed an 8-item questionnaire assessing their knowledge of energy consumption and conversion <span class="citation" data-cites="dewatersEnergyLiteracySecondary2011">(<a href="#ref-dewatersEnergyLiteracySecondary2011" role="doc-biblioref">DeWaters &amp; Powers, 2011</a>)</span>, and a question indicating whether they used a calculator for the task.</p>
 </section>
 <section id="procedure" class="level4">
-<h4 class="anchored" data-anchor-id="procedure">Procedure</h4>
-<p>Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. These goals were implementing by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting). Participants were informed at the start of the task that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer).For each family scenario, participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.</p>
-<div id="fig-task" class="quarto-float quarto-figure quarto-figure-center anchored">
+<h4 data-anchor-id="procedure">Procedure</h4>
+<p>Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family’s utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, … .</p>
+<div id="fig-task" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD." data-fignum="1" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/images/wells10e_pub.png" class="img-fluid figure-img">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;1</p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Example energy planning task trial. Participants saw a table with a family’s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD.
+<div class="Caption" data-custom-style="Caption">
+<p>Example energy planning task trial</p>
+</div>
 </figcaption>
+<div aria-describedby="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/images/wells10e_pub.png" class="img-fluid figure-img" data-apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD.">
+</div>
 </figure>
 </div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Participants saw a table with a family’s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD.</p>
+</div>
 </section>
+</section>
+<section id="measures" class="level3">
+<h3 data-anchor-id="measures">Measures</h3>
 </section>
 <section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
-<section id="data-analysis" class="level4">
-<h4 class="anchored" data-anchor-id="data-analysis">Data Analysis</h4>
+<h3 data-anchor-id="results">Results</h3>
 <p>All preprocessing and analyses were carried out in R <span class="citation" data-cites="rcoreteamLanguageEnvironmentStatistical2020">(<a href="#ref-rcoreteamLanguageEnvironmentStatistical2020" role="doc-biblioref">Team, 2020</a>)</span> and the Tidyverse package <span class="citation" data-cites="wickhamWelcomeTidyverse2019">(<a href="#ref-wickhamWelcomeTidyverse2019" role="doc-biblioref">Wickham et al., 2019</a>)</span>. Mixed Bayesian regressions were fit using the brms package <span class="citation" data-cites="burknerBrmsPackageBayesian2017">(<a href="#ref-burknerBrmsPackageBayesian2017" role="doc-biblioref">Bürkner, 2017</a>)</span>, with participants and family scenario (states) set as random effects.</p>
-<div id="tbl-s1-agg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-s1-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="1" data-apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;1</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Study 1: Summary of planning accuracy by reference class</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s1-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -321,27 +367,43 @@ Table&nbsp;1: Study 1: Summary of planning accuracy by reference class. The tabl
 </div>
 </figure>
 </div>
-<p><a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a> shows that participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when percentages or USD.</p>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC</p>
+</div>
+<p><a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a> shows the average x,y,z, separately for the conditions of … . As can be seen in Table 1, participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when the goal was framed in percentages or USD.</p>
 <p>As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a>, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations.</p>
-<div class="cell">
+<div class="cell FigureWithNote" data-apa-note="Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s1-log-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s1-log-dist" class="quarto-float quarto-figure quarto-figure-center" data-fignum="2" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;2</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 1: Planning Error Distributions</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s1-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s1-log-dist-1.png" class="img-fluid figure-img" width="1056">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s1-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Experiment 1: Distribution of the log of the absolute error between the participant’s action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
-<div id="tbl-s1-prop" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Distribution of the log of the absolute error between the participant’s action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy.</p>
+</div>
+<div class="cell FigureWithNote" data-apa-note="The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions." prefix="" data-tblnum="2" data-custom-style="FigureWithNote">
+<div id="tbl-s1-prop" class="cell quarto-float quarto-figure quarto-figure-center" prefix="" data-tblnum="2" data-apa-note="The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Study 1: The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;2</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Study 1: Descriptive Performance</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s1-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -383,16 +445,24 @@ Table&nbsp;2: Study 1: The table shows the percentage of participants who fell i
 </div>
 </figure>
 </div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.</p>
+</div>
 </div>
 <p>We next categorized responses into three accuracy levels (exact match [0% error], minor deviations [0.01–5%], and large deviations [&gt;5%]) for our primary statistical modeling. Using Bayesian ordinal regression, we modeled the ordered accuracy outcome as a function of the reference class condition, while controlling for random variation across participants and family scenarios:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \text{Accuracy Level} \sim \text{Reference Class} + \text{Calculator} + (1|\text{id}) + (1|\text{Family Scenario})
-\]</span></p>
+</span></p>
 <p>This approach allowed us to estimate thresholds (intercepts) and regression coefficients that capture how different reference classes affect the likelihood of achieving higher accuracy categories. For each comparison, we provide posterior odds ratios (OR) and their 95% CIs. This approach allows the estimation of threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category. Specifically, we used a cumulative logit link function to model the ordered accuracy outcome, and we specified weakly informative priors for the regression coefficients (normal distributions with mean 0 and standard deviation of 1) and for the cutpoints (normal distributions with a mean of zero and a standard deviation of 4.0). The approach allows us to estimate threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category.</p>
-<div id="tbl-s1-reg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-s1-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="3" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3: <strong>Experiment 1</strong>: Ordinal Regression results. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;3</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p><strong>Experiment 1</strong>: Ordinal Regression results</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s1-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -446,10 +516,18 @@ Table&nbsp;3: <strong>Experiment 1</strong>: Ordinal Regression results. Ordinal
 </div>
 </figure>
 </div>
-<div id="tbl-s1-ord" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.</p>
+</div>
+<div id="tbl-s1-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="4" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4: <strong>Experiment 1</strong>: Odds ratios for group comparisons. Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition.
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;4</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p><strong>Experiment 1</strong>: Odds ratios for group comparisons</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s1-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -479,57 +557,80 @@ Table&nbsp;4: <strong>Experiment 1</strong>: Odds ratios for group comparisons. 
 </div>
 </figure>
 </div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition</p>
+</div>
 <p>As shown in <a href="#tbl-s1-reg" class="quarto-xref">Table&nbsp;3</a>, the reference class coefficients are positive for both the Percentage (Estimate = 1.44, 95% CI: 0.07 to 2.88, pd = 0.98) and USD (Estimate = 3.13, 95% CI: 1.81 to 4.50, pd = 1.00) conditions, relative to the kWh baseline. This indicates that, compared to the kWh condition, participants in both the Percentage and USD conditions were more likely to produce plans that fell into higher error categories. Moreover, the odds ratios (see Table&nbsp;3) suggest that the USD condition led to a notably higher likelihood of large errors compared to the kWh baseline (OR = 22.9), while the Percentage condition also demonstrated increased odds (OR = 4.2) but was somewhat less detrimental to accuracy than USD. These results align with our descriptive findings and further clarify that framing the target reductions in absolute kWh units may facilitate significantly more accurate planning. Posterior predictive checks showed that the ordinal model provided a reasonable fit to the observed data (see <a href="#fig-s1-ppd" class="quarto-xref">Figure&nbsp;3</a>).</p>
-<div class="cell">
+<div class="cell FigureWithNote" data-apa-note="Posterior predictive check for frequency of trials at each accuracy level, faceted by reference class (kWh, Percentage, USD). Bars show observed, dots show model predicted proportions. Better accuracy is indicated by higher proportions in the 'Exact Match' and '0.01-5% error' categories." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s1-ppd" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s1-ppd" class="quarto-float quarto-figure quarto-figure-center" data-fignum="3" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;3</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 1: Posterior Predictive Check</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s1-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s1-ppd-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s1-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Experiment 1: Posterior predictive check for frequency of trials at each accuracy level, faceted by reference class (kWh, Percentage, USD). Bars show observed, dots show model predicted proportions. Better accuracy is indicated by higher proportions in the ‘Exact Match’ and ‘0.01-5% error’ categories.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Posterior predictive check for frequency of trials at each accuracy level, faceted by reference class (kWh, Percentage, USD). Bars show observed, dots show model predicted proportions. Better accuracy is indicated by higher proportions in the ‘Exact Match’ and ‘0.01-5% error’ categories.</p>
+</div>
+<div class="cell FigureWithNote" data-apa-note="The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s1-els" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s1-els" class="quarto-float quarto-figure quarto-figure-center" data-fignum="4" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;4</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 1. Conditional effect of energy literacy on log absolute error</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s1-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s1-els-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s1-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Experiment 1. Conditional effect of energy literacy on log absolute error. The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning.</p>
+</div>
 <p>To further investigate individual factors that may influence planning accuracy, we examined the relationship between participants’ energy literacy scores and their performance on the task. Energy literacy was assessed using an 8-item questionnaire adapted from <span class="citation" data-cites="dewatersEnergyLiteracySecondary2011">(<a href="#ref-dewatersEnergyLiteracySecondary2011" role="doc-biblioref">DeWaters &amp; Powers, 2011</a>)</span>, which covers topics such as energy units, appliance energy consumption, and sources of electricity. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1|id) + (1|state). Results indicated a significant negative relationship between energy literacy and log absolute error (Estimate = -2.35, 95% CI: -2.88 to -1.81), suggesting that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (<a href="#fig-s1-els" class="quarto-xref">Figure&nbsp;4</a>).</p>
 </section>
-</section>
 <section id="experiment-1-discussion" class="level3">
-<h3 class="anchored" data-anchor-id="experiment-1-discussion">Experiment 1: Discussion</h3>
+<h3 data-anchor-id="experiment-1-discussion">Experiment 1: Discussion</h3>
 <p>Experiment 1 examined how different numerical representations of energy reduction goals affected participants’ planning accuracy. In line with our hypothesis that absolute units would yield better accuracy, the kWh condition supported significantly more precise energy reduction plans than did either the Percentage or USD conditions. Although the Percentage format was detrimental to accuracy relative to kWh, it was the USD condition that consistently produced the poorest outcomes, suggesting that monetary terms, while intuitive in everyday contexts, may not serve as effective reference classes for planning appliance-specific reductions in energy use.</p>
 <p>Experiment 2 will extend these findings by examining whether additional variables, such as the difficulty of the reduction goal or the rounding of numerical values, further interact with reference class conditions, thereby providing a more comprehensive understanding of how to optimize energy information presentation for improved planning accuracy.</p>
 </section>
 </section>
 <section id="experiment-2" class="level2">
-<h2 class="anchored" data-anchor-id="experiment-2">Experiment 2</h2>
+<h2 data-anchor-id="experiment-2">Experiment 2</h2>
 <section id="methods-1" class="level3">
-<h3 class="anchored" data-anchor-id="methods-1">Methods</h3>
+<h3 data-anchor-id="methods-1">Methods</h3>
 <p>In Experiment 2, We recruited 206 participants from Amazon Mechanical Turk, but data from 10 participants were corrupted due to experimenter error, and six excluded due to deviant behavior, leaving a final sample of 190 participants (102 male; 88 female. Average age = 35.5, SD=9.5)</p>
 <p>Experiment 2 employed a mixed experimental design with reference class (USD, Percentage, kWh) as a between-subjects factor, and two within-subjects factors: task goal (10% vs.&nbsp;15% reduction) and the presentation of last year’s usage data (exact vs.&nbsp;rounded numbers). The order of presentation of the goal, rounding, and state conditions was counterbalanced across participants. As in Experiment 1, each participant completed the energy reduction planning task for two different family-state scenarios. In the “rounded” condition, both the family’s previous year usage and the state averages were rounded to the nearest whole number.</p>
 </section>
 <section id="results-1" class="level3">
-<h3 class="anchored" data-anchor-id="results-1">Results</h3>
-<div id="tbl-s2-agg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<h3 data-anchor-id="results-1">Results</h3>
+<div id="tbl-s2-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="5" data-apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5: Experiment 2: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;5</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 2: Summary of planning accuracy by reference class</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s2-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -576,36 +677,40 @@ Table&nbsp;5: Experiment 2: Summary of planning accuracy by reference class. The
 </div>
 </figure>
 </div>
-<div class="cell">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal.</p>
+</div>
+<div class="cell FigureWithNote" data-apa-note="Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s2-log-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s2-log-dist" class="quarto-float quarto-figure quarto-figure-center" data-fignum="5" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;5</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 2: Planning Error Distributions</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s2-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s2-log-dist-1.png" class="img-fluid figure-img" width="1056">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Experiment 2: Distribution of the log of the absolute error between the participant’s action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div id="tbl-s2-ord" class="cell quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-s2-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6
-</figcaption>
-<div aria-describedby="tbl-s2-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Distribution of the log of the absolute error between the participant’s action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy.</p>
 </div>
-</div>
-</figure>
-</div>
-<div id="tbl-s2-reg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-s2-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="6" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7: <strong>Experiment 2.</strong> Parameter estimates from the ordinal regression model. Positive coefficients for refClass predictors indicate increased likelihood of falling into higher error categories relative to the kWh baseline.
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;6</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p><strong>Experiment 2.</strong> Parameter estimates from the ordinal regression model</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s2-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -673,10 +778,18 @@ Table&nbsp;7: <strong>Experiment 2.</strong> Parameter estimates from the ordina
 </div>
 </figure>
 </div>
-<div id="tbl-s2-ord" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.</p>
+</div>
+<div id="tbl-s2-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="7" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8: <strong>Experiment 2.</strong> Odds ratios for group comparisons. Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the comparison condition.
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;7</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p><strong>Experiment 2.</strong> Odds ratios for group comparisons</p>
+</div>
 </figcaption>
 <div aria-describedby="tbl-s2-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -724,56 +837,83 @@ Table&nbsp;8: <strong>Experiment 2.</strong> Odds ratios for group comparisons. 
 </div>
 </figure>
 </div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition</p>
+</div>
 <p>As in Experiment 1, accuracy was categorized into three ordinal levels: “Exact match” (0% error), “0.01-5% error,” and “Over 5% error”. The analyses for Experiment 2 employed a Bayesian ordinal regression model to examine the probability of falling into one of three accuracy categories (exact match, minor deviations, or substantial deviations) as a function of the reference class condition (kWh, Percentage, USD), while including pct_goal (10% vs.&nbsp;15%), rounded (exact vs.&nbsp;rounded usage data), and calculator usage as additional predictors. Random intercepts were specified for both participant and state,</p>
 <p>The ordinal regression analysis revealed that the USD reference class significantly increased the odds of higher error categories compared to the kWh reference class (OR = 9.68, 95% CI: [1.69, 53.4]). Participants in the USD condition were therefore substantially more likely to deviate from the target energy reduction goal compared to those in the kWh condition. In contrast, the Percentage condition’s odds ratio relative to kWh was more uncertain (OR = 2.78, 95% CI: 0.53, 15.0), indicating that although there may be a trend toward reduced accuracy in the Percentage condition, the evidence was not definitive.</p>
 <p>We also found that using rounded numbers modestly improved accuracy (b = -0.53, 95% CI: [-0.96, -0.11]), with participants having 0.59 times the odds of falling into a worse accuracy category when working with rounded values. The more challenging 15% reduction goal was associated with slightly better performance compared to the 10% goal (b = -0.39, 95% CI: [-0.81, 0.04]), though this effect was relatively small. Consistent with Experiment 1, the use of a calculator had a large and significant effect on accuracy. The coefficient for calcNoCalculator was 4.10 (95% CI: 2.20, 6.06), and the corresponding odds ratio was 60.37 (95% CI: 9.02, 426.4), indicating that participants who did not use a calculator were substantially more likely to fall into higher error categories.</p>
 <p><a href="#fig-s2-ame" class="quarto-xref">Figure&nbsp;6</a> shows the marginal effects of refClass on each level of accuracy_level. These results reveal that switching from kWh to Percentage decreased the probability of an “Exact match” by an average of 7.0 percentage points (95% CI: -19.2, 4.2) and increased the probability of “Over 5% error” by 6.9 percentage points (95% CI: -4.5, 18.6). Similarly, switching from kWh to USD decreased the probability of an “Exact match” by 15 percentage points (95% CI: -26.7, -3.3) and increased the probability of “Over 5% error” by 16.5 percentage points (95% CI: 3.7, 29.3).</p>
-<div class="cell">
+<div class="cell FigureWithNote" data-apa-note="The points represent the average change in the probability of each accuracy level when switching from the kWh reference class to Percentage (red) or USD (green). Error bars indicate 95% credible intervals. The results show that, compared to kWh, the Percentage format decreases the probability of an &quot;Exact match&quot; by 7.0% and increases the probability of &quot;Over 5% error&quot; by 6.9%. The USD format has a larger negative effect on &quot;Exact match&quot; (-14.7%) and a larger positive effect on &quot;Over 5% error&quot; (+16.5%). The effects on the &quot;0.01-5% error&quot; category are near zero for both comparisons." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s2-ame" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s2-ame" class="quarto-float quarto-figure quarto-figure-center" data-fignum="6" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-ame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;6</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 2. Average marginal effects of reference class on accuracy levels</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s2-ame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s2-ame-1.png" class="img-fluid figure-img" width="1056">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-ame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Experiment 2. Average marginal effects of reference class on accuracy levels (Experiment 2). The points represent the average change in the probability of each accuracy level when switching from the kWh reference class to Percentage (red) or USD (green). Error bars indicate 95% credible intervals. The results show that, compared to kWh, the Percentage format decreases the probability of an “Exact match” by 7.0% and increases the probability of “Over 5% error” by 6.9%. The USD format has a larger negative effect on “Exact match” (-14.7%) and a larger positive effect on “Over 5% error” (+16.5%). The effects on the “0.01-5% error” category are near zero for both comparisons.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The points represent the average change in the probability of each accuracy level when switching from the kWh reference class to Percentage (red) or USD (green). Error bars indicate 95% credible intervals. The results show that, compared to kWh, the Percentage format decreases the probability of an “Exact match” by 7.0% and increases the probability of “Over 5% error” by 6.9%. The USD format has a larger negative effect on “Exact match” (-14.7%) and a larger positive effect on “Over 5% error” (+16.5%). The effects on the “0.01-5% error” category are near zero for both comparisons.</p>
+</div>
+<div class="cell FigureWithNote" data-apa-note="The plot shows the observed and predicted frequencies of each accuracy level, faceted by reference class (kWh, Percentage, USD). The model provides a reasonable fit to the observed data, with the predicted proportions closely matching the observed frequencies." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s2-ppd" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s2-ppd" class="quarto-float quarto-figure quarto-figure-center" data-fignum="7" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;7</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 2. Posterior predictive check of the bayesian regression model</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s2-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s2-ppd-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: Experiment 2. Posterior predictive check of the bayesian regression model, faceted by reference class. The bars represent the observed frequencies of each accuracy level within each reference class. The points represent the model’s predicted proportions, with error bars indicating 95% credible intervals.
-</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The plot shows the observed and predicted frequencies of each accuracy level, faceted by reference class (kWh, Percentage, USD). The model provides a reasonable fit to the observed data, with the predicted proportions closely matching the observed frequencies.</p>
+</div>
+<div class="cell FigureWithNote" data-apa-note="The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning." data-custom-style="FigureWithNote">
 <div class="cell-output-display">
-<div id="fig-s2-els" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-s2-els" class="quarto-float quarto-figure quarto-figure-center" data-fignum="8" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;8</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Experiment 2. Conditional effect of energy literacy on log absolute error</p>
+</div>
+</figcaption>
 <div aria-describedby="fig-s2-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="manuscript_files/figure-html/fig-s2-els-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-s2-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Experiment 2. Conditional effect of energy literacy on log absolute error. The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning.
-</figcaption>
 </figure>
 </div>
 </div>
+</div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. The plot shows the relationship between energy literacy score and log absolute error, controlling for random effects of participant and state. Higher energy literacy scores are associated with smaller deviations from the target reduction goal, indicating more accurate planning.</p>
 </div>
 <p>We once again examined the effect of energy literacy on planning accuracy. A Bayesian linear regression model was fit with log-transformed absolute error as the outcome variable and energy literacy score as the predictor, controlling for random effects of participant and state: log_abs_error ~ els + (1|id) + (1|state). This revealed a significant negative relationship between energy literacy and log absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52), indicating that participants with higher energy literacy scores tended to have smaller deviations from the target reduction goal, and thus more accurate plans overall (<a href="#fig-s2-els" class="quarto-xref">Figure&nbsp;8</a>).</p>
 </section>
 <section id="experiment-2-discussion" class="level3">
-<h3 class="anchored" data-anchor-id="experiment-2-discussion">Experiment 2: Discussion</h3>
+<h3 data-anchor-id="experiment-2-discussion">Experiment 2: Discussion</h3>
 <p>Experiment 2 aimed to build upon the findings of Experiment 1 by replicating the core manipulation of reference class. Additionally, it incorporated variables that might influence planning accuracy. These included goal difficulty and the way that the prior year’s usage was presented (rounded or exact). The results largely converged with those of Experiment 1, providing further converging evidence that presenting energy reduction goals in absolute units (kWh) facilitates more accurate planning compared to percentage-based or monetary formats.</p>
 <p>Taken together, the results of Experiment 2 provide further support for the hypothesis that presenting energy reduction goals in absolute units (kWh) leads to more accurate planning compared to percentage-based or monetary formats.</p>
 <p>The finding that the more challenging 15% reduction goal was associated with a slight improvement in accuracy is counterintuitive. It may be that participants put more effort into the task under this condition, or perhaps this is an artifact of the way that the task was presented. However, this effect was relatively small and thus should be explored in future research to better understand its underlying mechanisms. Furthermore, the magnitude of the effect size of this manipulation should be examined to better understand the practical implications of goal difficulty for energy conservation.</p>
@@ -781,7 +921,7 @@ Figure&nbsp;8: Experiment 2. Conditional effect of energy literacy on log absolu
 </section>
 </section>
 <section id="general-discussion" class="level2">
-<h2 class="anchored" data-anchor-id="general-discussion">General Discussion</h2>
+<h2 data-anchor-id="general-discussion">General Discussion</h2>
 <p>This study examined how different numerical representations of energy reduction goals influence consumers’ ability to create accurate energy conservation plans. Across two experiments, participants in the kWh conditions exhibited the smallest errors in allocating energy cuts across appliances, a result that consistently held even as scenario details varied. These results extend prior observations on the impact of numerical format on comprehension and decision-making <span class="citation" data-cites="gigerenzerSimpleToolsUnderstanding2003 reimerNumericCommunicationRisk2015">(<a href="#ref-gigerenzerSimpleToolsUnderstanding2003" role="doc-biblioref">Gigerenzer &amp; Edwards, 2003</a>; <a href="#ref-reimerNumericCommunicationRisk2015" role="doc-biblioref">Reimer et al., 2015</a>)</span>. but they move beyond simpler estimation tasks to show how these benefits persist in a multi-step planning context. Notably, individuals with higher energy literacy performed better overall, a finding in line with previous work emphasizing the importance of domain knowledge for effective resource conservation <span class="citation" data-cites="attariPublicPerceptionsEnergy2010 canfieldPerceptionsElectricityuseCommunications2017">(<a href="#ref-attariPublicPerceptionsEnergy2010" role="doc-biblioref">Attari et al., 2010</a>; <a href="#ref-canfieldPerceptionsElectricityuseCommunications2017" role="doc-biblioref">Canfield et al., 2017</a>)</span></p>
 <p>While prior research has suggested that consumers sometimes prefer monetary formats<span class="citation" data-cites="karjalainenConsumerPreferencesFeedback2011 nematiImpactInformationbasedInterventions2020">(<a href="#ref-karjalainenConsumerPreferencesFeedback2011" role="doc-biblioref">Karjalainen, 2011</a>; <a href="#ref-nematiImpactInformationbasedInterventions2020" role="doc-biblioref">Nemati &amp; Penn, 2020</a>)</span> or that monetary framing can improve appliance choices <span class="citation" data-cites="blaschBoundedlyRationalConsumers2019">(<a href="#ref-blaschBoundedlyRationalConsumers2019" role="doc-biblioref">Blasch et al., 2019</a>)</span>, our findings tentatively indicate that absolute energy units can facilitate the finer-grained calculations needed to plan specific usage cuts. This may be because kWh provide a more direct and less ambiguous representation of energy quantities, facilitating the necessary calculations for accurate planning. Moreover, although percentage-based targets might seem appealing from a goal-setting perspective, the additional step of converting percentages to tangible appliance reductions likely increases the chances for error <span class="citation" data-cites="fisher100BiasEffects2022">(<a href="#ref-fisher100BiasEffects2022" role="doc-biblioref">Fisher &amp; Mormann, 2022</a>)</span>. Research on consumer heuristics in energy judgments <span class="citation" data-cites="vandenbroekHeuristicsEnergyJudgement2019">(<a href="#ref-vandenbroekHeuristicsEnergyJudgement2019" role="doc-biblioref">Van Den Broek &amp; Walker, 2019</a>)</span> suggests that individuals gravitate toward concrete cues, and the directness of absolute units may align well with these heuristics. Similarly, the concept of “default units” <span class="citation" data-cites="herberzKiloWhatDefault2020">(<a href="#ref-herberzKiloWhatDefault2020" role="doc-biblioref">Herberz et al., 2020</a>)</span> further highlights how presenting energy data in a straightforward, standardized format can guide better consumer decisions. Nevertheless, it is unclear whether the observed benefits of absolute units (i.e., kWh) are genuinely attributable to their absolute nature, or if other inherent characteristics of these units might be driving the effects.</p>
 <p>A few constraints should be considered. First, each participant only completed a limited set of action plans (four total), which may not capture the variability of real-world decision processes. Second, although we recorded whether participants used calculators, we could not control how thoroughly they engaged in mathematical computations, nor could we track other external resources they might have consulted. Future studies could examine more extensive planning tasks, perhaps over multiple sessions, to see how stable these effects remain over time and repeated feedback cycles <span class="citation" data-cites="fischerFeedbackHouseholdElectricity2008">(<a href="#ref-fischerFeedbackHouseholdElectricity2008" role="doc-biblioref">Fischer, 2008</a>)</span>. In addition, investigating whether certain household types or income levels respond differently to monetary versus absolute energy frames could yield further practical guidance for targeting energy-reduction interventions. Finally, incorporating more explicit or automated prompts for appliance-specific tips <span class="citation" data-cites="tonkeProvidingProceduralKnowledge2024">(<a href="#ref-tonkeProvidingProceduralKnowledge2024" role="doc-biblioref">Tonke, 2024</a>)</span> could clarify how best to translate high-level goals into tangible actions in diverse contexts. By building on these avenues, subsequent work can refine how energy information is formatted and delivered, ultimately enhancing both the precision and feasibility of conservation planning.</p>
@@ -790,7 +930,7 @@ Figure&nbsp;8: Experiment 2. Conditional effect of energy literacy on log absolu
 <div style="page-break-after: always;"></div>
 </section>
 <section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<h2 data-anchor-id="references">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-abrahamseReviewInterventionStudies2005" class="csl-entry" role="listitem">
 Abrahamse, W., Steg, L., Vlek, C., &amp; Rothengatter, T. (2005). A review of intervention studies aimed at household energy conservation. <em>Journal of Environmental Psychology</em>, <em>25</em>(3), 273–291. <a href="https://doi.org/10.1016/j.jenvp.2005.08.002">https://doi.org/10.1016/j.jenvp.2005.08.002</a>
@@ -883,13 +1023,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     
