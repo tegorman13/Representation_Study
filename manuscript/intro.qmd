@@ -1,3 +1,29 @@
+---
+title: "Planning to Save Energy: How Information Format Affects Accuracy"
+author:
+  - name: Thomas E. Gorman
+    url: https://tegorman13.github.io/
+    orcid: "0000-0001-5366-5442"
+    affiliations: 
+      - ref: cclab
+    attributes: 
+      corresponding: true
+affiliations:
+  - id: cclab
+    name: Communication and Cognition Lab, Purdue University
+    city: West Lafayette
+    region: IN
+    country: USA
+    postal-code: 47907
+    url: https://web.ics.purdue.edu/~treimer/
+date: 2025-03-16
+abstract: "Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy."
+bibliography: ../assets/rs_bib.bib
+csl: ../assets/apa.csl
+keywords: ["Information format", "Energy literacy", "Decision-making", "Planning"]
+floatsintext: true
+---
+
 # Planning to Save Energy: How Information Format Affects Accuracy
 
 ## Abstract
@@ -33,3 +59,48 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 Participants received energy usage data for two hypothetical families and were tasked with creating action plans to meet specified reduction goals by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and and other appliances (e.g., TV, lighting).
 
 For each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
+
+
+
+::: {#tbl-s1-ord apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition"}
+|Comparison        |odds_ratio |ci_lower |ci_upper |
+|:-----------------|:----------|:--------|:--------|
+|Percentage vs kWh |4.2        |1.1      |18       |
+|USD vs kWh        |22.9       |6.1      |90       |
+
+
+**Experiment 1**: Odds ratios for group comparisons
+
+:::
+
+
+
+For1 each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
+
+
+
+@gigerenzerSimpleToolsUnderstanding2003
+
+![Example energy planning task trial](/assets/images/wells10e_pub.png){#fig-task apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656). Participants in the USD condition were provided with the conversion rate between kwH and USD."}
+
+
+For2 each family scenario, the participants were shown a table containing the families utility usage from the prior year, alongside the state averages for each appliance category (both prior year usage and stage averages are always shown in kWh). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage (see fig-task). Depending on their reference class condition, the target reduction amount presented either in kilowatt-hours (kWh), as percentages of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh.
+
+
+::: {#tbl-s1-agg apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC"}
+
+|Reference Class |Avg. % Change |% meeting goal (exact) |% meeting goal (close match) |Abs. Deviation |Log Abs. Deviation |
+|:---------------|:-------------|:----------------------|:----------------------------|:--------------|:------------------|
+|kWh             |0.22          |0.38                   |0.54                         |0.03           |-3.7               |
+|Percentage      |0.21          |0.22                   |0.40                         |0.06           |-3.1               |
+|USD             |0.23          |0.10                   |0.22                         |0.10           |-2.4               |
+
+Study 1: Summary of planning accuracy by reference class
+
+:::
+
+@tbl-s1-agg shows the average x,y,z, separately for the conditions of … . As can be seen in Table 1, participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when the goal was framed in percentages or USD.
+
+
+
+As shown in @tbl-s1-agg, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations. 

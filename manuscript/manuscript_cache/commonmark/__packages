@@ -27,7 +27,7 @@ pander
 marginaleffects
 wesanderson
 glue
-ggtext
 sysfonts
 showtextdb
 showtext
+ggtext

@@ -15,7 +15,7 @@ format-links:
     - text: docx
       href: rs_manuscript_apa.docx
     - gfm
-date: 2025-01-25
+date: 2025-03-16
 abstract: "Effective communication of energy consumption information is crucial for promoting residential energy conservation. This study investigates how different numerical representations of energy reduction goals influence consumers' ability to create accurate conservation plans. Across two experiments, we examined the impact of presenting energy information in kilowatt-hours (kWh), percentages, or U.S. dollars (USD) on planning accuracy. Participants completed a simulated household planning task in which they allocated energy usage across multiple appliances, with the goal presented in either kilowatt-hours (kWh), percentages, or monetary costs. Results across both experiments showed that presenting reduction goals in absolute units (kWh) led to significantly greater accuracy compared to percentage-based or monetary formats. Furthermore, we found that higher energy literacy was associated with more accurate planning. These findings demonstrate that absolute units (kWh) are more effective for communicating energy-saving goals, and highlight the potential value of educational interventions to improve consumer energy literacy."
 ---
 
@@ -24,32 +24,32 @@ abstract: "Effective communication of energy consumption information is crucial 
 Energy insecurity has emerged as a critical public health concern, especially among low-income households, who frequently face difficult choices between paying energy bills and meeting other essential needs [@bednarRecognitionResponseEnergy2020; @memmottSociodemographicDisparitiesEnergy2021]. Such households often experience unsafe coping strategies (e.g., foregoing heating during winter months), which disproportionately affect racial and ethnic minorities and heighten risks of utility disconnection  [@memmottSociodemographicDisparitiesEnergy2021]. Moreover, residential energy use contributes to climate change, intensifying the urgency for sustainable solutions [@farghaliStrategiesEnergyContext2023]. 
 
 
-Given the relevance of promoting behavior change to reduce energy consumption, several strands of research have aimed to identify factors that affect energy behaviors and interventions that effectively reduce energy consumption. Interventions often focus on X, Y, Z. For example, … 
- 
+Given the relevance of promoting behavior change to reduce energy consumption, several strands of research have aimed to identify factors that affect energy behaviors and interventions that effectively reduce energy consumption. For example, @abrahamseEffectTailoredInformation2007 used a combination of tailored information about energy use and tailored feedback, in addition to setting an energy-saving goal, to promote direct and indirect energy-saving behaviors and high levels of knowledge regarding energy use. Direct energy-saving behaviors were classified as reducing fuel, gas, and electricity consumption, while indirect behaviors referred to producing, distributing, and disposing goods. After a five-month intervention, the authors found that households in the experimental group reduced their direct energy use by 5.1% and had higher levels of knowledge about energy conservation compared to the control group, which used 0.7% more energy since the beginning of the intervention. No difference between groups was found in indirect behaviors.
+
 However, the success of such interventions may hinge on how effectively energy information is communicated, with format and presentation context significantly influencing understanding and action [@canfieldPerceptionsElectricityuseCommunications2017; @fischerFeedbackHouseholdElectricity2008]. Consequently, a pressing challenge lies in designing communication strategies that effectively convey energy data and motivate practical conservation decisions. We set out to explore if consumers are able to develop plans that would help meet certain energy consumption goals. 
 
 ### Representation Formats
 
 
-Receiving feedback about one’s energy use is an important step in identifying potential actions to reduce energy consumption. However, it is crucial to understand how consumers use the information that is given with their energy bill and whether consumers are able to translate a energy saving goal into an action plan. 
+Receiving feedback about one’s energy use is important in identifying potential actions to reduce energy consumption. However, it is crucial to understand how consumers use the information provided with their energy bill and whether they are able to translate an energy-saving goal into an action plan. @canfieldPerceptionsElectricityuseCommunications2017 specifically studied this problem by running an experiment in which participants were shown hypothetical electricity bills with information related to a household’s historical electricity use, electricity use in relation to their neighbors, and historical electricity use by appliances. Participants were randomly assigned to one of three formats of information representation (i.e., tables, bar graphs, and icon graphs) and were asked questions regarding their energy literacy. @canfieldPerceptionsElectricityuseCommunications2017 showed that tables were the easiest format to understand for consumers when evaluating every type of information related to energy use. Across types of information, historical electricity use elicited the highest intentions and preferences for energy savings regardless of format. Additionally, participants with high energy literacy had a better understanding of energy-related information across all types of information representations. By disentangling the effects of content, format, and individual differences in energy literacy on understanding, preferences, and intentions, @canfieldPerceptionsElectricityuseCommunications2017 demonstrated that easy-to-implement communication strategies in energy bills can lead to energy-saving behaviors.
 
-Building on the study of Canfield et al. (2017), we aimed to test xxx.
+
 
 
 Although many individuals express a desire to conserve energy, research consistently shows that abstract goals (e.g., “reduce overall usage by 15%”) often fail to translate into effective behavior change unless accompanied by specific, actionable steps [@abrahamseReviewInterventionStudies2005; @nematiImpactInformationbasedInterventions2020]. For instance, @abrahamseReviewInterventionStudies2005 demonstrated that merely providing general information about energy savings rarely alters consumption patterns unless consumers also receive concrete instructions or tailored feedback. 
 
 Similarly, @tonkeProvidingProceduralKnowledge2024 rreported that sending households brief but precise text messages outlining how to reduce water use (e.g., limiting irrigation times, adjusting washing machine settings) yielded meaningful decreases in consumption, underscoring the importance of procedural knowledge—namely, knowing how to operationalize a goal rather than simply why it is desirable. In the context of energy conservation, this implies that interventions should not only highlight potential reductions (such as a 15% target) but also guide residents in allocating those reductions across specific appliances or behaviors [@attariPublicPerceptionsEnergy2010]. Additionally, meta-analytic findings suggest that people respond more robustly to household-level feedback that situates their usage within a personalized framework, thereby reducing the cognitive burden of determining next steps [@nematiImpactInformationbasedInterventions2020]. 
 
-
-The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities[@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate decision making. However, it is important to note that even intuitive formats can pose challenges. For instance, @weberWhyCanOnly2018 found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. 
+The way numerical information is presented can significantly affect how individuals process and use that information. Of particular relevance are reference class effects, which occur when numerical statements are presented without a clear or intuitive basis for comparison, making it difficult to infer meaningful quantities [@gigerenzerSimpleToolsUnderstanding2003; @reimerNumericCommunicationRisk2015]. A substantial body of evidence suggests that presenting data in terms of absolute counts or frequencies, as opposed to probabilities or percentages, can promote more accurate comprehension and facilitate decision making. However, it is important to note that even intuitive formats can pose challenges. For instance, @weberWhyCanOnly2018 found that individuals often struggle with reasoning tasks presented in natural frequencies because they inadvertently revert to more complex probabilistic thinking. 
 
 The choice of units and the format in which information is presented have also been shown to exert a significant influence on decision-making within the context of energy consumption and planning.  For instance, tables are generally more effective than graphs for conveying specific electricity usage data because they facilitate straightforward point reading  [@canfieldPerceptionsElectricityuseCommunications2017]. Furthermore, the framing of energy costs, such as displaying monthly rather than daily or yearly expenses, can significantly affect consumers' choices [@gillConsumerMatchingCosts2022]. Consequently, the selection of an appropriate information format is crucial for effectively supporting energy-related decisions. Therefore, similar to natural frequencies, kWh provide a direct measure of energy use -  a characteristic that could simplify calculations and facilitate comparisons, potentially helping consumers better understand and compare the energy consumption of different appliances or activities. Conversely, prior research has suggested that consumers have a preference for receiving energy feedback in terms of monetary values over scientific units [@karjalainenConsumerPreferencesFeedback2011; @nematiImpactInformationbasedInterventions2020], as well as better long-term appliance selection with information presented in monetary terms [@blaschBoundedlyRationalConsumers2019]. However, it remains uncertain how these reported benefits might generalize to the more complex task of household energy planning, where usage patterns are multifaceted and subject to a variety of contextual influences.
 
-
-
 ### Overview of Current Research
 
-Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers' ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy. Based on the literature reviewed, we hypothesize that: 1) Presenting energy reduction goals in absolute units (kWh) will lead to greater planning accuracy compared to percentage-based or monetary formats, as absolute units provide a more direct and less ambiguous representation of energy quantities. 2) Higher energy literacy will be associated with more accurate planning, as individuals with greater energy knowledge may be better equipped to process and utilize the provided information, regardless of format. We also examine the potential of several exploratory variables, such as goal difficulty and the rounding of numerical values, to further elucidate the factors that influence planning accuracy.
+Building on the study of Canfield et al. (2017), we aimed to test xxx.
+
+
+Despite existing studies on energy-use communication and format effects, limited research has explored how different numerical representations influence consumers’ ability to create accurate energy conservation plans. Specifically, there is a gap in understanding how presenting energy information in absolute units versus percentages or monetary terms affects the precision of planning appliance-specific reductions. The current study addresses these critical issues by systematically investigating the impact of varying information formats (kWh, percentage, and USD) on the accuracy of energy-planning decisions. By manipulating the presentation format of energy information, this research aims to elucidate how different representational formats influence planning accuracy. Based on the literature reviewed, we hypothesize that: 1) Presenting energy reduction goals in absolute units (kWh) will lead to greater planning accuracy compared to percentage-based or monetary formats, as absolute units provide a more direct and less ambiguous representation of energy quantities. 2) Higher energy literacy will be associated with more accurate planning, as individuals with greater energy knowledge may be better equipped to process and utilize the provided information, regardless of format. We also examine the potential of several exploratory variables, such as goal difficulty and the rounding of numerical values, to further elucidate the factors that influence planning accuracy.
 
 
 
@@ -222,7 +222,7 @@ As shown in @tbl-s1-agg, participants in the kWh condition exactly met the targe
 ```{r}
 #| label: fig-s1-log-dist
 #| fig-cap: "Experiment 1: Planning Error Distributions"
-#| apa-note: "Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy."
+#| apa-note: "Distribution of the log of the absolute error between the participant's action plan and the reduction goal. Left side plot separates across different reference class conditions (kWh, Percentage, USD). Right side plot separates by self-reported calculator use. A lower log absolute error suggests higher planning accuracy."
 #| fig-width: 11
 #| fig-height: 8
 
@@ -264,7 +264,7 @@ s1_ld | s1_ldc
 
 ```{r}
 #| label: tbl-s1-prop
-#| tbl-cap: "Study 1: Descriptive Performance"
+#| tbl-cap: "Experiment 1 1: Categorization of Participants according to Accuracy Levels"
 #| apa-note: "The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions."
 
 
@@ -303,7 +303,7 @@ $$
 $$
 
 
-This approach allowed us to estimate thresholds (intercepts) and regression coefficients that capture how different reference classes affect the likelihood of achieving higher accuracy categories. For each comparison, we provide posterior odds ratios (OR) and their 95% CIs. This approach allows the estimation of threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category. Specifically, we used a cumulative logit link function to model the ordered accuracy outcome, and we specified weakly informative priors for the regression coefficients (normal distributions with mean 0 and standard deviation of 1) and for the cutpoints (normal distributions with a mean of zero and a standard deviation of 4.0). The approach allows us to estimate threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category.
+This approach allowed us to estimate thresholds (intercepts) and regression coefficients that capture how different reference classes affect the likelihood of achieving higher accuracy categories. For each comparison, we provide posterior odds ratios (OR) and their 95% CIs. This approach allows the estimation of threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category. Specifically, we used a cumulative logit link function to model the ordered accuracy outcome, and we specified weakly informative priors for the regression coefficients (normal distributions with mean 0 and standard deviation of 1) and for the cutpoints (normal distributions with a mean of zero and a standard deviation of 4.0). The approach can be used to estimate threshold parameters and regression coefficients that characterize how changes in predictor variables (such as the reference class: kWh, percentage, or USD) relate to probabilities of being in each accuracy category.
 
 
 ```{r}
@@ -367,7 +367,7 @@ t1 <- as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[,
 |refClassUSD        |3.13     |1.81     |4.50     |1.00 |
 |calcUsedCalculator |-3.30    |-4.80    |-1.92    |1.00 |
 
-**Experiment 1**: Ordinal Regression results
+**Experiment 1**: Ordinal Regression Results of a Test of Differences between conditions in Accuracy Levels
 
 :::
 
@@ -551,7 +551,7 @@ s2_agg4 |> group_by('Reference Class' = refClass) |>
 ```
 
 
-::: {#tbl-s2-agg apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."}
+::: {#tbl-s2-agg apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to participants who exactly met the target reduction goal (i.e., the proposed plan would reduce energy use by exactly 15%)"}
 
 |Reference Class |% meeting goal (exact) |% meeting goal (close match) |Abs. Deviation |Log Abs. Deviation |
 |:---------------|:----------------------|:----------------------------|:--------------|:------------------|
@@ -569,7 +569,7 @@ Experiment 2: Summary of planning accuracy by reference class
 ```{r}
 #| label: fig-s2-log-dist
 #| fig-cap: "Experiment 2: Planning Error Distributions"
-#| apa-note: "Distribution of the log of the absolute error between the participant's action plan and the reduction goal across different reference class conditions (kWh, Percentage, USD). The right side plots are further separated by calculator usage. A lower log absolute error suggests higher planning accuracy."
+#| apa-note: "Distribution of the log of the absolute error between the participant's action plan and the reduction goal. Left side plot separates across different reference class conditions (kWh, Percentage, USD). Right side plot separates by self-reported calculator use. A lower log absolute error suggests higher planning accuracy."
 #| fig-width: 11
 #| fig-height: 8
 

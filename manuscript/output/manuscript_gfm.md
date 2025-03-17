@@ -1,7 +1,7 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
 Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
-2025-01-25
+2025-03-16
 
 # Introduction
 
@@ -19,7 +19,19 @@ intensifying the urgency for sustainable solutions (Farghali et al.,
 Given the relevance of promoting behavior change to reduce energy
 consumption, several strands of research have aimed to identify factors
 that affect energy behaviors and interventions that effectively reduce
-energy consumption. Interventions often focus on X, Y, Z. For example, …
+energy consumption. For example, Abrahamse et al. (2007) used a
+combination of tailored information about energy use and tailored
+feedback, in addition to setting an energy-saving goal, to promote
+direct and indirect energy-saving behaviors and high levels of knowledge
+regarding energy use. Direct energy-saving behaviors were classified as
+reducing fuel, gas, and electricity consumption, while indirect
+behaviors referred to producing, distributing, and disposing goods.
+After a five-month intervention, the authors found that households in
+the experimental group reduced their direct energy use by 5.1% and had
+higher levels of knowledge about energy conservation compared to the
+control group, which used 0.7% more energy since the beginning of the
+intervention. No difference between groups was found in indirect
+behaviors.
 
 However, the success of such interventions may hinge on how effectively
 energy information is communicated, with format and presentation context
@@ -32,13 +44,29 @@ consumption goals.
 
 ### Representation Formats
 
-Receiving feedback about one’s energy use is an important step in
-identifying potential actions to reduce energy consumption. However, it
-is crucial to understand how consumers use the information that is given
-with their energy bill and whether consumers are able to translate a
-energy saving goal into an action plan.
-
-Building on the study of Canfield et al. (2017), we aimed to test xxx.
+Receiving feedback about one’s energy use is important in identifying
+potential actions to reduce energy consumption. However, it is crucial
+to understand how consumers use the information provided with their
+energy bill and whether they are able to translate an energy-saving goal
+into an action plan. Canfield et al. (2017) specifically studied this
+problem by running an experiment in which participants were shown
+hypothetical electricity bills with information related to a household’s
+historical electricity use, electricity use in relation to their
+neighbors, and historical electricity use by appliances. Participants
+were randomly assigned to one of three formats of information
+representation (i.e., tables, bar graphs, and icon graphs) and were
+asked questions regarding their energy literacy. Canfield et al. (2017)
+showed that tables were the easiest format to understand for consumers
+when evaluating every type of information related to energy use. Across
+types of information, historical electricity use elicited the highest
+intentions and preferences for energy savings regardless of format.
+Additionally, participants with high energy literacy had a better
+understanding of energy-related information across all types of
+information representations. By disentangling the effects of content,
+format, and individual differences in energy literacy on understanding,
+preferences, and intentions, Canfield et al. (2017) demonstrated that
+easy-to-implement communication strategies in energy bills can lead to
+energy-saving behaviors.
 
 Although many individuals express a desire to conserve energy, research
 consistently shows that abstract goals (e.g., “reduce overall usage by
@@ -67,7 +95,7 @@ The way numerical information is presented can significantly affect how
 individuals process and use that information. Of particular relevance
 are reference class effects, which occur when numerical statements are
 presented without a clear or intuitive basis for comparison, making it
-difficult to infer meaningful quantities(Gigerenzer & Edwards, 2003;
+difficult to infer meaningful quantities (Gigerenzer & Edwards, 2003;
 Reimer et al., 2015). A substantial body of evidence suggests that
 presenting data in terms of absolute counts or frequencies, as opposed
 to probabilities or percentages, can promote more accurate comprehension
@@ -101,6 +129,8 @@ household energy planning, where usage patterns are multifaceted and
 subject to a variety of contextual influences.
 
 ### Overview of Current Research
+
+Building on the study of Canfield et al. (2017), we aimed to test xxx.
 
 Despite existing studies on energy-use communication and format effects,
 limited research has explored how different numerical representations
@@ -361,7 +391,8 @@ Figure 2: Experiment 1: Planning Error Distributions
 
 <div id="tbl-s1-prop">
 
-Table 2: Study 1: Descriptive Performance
+Table 2: Experiment 1 1: Categorization of Participants according to
+Accuracy Levels
 
 ``` r
 # compute percentage of subjects per accuracy level per group
@@ -416,7 +447,7 @@ used a cumulative logit link function to model the ordered accuracy
 outcome, and we specified weakly informative priors for the regression
 coefficients (normal distributions with mean 0 and standard deviation
 of 1) and for the cutpoints (normal distributions with a mean of zero
-and a standard deviation of 4.0). The approach allows us to estimate
+and a standard deviation of 4.0). The approach can be used to estimate
 threshold parameters and regression coefficients that characterize how
 changes in predictor variables (such as the reference class: kWh,
 percentage, or USD) relate to probabilities of being in each accuracy
@@ -474,7 +505,8 @@ t1 <- as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[,
 
 <div id="tbl-s1-reg">
 
-Table 3: **Experiment 1**: Ordinal Regression results
+Table 3: **Experiment 1**: Ordinal Regression Results of a Test of
+Differences between conditions in Accuracy Levels
 
 | Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
 |:-------------------|:---------|:---------|:---------|:-----|

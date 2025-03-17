@@ -91,7 +91,7 @@ format:
                 display: none;
             }
             </style>
-  wordcount-html: 
+  wordcount_apa-html: 
     #output-file: index.html
     wordcount-banner: true
     floatsintext: true

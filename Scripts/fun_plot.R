@@ -82,23 +82,24 @@ theme_nice_pdf <- function() {
     )
 }
 
+# Define a custom theme function for ggplot2 with specific font and styling
 theme_nice_b <- function() {
-  theme_minimal(base_family = "Manrope") +
+  theme_minimal(base_family = "Manrope") +  # Use the "Manrope" font family as the base
     theme(
-      panel.grid.minor = element_blank(),
-      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.55)),
-      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),
-      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),
-      axis.title.x = element_text(hjust = .5),
-      axis.title.y = element_text(hjust = .5),
-      axis.text = element_text(face = "plain", size = rel(0.9)),
+      panel.grid.minor = element_blank(),  # Remove minor grid lines
+      plot.title = element_text(family = "Manrope Extrabold", face = "plain", size = rel(1.55)),  # Customize plot title
+      plot.subtitle = element_text(family = "Manrope Medium", face = "plain", size = rel(1.2)),  # Customize plot subtitle
+      axis.title = element_text(family = "Manrope SemiBold", face = "plain", size = rel(1)),  # Customize axis titles
+      axis.title.x = element_text(hjust = .5),  # Center the x-axis title
+      axis.title.y = element_text(hjust = .5),  # Center the y-axis title
+      axis.text = element_text(face = "plain", size = rel(0.9)),  # Customize axis text
       strip.text = element_text(
         family = "Manrope", face = "bold",
-        size = rel(1.2), hjust = 0
+        size = rel(1.2), hjust = 0  # Customize facet strip text
       ),
-      legend.position = "top",
-      legend.text = element_text( face = "plain", size = rel(1.3)), #family = "Manrope Light",
-      strip.background = element_rect(fill = "grey90", color = NA)
+      legend.position = "top",  # Position the legend at the top
+      legend.text = element_text(face = "plain", size = rel(1.3)),  # Customize legend text
+      strip.background = element_rect(fill = "grey90", color = NA)  # Customize facet strip background
     )
 }
 
