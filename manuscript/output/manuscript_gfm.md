@@ -10,9 +10,9 @@ especially among low-income households, who frequently face difficult
 choices between paying energy bills and meeting other essential needs
 (Bednar & Reames, 2020; Memmott et al., 2021). Such households often
 experience unsafe coping strategies (e.g., foregoing heating during
-winter months), which disproportionately affect racial and ethnic
-minorities and heighten risks of utility disconnection (Memmott et al.,
-2021). Moreover, residential energy use contributes to climate change,
+winter months), which disproportionately affect at-risk populations and
+heighten risks of utility disconnection (Memmott et al., 2021).
+Moreover, residential energy use contributes to climate change,
 intensifying the urgency for sustainable solutions (Farghali et al.,
 2023).
 
@@ -38,9 +38,9 @@ energy information is communicated, with format and presentation context
 significantly influencing understanding and action (Canfield et al.,
 2017; Fischer, 2008). Consequently, a pressing challenge lies in
 designing communication strategies that effectively convey energy data
-and motivate practical conservation decisions. We set out to explore if
-consumers are able to develop plans that would help meet certain energy
-consumption goals.
+and motivate practical conservation decisions. We set out to explore
+whether consumers are able to develop plans that would help meet certain
+energy consumption goals.
 
 ### Representation Formats
 
@@ -146,14 +146,14 @@ percentage, and USD) on the accuracy of energy-planning decisions. By
 manipulating the presentation format of energy information, this
 research aims to elucidate how different representational formats
 influence planning accuracy. Based on the literature reviewed, we
-hypothesize that: 1) Presenting energy reduction goals in absolute units
-(kWh) will lead to greater planning accuracy compared to
+hypothesized that: 1) Presenting energy reduction goals in absolute
+units (kWh) will lead to greater planning accuracy compared to
 percentage-based or monetary formats, as absolute units provide a more
 direct and less ambiguous representation of energy quantities. 2) Higher
 energy literacy will be associated with more accurate planning, as
 individuals with greater energy knowledge may be better equipped to
 process and utilize the provided information, regardless of format. We
-also examine the potential of several exploratory variables, such as
+also examined the potential of several exploratory variables, such as
 goal difficulty and the rounding of numerical values, to further
 elucidate the factors that influence planning accuracy.
 
@@ -220,7 +220,7 @@ target for that specific household.
 <div id="fig-task">
 
 <img src="./assets/images/wells10e_pub.png" style="width:80.0%"
-data-apa-note="Participants saw a table with a family&#39;s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% reduction), kilowatt hours (5965 kWh), or USD ($656). Participants in the USD condition were provided with the conversion rate between kWh and USD." />
+data-apa-note="Participants saw a table with a family&#39;s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% reduction), kilowatt hours (5965 kWh), or USD ($656). Participants in the USD condition were provided with the conversion rate between kWh and USD. All participants completed two scenarios, and for each scenario, they proposed two distinct action plans" />
 
 Figure 1: Example energy planning task trial
 
@@ -913,7 +913,7 @@ regression model
 | RefClass-USD        | 2.27     | 0.53     | 3.98     | 0.99 |
 | calc-NoCalculator   | 4.10     | 2.20     | 6.06     | 1.00 |
 | pct_goal15%         | -0.39    | -0.81    | 0.04     | 0.96 |
-| roundedRounded      | -0.53    | -0.96    | -0.11    | 0.99 |
+| rounded-Rounded     | -0.53    | -0.96    | -0.11    | 0.99 |
 
 </div>
 
@@ -954,32 +954,33 @@ the kWh reference class (OR = 9.68, 95% CI: \[1.69, 53.4\]).
 Participants in the USD condition were therefore substantially more
 likely to deviate from the target energy reduction goal compared to
 those in the kWh condition. In contrast, the Percentage condition’s odds
-ratio relative to kWh was more uncertain (OR = 2.78, 95% CI: 0.53,
-15.0), indicating that although there may be a trend toward reduced
+ratio relative to kWh was more uncertain (OR = 2.78, 95% CI: \[0.53,
+15.0\]), indicating that although there may be a trend toward reduced
 accuracy in the Percentage condition, the evidence was not definitive.
 
-We also found that using rounded numbers modestly improved accuracy (b =
--0.53, 95% CI: \[-0.96, -0.11\]), with participants having 0.59 times
-the odds of falling into a worse accuracy category when working with
-rounded values. The more challenging 15% reduction goal was associated
-with slightly better performance compared to the 10% goal (b = -0.39,
-95% CI: \[-0.81, 0.04\]), though this effect was relatively small.
-Consistent with Experiment 1, the use of a calculator had a large and
-significant effect on accuracy. The coefficient for calcNoCalculator was
-4.10 (95% CI: 2.20, 6.06), and the corresponding odds ratio was 60.37
-(95% CI: 9.02, 426.4), indicating that participants who did not use a
-calculator were substantially more likely to fall into higher error
-categories.
+We also found that using rounded numbers modestly improved accuracy
+(Estimate = -0.53, 95% CI: \[-0.96, -0.11\]), with participants having
+0.59 times the odds of falling into a worse accuracy category when
+working with rounded values. The more challenging 15% reduction goal was
+associated with slightly better performance compared to the 10% goal,
+Estimate = -0.39, 95% CI: \[-0.81, 0.04\], though this effect was
+relatively small. Consistent with Experiment 1, the use of a calculator
+had a large and significant effect on accuracy. The coefficient for
+calc-NoCalculator was Estimate = 4.10 95% CI: \[2.20, 6.06\], and the
+corresponding odds ratio was 60.37 (95% CI: \[9.02, 426.4\]), indicating
+that participants who did not use a calculator were substantially more
+likely to fall into higher error categories.
 
 <a href="#fig-s2-ame" class="quarto-xref">Figure 6</a> shows the
 marginal effects of refClass on each level of accuracy_level. These
 results reveal that switching from kWh to Percentage decreased the
-probability of an “Exact match” by an average of 7.0 percentage points
-(95% CI: -19.2, 4.2) and increased the probability of “Over 5% error” by
-6.9 percentage points (95% CI: -4.5, 18.6). Similarly, switching from
-kWh to USD decreased the probability of an “Exact match” by 15
-percentage points (95% CI: -26.7, -3.3) and increased the probability of
-“Over 5% error” by 16.5 percentage points (95% CI: 3.7, 29.3).
+probability of an “Exact match” by an average of 7.0 percentage points,
+95% CI: \[-19.2, 4.2\] and increased the probability of falling into the
+“Over 5% error” category by 6.9 percentage points, 95% CI: \[-4.5,
+18.6\]. Similarly, switching from kWh to USD decreased the probability
+of an “Exact match” by 15 percentage points, 95% CI: \[-26.7, -3.3\],
+and increased the probability of “Over 5% error” by 16.5 percentage
+points, 95% CI: \[3.7, 29.3\].
 
 ``` r
 library(ggtext)
@@ -1122,10 +1123,10 @@ with a slight improvement in accuracy is counterintuitive. It may be
 that participants put more effort into the task under this condition, or
 perhaps this is an artifact of the way that the task was presented.
 However, this effect was relatively small and thus should be explored in
-future research to better understand its underlying mechanisms.
-Furthermore, the magnitude of the effect size of this manipulation
-should be examined to better understand the practical implications of
-goal difficulty for energy conservation.
+future research to confidently establish its existence. Furthermore, the
+magnitude of the effect size of this manipulation should be examined to
+better understand the practical implications of goal difficulty for
+energy conservation.
 
 The large and significant effect of calculator use, consistent across
 both experiments, underscores the crucial role of tools that individuals
@@ -1144,7 +1145,7 @@ across appliances, a result that consistently held even as scenario
 details varied. These results extend prior observations on the impact of
 numerical format on comprehension and decision-making (Gigerenzer &
 Edwards, 2003; Reimer et al., 2015). But they move beyond simpler
-estimation tasks to show how these benefits persist in a multi-step
+estimation tasks to show how these benefits persist in a goal-directed
 planning context. Notably, individuals with higher energy literacy
 performed better overall, a finding in line with previous work
 emphasizing the importance of domain knowledge for effective resource
@@ -1169,8 +1170,8 @@ al., 2020) further highlights how presenting energy data in a
 straightforward, standardized format can guide better consumer
 decisions. Nevertheless, it is unclear whether the observed benefits of
 absolute units (i.e., kWh) are genuinely attributable to their absolute
-nature, or if other inherent characteristics of these units might be
-driving the effects.
+nature, or if other characteristics of these units might be driving the
+effects (e.g., familiarity).
 
 ## Limitations and Future Directions
 

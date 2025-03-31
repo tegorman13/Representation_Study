@@ -117,7 +117,7 @@ format:
   apaquarto-docx: 
     output-file: rs_manuscript_apa.docx
     echo: false
-    floatsintext: true
+    floatsintext: false
     shorttitle: "How Information Format Affects Accuracy"
     author-note:
       disclosures:
