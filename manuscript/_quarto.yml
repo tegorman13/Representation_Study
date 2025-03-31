@@ -136,6 +136,7 @@ format:
   apaquarto-pdf: 
     toc: false
     echo: false
+    #output-file: rs_apa_code.pdf
     output-file: rs_manuscript_apa.pdf
     floatsintext: true
     author-note:
