@@ -71,16 +71,13 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 
 ### Procedure
 
-Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family’s utility usage from the prior year, alongside the state averages for each appliance category (see @fig-task). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, … . 
+Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family’s utility usage from the prior year, alongside the state averages for each appliance category (see @fig-task). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, participants assigned to the Wells family scenario (Colorado), as depicted in Figure 1, were asked to achieve a reduction of 5,965 kWh in the kWh condition, 15% in the Percentage condition, or $656 in the USD condition, all representing the same underlying 15% energy reduction target for that specific household.
 
 
-![Example energy planning task trial](/assets/images/wells10e_pub.png){#fig-task apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656). Participants in the USD condition were provided with the conversion rate between kwH and USD."}
+![Example energy planning task trial](/assets/images/wells10e_pub.png){#fig-task width="80%" apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD (\$656). Participants in the USD condition were provided with the conversion rate between kwH and USD."}
 
 
 ## Measures
-
-
-
 
 
 ## Results
@@ -182,40 +179,51 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
 ##| tbl-cap: "Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
 
 # overall pct of subjects who matched their goal
-s1_agg4 |> group_by('Reference Class' = refClass) |>
-    summarise(
-    'Avg. % Change' = mean(mean_pct_change),
-    '% meeting goal (exact)' = mean(pct),
-    '% meeting goal (close match)' = mean(pct_close),
-    'Abs. Deviation' = median(mean_abs_error),
-    'Log Abs. Deviation' = (median(mean_log_abs_error)),
-    # sd = sd(pct),
-    # n = n(),
-    #se=sd(pct)/sqrt(n)
-) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
-  kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+# s1_agg4 |> group_by('Reference Class' = refClass) |>
+#     summarise(
+#     'Avg. % Change' = mean(mean_pct_change),
+#     '% meeting goal (exact)' = mean(pct),
+#     '% meeting goal (close match)' = mean(pct_close),
+#     'Abs. Deviation' = median(mean_abs_error),
+#     'Log Abs. Deviation' = (median(mean_log_abs_error)),
+#     # sd = sd(pct),
+#     # n = n(),
+#     #se=sd(pct)/sqrt(n)
+# ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
+#   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 
 #pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")
 
+
+summary_table <- s1_agg4 |> 
+  group_by(`Reference Class` = refClass) |> 
+  summarise(
+    N = n(),
+    `Avg. % Change` = sprintf("%.2f (%.2f)", mean(mean_pct_change), sd(mean_pct_change)),
+    `% meeting goal (exact)` = sprintf("%.2f (%.2f)", mean(pct), sd(pct)),
+    `% meeting goal (close match)` = sprintf("%.2f (%.2f)", mean(pct_close), sd(pct_close)),
+    `Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_abs_error), sd(mean_abs_error)),
+    `Log Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_log_abs_error), sd(mean_log_abs_error))
+  ) |> 
+  kable(escape = FALSE, booktabs = TRUE, align = c("l"))
+
+#summary_table
+
 ```
 
-::: {#tbl-s1-agg apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC"}
+::: {#tbl-s1-agg apa-note="Summary statistics by reference class. Values represent mean (SD) across participants for each planning accuracy metric. Values in parentheses represent standard deviations. 'Close match' indicates trials where the proposed reduction was within ±2% of the target goal. Abs. Deviation and Log Abs. Deviation columns report medians."}
 
-|Reference Class |Avg. % Change |% meeting goal (exact) |% meeting goal (close match) |Abs. Deviation |Log Abs. Deviation |
-|:---------------|:-------------|:----------------------|:----------------------------|:--------------|:------------------|
-|kWh             |0.22          |0.38                   |0.54                         |0.03           |-3.7               |
-|Percentage      |0.21          |0.22                   |0.40                         |0.06           |-3.1               |
-|USD             |0.23          |0.10                   |0.22                         |0.10           |-2.4               |
+|Reference Class |N  |Avg. % Change |% meeting goal (exact) |% meeting goal (close match) |Abs. Deviation |Log Abs. Deviation |
+|:---------------|:--|:-------------|:----------------------|:----------------------------|:--------------|:------------------|
+|kWh             |76 |0.22 (0.14)   |0.38 (0.45)            |0.54 (0.45)                  |0.09 (0.14)    |-3.47 (1.43)       |
+|Percentage      |67 |0.21 (0.11)   |0.22 (0.37)            |0.40 (0.41)                  |0.09 (0.10)    |-3.18 (1.20)       |
+|USD             |86 |0.23 (0.13)   |0.10 (0.28)            |0.22 (0.33)                  |0.12 (0.11)    |-2.61 (1.06)       |
 
 Study 1: Summary of planning accuracy by reference class
 
 :::
 
-@tbl-s1-agg shows the average x,y,z, separately for the conditions of … . As can be seen in Table 1, participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when the goal was framed in percentages or USD.
-
-
-
-As shown in @tbl-s1-agg, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations. 
+@tbl-s1-agg presents a summary of descriptive statistics regarding planning accuracy across the three experimental reference class conditions (kWh, Percentage, USD). Observation of the central tendencies suggests a potential advantage for the kWh condition. The kWh group exhibited the highest mean proportion of trials exactly matching the target goal (M = 0.38, SD = 0.45), considerably higher than that observed in the Percentage (M = 0.22, SD = 0.37) and USD (M = 0.10, SD = 0.28) conditions. A concordant pattern emerged for deviations, where the kWh condition displayed the lowest median absolute deviation (Mdn = 0.03) compared to the Percentage (Mdn = 0.06) and USD (Mdn = 0.10) conditions, hinting at greater precision when goals were presented in absolute energy units.
 
 
 
@@ -292,9 +300,7 @@ observed_props_s1 |>
 ```
 
 
-
-
-
+{{< pagebreak >}}
 
 We next categorized responses into three accuracy levels (exact match [0% error], minor deviations [0.01–5%], and large deviations [>5%]) for our primary statistical modeling. Using Bayesian ordinal regression, we modeled the ordered accuracy outcome as a function of the reference class condition, while controlling for random variation across participants and family scenarios:
 

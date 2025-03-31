@@ -78,7 +78,7 @@ The study employed a mixed design with reference class (kWh, percentage, USD) as
 
 ### Procedure
 
-Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family's utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure 1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, ... .
+Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family's utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure 1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, participants assigned to the Wells family scenario (Colorado), as depicted in Figure 1, were asked to achieve a reduction of 5,965 kWh in the kWh condition, 15% in the Percentage condition, or \$656 in the USD condition, all representing the same underlying 15% energy reduction target for that specific household.
 
 <img src="./assets/images/wells10e_pub.png" id="fig-task"
 alt="Figure 1: Example energy planning task trial" />
@@ -91,18 +91,16 @@ All preprocessing and analyses were carried out in R (Team, 2020) and the Tidyve
 
 <div id="tbl-s1-agg">
 
-| Reference Class | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
-|:---------|:--------|:-------------|:-----------------|:---------|:-----------|
-| kWh | 0.22 | 0.38 | 0.54 | 0.03 | -3.7 |
-| Percentage | 0.21 | 0.22 | 0.40 | 0.06 | -3.1 |
-| USD | 0.23 | 0.10 | 0.22 | 0.10 | -2.4 |
+| Reference Class | N | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
+|:---------|:--|:--------|:-------------|:----------------|:---------|:-----------|
+| kWh | 76 | 0.22 (0.14) | 0.38 (0.45) | 0.54 (0.45) | 0.09 (0.14) | -3.47 (1.43) |
+| Percentage | 67 | 0.21 (0.11) | 0.22 (0.37) | 0.40 (0.41) | 0.09 (0.10) | -3.18 (1.20) |
+| USD | 86 | 0.23 (0.13) | 0.10 (0.28) | 0.22 (0.33) | 0.12 (0.11) | -2.61 (1.06) |
 
 Table 1: Study 1: Summary of planning accuracy by reference class
 </div>
 
-<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> shows the average x,y,z, separately for the conditions of ... . As can be seen in Table 1, participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when the goal was framed in percentages or USD.
-
-As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table 1</a>, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations.
+<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> presents a summary of descriptive statistics regarding planning accuracy across the three experimental reference class conditions (kWh, Percentage, USD). Observation of the central tendencies suggests a potential advantage for the kWh condition. The kWh group exhibited the highest mean proportion of trials exactly matching the target goal (M = 0.38, SD = 0.45), considerably higher than that observed in the Percentage (M = 0.22, SD = 0.37) and USD (M = 0.10, SD = 0.28) conditions. A concordant pattern emerged for deviations, where the kWh condition displayed the lowest median absolute deviation (Mdn = 0.03) compared to the Percentage (Mdn = 0.06) and USD (Mdn = 0.10) conditions, hinting at greater precision when goals were presented in absolute energy units.
 
 We next categorized responses into three accuracy levels (exact match \[0% error\], minor deviations \[0.01--5%\], and large deviations \[\>5%\]) for our primary statistical modeling. Using Bayesian ordinal regression, we modeled the ordered accuracy outcome as a function of the reference class condition, while controlling for random variation across participants and family scenarios:
 

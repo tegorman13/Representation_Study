@@ -208,7 +208,11 @@ on their reference class condition, the target reduction amount was
 presented either in kilowatt-hours (kWh), as a percentage of total
 household usage, or in U.S. dollars. In all conditions, the target
 reduction was equivalent to a 15% reduction in total household kWh. For
-example, … .
+example, participants assigned to the Wells family scenario (Colorado),
+as depicted in Figure 1, were asked to achieve a reduction of 5,965 kWh
+in the kWh condition, 15% in the Percentage condition, or \$656 in the
+USD condition, all representing the same underlying 15% energy reduction
+target for that specific household.
 
 <div id="fig-task">
 
@@ -307,50 +311,61 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
 ##| tbl-cap: "Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
 
 # overall pct of subjects who matched their goal
-s1_agg4 |> group_by('Reference Class' = refClass) |>
-    summarise(
-    'Avg. % Change' = mean(mean_pct_change),
-    '% meeting goal (exact)' = mean(pct),
-    '% meeting goal (close match)' = mean(pct_close),
-    'Abs. Deviation' = median(mean_abs_error),
-    'Log Abs. Deviation' = (median(mean_log_abs_error)),
-    # sd = sd(pct),
-    # n = n(),
-    #se=sd(pct)/sqrt(n)
-) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
-  kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+# s1_agg4 |> group_by('Reference Class' = refClass) |>
+#     summarise(
+#     'Avg. % Change' = mean(mean_pct_change),
+#     '% meeting goal (exact)' = mean(pct),
+#     '% meeting goal (close match)' = mean(pct_close),
+#     'Abs. Deviation' = median(mean_abs_error),
+#     'Log Abs. Deviation' = (median(mean_log_abs_error)),
+#     # sd = sd(pct),
+#     # n = n(),
+#     #se=sd(pct)/sqrt(n)
+# ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
+#   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 
 #pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")
+
+
+summary_table <- s1_agg4 |> 
+  group_by(`Reference Class` = refClass) |> 
+  summarise(
+    N = n(),
+    `Avg. % Change` = sprintf("%.2f (%.2f)", mean(mean_pct_change), sd(mean_pct_change)),
+    `% meeting goal (exact)` = sprintf("%.2f (%.2f)", mean(pct), sd(pct)),
+    `% meeting goal (close match)` = sprintf("%.2f (%.2f)", mean(pct_close), sd(pct_close)),
+    `Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_abs_error), sd(mean_abs_error)),
+    `Log Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_log_abs_error), sd(mean_log_abs_error))
+  ) |> 
+  kable(escape = FALSE, booktabs = TRUE, align = c("l"))
+
+#summary_table
 ```
 
 <div id="tbl-s1-agg">
 
 Table 1: Study 1: Summary of planning accuracy by reference class
 
-| Reference Class | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
-|:---|:---|:---|:---|:---|:---|
-| kWh | 0.22 | 0.38 | 0.54 | 0.03 | -3.7 |
-| Percentage | 0.21 | 0.22 | 0.40 | 0.06 | -3.1 |
-| USD | 0.23 | 0.10 | 0.22 | 0.10 | -2.4 |
+| Reference Class | N | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
+|:---|:---|:---|:---|:---|:---|:---|
+| kWh | 76 | 0.22 (0.14) | 0.38 (0.45) | 0.54 (0.45) | 0.09 (0.14) | -3.47 (1.43) |
+| Percentage | 67 | 0.21 (0.11) | 0.22 (0.37) | 0.40 (0.41) | 0.09 (0.10) | -3.18 (1.20) |
+| USD | 86 | 0.23 (0.13) | 0.10 (0.28) | 0.22 (0.33) | 0.12 (0.11) | -2.61 (1.06) |
 
 </div>
 
-<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> shows the average
-x,y,z, separately for the conditions of … . As can be seen in Table 1,
-participants in the kWh condition met the target goal 38% of the time,
-compared to 22% for the Percentage condition and 10% for the USD
-condition. Moreover, the kWh reference class exhibited smaller
-deviations from the target reduction, suggesting that participants
-performed more accurately when the goal was framed in kWh rather than
-when the goal was framed in percentages or USD.
-
-As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table 1</a>,
-participants in the kWh condition exactly met the target reduction goal
-38% of the time, significantly outperforming those in the Percentage
-(22%) and USD (10%) conditions. Furthermore, the kWh reference class
-exhibited notably smaller mean absolute deviations (0.03) compared to
-Percentage (0.06) and USD (0.10), suggesting that presenting the
-reduction goal in absolute units facilitated more precise allocations.
+<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> presents a summary
+of descriptive statistics regarding planning accuracy across the three
+experimental reference class conditions (kWh, Percentage, USD).
+Observation of the central tendencies suggests a potential advantage for
+the kWh condition. The kWh group exhibited the highest mean proportion
+of trials exactly matching the target goal (M = 0.38, SD = 0.45),
+considerably higher than that observed in the Percentage (M = 0.22, SD =
+0.37) and USD (M = 0.10, SD = 0.28) conditions. A concordant pattern
+emerged for deviations, where the kWh condition displayed the lowest
+median absolute deviation (Mdn = 0.03) compared to the Percentage (Mdn =
+0.06) and USD (Mdn = 0.10) conditions, hinting at greater precision when
+goals were presented in absolute energy units.
 
 ``` r
 s1_ld <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, fill = refClass)) +

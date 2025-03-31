@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.17">
+<meta name="generator" content="quarto-1.7.20">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -27,8 +27,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -39,7 +40,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -89,7 +90,7 @@ div.csl-indent {
 <script src="manuscript_files/libs/quarto-html/popper.min.js"></script>
 <script src="manuscript_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="manuscript_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="manuscript_files/libs/quarto-html/quarto-syntax-highlighting-da03d714c310c60cec1d83284c92da2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="manuscript_files/libs/quarto-html/quarto-syntax-highlighting-6bb072e51ab976e338d8fd19b221fbe5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="manuscript_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="manuscript_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="manuscript_files/libs/bootstrap/bootstrap-897e76441188b61f4a49fd090ee42f46.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -314,8 +315,8 @@ window.Quarto = {
 </section>
 <section id="procedure" class="level4">
 <h4 data-anchor-id="procedure">Procedure</h4>
-<p>Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family’s utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, … .</p>
-<div id="fig-task" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD." data-fignum="1" data-custom-style="FigureWithNote">
+<p>Participants were provided with energy usage data for two hypothetical families and tasked with creating action plans to meet specified energy reduction goals. Participants were informed at the start of the study that they would be presented with tables of detailed energy usage data for each family, and that they would have to create 2 action plans for each of the families. Each action plan goal was implemented by allocating usage across five appliance categories: heating, cooling, water heating, refrigerator, and other appliances (e.g., TV, lighting, washer/dryer). For each family scenario, participants were shown a table containing the family’s utility usage from the prior year, alongside the state averages for each appliance category (see <a href="#fig-task" class="quarto-xref">Figure&nbsp;1</a>). For each scenario, participants were asked to create two possible action plans to achieve the target reduction in total household energy usage . Depending on their reference class condition, the target reduction amount was presented either in kilowatt-hours (kWh), as a percentage of total household usage, or in U.S. dollars. In all conditions, the target reduction was equivalent to a 15% reduction in total household kWh. For example, participants assigned to the Wells family scenario (Colorado), as depicted in Figure 1, were asked to achieve a reduction of 5,965 kWh in the kWh condition, 15% in the Percentage condition, or $656 in the USD condition, all representing the same underlying 15% energy reduction target for that specific household.</p>
+<div id="fig-task" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-fignum="1" data-apa-note="Participants saw a table with a family's previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-task-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -426,23 +427,38 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">##| tbl-cap: "Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># overall pct of subjects who matched their goal</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>s1_agg4 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(<span class="st">'Reference Class'</span> <span class="ot">=</span> refClass) <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Avg. % Change'</span> <span class="ot">=</span> <span class="fu">mean</span>(mean_pct_change),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'% meeting goal (exact)'</span> <span class="ot">=</span> <span class="fu">mean</span>(pct),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'% meeting goal (close match)'</span> <span class="ot">=</span> <span class="fu">mean</span>(pct_close),</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Abs. Deviation'</span> <span class="ot">=</span> <span class="fu">median</span>(mean_abs_error),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Log Abs. Deviation'</span> <span class="ot">=</span> (<span class="fu">median</span>(mean_log_abs_error)),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sd = sd(pct),</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># n = n(),</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#se=sd(pct)/sqrt(n)</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span>   <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">escape=</span><span class="cn">FALSE</span>,<span class="at">booktabs=</span><span class="cn">TRUE</span>,<span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>)) </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># s1_agg4 |&gt; group_by('Reference Class' = refClass) |&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     summarise(</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     'Avg. % Change' = mean(mean_pct_change),</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     '% meeting goal (exact)' = mean(pct),</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     '% meeting goal (close match)' = mean(pct_close),</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     'Abs. Deviation' = median(mean_abs_error),</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     'Log Abs. Deviation' = (median(mean_log_abs_error)),</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     # sd = sd(pct),</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     # n = n(),</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     #se=sd(pct)/sqrt(n)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ) |&gt;   mutate(across(where(is.numeric), \(x) round(x, 3))) %&gt;% </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   kable(escape=FALSE,booktabs=TRUE,align=c("l")) </span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> s1_agg4 <span class="sc">|&gt;</span> </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Reference Class</span><span class="st">`</span> <span class="ot">=</span> refClass) <span class="sc">|&gt;</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">N =</span> <span class="fu">n</span>(),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Avg. % Change</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, <span class="fu">mean</span>(mean_pct_change), <span class="fu">sd</span>(mean_pct_change)),</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">% meeting goal (exact)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, <span class="fu">mean</span>(pct), <span class="fu">sd</span>(pct)),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">% meeting goal (close match)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, <span class="fu">mean</span>(pct_close), <span class="fu">sd</span>(pct_close)),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Abs. Deviation</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, <span class="fu">mean</span>(mean_abs_error), <span class="fu">sd</span>(mean_abs_error)),</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Log Abs. Deviation</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, <span class="fu">mean</span>(mean_log_abs_error), <span class="fu">sd</span>(mean_log_abs_error))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>, <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>))</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#summary_table</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="tbl-s1-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC" data-tblnum="1" data-custom-style="FigureWithNote">
+<div id="tbl-s1-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="1" data-apa-note="Summary statistics by reference class. Values represent mean (SD) across participants for each planning accuracy metric. Values in parentheses represent standard deviations. 'Close match' indicates trials where the proposed reduction was within ±2% of the target goal. Abs. Deviation and Log Abs. Deviation columns report medians." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -456,15 +472,17 @@ window.Quarto = {
 <table class="caption-top table">
 <colgroup>
 <col style="width: 13%">
-<col style="width: 12%">
+<col style="width: 2%">
+<col style="width: 11%">
 <col style="width: 19%">
-<col style="width: 25%">
+<col style="width: 24%">
 <col style="width: 12%">
-<col style="width: 16%">
+<col style="width: 15%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Reference Class</th>
+<th style="text-align: left;">N</th>
 <th style="text-align: left;">Avg. % Change</th>
 <th style="text-align: left;">% meeting goal (exact)</th>
 <th style="text-align: left;">% meeting goal (close match)</th>
@@ -475,27 +493,30 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">kWh</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">0.38</td>
-<td style="text-align: left;">0.54</td>
-<td style="text-align: left;">0.03</td>
-<td style="text-align: left;">-3.7</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: left;">0.22 (0.14)</td>
+<td style="text-align: left;">0.38 (0.45)</td>
+<td style="text-align: left;">0.54 (0.45)</td>
+<td style="text-align: left;">0.09 (0.14)</td>
+<td style="text-align: left;">-3.47 (1.43)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Percentage</td>
-<td style="text-align: left;">0.21</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">0.40</td>
-<td style="text-align: left;">0.06</td>
-<td style="text-align: left;">-3.1</td>
+<td style="text-align: left;">67</td>
+<td style="text-align: left;">0.21 (0.11)</td>
+<td style="text-align: left;">0.22 (0.37)</td>
+<td style="text-align: left;">0.40 (0.41)</td>
+<td style="text-align: left;">0.09 (0.10)</td>
+<td style="text-align: left;">-3.18 (1.20)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">USD</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">0.10</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">0.10</td>
-<td style="text-align: left;">-2.4</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: left;">0.23 (0.13)</td>
+<td style="text-align: left;">0.10 (0.28)</td>
+<td style="text-align: left;">0.22 (0.33)</td>
+<td style="text-align: left;">0.12 (0.11)</td>
+<td style="text-align: left;">-2.61 (1.06)</td>
 </tr>
 </tbody>
 </table>
@@ -503,10 +524,9 @@ window.Quarto = {
 </figure>
 </div>
 <div class="FigureNote" data-custom-style="FigureNote">
-<p><em>Note</em>. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to … ETC</p>
+<p><em>Note</em>. Summary statistics by reference class. Values represent mean (SD) across participants for each planning accuracy metric. Values in parentheses represent standard deviations. ‘Close match’ indicates trials where the proposed reduction was within ±2% of the target goal. Abs. Deviation and Log Abs. Deviation columns report medians.</p>
 </div>
-<p><a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a> shows the average x,y,z, separately for the conditions of … . As can be seen in Table 1, participants in the kWh condition met the target goal 38% of the time, compared to 22% for the Percentage condition and 10% for the USD condition. Moreover, the kWh reference class exhibited smaller deviations from the target reduction, suggesting that participants performed more accurately when the goal was framed in kWh rather than when the goal was framed in percentages or USD.</p>
-<p>As shown in <a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a>, participants in the kWh condition exactly met the target reduction goal 38% of the time, significantly outperforming those in the Percentage (22%) and USD (10%) conditions. Furthermore, the kWh reference class exhibited notably smaller mean absolute deviations (0.03) compared to Percentage (0.06) and USD (0.10), suggesting that presenting the reduction goal in absolute units facilitated more precise allocations.</p>
+<p><a href="#tbl-s1-agg" class="quarto-xref">Table&nbsp;1</a> presents a summary of descriptive statistics regarding planning accuracy across the three experimental reference class conditions (kWh, Percentage, USD). Observation of the central tendencies suggests a potential advantage for the kWh condition. The kWh group exhibited the highest mean proportion of trials exactly matching the target goal (M = 0.38, SD = 0.45), considerably higher than that observed in the Percentage (M = 0.22, SD = 0.37) and USD (M = 0.10, SD = 0.28) conditions. A concordant pattern emerged for deviations, where the kWh condition displayed the lowest median absolute deviation (Mdn = 0.03) compared to the Percentage (Mdn = 0.06) and USD (Mdn = 0.10) conditions, hinting at greater precision when goals were presented in absolute energy units.</p>
 <div class="cell FigureWithNote" data-apa-note="Distribution of the log of the absolute error between the participant's action plan and the reduction goal. Left side plot separates across different reference class conditions (kWh, Percentage, USD). Right side plot separates by self-reported calculator use. A lower log absolute error suggests higher planning accuracy." data-custom-style="FigureWithNote">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
@@ -538,7 +558,7 @@ window.Quarto = {
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>s1_ld <span class="sc">|</span> s1_ldc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s1-log-dist" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="2">
+<div id="fig-s1-log-dist" class="quarto-float quarto-figure quarto-figure-center" data-fignum="2" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -581,7 +601,7 @@ window.Quarto = {
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(<span class="st">"Combined Groups %"</span> , <span class="at">.after=</span><span class="fu">last_col</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">escape=</span><span class="cn">FALSE</span>,<span class="at">booktabs=</span><span class="cn">TRUE</span>,<span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="tbl-s1-prop" class="cell quarto-float quarto-figure quarto-figure-center" prefix="" data-apa-note="The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions." data-tblnum="2">
+<div id="tbl-s1-prop" class="cell quarto-float quarto-figure quarto-figure-center" prefix="" data-tblnum="2" data-apa-note="The table shows the percentage of participants who fell into each accuracy level for each reference class condition (percentages of kWh, $, and USD columns reflect within condition percentages). The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -692,7 +712,7 @@ window.Quarto = {
 <span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#     )) |&gt; kable(escape=FALSE,booktabs=TRUE,align=c("l"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="tbl-s1-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-tblnum="3" data-custom-style="FigureWithNote">
+<div id="tbl-s1-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="3" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -757,7 +777,7 @@ window.Quarto = {
 <div class="FigureNote" data-custom-style="FigureNote">
 <p><em>Note</em>. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.</p>
 </div>
-<div id="tbl-s1-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-tblnum="4" data-custom-style="FigureWithNote">
+<div id="tbl-s1-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="4" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s1-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -816,7 +836,7 @@ window.Quarto = {
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s1-ppd" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="3">
+<div id="fig-s1-ppd" class="quarto-float quarto-figure quarto-figure-center" data-fignum="3" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -876,7 +896,7 @@ window.Quarto = {
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s1-els" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="4">
+<div id="fig-s1-els" class="quarto-float quarto-figure quarto-figure-center" data-fignum="4" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s1-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -985,7 +1005,7 @@ window.Quarto = {
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">escape=</span><span class="cn">FALSE</span>,<span class="at">booktabs=</span><span class="cn">TRUE</span>,<span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="tbl-s2-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to participants who exactly met the target reduction goal (i.e., the proposed plan would reduce energy use by exactly 15%)" data-tblnum="5" data-custom-style="FigureWithNote">
+<div id="tbl-s2-agg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="5" data-apa-note="The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal. Percentage meeting goal refers to participants who exactly met the target reduction goal (i.e., the proposed plan would reduce energy use by exactly 15%)" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-agg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1074,7 +1094,7 @@ window.Quarto = {
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>s2_ld <span class="sc">+</span> s2_ldc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s2-log-dist" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="5">
+<div id="fig-s2-log-dist" class="quarto-float quarto-figure quarto-figure-center" data-fignum="5" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-log-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1149,7 +1169,7 @@ window.Quarto = {
 <span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">escape=</span><span class="cn">FALSE</span>,<span class="at">booktabs=</span><span class="cn">TRUE</span>,<span class="at">align=</span><span class="fu">c</span>(<span class="st">"l"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="tbl-s2-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-tblnum="6" data-custom-style="FigureWithNote">
+<div id="tbl-s2-reg" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="6" data-apa-note="Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline." data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-reg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1228,7 +1248,7 @@ window.Quarto = {
 <div class="FigureNote" data-custom-style="FigureNote">
 <p><em>Note</em>. Ordinal regression results. Positive coefficients for the reference class predictors indicate that those conditions are associated with higher error categories relative to the kWh baseline.</p>
 </div>
-<div id="tbl-s2-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-tblnum="7" data-custom-style="FigureWithNote">
+<div id="tbl-s2-ord" class="quarto-float quarto-figure quarto-figure-center FigureWithNote" prefix="" data-tblnum="7" data-apa-note="Odds ratios greater than 1 indicate increased odds of falling into a worse accuracy category compared to the kWh condition" data-custom-style="FigureWithNote">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-s2-ord-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1327,7 +1347,7 @@ window.Quarto = {
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s2-ame" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="6">
+<div id="fig-s2-ame" class="quarto-float quarto-figure quarto-figure-center" data-fignum="6" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-ame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1364,7 +1384,7 @@ window.Quarto = {
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s2-ppd" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="7">
+<div id="fig-s2-ppd" class="quarto-float quarto-figure quarto-figure-center" data-fignum="7" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-ppd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
@@ -1419,7 +1439,7 @@ window.Quarto = {
 <span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-s2-els" class="quarto-float quarto-figure quarto-figure-center" prefix="" data-fignum="8">
+<div id="fig-s2-els" class="quarto-float quarto-figure quarto-figure-center" data-fignum="8" prefix="">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-s2-els-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="FigureTitle" data-custom-style="FigureTitle">
