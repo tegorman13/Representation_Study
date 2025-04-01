@@ -1,7 +1,7 @@
 # Planning to Save Energy: How Information Format Affects Accuracy
 Thomas E. Gorman, Torsten Reimer, Juan Pablo Loaiza Ramirez, Hayden
 Barber
-2025-03-16
+2025-03-31
 
 # Introduction
 
@@ -10,9 +10,9 @@ especially among low-income households, who frequently face difficult
 choices between paying energy bills and meeting other essential needs
 (Bednar & Reames, 2020; Memmott et al., 2021). Such households often
 experience unsafe coping strategies (e.g., foregoing heating during
-winter months), which disproportionately affect racial and ethnic
-minorities and heighten risks of utility disconnection (Memmott et al.,
-2021). Moreover, residential energy use contributes to climate change,
+winter months), which disproportionately affect at-risk populations and
+heighten risks of utility disconnection (Memmott et al., 2021).
+Moreover, residential energy use contributes to climate change,
 intensifying the urgency for sustainable solutions (Farghali et al.,
 2023).
 
@@ -38,9 +38,9 @@ energy information is communicated, with format and presentation context
 significantly influencing understanding and action (Canfield et al.,
 2017; Fischer, 2008). Consequently, a pressing challenge lies in
 designing communication strategies that effectively convey energy data
-and motivate practical conservation decisions. We set out to explore if
-consumers are able to develop plans that would help meet certain energy
-consumption goals.
+and motivate practical conservation decisions. We set out to explore
+whether consumers are able to develop plans that would help meet certain
+energy consumption goals.
 
 ### Representation Formats
 
@@ -62,11 +62,15 @@ types of information, historical electricity use elicited the highest
 intentions and preferences for energy savings regardless of format.
 Additionally, participants with high energy literacy had a better
 understanding of energy-related information across all types of
-information representations. By disentangling the effects of content,
-format, and individual differences in energy literacy on understanding,
-preferences, and intentions, Canfield et al. (2017) demonstrated that
-easy-to-implement communication strategies in energy bills can lead to
-energy-saving behaviors.
+information representations. Studies such as DeWaters & Powers (2011)
+have highlighted that while individuals may express concern for energy
+issues, their actual knowledge and behaviors may not align, underscoring
+the importance of fostering a comprehensive understanding of energy
+concepts to facilitate effective conservation actions. By disentangling
+the effects of content, format, and individual differences in energy
+literacy on understanding, preferences, and intentions, Canfield et al.
+(2017) demonstrated that easy-to-implement communication strategies in
+energy bills can lead to energy-saving behaviors.
 
 Although many individuals express a desire to conserve energy, research
 consistently shows that abstract goals (e.g., “reduce overall usage by
@@ -77,7 +81,7 @@ that merely providing general information about energy savings rarely
 alters consumption patterns unless consumers also receive concrete
 instructions or tailored feedback.
 
-Similarly, Tonke (2024) rreported that sending households brief but
+Similarly, Tonke (2024) reported that sending households brief but
 precise text messages outlining how to reduce water use (e.g., limiting
 irrigation times, adjusting washing machine settings) yielded meaningful
 decreases in consumption, underscoring the importance of procedural
@@ -130,8 +134,6 @@ subject to a variety of contextual influences.
 
 ### Overview of Current Research
 
-Building on the study of Canfield et al. (2017), we aimed to test xxx.
-
 Despite existing studies on energy-use communication and format effects,
 limited research has explored how different numerical representations
 influence consumers’ ability to create accurate energy conservation
@@ -144,14 +146,14 @@ percentage, and USD) on the accuracy of energy-planning decisions. By
 manipulating the presentation format of energy information, this
 research aims to elucidate how different representational formats
 influence planning accuracy. Based on the literature reviewed, we
-hypothesize that: 1) Presenting energy reduction goals in absolute units
-(kWh) will lead to greater planning accuracy compared to
+hypothesized that: 1) Presenting energy reduction goals in absolute
+units (kWh) will lead to greater planning accuracy compared to
 percentage-based or monetary formats, as absolute units provide a more
 direct and less ambiguous representation of energy quantities. 2) Higher
 energy literacy will be associated with more accurate planning, as
 individuals with greater energy knowledge may be better equipped to
 process and utilize the provided information, regardless of format. We
-also examine the potential of several exploratory variables, such as
+also examined the potential of several exploratory variables, such as
 goal difficulty and the rounding of numerical values, to further
 elucidate the factors that influence planning accuracy.
 
@@ -167,10 +169,12 @@ of a planning trial as it was seen by participants.
 We implemented our task and surveys on Qualtrics, and recruited
 participants through Amazon Mechanical Turk. In Experiment 1, 235
 participants were initially recruited. Data from six participants were
-excluded due to deviant performance on the task, resulting in a final
-sample of 229 participants (146 males, 92 females, 1 not specified). The
-average age of participants was 34.3 years (SD = 10.2). Most
-participants (76%) reported using a calculator to complete the task.
+excluded due to unusually large error magnitudes (error magnitudes
+exceeding 2.5 standard deviations from the group mean), resulting in a
+final sample of 229 participants (136 males, 92 females, 1 participant
+not specified). The average age of participants was 34.3 years (SD =
+10.2). Most participants (76%) reported using a calculator to complete
+the task.
 
 ### Materials and Design
 
@@ -182,11 +186,10 @@ state order counterbalanced across participants. The family scenarios
 featured four households in different climate regions: Texas (Smith
 family) and California (Adams family) representing warm climates, and
 Colorado (Wells family) and Massachusetts (Davis family) representing
-cold climates. Average utility use data for each state was obtained from
-the CITE SOURCE FOR STATE AVGS? Participants also completed an 8-item
-questionnaire assessing their knowledge of energy consumption and
-conversion (DeWaters & Powers, 2011), and a question indicating whether
-they used a calculator for the task.
+cold climates. Participants also completed an 8-item questionnaire
+assessing their knowledge of energy consumption and conversion (DeWaters
+& Powers, 2011), and a question indicating whether they used a
+calculator for the task.
 
 ### Procedure
 
@@ -216,21 +219,19 @@ target for that specific household.
 
 <div id="fig-task">
 
-<img src="./assets/images/wells10e_pub.png"
-data-apa-note="Participants saw a table with a family&#39;s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% given as goal reduction), kilowatt hours (5965 kWh given), or USD ($656). Participants in the USD condition were provided with the conversion rate between kwH and USD." />
+<img src="./assets/images/wells10e_pub.png" style="width:80.0%"
+data-apa-note="Participants saw a table with a family&#39;s previous year electricity usage (here for the Wells family in Colorado) and were asked to allocate energy usage to meet a 15% reduction goal. The format of the reduction goal was manipulated to be either a percentage (15% reduction), kilowatt hours (5965 kWh), or USD ($656). Participants in the USD condition were provided with the conversion rate between kWh and USD. All participants completed two scenarios, and for each scenario, they proposed two distinct action plans" />
 
 Figure 1: Example energy planning task trial
 
 </div>
 
-## Measures
-
 ## Results
 
-All preprocessing and analyses were carried out in R (Team, 2020) and
-the Tidyverse package (Wickham et al., 2019). Mixed Bayesian regressions
-were fit using the brms package (Bürkner, 2017), with participants and
-family scenario (states) set as random effects.
+All preprocessing and analyses were carried out in `R` version 4.4.3
+(Team, 2020) and the Tidyverse package (Wickham et al., 2019). Mixed
+Bayesian regressions were fit using the `brms` package (Bürkner, 2017),
+with participants and family scenario set as random effects.
 
 ``` r
 pacman::p_load(dplyr,purrr,tidyr,stringr,here,tibble,brms,rstan,bayestestR,emmeans,tidybayes,
@@ -281,9 +282,6 @@ s1_agg <- s1 |>
             )
         ) |> relocate(accuracy_level, .after= "pct_change")
 
-
-
-
 s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |> 
     mutate(n_accuracy = n_distinct(accuracy_level)) |> 
     summarise(
@@ -310,34 +308,22 @@ s1_agg4 <- s1_agg |> group_by(id,refClass,calc) |>
 ##| label: tbl-s1-agg
 ##| tbl-cap: "Study 1: Summary of planning accuracy by reference class. The table shows performance as both the % of trials where participants matched the goal, and the mean absolute error from the target reduction goal."
 
-# overall pct of subjects who matched their goal
-# s1_agg4 |> group_by('Reference Class' = refClass) |>
-#     summarise(
-#     'Avg. % Change' = mean(mean_pct_change),
-#     '% meeting goal (exact)' = mean(pct),
-#     '% meeting goal (close match)' = mean(pct_close),
-#     'Abs. Deviation' = median(mean_abs_error),
-#     'Log Abs. Deviation' = (median(mean_log_abs_error)),
-#     # sd = sd(pct),
-#     # n = n(),
-#     #se=sd(pct)/sqrt(n)
-# ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
-#   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+summary_table <- s1_agg4 |>
+    group_by(`Reference Class` = refClass) |>
+    summarise(
+        N = n(),
+        # Keep Mean (SD) for average change proportion
+        #`Avg. % Change` = sprintf("%.2f (%.2f)", mean(mean_pct_change), sd(mean_pct_change)),
+        # Calculate Mean (SD) for percentages, multiply by 100, format as whole number
+        `Exact Match Rate(%)` = sprintf("%.0f (%.0f)", mean(pct) * 100, sd(pct) * 100),
+        `Close Match Rate(%)` = sprintf("%.0f (%.0f)", mean(pct_close) * 100, sd(pct_close) * 100),
+        # Calculate Median [IQR] for deviations, adjust decimals as needed
+        `Abs. Deviation` = sprintf("%.3f (%.3f)", median(mean_abs_error), IQR(mean_abs_error)),
+        `Log Abs. Deviation` = sprintf("%.2f (%.2f)", median(mean_log_abs_error), IQR(mean_log_abs_error))
+    ) |>
+    # Apply kable formatting (optional, depends on your workflow)
+    knitr::kable(escape = FALSE, booktabs = TRUE, align = c("l"))
 
-#pander::pandoc.table(caption="Study 1: Proportion of participants who matched their goal overall")
-
-
-summary_table <- s1_agg4 |> 
-  group_by(`Reference Class` = refClass) |> 
-  summarise(
-    N = n(),
-    `Avg. % Change` = sprintf("%.2f (%.2f)", mean(mean_pct_change), sd(mean_pct_change)),
-    `% meeting goal (exact)` = sprintf("%.2f (%.2f)", mean(pct), sd(pct)),
-    `% meeting goal (close match)` = sprintf("%.2f (%.2f)", mean(pct_close), sd(pct_close)),
-    `Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_abs_error), sd(mean_abs_error)),
-    `Log Abs. Deviation` = sprintf("%.2f (%.2f)", mean(mean_log_abs_error), sd(mean_log_abs_error))
-  ) |> 
-  kable(escape = FALSE, booktabs = TRUE, align = c("l"))
 
 #summary_table
 ```
@@ -346,26 +332,37 @@ summary_table <- s1_agg4 |>
 
 Table 1: Study 1: Summary of planning accuracy by reference class
 
-| Reference Class | N | Avg. % Change | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
-|:---|:---|:---|:---|:---|:---|:---|
-| kWh | 76 | 0.22 (0.14) | 0.38 (0.45) | 0.54 (0.45) | 0.09 (0.14) | -3.47 (1.43) |
-| Percentage | 67 | 0.21 (0.11) | 0.22 (0.37) | 0.40 (0.41) | 0.09 (0.10) | -3.18 (1.20) |
-| USD | 86 | 0.23 (0.13) | 0.10 (0.28) | 0.22 (0.33) | 0.12 (0.11) | -2.61 (1.06) |
+| Reference Class | N | Exact Match Rate(%) | Close Match Rate(%) | Abs. Deviation | Log Abs. Deviation |
+|:---|:---|:---|:---|:---|:---|
+| kWh | 76 | 38 (45) | 54 (45) | 0.029 (0.117) | -3.69 (2.79) |
+| Percentage | 67 | 22 (37) | 40 (41) | 0.056 (0.104) | -3.10 (1.87) |
+| USD | 86 | 10 (28) | 22 (33) | 0.095 (0.094) | -2.40 (1.09) |
 
 </div>
 
-<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> presents a summary
-of descriptive statistics regarding planning accuracy across the three
-experimental reference class conditions (kWh, Percentage, USD).
-Observation of the central tendencies suggests a potential advantage for
-the kWh condition. The kWh group exhibited the highest mean proportion
-of trials exactly matching the target goal (M = 0.38, SD = 0.45),
-considerably higher than that observed in the Percentage (M = 0.22, SD =
-0.37) and USD (M = 0.10, SD = 0.28) conditions. A concordant pattern
-emerged for deviations, where the kWh condition displayed the lowest
-median absolute deviation (Mdn = 0.03) compared to the Percentage (Mdn =
-0.06) and USD (Mdn = 0.10) conditions, hinting at greater precision when
-goals were presented in absolute energy units.
+The summary statistics in
+<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a> suggest
+descriptive differences in planning accuracy across reference class
+conditions, with the kWh condition yielding the highest rates of exact
+matches, and lowest absolute deviations from the target reduction goal.
+However, use of these performance metrics to compare conditions is
+complicated by the non-normality of their distributions. Specifically,
+the substantial standard deviations associated with the match rates in
+<a href="#tbl-s1-agg" class="quarto-xref">Table 1</a>, coupled with the
+visual evidence presented in
+<a href="#fig-s1-log-dist" class="quarto-xref">Figure 2</a>, underscore
+the markedly skewed, and potentially bi-modal distribution of the
+underlying planning errors.
+
+In light of these distributional characteristics, we elected to bin
+planning performance into ordered accuracy levels (as shown in
+<a href="#tbl-s1-prop" class="quarto-xref">Table 2</a>). Consequently,
+we binned individual trial outcomes into three distinct, ordered
+categories: “Exact match” (0% absolute error), “0.01-5% error” (minor
+deviations), and “Over 5% error” (larger deviations). This binned
+`accuracy_level` variable subsequently served as the dependent measure
+in our primary inferential analyses examining the impact of reference
+class on planning accuracy
 
 ``` r
 s1_ld <- ggplot(s1_agg, aes(y = refClass, x = log_abs_error, fill = refClass)) +
@@ -406,10 +403,12 @@ Figure 2: Experiment 1: Planning Error Distributions
 
 <div id="tbl-s1-prop">
 
-Table 2: Experiment 1 1: Categorization of Participants according to
+Table 2: Experiment 1: Categorization of Participants according to
 Accuracy Levels
 
 ``` r
+# The combined group column reflects the percentage of participants in each accuracy level when aggregating across across all reference class conditions.
+
 # compute percentage of subjects per accuracy level per group
 observed_props_s1 <- s1_agg |>
   group_by(refClass, accuracy_level) |>
@@ -423,50 +422,53 @@ observed_props_s1 |>
   group_by(accuracy_level) |>
   mutate(ns=sum(n)/4) |> 
   mutate(Total = paste0(round(ns/n_total*100,1), "%")) |>
-  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp, "Combined Groups %" =Total) |>
+  select('Reference Class'=refClass, 'Accuracy Level'=accuracy_level, '% in Group'=pct_grp) |> #, "Combined Groups %" =Total) |>
   pivot_wider(
     names_from = 'Reference Class',
     values_from = c('% in Group')
-  ) |> relocate("Combined Groups %" , .after=last_col()) |> 
+  ) |> #relocate("Combined Groups %" , .after=last_col()) |> 
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
-| Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
-|:---------------|:------|:-----------|:------|:------------------|
-| Exact match    | 38.5% | 22.4%      | 10.2% | 23.1%             |
-| 0.01-5% error  | 22.7% | 29.5%      | 25%   | 25.5%             |
-| Over 5% error  | 38.8% | 48.1%      | 64.8% | 51.3%             |
+| Accuracy Level | kWh   | Percentage | USD   |
+|:---------------|:------|:-----------|:------|
+| Exact match    | 38.5% | 22.4%      | 10.2% |
+| 0.01-5% error  | 22.7% | 29.5%      | 25%   |
+| Over 5% error  | 38.8% | 48.1%      | 64.8% |
 
 </div>
 
-We next categorized responses into three accuracy levels (exact match
-\[0% error\], minor deviations \[0.01–5%\], and large deviations
-\[\>5%\]) for our primary statistical modeling. Using Bayesian ordinal
-regression, we modeled the ordered accuracy outcome as a function of the
-reference class condition, while controlling for random variation across
-participants and family scenarios:
+
 
-$$
+Group comparisons were conducted with Bayesian ordinal regression
+(Bürkner & Vuorre, 2019; Kruschke, 2014). We modeled the ordered
+accuracy outcome as a function of the reference class condition, while
+controlling for random variation across participants and family
+scenarios (<a href="#eq-e1" class="quarto-xref">Equation 1</a>).
+
+<span id="eq-e1">$$
 \text{Accuracy Level} \sim \text{Reference Class} + \text{Calculator} + (1|\text{id}) + (1|\text{Family Scenario})
-$$
+ \qquad(1)$$</span>
 
-This approach allowed us to estimate thresholds (intercepts) and
-regression coefficients that capture how different reference classes
-affect the likelihood of achieving higher accuracy categories. For each
-comparison, we provide posterior odds ratios (OR) and their 95% CIs.
 This approach allows the estimation of threshold parameters and
 regression coefficients that characterize how changes in predictor
 variables (such as the reference class: kWh, percentage, or USD) relate
-to probabilities of being in each accuracy category. Specifically, we
-used a cumulative logit link function to model the ordered accuracy
-outcome, and we specified weakly informative priors for the regression
-coefficients (normal distributions with mean 0 and standard deviation
-of 1) and for the cutpoints (normal distributions with a mean of zero
-and a standard deviation of 4.0). The approach can be used to estimate
-threshold parameters and regression coefficients that characterize how
-changes in predictor variables (such as the reference class: kWh,
-percentage, or USD) relate to probabilities of being in each accuracy
-category.
+to probabilities of being in each accuracy category. We used a
+cumulative logit link function to model the ordered accuracy outcome,
+and we specified weakly informative priors (Kruschke, 2014) for the
+regression coefficients (normal distributions with mean 0 and standard
+deviation of 1) and for the cutpoints (normal distributions with a mean
+of zero and a standard deviation of 4.0). The approach can be used to
+estimate threshold parameters and regression coefficients that
+characterize how changes in predictor variables (such as the reference
+class: kWh, percentage, or USD) relate to probabilities of being in each
+level of accuracy (0% absolute error; 0.01-5% error; Over 5% error).
+Bayesian regression provides a probability distribution over the
+plausible values of the model parameters, allowing for a probabilistic
+interpretation of the uncertainty associated with these estimates. The
+width of the credible intervals (Bayesian equivalent of confidence
+intervals) derived from the posterior distribution directly indicates
+the degree of uncertainty in these effects.
 
 ``` r
 ##| label: tbl-s1-ord
@@ -523,13 +525,13 @@ t1 <- as.data.frame(describe_posterior(ordinal_model_s1, centrality = "Mean"))[,
 Table 3: **Experiment 1**: Ordinal Regression Results of a Test of
 Differences between conditions in Accuracy Levels
 
-| Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
-|:-------------------|:---------|:---------|:---------|:-----|
-| Intercept\[1\]     | -4.21    | -5.90    | -2.58    | 1.00 |
-| Intercept\[2\]     | -0.89    | -2.49    | 0.71     | 0.87 |
-| refClassPercentage | 1.44     | 0.07     | 2.88     | 0.98 |
-| refClassUSD        | 3.13     | 1.81     | 4.50     | 1.00 |
-| calcUsedCalculator | -3.30    | -4.80    | -1.92    | 1.00 |
+| Parameter           | Estimate | CI_Lower | CI_Upper | pd   |
+|:--------------------|:---------|:---------|:---------|:-----|
+| Intercept\[1\]      | -4.21    | -5.90    | -2.58    | 1.00 |
+| Intercept\[2\]      | -0.89    | -2.49    | 0.71     | 0.87 |
+| RefClass-Percentage | 1.44     | 0.07     | 2.88     | 0.98 |
+| RefClass-USD        | 3.13     | 1.81     | 4.50     | 1.00 |
+| calc-UsedCalculator | -3.30    | -4.80    | -1.92    | 1.00 |
 
 </div>
 
@@ -551,15 +553,24 @@ reference class coefficients are positive for both the Percentage
 baseline. This indicates that, compared to the kWh condition,
 participants in both the Percentage and USD conditions were more likely
 to produce plans that fell into higher error categories. Moreover, the
-odds ratios (see Table 3) suggest that the USD condition led to a
-notably higher likelihood of large errors compared to the kWh baseline
-(OR = 22.9), while the Percentage condition also demonstrated increased
-odds (OR = 4.2) but was somewhat less detrimental to accuracy than USD.
-These results align with our descriptive findings and further clarify
-that framing the target reductions in absolute kWh units may facilitate
-significantly more accurate planning. Posterior predictive checks showed
-that the ordinal model provided a reasonable fit to the observed data
-(see <a href="#fig-s1-ppd" class="quarto-xref">Figure 3</a>).
+odds ratios (see <a href="#tbl-s1-ord" class="quarto-xref">Table 4</a>)
+suggest that the USD condition led to a notably higher likelihood of
+large errors compared to the kWh baseline (OR = 22.9), while the
+Percentage condition also demonstrated increased odds (OR = 4.2) but was
+somewhat less detrimental to accuracy than USD. These results align with
+our descriptive findings and further clarify that framing the target
+reductions in absolute kWh units may facilitate significantly more
+accurate planning. To evaluate the descriptive adequacy of our
+statistical model, we performed posterior predictive checks, a standard
+Bayesian technique wherein data simulated from the fitted ordinal model
+are compared against the observed data. As shown in
+<a href="#fig-s1-ppd" class="quarto-xref">Figure 3</a>, which compares
+the observed proportions of participant responses for each accuracy
+level (represented by bars) to the models predicted proportions
+(represented by points). The close correspondence between the observed
+bars and predicted points across different accuracy levels and reference
+class conditions suggests that the model adequately captures the
+patterns in the observed data.
 
 ``` r
 pp_check(ordinal_model_s1, type = "bars_grouped", group="refClass", fatten = 2) +
@@ -633,18 +644,15 @@ absolute error
 
 To further investigate individual factors that may influence planning
 accuracy, we examined the relationship between participants’ energy
-literacy scores and their performance on the task. Energy literacy was
-assessed using an 8-item questionnaire adapted from (DeWaters & Powers,
-2011), which covers topics such as energy units, appliance energy
-consumption, and sources of electricity. A Bayesian linear regression
-model was fit with log-transformed absolute error as the outcome
-variable and energy literacy score as the predictor, controlling for
-random effects of participant and state: log_abs_error ~ els + (1\|id) +
-(1\|state). Results indicated a significant negative relationship
-between energy literacy and log absolute error (Estimate = -2.35, 95%
-CI: -2.88 to -1.81), suggesting that participants with higher energy
-literacy scores tended to have smaller deviations from the target
-reduction goal, and thus more accurate plans overall
+literacy scores and their performance on the task. A Bayesian linear
+regression model was fit with log-transformed absolute error as the
+outcome variable and energy literacy score as the predictor, controlling
+for random effects of participant and state. Results indicated a
+significant negative relationship between energy literacy and log
+absolute error (Estimate = -2.35, 95% CI: -2.88 to -1.81), suggesting
+that participants with higher energy literacy scores tended to have
+smaller deviations from the target reduction goal, and thus more
+accurate plans overall
 (<a href="#fig-s1-els" class="quarto-xref">Figure 4</a>).
 
 ## Experiment 1: Discussion
@@ -653,12 +661,12 @@ Experiment 1 examined how different numerical representations of energy
 reduction goals affected participants’ planning accuracy. In line with
 our hypothesis that absolute units would yield better accuracy, the kWh
 condition supported significantly more precise energy reduction plans
-than did either the Percentage or USD conditions. Although the
-Percentage format was detrimental to accuracy relative to kWh, it was
-the USD condition that consistently produced the poorest outcomes,
-suggesting that monetary terms, while intuitive in everyday contexts,
-may not serve as effective reference classes for planning
-appliance-specific reductions in energy use.
+than either the Percentage or USD conditions. Although the Percentage
+format was detrimental to accuracy relative to kWh, it was the USD
+condition that consistently produced the poorest outcomes, suggesting
+that monetary terms, while intuitive in everyday contexts, may not serve
+as effective reference classes for planning appliance-specific
+reductions in energy use.
 
 Experiment 2 will extend these findings by examining whether additional
 variables, such as the difficulty of the reduction goal or the rounding
@@ -668,18 +676,35 @@ energy information presentation for improved planning accuracy.
 
 # Experiment 2
 
+## Introduction
+
+Building upon the preliminary evidence from Experiment 1, which
+indicated that representing energy reduction targets in absolute
+kilowatt-hour (kWh) units might yield superior planning accuracy
+relative to percentage or monetary formats, Experiment 2 was designed to
+further probe the robustness and nuances of this effect. A primary
+objective was to replicate the core finding regarding the influence of
+reference class on planning precision. Additionally, this second
+experiment sought to broaden the investigation by examining the
+potential impact of other task parameters; specifically, we manipulated
+the difficulty of the reduction goal (comparing a 10% versus a 15%
+target) and the granularity of the presented numerical usage data (using
+exact versus rounded figures).
+
 ## Methods
 
-In Experiment 2, We recruited 206 participants from Amazon Mechanical
+In Experiment 2, 206 participants were recruited from Amazon Mechanical
 Turk, but data from 10 participants were corrupted due to experimenter
-error, and six excluded due to deviant behavior, leaving a final sample
-of 190 participants (102 male; 88 female. Average age = 35.5, SD=9.5)
+error, and six were excluded because their error magnitudes were
+statistical outliers (error magnitudes exceeding 2.5 standard deviations
+from the group mean), leaving a final sample of 190 participants (102
+males, 88 females, with an average age = 35.5, SD=9.5)
 
 Experiment 2 employed a mixed experimental design with reference class
 (USD, Percentage, kWh) as a between-subjects factor, and two
 within-subjects factors: task goal (10% vs. 15% reduction) and the
 presentation of last year’s usage data (exact vs. rounded numbers). The
-order of presentation of the goal, rounding, and state conditions was
+order of presentation of the goal, rounding, and family scenarios was
 counterbalanced across participants. As in Experiment 1, each
 participant completed the energy reduction planning task for two
 different family-state scenarios. In the “rounded” condition, both the
@@ -754,17 +779,34 @@ s2_agg4 |> group_by('Reference Class' = refClass) |>
     'Log Abs. Deviation' = (median(mean_log_abs_error)),
 ) |>   mutate(across(where(is.numeric), \(x) round(x, 3))) %>% 
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
+
+
+summary_table <- s2_agg4 |>
+    group_by(`Reference Class` = refClass) |>
+    summarise(
+        N = n(),
+        # Keep Mean (SD) for average change proportion
+        #`Avg. % Change` = sprintf("%.2f (%.2f)", mean(mean_pct_change), sd(mean_pct_change)),
+        # Calculate Mean (SD) for percentages, multiply by 100, format as whole number
+        `Exact Match Rate(%)` = sprintf("%.0f (%.0f)", mean(pct) * 100, sd(pct) * 100),
+        `Close Match Rate(%)` = sprintf("%.0f (%.0f)", mean(pct_close) * 100, sd(pct_close) * 100),
+        # Calculate Median [IQR] for deviations, adjust decimals as needed
+        `Abs. Deviation` = sprintf("%.3f (%.3f)", median(mean_abs_error), IQR(mean_abs_error)),
+        `Log Abs. Deviation` = sprintf("%.2f (%.2f)", median(mean_log_abs_error), IQR(mean_log_abs_error))
+    ) |>
+    # Apply kable formatting (optional, depends on your workflow)
+    knitr::kable(escape = FALSE, booktabs = TRUE, align = c("l"))
 ```
 
 <div id="tbl-s2-agg">
 
 Table 5: Experiment 2: Summary of planning accuracy by reference class
 
-| Reference Class | % meeting goal (exact) | % meeting goal (close match) | Abs. Deviation | Log Abs. Deviation |
-|:---|:---|:---|:---|:---|
-| kWh | 0.44 | 0.52 | 0.02 | -3.9 |
-| Percentage | 0.28 | 0.42 | 0.06 | -3.2 |
-| USD | 0.20 | 0.29 | 0.10 | -2.4 |
+| Reference Class | N | Exact Match Rate(%) | Close Match Rate(%) | Abs. Deviation | Log Abs. Deviation |
+|:---|:---|:---|:---|:---|:---|
+| kWh | 68 | 44 (45) | 52 (46) | 0.022 (0.182) | -3.87 (3.12) |
+| Percentage | 67 | 28 (36) | 42 (42) | 0.062 (0.138) | -3.22 (2.31) |
+| USD | 55 | 20 (38) | 29 (40) | 0.102 (0.135) | -2.42 (1.52) |
 
 </div>
 
@@ -863,15 +905,15 @@ or2 <- as.data.frame(fixef(ordinal_model_s2_logit)[,-2])|> as.data.frame() %>%
 Table 6: **Experiment 2.** Parameter estimates from the ordinal
 regression model
 
-| Parameter          | Estimate | CI_Lower | CI_Upper | pd   |
-|:-------------------|:---------|:---------|:---------|:-----|
-| Intercept\[1\]     | -1.45    | -2.85    | -0.07    | 0.98 |
-| Intercept\[2\]     | 1.26     | -0.09    | 2.65     | 0.97 |
-| refClassPercentage | 1.02     | -0.63    | 2.71     | 0.89 |
-| refClassUSD        | 2.27     | 0.53     | 3.98     | 0.99 |
-| calcNoCalculator   | 4.10     | 2.20     | 6.06     | 1.00 |
-| pct_goal15%        | -0.39    | -0.81    | 0.04     | 0.96 |
-| roundedRounded     | -0.53    | -0.96    | -0.11    | 0.99 |
+| Parameter           | Estimate | CI_Lower | CI_Upper | pd   |
+|:--------------------|:---------|:---------|:---------|:-----|
+| Intercept\[1\]      | -1.45    | -2.85    | -0.07    | 0.98 |
+| Intercept\[2\]      | 1.26     | -0.09    | 2.65     | 0.97 |
+| RefClass-Percentage | 1.02     | -0.63    | 2.71     | 0.89 |
+| RefClass-USD        | 2.27     | 0.53     | 3.98     | 0.99 |
+| calc-NoCalculator   | 4.10     | 2.20     | 6.06     | 1.00 |
+| pct_goal15%         | -0.39    | -0.81    | 0.04     | 0.96 |
+| rounded-Rounded     | -0.53    | -0.96    | -0.11    | 0.99 |
 
 </div>
 
@@ -883,7 +925,7 @@ Table 7: **Experiment 2.** Odds ratios for group comparisons
 |:---------------------|:-----------|:---------|:---------|
 | Percentage vs kWh    | 2.78       | 0.53     | 15.0     |
 | USD vs kWh           | 9.68       | 1.69     | 53.4     |
-| calcNoCalculator     | 60.37      | 9.02     | 426.4    |
+| calc-NoCalculator    | 60.37      | 9.02     | 426.4    |
 | 15% Goal vs 10% Goal | 0.68       | 0.44     | 1.0      |
 | Rounded vs Not       | 0.59       | 0.38     | 0.9      |
 
@@ -897,40 +939,51 @@ categories (exact match, minor deviations, or substantial deviations) as
 a function of the reference class condition (kWh, Percentage, USD),
 while including pct_goal (10% vs. 15%), rounded (exact vs. rounded usage
 data), and calculator usage as additional predictors. Random intercepts
-were specified for both participant and state,
+were specified for both participant and state
+(<a href="#eq-e2" class="quarto-xref">Equation 2</a>). The model was fit
+using the brms package in R, with weakly informative priors for the
+regression coefficients and cutpoints (Kruschke, 2014).
 
-The ordinal regression analysis revealed that the USD reference class
-significantly increased the odds of higher error categories compared to
-the kWh reference class (OR = 9.68, 95% CI: \[1.69, 53.4\]).
-Participants in the USD condition were therefore substantially more
-likely to deviate from the target energy reduction goal compared to
-those in the kWh condition. In contrast, the Percentage condition’s odds
-ratio relative to kWh was more uncertain (OR = 2.78, 95% CI: 0.53,
-15.0), indicating that although there may be a trend toward reduced
-accuracy in the Percentage condition, the evidence was not definitive.
+<span id="eq-e2">$$
+\text{Accuracy} \sim \text{Reference Class} + \text{Calculator} + \text{Goal} + \text{Rounded} + (1|\text{id}) + (1|\text{Family Scenario})
+ \qquad(2)$$</span>
 
-We also found that using rounded numbers modestly improved accuracy (b =
--0.53, 95% CI: \[-0.96, -0.11\]), with participants having 0.59 times
-the odds of falling into a worse accuracy category when working with
-rounded values. The more challenging 15% reduction goal was associated
-with slightly better performance compared to the 10% goal (b = -0.39,
-95% CI: \[-0.81, 0.04\]), though this effect was relatively small.
-Consistent with Experiment 1, the use of a calculator had a large and
-significant effect on accuracy. The coefficient for calcNoCalculator was
-4.10 (95% CI: 2.20, 6.06), and the corresponding odds ratio was 60.37
-(95% CI: 9.02, 426.4), indicating that participants who did not use a
-calculator were substantially more likely to fall into higher error
-categories.
+See <a href="#tbl-s2-agg" class="quarto-xref">Table 5</a> for a
+breakdown of the descriptive statistics. The ordinal regression analysis
+revealed that the USD reference class significantly increased the odds
+of higher error categories compared to the kWh reference class (OR =
+9.68, 95% CI: \[1.69, 53.4\]). Participants in the USD condition were
+therefore substantially more likely to deviate from the target energy
+reduction goal compared to those in the kWh condition. In contrast, the
+Percentage condition’s odds ratio relative to kWh was more uncertain (OR
+= 2.78, 95% CI: \[0.53, 15.0\]), indicating that although there may be a
+trend toward reduced accuracy in the Percentage condition, the evidence
+was not definitive
+(<a href="#tbl-s2-ord" class="quarto-xref">Table 7</a>).
+
+We also found that using rounded numbers modestly improved accuracy
+(Estimate = -0.53, 95% CI: \[-0.96, -0.11\]), with participants having
+0.59 times the odds of falling into a worse accuracy category when
+working with rounded values. The more challenging 15% reduction goal was
+associated with slightly better performance compared to the 10% goal,
+Estimate = -0.39, 95% CI: \[-0.81, 0.04\], though this effect was
+relatively small. Consistent with Experiment 1, the use of a calculator
+had a large and significant effect on accuracy. The coefficient for
+calc-NoCalculator was Estimate = 4.10 95% CI: \[2.20, 6.06\], and the
+corresponding odds ratio was 60.37 (95% CI: \[9.02, 426.4\]), indicating
+that participants who did not use a calculator were substantially more
+likely to fall into higher error categories.
 
 <a href="#fig-s2-ame" class="quarto-xref">Figure 6</a> shows the
-marginal effects of refClass on each level of accuracy_level. These
-results reveal that switching from kWh to Percentage decreased the
-probability of an “Exact match” by an average of 7.0 percentage points
-(95% CI: -19.2, 4.2) and increased the probability of “Over 5% error” by
-6.9 percentage points (95% CI: -4.5, 18.6). Similarly, switching from
-kWh to USD decreased the probability of an “Exact match” by 15
-percentage points (95% CI: -26.7, -3.3) and increased the probability of
-“Over 5% error” by 16.5 percentage points (95% CI: 3.7, 29.3).
+marginal effects of Reference Class on each level of accuracy_level.
+These results reveal that switching from kWh to Percentage decreased the
+probability of an “Exact match” by an average of 7.0 percentage points,
+95% CI: \[-19.2, 4.2\] and increased the probability of falling into the
+“Over 5% error” category by 6.9 percentage points, 95% CI: \[-4.5,
+18.6\]. Similarly, switching from kWh to USD decreased the probability
+of an “Exact match” by 15 percentage points, 95% CI: \[-26.7, -3.3\],
+and increased the probability of “Over 5% error” by 16.5 percentage
+points, 95% CI: \[3.7, 29.3\].
 
 ``` r
 library(ggtext)
@@ -948,9 +1001,9 @@ ame2_annotated <- ame2 %>%
 
 ggplot(ame2_annotated, aes(x = estimate, y = group, color = contrast, group = contrast)) +
     geom_point(size = 3, alpha=.6,position = position_dodge(width = 0.5)) +
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2, alpha=.5,
+    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2, alpha=.3,
                    position = position_dodge(width = 0.5)) +
-    geom_vline(xintercept = 0, linetype = "dashed",alpha=.5) +
+    geom_vline(xintercept = 0, linetype = "dashed",alpha=.1) +
     labs(
         x = "Average Marginal Effect",
         y = "Accuracy Level",
@@ -960,7 +1013,7 @@ ggplot(ame2_annotated, aes(x = estimate, y = group, color = contrast, group = co
     # Add annotations
     geom_text(
         aes(label = label),
-        color = "black", size = 3.5, hjust = -0.3, vjust = -0.5,
+        color = "black", size = 3.6, hjust = -0.3, vjust = -0.5,
         position = position_dodge(width = 0.5)
     ) +
     theme_minimal()
@@ -1045,12 +1098,11 @@ We once again examined the effect of energy literacy on planning
 accuracy. A Bayesian linear regression model was fit with
 log-transformed absolute error as the outcome variable and energy
 literacy score as the predictor, controlling for random effects of
-participant and state: log_abs_error ~ els + (1\|id) + (1\|state). This
-revealed a significant negative relationship between energy literacy and
-log absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52),
-indicating that participants with higher energy literacy scores tended
-to have smaller deviations from the target reduction goal, and thus more
-accurate plans overall
+participant and state. This revealed a significant negative relationship
+between energy literacy and log absolute error (Estimate = -3.21, 95%
+CI: \[-3.89 to -2.52\]), indicating that participants with higher energy
+literacy scores tended to have smaller deviations from the target
+reduction goal, and thus more accurate plans overall
 (<a href="#fig-s2-els" class="quarto-xref">Figure 8</a>).
 
 ## Experiment 2: Discussion
@@ -1074,10 +1126,10 @@ with a slight improvement in accuracy is counterintuitive. It may be
 that participants put more effort into the task under this condition, or
 perhaps this is an artifact of the way that the task was presented.
 However, this effect was relatively small and thus should be explored in
-future research to better understand its underlying mechanisms.
-Furthermore, the magnitude of the effect size of this manipulation
-should be examined to better understand the practical implications of
-goal difficulty for energy conservation.
+future research to confidently establish its existence. Furthermore, the
+magnitude of the effect size of this manipulation should be examined to
+better understand the practical implications of goal difficulty for
+energy conservation.
 
 The large and significant effect of calculator use, consistent across
 both experiments, underscores the crucial role of tools that individuals
@@ -1095,15 +1147,15 @@ conditions exhibited the smallest errors in allocating energy cuts
 across appliances, a result that consistently held even as scenario
 details varied. These results extend prior observations on the impact of
 numerical format on comprehension and decision-making (Gigerenzer &
-Edwards, 2003; Reimer et al., 2015). but they move beyond simpler
-estimation tasks to show how these benefits persist in a multi-step
+Edwards, 2003; Reimer et al., 2015). But they move beyond simpler
+estimation tasks to show how these benefits persist in a goal-directed
 planning context. Notably, individuals with higher energy literacy
 performed better overall, a finding in line with previous work
 emphasizing the importance of domain knowledge for effective resource
 conservation (Attari et al., 2010; Canfield et al., 2017)
 
 While prior research has suggested that consumers sometimes prefer
-monetary formats(Karjalainen, 2011; Nemati & Penn, 2020) or that
+monetary formats (Karjalainen, 2011; Nemati & Penn, 2020) or that
 monetary framing can improve appliance choices (Blasch et al., 2019),
 our findings tentatively indicate that absolute energy units can
 facilitate the finer-grained calculations needed to plan specific usage
@@ -1121,8 +1173,10 @@ al., 2020) further highlights how presenting energy data in a
 straightforward, standardized format can guide better consumer
 decisions. Nevertheless, it is unclear whether the observed benefits of
 absolute units (i.e., kWh) are genuinely attributable to their absolute
-nature, or if other inherent characteristics of these units might be
-driving the effects.
+nature, or if other characteristics of these units might be driving the
+effects (e.g., familiarity).
+
+## Limitations and Future Directions
 
 A few constraints should be considered. First, each participant only
 completed a limited set of action plans (four total), which may not
@@ -1142,11 +1196,6 @@ into tangible actions in diverse contexts. By building on these avenues,
 subsequent work can refine how energy information is formatted and
 delivered, ultimately enhancing both the precision and feasibility of
 conservation planning.
-
-------------------------------------------------------------------------
-
-Supplementary information and materials can be found online at [this
-website](https://tegorman13.github.io/Representation_Study/manuscript/output/appendix.html)
 
 
 

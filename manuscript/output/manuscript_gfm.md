@@ -465,7 +465,7 @@ class: kWh, percentage, or USD) relate to probabilities of being in each
 level of accuracy (0% absolute error; 0.01-5% error; Over 5% error).
 Bayesian regression provides a probability distribution over the
 plausible values of the model parameters, allowing for a probabilistic
-interpretation of the uncertainty associated with these estimates.The
+interpretation of the uncertainty associated with these estimates. The
 width of the credible intervals (Bayesian equivalent of confidence
 intervals) derived from the posterior distribution directly indicates
 the degree of uncertainty in these effects.
@@ -948,15 +948,18 @@ regression coefficients and cutpoints (Kruschke, 2014).
 \text{Accuracy} \sim \text{Reference Class} + \text{Calculator} + \text{Goal} + \text{Rounded} + (1|\text{id}) + (1|\text{Family Scenario})
  \qquad(2)$$</span>
 
-The ordinal regression analysis revealed that the USD reference class
-significantly increased the odds of higher error categories compared to
-the kWh reference class (OR = 9.68, 95% CI: \[1.69, 53.4\]).
-Participants in the USD condition were therefore substantially more
-likely to deviate from the target energy reduction goal compared to
-those in the kWh condition. In contrast, the Percentage condition’s odds
-ratio relative to kWh was more uncertain (OR = 2.78, 95% CI: \[0.53,
-15.0\]), indicating that although there may be a trend toward reduced
-accuracy in the Percentage condition, the evidence was not definitive.
+See <a href="#tbl-s2-agg" class="quarto-xref">Table 5</a> for a
+breakdown of the descriptive statistics. The ordinal regression analysis
+revealed that the USD reference class significantly increased the odds
+of higher error categories compared to the kWh reference class (OR =
+9.68, 95% CI: \[1.69, 53.4\]). Participants in the USD condition were
+therefore substantially more likely to deviate from the target energy
+reduction goal compared to those in the kWh condition. In contrast, the
+Percentage condition’s odds ratio relative to kWh was more uncertain (OR
+= 2.78, 95% CI: \[0.53, 15.0\]), indicating that although there may be a
+trend toward reduced accuracy in the Percentage condition, the evidence
+was not definitive
+(<a href="#tbl-s2-ord" class="quarto-xref">Table 7</a>).
 
 We also found that using rounded numbers modestly improved accuracy
 (Estimate = -0.53, 95% CI: \[-0.96, -0.11\]), with participants having
@@ -972,8 +975,8 @@ that participants who did not use a calculator were substantially more
 likely to fall into higher error categories.
 
 <a href="#fig-s2-ame" class="quarto-xref">Figure 6</a> shows the
-marginal effects of refClass on each level of accuracy_level. These
-results reveal that switching from kWh to Percentage decreased the
+marginal effects of Reference Class on each level of accuracy_level.
+These results reveal that switching from kWh to Percentage decreased the
 probability of an “Exact match” by an average of 7.0 percentage points,
 95% CI: \[-19.2, 4.2\] and increased the probability of falling into the
 “Over 5% error” category by 6.9 percentage points, 95% CI: \[-4.5,
