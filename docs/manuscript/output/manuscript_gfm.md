@@ -949,17 +949,22 @@ regression coefficients and cutpoints (Kruschke, 2014).
  \qquad(2)$$</span>
 
 See <a href="#tbl-s2-agg" class="quarto-xref">Table 5</a> for a
-breakdown of the descriptive statistics. The ordinal regression analysis
-(see <a href="#tbl-s2-reg" class="quarto-xref">Table 6</a>) revealed
-that the USD reference class significantly increased the odds of higher
-error categories compared to the kWh reference class (OR = 9.68, 95% CI:
-\[1.69, 53.4\]). Participants in the USD condition were therefore
-substantially more likely to deviate from the target energy reduction
-goal compared to those in the kWh condition. In contrast, the Percentage
-condition’s odds ratio relative to kWh was more uncertain (OR = 2.78,
-95% CI: \[0.53, 15.0\]), indicating that although there may be a trend
-toward reduced accuracy in the Percentage condition, the evidence was
-not definitive (<a href="#tbl-s2-ord" class="quarto-xref">Table 7</a>).
+breakdown of the descriptive statistics, and
+<a href="#fig-s2-log-dist" class="quarto-xref">Figure 5</a> for
+visualizations of the full error distributions. The ordinal regression
+analysis (see <a href="#tbl-s2-reg" class="quarto-xref">Table 6</a>)
+revealed that the USD reference class significantly increased the odds
+of higher error categories compared to the kWh reference class (OR =
+9.68, 95% CI: \[1.69, 53.4\]). Participants in the USD condition were
+therefore substantially more likely to deviate from the target energy
+reduction goal compared to those in the kWh condition. In contrast, the
+Percentage condition’s odds ratio relative to kWh was more uncertain (OR
+= 2.78, 95% CI: \[0.53, 15.0\]), indicating that although there may be a
+trend toward reduced accuracy in the Percentage condition, the evidence
+was not definitive
+(<a href="#tbl-s2-ord" class="quarto-xref">Table 7</a>). Posterior
+predictive checks are shown in
+<a href="#fig-s2-ppd" class="quarto-xref">Figure 7</a>.
 
 We also found that using rounded numbers modestly improved accuracy
 (Estimate = -0.53, 95% CI: \[-0.96, -0.11\]), with participants having
