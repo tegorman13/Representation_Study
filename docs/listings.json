@@ -2,8 +2,10 @@
   {
     "listing": "/nb/analysis.html",
     "items": [
+      "/nb/s2_survey.html",
       "/nb/results.html",
       "/nb/overview.html",
+      "/nb/s1_survey.html",
       "/nb/study1.html",
       "/nb/study2.html"
     ]
