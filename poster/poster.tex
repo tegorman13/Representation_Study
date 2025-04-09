@@ -163,6 +163,9 @@
 \usepackage{etoolbox}
 \usepackage{titletoc}        % For table of contents customization
 \usepackage[explicit]{titlesec}  % For section title customization with explicit option
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
+
 
 % --- Color Definitions ---
 \definecolor{purduegold}{HTML}{CEB888} % Keep original Purdue Gold
@@ -175,7 +178,7 @@
 % --- SET BASE FONT SIZE HERE (Overrides any default/cached \normalsize) ---
 \makeatletter
 \renewcommand{\normalsize}{%
-    \@setfontsize\normalsize{18.5pt}{22pt}% Main font size and line spacing
+    \@setfontsize\normalsize{19.5pt}{22pt}% Main font size and line spacing
     \abovedisplayskip 12pt plus 3pt minus 7pt
     \abovedisplayshortskip \z@ plus 3pt
     \belowdisplayshortskip 6.5pt plus 3.5pt minus 3pt
@@ -211,12 +214,12 @@
 
 \titlespacing*{\subsection}
   {0pt}               % Left margin
-  {.0ex plus 0.0ex minus .0ex} % Space BEFORE title (reduced slightly)
+  {.1ex plus 0.1ex minus .0ex} % Space BEFORE title (reduced slightly)
   {0.1ex plus .1ex}   % Space AFTER title (REDUCED)
 
 \titlespacing*{\subsubsection}
   {0pt}               % Left margin
-  {0.0ex plus 0.0ex minus .2ex} % Space BEFORE title (reduced slightly)
+  {0.1ex plus 0.1ex minus .2ex} % Space BEFORE title (reduced slightly)
   {0.0ex plus .02ex}   % Space AFTER title (REDUCED)
 
 % --- List Styling ---
@@ -429,24 +432,16 @@
 \tightlist
 \item
   \textbf{Problem:} Energy insecurity is a critical public health
-  concern, especially among low-income households who face difficult
-  choices and unsafe coping strategies (Bednar \& Reames, 2020; Memmott
-  et al., 2021). Furthermore, residential energy use significantly
-  contributes to climate change, necessitating sustainable solutions
-  (Farghali et al., 2023).
+  concern (Bednar \& Reames, 2020; Memmott et al., 2021).
 \item
-  \textbf{Gap:} While interventions exist, success hinges on
-  communication format (Fischer, 2008). Specifically, how do different
-  \textbf{numerical representations (kWh, \%, USD)} of energy reduction
-  goals influence consumers' ability to create \emph{accurate}, specific
-  conservation plans for appliance use?
-\item
-  \textbf{Concepts \& Theory:} This study draws on principles of energy
-  literacy (DeWaters \& Powers, 2011), reference class effects (absolute
-  units like kWh may simplify calculations compared to relative units
-  like \% or derived units like USD) (Gigerenzer \& Edwards, 2003;
-  Reimer et al., 2015), and the importance of procedural knowledge
-  (knowing \emph{how} to act on a goal) (Tonke, 2024).
+  \textbf{Prior Work:} While interventions exist, success often hinges
+  on communication format (Canfield et al., 2017; Fischer, 2008), such
+  as the use of tables vs.~figures, the framing of information (e.g.,
+  savings vs.~costs), and energy literacy. Many reasoning tasks
+  involving quantities are also influenced by reference class (e.g.,
+  absolute units like kWh may simplify calculations compared to relative
+  units like \% or derived units like USD) (Gigerenzer \& Edwards, 2003;
+  Reimer et al., 2015).
 \end{itemize}
 
 \subsubsection{Research Questions \&
@@ -455,13 +450,13 @@ Hypotheses}\label{research-questions-hypotheses}
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Primary Question:} How does the format (kWh, \%, USD) used to
-  present an energy reduction goal influence the accuracy of household
-  energy conservation planning?
+  \textbf{Primary Question:} How does the Reference class (kWh, \%, USD)
+  used to present a reduction goal influence the accuracy of energy
+  planning?
 \item
-  \textbf{H1 (Reference Class):} Presenting goals in \textbf{absolute
-  units (kWh)} will lead to higher planning accuracy compared to
-  percentage (\%) or monetary (USD) formats.
+  \textbf{H1 (Reference Class):} Goals presented in \textbf{absolute
+  units (kWh)} will benefit planning accuracy compared to percentage
+  (\%) or monetary (USD) formats.
 \item
   \textbf{H2 (Energy Literacy):} Individuals with \textbf{higher energy
   literacy} will demonstrate more accurate planning, regardless of
@@ -476,14 +471,14 @@ Hypotheses}\label{research-questions-hypotheses}
   \textbf{Design:} Two online experiments (N=229 \& N=190 via MTurk)
   using a simulated household energy planning task.
 \item
-  \textbf{Task:} Participants adjusted appliance energy use (kWh) for
-  hypothetical families to meet a specified reduction goal.
+  \textbf{Planning Task:} Propose appliance energy use (kWh) for
+  hypothetical families to meet a target reduction goal.
 \item
-  \textbf{Manipulation:} Goal presentation format (Between-Subjects):
-  \textbf{kWh} vs.~\textbf{\%} vs.~\textbf{USD}.
+  \textbf{Manipulation:} Reference Class of reduction goal
+  (Between-Subjects): \textbf{kWh} vs.~\textbf{\%} vs.~\textbf{USD}.
 \item
-  \textbf{Exp 2 Factors:} Also varied Goal Difficulty (10/15\%) \&
-  Numerical Rounding (exact/rounded).
+  \textbf{Exp 2 Factors:} Goal Difficulty (10\% vs.~15\% reduction) and
+  Numerical Rounding (exact vs.~rounded).
 \end{itemize}
 
 \subsubsection{Figure 1: Procedure and Task
@@ -522,48 +517,23 @@ Example}\label{figure-1-procedure-and-task-example}
   \begin{itemize}
   \tightlist
   \item
-    \textbf{Planning Accuracy:} Absolute deviation between plan
-    reduction and the goal reduction (ordinal bins: exact, minor, large
-    error).
+    \textbf{Planning Accuracy:} Deviation between intended reduction
+    goal and proposed plan (ordinal bins: exact, minor, large error).
   \item
     \textbf{Energy Literacy:} 8-item knowledge scale score (DeWaters \&
     Powers, 2011).
   \end{itemize}
 \item
-  \textbf{Analysis:} Bayesian mixed-effects regression (Ordinal \&
-  Linear) controlling for participant and scenario random effects:
+  \textbf{Analysis:} Bayesian mixed-effects regression:
   \(\text{Accuracy Level} \; \text{\textasciitilde} \; \text{Reference Class} + \text{Calculator} + (1|\text{id}) + (1|\text{Family Scenario})\)
 \item
-  \textbf{Goal Format (H1 Supported):} Planning accuracy was
-  significantly higher when the energy reduction goal was presented in
-  absolute units (kWh) compared to percentages (\%) or U.S. dollars
-  (USD) across both experiments.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \emph{Exp 1:} USD (\emph{OR} = 22.9) and \% (\emph{OR} = 4.2)
-    formats had significantly higher odds of lower accuracy than kWh.
-  \item
-    \emph{Exp 2:} Similar significant effect for USD (\emph{OR} = 9.68);
-    the trend persisted for \% (\emph{OR} = 2.78), though the CI
-    included 1.0. USD/percentage formats reduced the probability of
-    exact matches and increased large errors compared to kWh.
-  \end{itemize}
+  \textbf{Effect of reference class (H1 Supported):} Smallest planning
+  errors when reduction goal was presented in absolute units (kWh)
+  compared to percentages (\%) or dollars (USD) across both experiments.
 \item
   \textbf{Energy Literacy (H2 Supported):} Higher energy literacy scores
-  were significantly associated with more accurate planning (lower
-  error) in both experiments (Exp 1: \(B\) = -2.35; Exp 2: \(B\) =
-  -3.21). (See Fig 3b).
-\item
-  \textbf{Exploratory Findings (Exp 2):}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Using rounded numbers for prior usage slightly improved accuracy
-    (Est. = -0.53). No effect of Goal Difficulty.
-  \end{itemize}
+  associated with more accurate planning (lower error) in both
+  experiments.
 \end{itemize}
 
 \subsubsection{Figure 2: Reference Class Effect on Planning Error (Exp
@@ -571,7 +541,7 @@ Example}\label{figure-1-procedure-and-task-example}
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{assets/images/fig-s1-log-dist-1.png}
+{\centering \includegraphics[width=0.85\linewidth,height=\textheight,keepaspectratio]{assets/images/fig-s1-log-dist-1.png}
 
 }
 
@@ -580,7 +550,8 @@ Example}\label{figure-1-procedure-and-task-example}
 
 \end{figure}%
 
-\subsubsection{Figure 3}\label{figure-3}
+\subsubsection{Figure 3 - Bayesian Regression Results (Exp
+1)}\label{figure-3---bayesian-regression-results-exp-1}
 
 \begin{figure}[H]
 \centering
@@ -588,15 +559,15 @@ Example}\label{figure-1-procedure-and-task-example}
 \makebox[\linewidth]{%
   \begin{minipage}[t]{0.44\linewidth}
     \centering
-    \subcaptionbox{Posterior predictive check for the ordinal regression model. Blue bars show the observed frequencies per accuracy level, dots represent the model predictions.\label{fig-s1-ppd}}[0.93\linewidth]{%
-    \includegraphics[height=4.25in, keepaspectratio]{assets/images/fig-s1-ppd-1.png}
+    \subcaptionbox{PPC for ordinal model. Blue bars are observed frequencies per accuracy level, dots show model predictions.\label{fig-s1-ppd}}[0.93\linewidth]{%
+    \includegraphics[height=4.4in, keepaspectratio]{assets/images/fig-s1-ppd-1.png}
     }
   \end{minipage}
   \hspace{0.01em}
   \begin{minipage}[t]{0.44\linewidth}
   \centering
-    \subcaptionbox{Relationship between energy literacy score and log absolute error, controlling for random effects \label{fig-s1-els}}[0.93\linewidth]{%
-    \includegraphics[height=4.25in, keepaspectratio]{assets/images/fig-s1-els-1.png}
+    \subcaptionbox{Relationship between energy literacy score and log absolute error of reduction plans \label{fig-s1-els}}[0.93\linewidth]{%
+    \includegraphics[height=4.4in, keepaspectratio]{assets/images/fig-s1-els-1.png}
     }
   \end{minipage}
 }
@@ -610,7 +581,7 @@ Example}\label{figure-1-procedure-and-task-example}
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.83\linewidth,height=\textheight,keepaspectratio]{assets/images/fig-s2-log-dist-1.png}
+{\centering \includegraphics[width=0.85\linewidth,height=\textheight,keepaspectratio]{assets/images/fig-s2-log-dist-1.png}
 
 }
 
@@ -619,26 +590,46 @@ Example}\label{figure-1-procedure-and-task-example}
 
 \end{figure}%
 
+\subsubsection{Figure 5 - Bayesian Regression Results (Exp
+2)}\label{figure-5---bayesian-regression-results-exp-2}
+
+\begin{figure}[H]
+\centering
+
+\makebox[\linewidth]{%
+  \begin{minipage}[t]{0.44\linewidth}
+    \centering
+    \subcaptionbox{PPC for ordinal model. Blue bars are observed frequencies per accuracy level, dots show model predictions.\label{fig-s2-ppd}}[0.90\linewidth]{%
+    \includegraphics[height=4.4in, keepaspectratio]{assets/images/fig-s2-ppd-1.png}
+    }
+  \end{minipage}
+  \hspace{0.01em}
+  \begin{minipage}[t]{0.44\linewidth}
+  \centering
+    \subcaptionbox{Relationship between energy literacy score and log absolute error of reduction plans. \label{fig-s2-els}}[0.90\linewidth]{%
+    \includegraphics[height=4.4in, keepaspectratio]{assets/images/fig-s2-els-1.png}
+    }
+  \end{minipage}
+}
+
+\end{figure}
+
 \subsection{Discussion}\label{discussion}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Key Finding:} Goal format significantly impacts planning
+  \textbf{Key Finding:} Reference class significantly impacts planning
   accuracy. \textbf{Presenting goals in absolute kWh is superior} to
   relative (\%) or monetary (USD) formats, likely by simplifying
-  calculations and reducing cognitive load (Gigerenzer \& Edwards,
-  2003).
+  calculations and reducing cognitive load.
 \item
   \textbf{Energy Literacy Matters:} Higher domain knowledge consistently
   predicted better planning accuracy, emphasizing the role of energy
-  education (Canfield et al., 2017).
+  education.
 \item
   \textbf{Limitations:} Lab simulation, short duration, self-reported
   calculator use.
-\item
-  \textbf{Future Directions:} Explore combining kWh format with
-  actionable tips (Tonke, 2024); test interactive tools/visualizations.
 \end{itemize}
 
 \subsection{References}\label{references}
@@ -663,13 +654,6 @@ students in {New York State} ({USA}): {A} measure of knowledge, affect,
 and behavior. \emph{Energy Policy}, \emph{39}(3), 1699--1710.
 \url{https://doi.org/10.1016/j.enpol.2010.12.049}
 
-\bibitem[\citeproctext]{ref-farghaliStrategiesEnergyContext2023}
-Farghali, M., Osman, A. I., Mohamed, I. M. A., Chen, Z., Chen, L.,
-Ihara, I., Yap, P.-S., \& Rooney, D. W. (2023). Strategies to save
-energy in the context of the energy crisis: A review.
-\emph{Environmental Chemistry Letters}, \emph{21}(4), 2003--2039.
-\url{https://doi.org/10.1007/s10311-023-01591-5}
-
 \bibitem[\citeproctext]{ref-fischerFeedbackHouseholdElectricity2008}
 Fischer, C. (2008). Feedback on household electricity consumption: A
 tool for saving energy? \emph{Energy Efficiency}, \emph{1}(1), 79--104.
@@ -691,12 +675,6 @@ Energy}, \emph{6}(2), 186--193.
 Reimer, T., Jones, C., \& Skubisz, C. (2015). Numeric {Communication} of
 {Risk}. In \emph{The {SAGE} handbook of risk communication} (pp.
 167--179).
-
-\bibitem[\citeproctext]{ref-tonkeProvidingProceduralKnowledge2024}
-Tonke, S. (2024). Providing procedural knowledge: {A} field experiment
-to encourage resource conservation in {Namibia}. \emph{Journal of
-Development Economics}, \emph{166}, 103202.
-\url{https://doi.org/10.1016/j.jdeveco.2023.103202}
 
 \end{CSLReferences}
 

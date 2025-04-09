@@ -48,6 +48,9 @@
           \usepackage{etoolbox}
           \usepackage{titletoc}        % For table of contents customization
           \usepackage[explicit]{titlesec}  % For section title customization with explicit option
+          \usepackage{caption}
+          \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
+
 
           % --- Color Definitions ---
           \definecolor{purduegold}{HTML}{CEB888} % Keep original Purdue Gold
@@ -60,7 +63,7 @@
           % --- SET BASE FONT SIZE HERE (Overrides any default/cached \normalsize) ---
           \makeatletter
           \renewcommand{\normalsize}{%
-              \@setfontsize\normalsize{18.5pt}{22pt}% Main font size and line spacing
+              \@setfontsize\normalsize{19.5pt}{22pt}% Main font size and line spacing
               \abovedisplayskip 12pt plus 3pt minus 7pt
               \abovedisplayshortskip \z@ plus 3pt
               \belowdisplayshortskip 6.5pt plus 3.5pt minus 3pt
@@ -96,12 +99,12 @@
 
           \titlespacing*{\subsection}
             {0pt}               % Left margin
-            {.0ex plus 0.0ex minus .0ex} % Space BEFORE title (reduced slightly)
+            {.1ex plus 0.1ex minus .0ex} % Space BEFORE title (reduced slightly)
             {0.1ex plus .1ex}   % Space AFTER title (REDUCED)
 
           \titlespacing*{\subsubsection}
             {0pt}               % Left margin
-            {0.0ex plus 0.0ex minus .2ex} % Space BEFORE title (reduced slightly)
+            {0.1ex plus 0.1ex minus .2ex} % Space BEFORE title (reduced slightly)
             {0.0ex plus .02ex}   % Space AFTER title (REDUCED)
 
           % --- List Styling ---
