@@ -1,0 +1,51 @@
+% This part runs after the main document content
+
+\end{multicols} % End the 3-column layout
+
+% Draw a simple footer line with a slightly taller background
+\AddToHook{shipout/background}{% Add to background hook for each page
+  \begin{tikzpicture}[remember picture, overlay]
+    % Extend footer area height slightly
+    \fill[purduegold] (current page.south west) rectangle ([yshift=0.53in]current page.south east); 
+
+    % Adjust Text position in the footer
+    \node[anchor=south east, xshift=-0.75in, yshift=0.2in, % Shift down slightly
+          text=darkgray, font=\small\sffamily] % Text color and font
+          at (current page.south east) 
+          {Communication and Cognition Lab | Purdue University}; 
+          
+    % Adjust email position in the footer
+    \node[anchor=south west, xshift=0.75in, yshift=0.05in, % Shift down slightly
+          text=darkgray, font=\small\sffamily] % Text color and font
+          at (current page.south west) 
+          {\textsuperscript{*}Corresponding author: \href{mailto:tegorman@purdue.edu}{tegorman@purdue.edu}};
+  \end{tikzpicture}
+}
+
+% \end{multicols} % End the 3-column layout
+
+% % Draw background color and text for footer area using TikZ overlay
+% \AddToHook{shipout/background}{% Add to background hook for each page
+%   \begin{tikzpicture}[remember picture, overlay]
+%     % Fill footer area with Purdue Gold - adjust height (1in) as needed
+%     \fill[purduegold] (current page.south west) rectangle ([yshift=0.8in]current page.south east); 
+
+%     % Add Text to the footer - Adjust position and content
+%     \node[anchor=south east, xshift=-0.75in, yshift=0.25in, % Position from bottom right
+%           text=darkgray, font=\small\sffamily] % Text color and font
+%           at (current page.south east) 
+%           {Communication and Cognition Lab | Purdue University}; 
+          
+%     % Add email to the left side of the footer
+%     \node[anchor=south west, xshift=0.75in, yshift=0.25in, % Position from bottom left
+%           text=darkgray, font=\small\sffamily] % Text color and font
+%           at (current page.south west) 
+%           {\textsuperscript{*}Corresponding author: \href{mailto:tegorman@purdue.edu}{tegorman@purdue.edu}};
+          
+%     % Optional: Add a logo - Uncomment and adjust path/size
+%     % \node[anchor=south west, xshift=0.75in, yshift=0.15in] 
+%     %       at (current page.south west) {
+%     %   \includegraphics[height=0.5in]{path/to/purdue_logo.png} % Adjust height/path
+%     % };
+%   \end{tikzpicture}
+% }

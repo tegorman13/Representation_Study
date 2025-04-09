@@ -9,6 +9,7 @@ project:
     - "!_*" # ignore any file that starts with a _
     - "!manuscript/"
     - "!misc/"
+    - "!poster/"
     
   resources:
     - "manuscript/output"

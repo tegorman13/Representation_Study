@@ -1,0 +1,65 @@
+% before-body.tex
+
+% Replace the current header background with a more subtle approach
+\AddToHook{shipout/background}{% Add to background hook for each page
+  \begin{tikzpicture}[remember picture, overlay]
+    % Fill header area with a much thinner line instead of full background
+    \fill[purduegold] (current page.north west) rectangle ([yshift=-0.2in]current page.north east);
+  \end{tikzpicture}
+}
+
+% --- Logo and Title Block Setup ---
+\noindent % Prevent potential paragraph indentation
+\makebox[\linewidth]{% Create a box spanning the full line width
+  \begin{minipage}[t]{0.15\linewidth} % Left Logo Column
+    \raggedright
+    \vspace*{0pt} % Align content to the top
+    % First logo (Purdue logo)
+    \includegraphics[width=0.80\linewidth]{assets/PU-H-Full-RGB.png}
+    
+    \vspace{0.12in} % Space between logos
+    
+    % Second logo (CLA logo)
+    \includegraphics[width=0.75\linewidth]{assets/CLA_logo1.png}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.65\linewidth} % Center Text Column
+    \centering
+    \vspace*{0pt} % Align content to the top
+
+    % --- Title ---
+    {\color{darkgray}\Huge\bfseries\sffamily Planning to Save Energy: How Information Format Affects Accuracy\par}
+    \vspace{0.15in} % Space after title
+
+    % --- Authors ---
+    {\color{purduegray}\Large\sffamily
+    Thomas E. Gorman\textsuperscript{1,2,*},
+    Torsten Reimer\textsuperscript{1,2},
+    Juan Pablo Loaiza Ramirez\textsuperscript{1,2},
+    Hayden Barber\textsuperscript{3}
+    \par}
+    \vspace{0.08in} % Space after authors
+
+    % --- Affiliations ---
+    {\color{purduegray}\large\sffamily
+    \textsuperscript{1}Communication and Cognition Lab, Purdue University, West Lafayette, IN, USA \\
+    \textsuperscript{2}College of Liberal Arts Research Academy, Purdue University, West Lafayette, IN, USA \\
+    \textsuperscript{3}School of Communication \& Journalism, South Dakota State University, Brookings, SD, USA \\
+    \vspace{0.05in} % Space after affiliations
+    \par}
+
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.10\linewidth} % Right Logo Column
+    \raggedleft
+    \vspace*{0pt} % Adjust slightly if needed e.g., \vspace*{-2pt}
+    \includegraphics[scale=0.42]{assets/nsf_logo1.png}
+  \end{minipage}%
+} % End \makebox
+
+% Adjust space AFTER the header block, before the multicolumn content starts.
+\vspace{0.5in} % Or adjust as needed
+
+% Start the 3-column layout
+\begin{multicols}{3}
+\raggedright % Justify text to the left, better for narrow columns

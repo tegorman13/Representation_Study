@@ -81,6 +81,11 @@ manuscript/output/manuscript_files/figure-pdf/*
 
 manuscript/.quarto/** 
 
+poster/old/*
+poster/.quarto/*
+
+
+
 misc/*
 misc/**/*.qmd
 nb/*
