@@ -22,23 +22,23 @@ format:
                 display: none;
             }
             </style>
-  wordcount-html: 
-    output-file: appendix.html
-    wordcount-banner: true
-    echo: false
-    theme: 
-        - zephyr
-        - ../assets/custom.scss
-    toc: true
-    shift-heading-level-by: 1
-    title-block-banner: "#000D51"
-    include-in-header:
-        - text: |
-            <style type="text/css">
-            h2.hide {
-                display: none;
-            }
-            </style>
+  # wordcount-html: 
+  #   output-file: appendix.html
+  #   wordcount-banner: true
+  #   echo: false
+  #   theme: 
+  #       - zephyr
+  #       - ../assets/custom.scss
+  #   toc: true
+  #   shift-heading-level-by: 1
+  #   title-block-banner: "#000D51"
+  #   include-in-header:
+  #       - text: |
+  #           <style type="text/css">
+  #           h2.hide {
+  #               display: none;
+  #           }
+  #           </style>
   docx: default
   #hikmah-manuscript-docx: default
   hugo-md:
@@ -51,17 +51,23 @@ format:
     echo: true
     output-file: appendix_gfm.md
     suppress-bibliography: true
-  hikmah-manuscript-pdf:
-    output-file: rs_appendix.pdf
+  # hikmah-manuscript-pdf:
+  #   output-file: rs_appendix.pdf
+  #   echo: false
+  #   mainfont: "Linux Libertine O"
+  #   mainfontoptions:
+  #   - "Numbers=Proportional"
+  #   - "Numbers=OldStyle"
+  #   mathfont: "Libertinus Math"
+  #   knitr:
+  #       opts_chunk:
+  #           dev: "cairo_pdf"
+  apaquarto-pdf: 
+    toc: false
     echo: false
-    mainfont: "Linux Libertine O"
-    mainfontoptions:
-    - "Numbers=Proportional"
-    - "Numbers=OldStyle"
-    mathfont: "Libertinus Math"
-    knitr:
-        opts_chunk:
-            dev: "cairo_pdf"
+    #output-file: rs_apa_code.pdf
+    output-file: rs_appendix.pdf
+   # floatsintext: true
 format-links:   
     - text: HTML
       href: appendix.html
@@ -695,7 +701,9 @@ observed_props_s2 |>
 
 ```
 
-@tbl-s2-prop shows that, once again, participants in the kWh condition achieved closer alignment with the target goals (44% exact matches), followed by Percentage (27%) and USD (18%). These percentages are consistent with the patterns observed in Study 1, reinforcing the conclusion that providing goals in kWh supports better accuracy.
+<!-- @tbl-s2-prop  -->
+
+shows that, once again, participants in the kWh condition achieved closer alignment with the target goals (44% exact matches), followed by Percentage (27%) and USD (18%). These percentages are consistent with the patterns observed in Study 1, reinforcing the conclusion that providing goals in kWh supports better accuracy.
 
 
 
@@ -797,6 +805,8 @@ ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = refClass))
 ### Model Tables
 
 ```{r}
+#| eval: false
+
 
 library(marginaleffects)
 marginaleffects_by_pct <- avg_slopes(
@@ -951,7 +961,7 @@ theme_minimal()
 
 ### Individual Differences
 
-As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy scores tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (@fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
+As in Experiment 1, we further investigated the role of individual differences in energy literacy in predicting planning accuracy. A Bayesian linear regression model, analogous to the one used in Experiment 1 (log_abs_error ~ els + (1|id) + (1|state)), revealed a significant negative relationship between energy literacy scores and log-transformed absolute error (Estimate = -3.21, 95% CI: -3.89 to -2.52). This finding indicates that participants with higher energy literacy scores tended to produce more accurate plans, exhibiting smaller deviations from the target reduction goals. The conditional effect plot (fig-s2-els) visually confirms this relationship, showing a clear decreasing trend in log absolute error as energy literacy increases.
 
 ```{r}
 #| label: fig-s2-indv

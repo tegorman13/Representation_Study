@@ -22,23 +22,6 @@ format:
               display: none;
           }
           </style>
-  wordcount-html:
-    output-file: appendix.html
-    wordcount-banner: true
-    echo: false
-    theme:
-      - zephyr
-      - ../assets/custom.scss
-    toc: true
-    shift-heading-level-by: 1
-    title-block-banner: '#000D51'
-    include-in-header:
-      - text: |
-          <style type="text/css">
-          h2.hide {
-              display: none;
-          }
-          </style>
   docx: default
   hugo-md:
     include: false
@@ -50,17 +33,6 @@ format:
     echo: true
     output-file: appendix_gfm.md
     suppress-bibliography: true
-  hikmah-manuscript-pdf:
-    output-file: rs_appendix.pdf
-    echo: false
-    mainfont: Linux Libertine O
-    mainfontoptions:
-      - Numbers=Proportional
-      - Numbers=OldStyle
-    mathfont: Libertinus Math
-    knitr:
-      opts_chunk:
-        dev: cairo_pdf
 format-links:
   - text: HTML
     href: appendix.html

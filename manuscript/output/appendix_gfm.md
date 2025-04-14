@@ -385,12 +385,10 @@ s1 %>%
   print()
 ```
 
-    # A tibble: 3 × 3
-      total_subjects refClass   subjects_per_refClass
-               <int> <fct>                      <int>
-    1            229 kWh                           76
-    2            229 Percentage                    67
-    3            229 USD                           86
+# A tibble: 3 × 3
+
+total_subjects refClass subjects_per_refClass <int> <fct> <int> 1 229
+kWh 76 2 229 Percentage 67 3 229 USD 86
 
 ``` r
 s2_long %>%
@@ -407,12 +405,10 @@ s2_long %>%
   print()
 ```
 
-    # A tibble: 3 × 3
-      total_subjects refClass   subjects_per_refClass
-               <int> <fct>                      <int>
-    1            190 kWh                           68
-    2            190 Percentage                    67
-    3            190 USD                           55
+# A tibble: 3 × 3
+
+total_subjects refClass subjects_per_refClass <int> <fct> <int> 1 190
+kWh 68 2 190 Percentage 67 3 190 USD 55
 
 # Demographics S1
 
@@ -524,9 +520,7 @@ ordinal_model_s1 <- brm(
 plot(ordinal_model_s1, condition = "refClass")
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-6-1.png)
-
-![](appendix_files/figure-commonmark/unnamed-chunk-6-2.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-6-1.png)![](appendix_files/figure-commonmark/unnamed-chunk-6-2.png)
 
 ## Study2
 
@@ -550,11 +544,18 @@ ordinal_model_s2_logit <- brm(
 plot(ordinal_model_s2_logit, condition = "refClass")
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-8-1.png)
-
-![](appendix_files/figure-commonmark/unnamed-chunk-8-2.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-8-1.png)![](appendix_files/figure-commonmark/unnamed-chunk-8-2.png)
 
 ### Tables
+
+<div id="tbl-s2-prop1">
+
+Table 1: Study 2: The table shows the percentage of participants who
+fell into each accuracy level for each reference class condition
+(percentages of kWh, \$, and USD columns reflect within condition
+percentages). The combined group column reflects the percentage of
+participants in each accuracy level when aggregating across across all
+reference class conditions.
 
 ``` r
 # observed_props_s2 <- s2_agg |>
@@ -590,17 +591,6 @@ observed_props_s2 |>
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
-<div id="tbl-s2-prop1">
-
-Table 1: Study 2: The table shows the percentage of participants who
-fell into each accuracy level for each reference class condition
-(percentages of kWh, \$, and USD columns reflect within condition
-percentages). The combined group column reflects the percentage of
-participants in each accuracy level when aggregating across across all
-reference class conditions.
-
-<div class="cell-output-display">
-
 | Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
 |:---------------|:------|:-----------|:------|:------------------|
 | Exact match    | 44.1% | 27.6%      | 19.5% | 23.4%             |
@@ -609,7 +599,14 @@ reference class conditions.
 
 </div>
 
-</div>
+<div id="tbl-s2-prop2">
+
+Table 2: Study 2: The table shows the percentage of participants who
+fell into each accuracy level for each reference class condition
+(percentages of kWh, \$, and USD columns reflect within condition
+percentages). The combined group column reflects the percentage of
+participants in each accuracy level when aggregating across across all
+reference class conditions.
 
 ``` r
 # compute percentage of subjects per accuracy level per group
@@ -633,24 +630,11 @@ observed_props_s2 |>
   kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
 ```
 
-<div id="tbl-s2-prop2">
-
-Table 2: Study 2: The table shows the percentage of participants who
-fell into each accuracy level for each reference class condition
-(percentages of kWh, \$, and USD columns reflect within condition
-percentages). The combined group column reflects the percentage of
-participants in each accuracy level when aggregating across across all
-reference class conditions.
-
-<div class="cell-output-display">
-
 | Accuracy Level | kWh   | Percentage | USD   | Combined Groups % |
 |:---------------|:------|:-----------|:------|:------------------|
 | Exact match    | 44.1% | 27.6%      | 19.5% | 23.4%             |
 | 0.01-5% error  | 14.7% | 25.4%      | 15.9% | 14.1%             |
 | Over 5% error  | 41.2% | 47%        | 64.5% | 37.5%             |
-
-</div>
 
 </div>
 
@@ -771,24 +755,7 @@ marginaleffects_by_pct <- avg_slopes(
     )
 
 marginaleffects_by_pct |> kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
-```
-
-| term     | group         | contrast         | pct_goal | estimate | conf.low | conf.high |
-|:---------|:--------------|:-----------------|:---------|:---------|:---------|:----------|
-| refClass | Exact match   | Percentage - kWh | 10%      | -0.07    | -0.19    | 0.04      |
-| refClass | Exact match   | USD - kWh        | 10%      | -0.15    | -0.26    | -0.03     |
-| refClass | 0.01-5% error | Percentage - kWh | 10%      | 0.00     | -0.02    | 0.02      |
-| refClass | 0.01-5% error | USD - kWh        | 10%      | -0.02    | -0.06    | 0.01      |
-| refClass | Over 5% error | Percentage - kWh | 10%      | 0.07     | -0.05    | 0.19      |
-| refClass | Over 5% error | USD - kWh        | 10%      | 0.17     | 0.04     | 0.29      |
-| refClass | Exact match   | Percentage - kWh | 15%      | -0.07    | -0.19    | 0.04      |
-| refClass | Exact match   | USD - kWh        | 15%      | -0.15    | -0.27    | -0.03     |
-| refClass | 0.01-5% error | Percentage - kWh | 15%      | 0.00     | -0.01    | 0.03      |
-| refClass | 0.01-5% error | USD - kWh        | 15%      | -0.01    | -0.05    | 0.02      |
-| refClass | Over 5% error | Percentage - kWh | 15%      | 0.07     | -0.04    | 0.18      |
-| refClass | Over 5% error | USD - kWh        | 15%      | 0.17     | 0.04     | 0.29      |
-
-``` r
+    
  #         Group     Term         Contrast pct_goal  Estimate    2.5 %  97.5 %
  # Exact match   refClass Percentage - kWh      10% -0.073089 -0.19345  0.0421
  # Exact match   refClass USD - kWh             10% -0.150377 -0.26763 -0.0324
@@ -805,21 +772,7 @@ marginaleffects_by_pct |> kable(escape=FALSE,booktabs=TRUE,align=c("l"))
     
     
 avg_predictions(ordinal_model_s2_logit, newdata = datagrid(id=unique,refClass=unique),by="refClass") |> kable(escape=FALSE,booktabs=TRUE,align=c("l")) 
-```
 
-| group         | refClass   | estimate | conf.low | conf.high |
-|:--------------|:-----------|:---------|:---------|:----------|
-| Exact match   | kWh        | 0.42     | 0.34     | 0.51      |
-| Exact match   | Percentage | 0.34     | 0.27     | 0.43      |
-| Exact match   | USD        | 0.25     | 0.18     | 0.35      |
-| 0.01-5% error | kWh        | 0.21     | 0.17     | 0.24      |
-| 0.01-5% error | Percentage | 0.21     | 0.18     | 0.25      |
-| 0.01-5% error | USD        | 0.20     | 0.16     | 0.23      |
-| Over 5% error | kWh        | 0.37     | 0.29     | 0.46      |
-| Over 5% error | Percentage | 0.44     | 0.36     | 0.53      |
-| Over 5% error | USD        | 0.54     | 0.45     | 0.65      |
-
-``` r
  #         Group   refClass Estimate 2.5 % 97.5 %
  # Exact match   kWh           0.420 0.336  0.513
  # Exact match   Percentage    0.340 0.266  0.427
@@ -837,18 +790,7 @@ ame2 <- avg_slopes(
   variables = "refClass"
 )
 ame2 |>  kable(escape=FALSE,booktabs=TRUE,align=c("l"))
-```
 
-| term     | group         | contrast         | estimate | conf.low | conf.high |
-|:---------|:--------------|:-----------------|:---------|:---------|:----------|
-| refClass | Exact match   | Percentage - kWh | -0.07    | -0.19    | 0.04      |
-| refClass | Exact match   | USD - kWh        | -0.15    | -0.27    | -0.03     |
-| refClass | 0.01-5% error | Percentage - kWh | 0.00     | -0.01    | 0.02      |
-| refClass | 0.01-5% error | USD - kWh        | -0.02    | -0.05    | 0.01      |
-| refClass | Over 5% error | Percentage - kWh | 0.07     | -0.05    | 0.19      |
-| refClass | Over 5% error | USD - kWh        | 0.17     | 0.04     | 0.29      |
-
-``` r
  #         Group         Contrast  Estimate   2.5 %   97.5 %
  # Exact match   Percentage - kWh -0.072820 -0.1920  0.04245
  # Exact match   USD - kWh        -0.150425 -0.2668 -0.03252
@@ -863,7 +805,7 @@ me <- conditional_effects(ordinal_model_s2_logit, effects = "refClass",categoric
 plot(me, points = TRUE)
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-15-1.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-10-1.png)
 
 ### Goal Manipulation
 
@@ -881,7 +823,7 @@ ggplot(s2_agg, aes(y = pct_goal, x = log_abs_error, color = calc)) +
   theme(legend.position = "top")
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-16-1.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-11-1.png)
 
 ``` r
 ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = pct_goal)) +
@@ -894,7 +836,7 @@ ggplot(prop_combo_s2, aes(x = accuracy_level, y = Probability, fill = pct_goal))
     theme_minimal() 
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-16-2.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-11-2.png)
 
 ``` r
 ggplot(data = s2_agg, aes(x = accuracy_level, fill = pct_goal)) +
@@ -907,7 +849,7 @@ ggplot(data = s2_agg, aes(x = accuracy_level, fill = pct_goal)) +
   theme_minimal()
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-16-3.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-11-3.png)
 
 ``` r
 ggplot(data = s2_agg, aes(x = accuracy_level, fill = pct_goal)) +
@@ -921,7 +863,7 @@ labs(title = "Accuracy Levels by Reference Class",
 theme_minimal()
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-16-4.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-11-4.png)
 
 ### Rounding
 
@@ -939,7 +881,7 @@ ggplot(s2_agg, aes(y = refClass, x = log_abs_error, color = rounded)) +
   theme(legend.position = "top")
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-17-1.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-12-1.png)
 
 ``` r
 ggplot(data = s2_agg, aes(x = accuracy_level, fill = rounded)) +
@@ -953,7 +895,7 @@ labs(title = "Accuracy Levels by Reference Class",
 theme_minimal()
 ```
 
-![](appendix_files/figure-commonmark/unnamed-chunk-17-2.png)
+![](appendix_files/figure-commonmark/unnamed-chunk-12-2.png)
 
 ### Individual Differences
 
@@ -1018,33 +960,19 @@ s2_long |> filter(id %in% unique(s2_long$id)[1:30]) |>
   facet_wrap(~id) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-<div id="fig-s2-indv2-1">
-
-![](appendix_files/figure-commonmark/fig-s2-indv2-1.png)
-
-Figure 5: Study 2: Respones patterns for a subset of individiual
-participants. Black points are participant responses, red points are the
-state average, and blue points are the family average. The x-axis
-represents the appliance category, and the y-axis represents the energy
-usage in kWh.
-
-</div>
-
-<div id="fig-s2-indv2-2">
-
-![](appendix_files/figure-commonmark/fig-s2-indv2-2.png)
-
-Figure 6: Study 2: Respones patterns for a subset of individiual
-participants. Black points are participant responses, red points are the
-state average, and blue points are the family average. The x-axis
-represents the appliance category, and the y-axis represents the energy
-usage in kWh.
-
-</div>
+<img src="appendix_files/figure-commonmark/fig-s2-indv2-1.png"
+id="fig-s2-indv2-1"
+alt="Study 2: Respones patterns for a subset of individiual participants. Black points are participant responses, red points are the state average, and blue points are the family average. The x-axis represents the appliance category, and the y-axis represents the energy usage in kWh." /><img src="appendix_files/figure-commonmark/fig-s2-indv2-2.png"
+id="fig-s2-indv2-2"
+alt="Study 2: Respones patterns for a subset of individiual participants. Black points are participant responses, red points are the state average, and blue points are the family average. The x-axis represents the appliance category, and the y-axis represents the energy usage in kWh." />
 
 ### Tables
 
 ### Distance plots
+
+<div id="tbl-s2-agg">
+
+Table 3: ![](appendix_files/figure-commonmark/tbl-s2-agg-2.png)
 
 ``` r
 # s2_agg |> group_by(id,refClass,calc) |> 
@@ -1057,29 +985,15 @@ s2_agg4 %>% ggplot(aes(x=refClass,y=mean_log_abs_error,fill=refClass)) +
   stat_summary(fun=mean, geom="bar") +
   stat_summary(fun.data=mean_cl_normal, geom="errorbar", width=0.2) +
   geom_jitter(alpha = 0.2, width = 0.2, height = 0) 
+```
+
+![](appendix_files/figure-commonmark/tbl-s2-agg-1.png)
+
+``` r
 s2_agg4 |> 
   ggplot(aes(x = mean_log_abs_error,fill = refClass)) +
   geom_density(alpha = 0.7) 
 ```
-
-<div id="tbl-s2-agg">
-
-Table 3: Study 2: Summary of planning accuracy by reference class. The
-table shows performance as both the % of trials where participants
-matched the goal, and the mean absolute error from the target reduction
-goal.
-
-<div class="cell-output-display">
-
-![](appendix_files/figure-commonmark/tbl-s2-agg-1.png)
-
-</div>
-
-<div class="cell-output-display">
-
-![](appendix_files/figure-commonmark/tbl-s2-agg-2.png)
-
-</div>
 
 </div>
 
